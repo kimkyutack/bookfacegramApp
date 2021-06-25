@@ -1,0 +1,15 @@
+export default {
+  splash: require('../assets/images/splash-hdpi.png'),
+  login: require('../assets/images/login-mdpi.png'),
+  facebook: require('../assets/images/icon-facebook-mdpi.png'),
+  google: require('../assets/images/icon-google-mdpi.png'),
+  kakao: require('../assets/images/icon-kakao-mdpi.png'),
+  naver: require('../assets/images/icon-naver-mdpi.png'),
+  toaping: require('../assets/images/icon-toaping-mdpi.png'),
+  back: require('../assets/images/top-back-mdpi.png'),
+  hamberger: require('../assets/images/top-hamberger-mdpi.png'),
+  camera: require('../assets/images/top-camera-mdpi.png'),
+  search: require('../assets/images/search-mdpi.png'),
+  tabFriendOn: require('../assets/images/tab_friend_on.png'),
+  tabFriendOff: require('../assets/images/tab_friend_off.png'),
+};
