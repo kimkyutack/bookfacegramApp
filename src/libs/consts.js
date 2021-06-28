@@ -11,12 +11,12 @@ export default {
   //   : 'android.',
   version: '1.0.0',
   apiUrl: devMode
-    ? // ? 'http://' + devIp + ':8081'
-      'http://' + devIp + ':8081'
-    : '',
+    ? 'http://' + devIp + ':8080'
+    : // 'http://localhost:8080'
+      '',
   fileApiUrl: devMode
-    ? // ? 'http://' + devIp + ':8081'
-      'http://' + devIp + ':8081'
-    : '',
+    ? 'http://' + devIp + ':8080'
+    : // 'http://localhost:8080'
+      '',
   dialogZindex: 10,
 };

@@ -65,7 +65,7 @@ export const requestDelete = async ({url, headers, query = {}}) => {
   try {
     const response = await axios.delete(
       `${url}?${Object.keys(query)
-        .map((key) => `${key}=${query[key]}`)
+        .map(key => `${key}=${query[key]}`)
         .join('&')}`,
       {
         headers: {
@@ -119,12 +119,12 @@ export const requestGet = async ({url, headers, query = {}}) => {
   try {
     const response = await axios.get(
       `${url}?${Object.keys(query)
-        .map((key) => `${key}=${query[key]}`)
+        .map(key => `${key}=${query[key]}`)
         .join('&')}`,
       {
         headers: {
           ...headers,
-          authorization: `KdisConnectUser ${await getItem('token')}`,
+          // authorization: `KdisConnectUser ${await getItem('token')}`,
           version: consts.version,
         },
       },

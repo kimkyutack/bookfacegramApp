@@ -15,15 +15,12 @@ export default function TopTabs() {
       tabBarOptions={{
         labelStyle: {fontSize: 14},
         style: {
-          // paddingHorizontal: 20,
           elevation: 0, // defualt border color
         },
         indicatorStyle: {
           borderColor: '#FED500',
           borderWidth: 1,
           borderBottomWidth: 3,
-          // width: 100,
-          // left: Dimensions.get('window').width / 3 / 2,
         },
         indicatorContainerStyle: {marginHorizontal: 20, paddingHorizontal: 60},
         tabStyle: {

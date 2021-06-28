@@ -1,6 +1,6 @@
 import {Dimensions, Linking, Platform} from 'react-native';
 import moment from 'moment-timezone';
-import SimpleToast from 'react-native-simple-toast';
+// import SimpleToast from 'react-native-simple-toast';
 export const screenWidth = Dimensions.get('window').width;
 export const screenHeight = Dimensions.get('window').height;
 export const isIos = Platform.OS === 'ios';
@@ -213,9 +213,9 @@ export const formatPhone = f => {
 export const openMail = () => {
   Linking.openURL('mailto:kdischool.connect@gmail.com?subject=&body=');
 };
-export const toast = message => {
-  SimpleToast.show(message);
-};
+// export const toast = message => {
+//   SimpleToast.show(message);
+// };
 
 export const getAgeFromMoment = (birthday, format, isMan) => {
   if (!birthday) {

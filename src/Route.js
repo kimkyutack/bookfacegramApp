@@ -47,7 +47,7 @@ export default function Router({}) {
                 width: 240,
               }}
               headerMode="none"
-              initialRouteName={routes.homeTab}
+              initialRouteName={routes.home}
               drawerContent={props => <DrawerCustom {...props} />}>
               <Drawer.Screen name={routes.home} component={homeTab} />
               <Drawer.Screen name={routes.tab} component={Tabs} />

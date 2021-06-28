@@ -12,4 +12,6 @@ export default {
   search: require('../assets/images/search-mdpi.png'),
   tabFriendOn: require('../assets/images/tab_friend_on.png'),
   tabFriendOff: require('../assets/images/tab_friend_off.png'),
+  bannerOne: require('../assets/images/bannerOne.png'),
+  bannerTwo: require('../assets/images/bannerTwo.png'),
 };
