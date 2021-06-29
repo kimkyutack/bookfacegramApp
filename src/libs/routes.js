@@ -12,4 +12,5 @@ export default {
   topMyBooks: 'topMyBooks',
   topNewBooks: 'topNewBooks',
   topActivity: 'topActivity',
+  notice: 'notice',
 };

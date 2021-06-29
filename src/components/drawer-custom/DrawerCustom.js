@@ -29,19 +29,19 @@ export default function DrawerCustom(props) {
         <View style={styles.container}>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ공지사항"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('home');
+                props.navigation.navigate('notice');
               }}
             />
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ이벤트"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('tab');
               }}
@@ -49,9 +49,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ책 서랍"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('home');
               }}
@@ -59,9 +59,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ피드북"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('topNewBooks');
               }}
@@ -69,9 +69,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ북핑스토어"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('topMyBooks');
               }}
@@ -79,9 +79,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ개인정보수정"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('topActivity');
               }}
@@ -89,9 +89,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ도움말"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('splash');
               }}
@@ -99,9 +99,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ앱설정"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('splash');
               }}
@@ -109,9 +109,9 @@ export default function DrawerCustom(props) {
           </View>
           <View style={styles.itemList}>
             <DrawerItem
-              style={{width: 220}}
+              style={styles.drawerItem}
               label="ㆍ로그아웃"
-              labelStyle={{color: '#000000', fontSize: 14}}
+              labelStyle={styles.label}
               onPress={() => {
                 props.navigation.navigate('splash');
               }}
@@ -136,10 +136,6 @@ const styles = StyleSheet.create({
     width: 240,
   },
   itemList: {
-    // flex: 1,
-    // flexDirection: 'column',
-    // justifyContent: 'space-evenly',
-    // alignItems: 'center',
     height: 50,
   },
   avator: {
@@ -150,5 +146,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 10,
     fontSize: 16,
+  },
+  label: {
+    color: '#000000',
+    fontSize: 14,
+  },
+  drawerItem: {
+    width: 220,
   },
 });

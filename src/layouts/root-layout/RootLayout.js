@@ -4,9 +4,11 @@ import {
   StyleSheet,
   StatusBar,
   SafeAreaView,
+  Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../libs/colors';
+import images from '../../libs/image';
 import {isIos} from '../../services/util';
 import Topbar from '../../components/topbar/Topbar';
 import {useSelector, shallowEqual} from 'react-redux';
@@ -19,6 +21,17 @@ const RootLayout = ({
   rootComponent,
   absoluteComponent,
 }) => {
+  if (topbar) {
+    switch (topbar.options) {
+      case 'camera':
+        topbar.options = (
+          <Image style={styles.cameraIcon} source={images.camera} />
+        );
+        break;
+      default:
+        break;
+    }
+  }
   const {show} = useSelector(s => s.keyboard, shallowEqual);
   const render = (
     <SafeAreaView
@@ -57,15 +70,12 @@ const styles = StyleSheet.create({
   },
   safe: {
     backgroundColor: colors.white,
-
     flex: 1,
   },
-  topbar: {
-    backgroundColor: colors.white,
-    height: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  cameraIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
 });
 export default React.memo(RootLayout);

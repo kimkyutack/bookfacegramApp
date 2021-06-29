@@ -1,8 +1,17 @@
 export default {
   white: '#fff',
+  black: '#000000',
   border: '#e5e5e5',
   red: '#fe5f55',
   primary: '#01a046',
   text: '#222',
   background: '#0066FF',
+  blue: '#0B5EAA',
+  st1: '#E66D1E',
+  st2: '#0E96AC',
+  st3: '#CA275C',
+  st4: '#ED841B',
+  st5: '#5A7411',
+  st6: '#760A9C',
+  borderLine: '#F0F0F0',
 };

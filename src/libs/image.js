@@ -14,4 +14,6 @@ export default {
   tabFriendOff: require('../assets/images/tab_friend_off.png'),
   bannerOne: require('../assets/images/bannerOne.png'),
   bannerTwo: require('../assets/images/bannerTwo.png'),
+  angleUp: require('../assets/images/angleUp.png'),
+  angleDown: require('../assets/images/angleDown.png'),
 };

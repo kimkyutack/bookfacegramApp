@@ -5,13 +5,7 @@ import image from '../../libs/image';
 import {goBack, navigationRef} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
 
-export default function Topbar({
-  title,
-  onGoBack,
-  options,
-  back = true,
-  navigation,
-}) {
+export default function Topbar({title, onGoBack, options, back, navigation}) {
   const [optionWidth, setOptionWidth] = useState(0);
   const handleOptionLayout = e => {
     const {width} = e.nativeEvent.layout;
@@ -21,7 +15,7 @@ export default function Topbar({
   };
   return (
     <View style={styles.root}>
-      {!navigation ? (
+      {back ? (
         <TouchableWithoutFeedback onPress={onGoBack || goBack}>
           <View
             style={[styles.back, optionWidth && {width: optionWidth}]}

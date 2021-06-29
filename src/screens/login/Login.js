@@ -2,7 +2,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import {
   Image,
   Keyboard,
-  ScrollView,
   StyleSheet,
   View,
   PixelRatio,

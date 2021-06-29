@@ -21,6 +21,7 @@ import {navigate, navigationRef} from './services/navigation';
 import TopNewBooks from './screens/homeTab/TopNewBooks';
 import TopActivity from './screens/homeTab/TopActivity';
 import TopMyBooks from './screens/homeTab/TopMyBooks';
+import Notice from './screens/notice/Notice';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -49,16 +50,59 @@ export default function Router({}) {
               headerMode="none"
               initialRouteName={routes.home}
               drawerContent={props => <DrawerCustom {...props} />}>
-              <Drawer.Screen name={routes.home} component={homeTab} />
-              <Drawer.Screen name={routes.tab} component={Tabs} />
+              <Drawer.Screen
+                name={routes.home}
+                component={homeTab}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
+              <Drawer.Screen
+                name={routes.notice}
+                component={Notice}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
+              <Drawer.Screen
+                name={routes.tab}
+                component={Tabs}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
               <Drawer.Screen
                 name={routes.topActivity}
                 component={TopActivity}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
               />
-              <Drawer.Screen name={routes.topMyBooks} component={TopMyBooks} />
+              <Drawer.Screen
+                name={routes.topMyBooks}
+                component={TopMyBooks}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
               <Drawer.Screen
                 name={routes.topNewBooks}
                 component={TopNewBooks}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
               />
             </Drawer.Navigator>
           </>

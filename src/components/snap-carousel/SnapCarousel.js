@@ -31,12 +31,7 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
     // console.log(item);
     return (
       <TouchableWithoutFeedback>
-        <View
-          style={{
-            backgroundColor: 'green',
-            marginTop: 25,
-            // height: 'auto',
-          }}>
+        <View style={styles.bannerContainer}>
           <Image style={styles.banner} source={item.title} />
         </View>
       </TouchableWithoutFeedback>
@@ -97,8 +92,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   banner: {
-    height: '100%',
+    height: 150,
     width: '100%',
-    // resizeMode: 'contain',
+    resizeMode: 'stretch',
+  },
+  bannerContainer: {
+    backgroundColor: 'white',
+    marginTop: 25,
+    height: 150,
   },
 });

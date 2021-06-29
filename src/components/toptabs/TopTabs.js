@@ -13,7 +13,7 @@ export default function TopTabs() {
     <Tab.Navigator
       initialRouteName="NEW BOOKS"
       tabBarOptions={{
-        labelStyle: {fontSize: 14},
+        labelStyle: {fontSize: 12},
         style: {
           elevation: 0, // defualt border color
         },
