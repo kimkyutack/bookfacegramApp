@@ -1,16 +1,14 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import routes from '../../libs/routes';
-import Splash from '../splash/Splash';
-import Home from '../homeTab';
-// import TabsFind from '../tabs-find/TabsFind';
-
-import image from '../../libs/image';
 import {Image, SafeAreaView} from 'react-native';
+import routes from '../../libs/routes';
+import images from '../../libs/image';
+import Splash from '../splash/Splash';
+import colors from '../../libs/colors';
 import TabIcon from './TabIcon';
 import TabBar from './TabBar';
-// import TabsChat from '../tabs-chat/TabsChat';
-import colors from '../../libs/colors';
+
+import Home from '../homeTab';
 
 const BottomTab = createBottomTabNavigator();
 export default function Tabs({}) {
@@ -26,7 +24,7 @@ export default function Tabs({}) {
         }}>
         <BottomTab.Screen
           options={{
-            tabBarLabel: 'home',
+            tabBarLabel: 'menu',
             // tabBarIcon: props => (
             //   <TabIcon
             //     {...props}
@@ -35,7 +33,7 @@ export default function Tabs({}) {
             //   />
             // ),
           }}
-          name={routes.splash}
+          name={routes.topActivity}
           component={Home}
         />
         <BottomTab.Screen
@@ -54,7 +52,7 @@ export default function Tabs({}) {
         />
         <BottomTab.Screen
           options={{
-            tabBarLabel: '>',
+            tabBarLabel: 'home',
             // tabBarIcon: (props) => (
             //   <TabIcon
             //     {...props}
@@ -63,12 +61,12 @@ export default function Tabs({}) {
             //   />
             // ),
           }}
-          name={routes.topActivity}
+          name={routes.home}
           component={Home}
         />
         <BottomTab.Screen
           options={{
-            tabBarLabel: 'menu',
+            tabBarLabel: 'feed',
             // tabBarIcon: (props) => (
             //   <TabIcon
             //     {...props}
@@ -77,7 +75,7 @@ export default function Tabs({}) {
             //   />
             // ),
           }}
-          name={routes.home}
+          name={routes.event}
           component={Home}
         />
         <BottomTab.Screen

@@ -16,4 +16,8 @@ export default {
   bannerTwo: require('../assets/images/bannerTwo.png'),
   angleUp: require('../assets/images/angleUp.png'),
   angleDown: require('../assets/images/angleDown.png'),
+  event1: require('../assets/images/event1.png'),
+  event2: require('../assets/images/event2.png'),
+  event1Body: require('../assets/images/event1_body.png'),
+  event2Body: require('../assets/images/event2_body.png'),
 };

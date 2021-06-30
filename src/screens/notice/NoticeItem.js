@@ -4,13 +4,18 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import image from '../../libs/image';
+import images from '../../libs/image';
 import {formatTime, screenWidth} from '../../services/util';
+import HTMLView from 'react-native-htmlview';
 
-export default function NoticeItem({createdAt, title, description, filePath}) {
+export default function NoticeItem({
+  REGISTER_DT,
+  TITLE,
+  CONTENTS,
+  filePath,
+  index,
+}) {
   const [open, setOpen] = useState(false);
-  const [h, setH] = useState(1);
-
   return (
     <View>
       <TouchableOpacity
@@ -20,14 +25,12 @@ export default function NoticeItem({createdAt, title, description, filePath}) {
         }}>
         <View style={[styles.mainContent, open && {marginTop: 10}]}>
           <TextWrap font={fonts.robotoMedium} style={styles.title}>
-            {title}
+            {TITLE}
           </TextWrap>
-          <TextWrap style={styles.date}>
-            {formatTime(createdAt, 'YYYY. MM. DD')}
-          </TextWrap>
+          <TextWrap style={styles.date}>{REGISTER_DT}</TextWrap>
         </View>
         <Image
-          source={open ? image.angleUp : image.angleDown}
+          source={open ? images.angleUp : images.angleDown}
           style={styles.up}
         />
       </TouchableOpacity>
@@ -49,7 +52,13 @@ export default function NoticeItem({createdAt, title, description, filePath}) {
               }}
             />
           )} */}
-          <TextWrap style={styles.descText}>{description}</TextWrap>
+          {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
+          <View style={styles.descText}>
+            <HTMLView
+              value={CONTENTS}
+              // stylesheet={styles.descText}
+            />
+          </View>
         </View>
       )}
       <View style={styles.divider} />

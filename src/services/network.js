@@ -14,7 +14,7 @@ export const requestFile = async ({url, method, headers = {}}, form) => {
         'Content-Type': 'multipart/form-data',
         'content-Type': 'multipart/form-data',
         'cache-control': 'no-cache',
-        authorization: `KdisConnectUser ${await getItem('token')}`,
+        // authorization: `KdisConnectUser ${await getItem('token')}`,
         version: consts.version,
       },
     });
@@ -40,7 +40,7 @@ export const requestPost = async ({url, body = {}, headers = {}, file}) => {
     const response = await axios.post(url, body, {
       headers: {
         ...headers,
-        authorization: `KdisConnectUser ${await getItem('token')}`,
+        // authorization: `KdisConnectUser ${await getItem('token')}`,
         version: consts.version,
       },
     });
@@ -70,7 +70,7 @@ export const requestDelete = async ({url, headers, query = {}}) => {
       {
         headers: {
           ...headers,
-          authorization: `KdisConnectUser ${await getItem('token')}`,
+          // authorization: `KdisConnectUser ${await getItem('token')}`,
           version: consts.version,
         },
       },
@@ -95,7 +95,7 @@ export const requestPut = async ({url, body = {}, headers = {}, file}) => {
     const response = await axios.put(url, body, {
       headers: {
         ...headers,
-        authorization: `KdisConnectUser ${await getItem('token')}`,
+        // authorization: `KdisConnectUser ${await getItem('token')}`,
         version: consts.version,
       },
     });
@@ -150,7 +150,7 @@ export const requestPatch = async ({url, body = {}, headers}) => {
     const response = await axios.patch(url, body, {
       headers: {
         ...headers,
-        authorization: `KdisConnectUser ${await getItem('token')}`,
+        // authorization: `KdisConnectUser ${await getItem('token')}`,
         version: consts.version,
       },
     });

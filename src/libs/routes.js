@@ -13,4 +13,6 @@ export default {
   topNewBooks: 'topNewBooks',
   topActivity: 'topActivity',
   notice: 'notice',
+  event: 'event',
+  eventDetail: 'eventDetail',
 };

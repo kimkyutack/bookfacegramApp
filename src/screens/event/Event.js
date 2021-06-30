@@ -7,44 +7,44 @@ import consts from '../../libs/consts';
 import {dialogError} from '../../redux/dialog/DialogActions';
 import {goBack} from '../../services/navigation';
 import {requestGet} from '../../services/network';
-import NoticeItem from './NoticeItem';
+import EventItem from './EventItem';
 
-export default function Notice({navigation}) {
+export default function Event({navigation}) {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/noticeList'})
+    requestGet({url: consts.apiUrl + '/eventList'})
       .then(x => {
         console.log(x);
-        setData([...x.noticeList]);
+        setData([...x.event]);
       })
       .catch(e => {
         console.log(e);
         // dispatch(dialogError(e));
-        goBack();
+        // goBack();
       });
   }, []);
 
   return (
     <RootLayout
       topbar={{
-        title: '공지사항',
+        title: '이벤트',
         options: 'camera',
         navigation: navigation,
         back: true,
       }}>
-      <View
+      {/* <View
         style={{
           borderBottomColor: colors.borderLine,
           borderBottomWidth: 1,
         }}
-      />
+      /> */}
       <FlatList
         data={data}
         disableVirtualization={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
-          return <NoticeItem {...item} index={index} />;
+          return <EventItem {...item} navigation={navigation} />;
         }}
       />
     </RootLayout>

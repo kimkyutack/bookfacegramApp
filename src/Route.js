@@ -22,6 +22,8 @@ import TopNewBooks from './screens/homeTab/TopNewBooks';
 import TopActivity from './screens/homeTab/TopActivity';
 import TopMyBooks from './screens/homeTab/TopMyBooks';
 import Notice from './screens/notice/Notice';
+import Event from './screens/event/Event';
+import EventDetail from './screens/event/EventDetail';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -60,15 +62,6 @@ export default function Router({}) {
                 }}
               />
               <Drawer.Screen
-                name={routes.notice}
-                component={Notice}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-              <Drawer.Screen
                 name={routes.tab}
                 component={Tabs}
                 options={({route, navigation}) => {
@@ -98,6 +91,33 @@ export default function Router({}) {
               <Drawer.Screen
                 name={routes.topNewBooks}
                 component={TopNewBooks}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
+              <Drawer.Screen
+                name={routes.notice}
+                component={Notice}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
+              <Drawer.Screen
+                name={routes.event}
+                component={Event}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
+              <Drawer.Screen
+                name={routes.eventDetail}
+                component={EventDetail}
                 options={({route, navigation}) => {
                   return {
                     swipeEnabled: false,

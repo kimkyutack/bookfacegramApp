@@ -43,7 +43,7 @@ export default function DrawerCustom(props) {
               label="ㆍ이벤트"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('tab');
+                props.navigation.navigate('event');
               }}
             />
           </View>
@@ -93,7 +93,7 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('splash');
+                props.navigation.navigate('tab');
               }}
             />
           </View>
@@ -103,7 +103,7 @@ export default function DrawerCustom(props) {
               label="ㆍ앱설정"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('splash');
+                props.navigation.navigate('tab');
               }}
             />
           </View>
@@ -113,7 +113,7 @@ export default function DrawerCustom(props) {
               label="ㆍ로그아웃"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('splash');
+                props.navigation.navigate('tab');
               }}
             />
           </View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     width: 240,
   },
   itemList: {
-    height: 50,
+    height: 54,
   },
   avator: {
     marginTop: 20,

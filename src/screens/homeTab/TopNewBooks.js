@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
   View,
   Text,
   ScrollView,
@@ -32,11 +33,11 @@ export default function TopNewBooks({}) {
     try {
       setLoading(true);
       const books = await requestGet({
-        url: consts.apiUrl + '/newBookListJson',
+        // url: consts.apiUrl + '/bookList',
+        url: 'http://172.16.0.89:8080/bookList',
       });
-
-      // console.log(books.newBook);
-      setBookList(books.newBook);
+      console.log(books);
+      setBookList([...books.newBook]);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -49,383 +50,377 @@ export default function TopNewBooks({}) {
     fetchRequested();
   }, []);
 
-  const onEndReached = () => {
-    if (loading) {
-      return;
-    } else {
-      fetchRequested();
-    }
-  };
+  // const onEndReached = () => {
+  //   if (loading) {
+  //     return;
+  //   } else {
+  //     fetchRequested();
+  //   }
+  // };
 
   const onPressTitle = () => {
     navigate('topActivity');
   };
   return (
     <View style={styles.root}>
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-        }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled">
-        <SnapCarousel name="mainCarousel" />
-        {/* 신간 */}
-        <View>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitleSt1}>
-              신간을 확인해보세요!
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread} onPress={onPressTitle}>
-              &gt; 전체보기
-            </TextWrap>
-          </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap
-                  style={styles.card}
-                  key={i}
-                  onPress={() => console.log(u.url)}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 1급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          style={{alignSelf: 'center', marginBottom: 60}}
+          color={colors.primary}
+        />
+      ) : (
+        <ScrollView
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          <SnapCarousel
+            name="mainCarousel"
+            sliderWidth={screenWidth - 40}
+            itemWidth={screenWidth - 40}
+          />
+          {/* 신간 */}
+          <View>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitleSt1}>
+                신간을 확인해보세요!
               </TextWrap>
-              <TextWrap style={{color: colors.st1}}> 1급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
-          </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 2급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+              <TextWrap style={styles.cardHeaderSpread} onPress={onPressTitle}>
+                &gt; 전체보기
               </TextWrap>
-              <TextWrap style={{color: colors.st2}}> 2급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap
+                    style={styles.card}
+                    key={i}
+                    onPress={() => console.log(u.url)}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 준(3)급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+          {/* 1급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st1}}> 1급 </TextWrap>도서
               </TextWrap>
-              <TextWrap style={{color: colors.st3}}> (준)3급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 준(4)급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+          {/* 2급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st2}}> 2급 </TextWrap>도서
               </TextWrap>
-              <TextWrap style={{color: colors.st4}}> 준(4)급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 준(5)급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+          {/* 준(3)급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st3}}> (준)3급 </TextWrap>도서
               </TextWrap>
-              <TextWrap style={{color: colors.st5}}> 준(5)급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
-          </View>
-        </View>
-        {/* 누리급 도서 */}
-        <View style={styles.category}>
-          <View style={styles.cardHeader}>
-            <TextWrap style={styles.cardHeaderTitle}>
-              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-              <TextWrap style={styles.blueText}>
-                책과함께, KBS한국어능력시험
+          {/* 준(4)급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st4}}> 준(4)급 </TextWrap>도서
               </TextWrap>
-              <TextWrap style={{color: colors.st6}}> 누리급 </TextWrap>도서
-            </TextWrap>
-            <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-          <View style={styles.cardContainer}>
-            {[
-              {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
-              {
-                url: 2,
-                title: '이토록 공부가 재미있어지는 순간',
-                writer: '박성희',
-              },
-              {url: 3, title: '돈의속성', writer: '김승호'},
-            ].map((u, i) => {
-              return (
-                <CardWrap style={styles.card} key={i}>
-                  <Image
-                    style={styles.image}
-                    source={
-                      u.url === 1
-                        ? require('../../assets/images/book1.png')
-                        : u.url === 2
-                        ? require('../../assets/images/book2.png')
-                        : u.url === 3
-                        ? require('../../assets/images/book3.png')
-                        : 'defulat'
-                    }
-                  />
-                  <TextWrap
-                    style={styles.info}
-                    ellipsizeMode="tail"
-                    numberOfLines={2}>
-                    {u.writer}/{'\n'}
-                    {u.title}
-                  </TextWrap>
-                </CardWrap>
-              );
-            })}
+          {/* 준(5)급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st5}}> 준(5)급 </TextWrap>도서
+              </TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      {/* <FlatList
-            data={bookList}
-            keyExtractor={(item, index) => item.id + '_' + index}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={0.8}
-            initialNumToRender={10}
-            renderItem={({item, index}) => {
-              return (
-                <BookItem
-                  {...item}
-                  index={index}
-                  onPress={() => {
-                    // navigate(routes.profile, {userId: item.userId});
-                  }}
-                />
-              );
-            }}
-          /> */}
+          {/* 누리급 도서 */}
+          <View style={styles.category}>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.cardHeaderTitle}>
+                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                <TextWrap style={styles.blueText}>
+                  책과함께, KBS한국어능력시험
+                </TextWrap>
+                <TextWrap style={{color: colors.st6}}> 누리급 </TextWrap>도서
+              </TextWrap>
+              <TextWrap style={styles.cardHeaderSpread}>&gt; 전체보기</TextWrap>
+            </View>
+            <View style={styles.cardContainer}>
+              {[
+                {url: 1, title: '존리의 부자되기 습관', writer: '존리'},
+                {
+                  url: 2,
+                  title: '이토록 공부가 재미있어지는 순간',
+                  writer: '박성희',
+                },
+                {url: 3, title: '돈의속성', writer: '김승호'},
+              ].map((u, i) => {
+                return (
+                  <CardWrap style={styles.card} key={i}>
+                    <Image
+                      style={styles.image}
+                      source={
+                        u.url === 1
+                          ? require('../../assets/images/book1.png')
+                          : u.url === 2
+                          ? require('../../assets/images/book2.png')
+                          : u.url === 3
+                          ? require('../../assets/images/book3.png')
+                          : 'defulat'
+                      }
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      numberOfLines={2}>
+                      {u.writer}/{'\n'}
+                      {u.title}
+                    </TextWrap>
+                  </CardWrap>
+                );
+              })}
+            </View>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 }
