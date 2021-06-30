@@ -21,7 +21,6 @@ export default function Event({navigation}) {
       .catch(e => {
         console.log(e);
         // dispatch(dialogError(e));
-        // goBack();
       });
   }, []);
 

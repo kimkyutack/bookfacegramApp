@@ -13,20 +13,20 @@ export default function EventItem(item) {
       <TouchableOpacity
         style={styles.main}
         onPress={() => {
-          item.navigation.navigate('eventDetail', {item: item.EV_IMG});
+          item.navigation.navigate('eventDetail', {item: item.ev_img});
         }}>
         <View style={styles.mainContent}>
           <Image
             source={
-              item.EV_IMG === 'event1_thumb.jpg' ? images.event1 : images.event2
+              item.ev_img === 'event1_thumb.jpg' ? images.event1 : images.event2
             }
             style={styles.thumbnail}
           />
           <TextWrap font={fonts.robotoMedium} style={styles.title}>
-            {item.EV_TITLE}
+            {item.ev_title}
           </TextWrap>
           <TextWrap style={styles.date}>
-            {item.START_DE} ~ {item.END_DE}
+            {item.ev_start_date} ~ {item.ev_end_date}
           </TextWrap>
         </View>
       </TouchableOpacity>

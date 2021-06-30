@@ -33,8 +33,7 @@ export default function TopNewBooks({}) {
     try {
       setLoading(true);
       const books = await requestGet({
-        // url: consts.apiUrl + '/bookList',
-        url: 'http://172.16.0.89:8080/bookList',
+        url: consts.apiUrl + '/bookList',
       });
       console.log(books);
       setBookList([...books.newBook]);
@@ -83,7 +82,7 @@ export default function TopNewBooks({}) {
             itemWidth={screenWidth - 40}
           />
           {/* 신간 */}
-          <View>
+          <View style={{marginBottom: 10}}>
             <View style={styles.cardHeader}>
               <TextWrap style={styles.cardHeaderTitleSt1}>
                 신간을 확인해보세요!
@@ -432,13 +431,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   category: {
-    marginVertical: 30,
+    marginVertical: 15,
   },
   card: {
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#d9d9d9',
-    height: 200,
+    height: 204,
     maxWidth: screenWidth / 3.5,
   },
   cardHeader: {
@@ -460,7 +459,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 200,
+    height: 204,
   },
   image: {
     top: 5,

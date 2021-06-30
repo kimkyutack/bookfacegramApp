@@ -9,9 +9,9 @@ import {formatTime, screenWidth} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 
 export default function NoticeItem({
-  REGISTER_DT,
-  TITLE,
-  CONTENTS,
+  register_dt,
+  title,
+  contents,
   filePath,
   index,
 }) {
@@ -25,9 +25,9 @@ export default function NoticeItem({
         }}>
         <View style={[styles.mainContent, open && {marginTop: 10}]}>
           <TextWrap font={fonts.robotoMedium} style={styles.title}>
-            {TITLE}
+            {title}
           </TextWrap>
-          <TextWrap style={styles.date}>{REGISTER_DT}</TextWrap>
+          <TextWrap style={styles.date}>{register_dt}</TextWrap>
         </View>
         <Image
           source={open ? images.angleUp : images.angleDown}
@@ -55,7 +55,7 @@ export default function NoticeItem({
           {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
           <View style={styles.descText}>
             <HTMLView
-              value={CONTENTS}
+              value={contents}
               // stylesheet={styles.descText}
             />
           </View>

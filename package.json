@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android-apk": "adb reverse tcp:8081 tcp:8081&& react-native run-android" 
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
@@ -50,6 +51,7 @@
     "eslint": "^7.29.0",
     "jest": "^27.0.5",
     "metro-react-native-babel-preset": "^0.66.0",
+    "react-devtools": "^4.13.5",
     "react-test-renderer": "17.0.1"
   },
   "jest": {

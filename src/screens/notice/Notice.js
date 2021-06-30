@@ -21,7 +21,6 @@ export default function Notice({navigation}) {
       .catch(e => {
         console.log(e);
         // dispatch(dialogError(e));
-        goBack();
       });
   }, []);
 

@@ -1,6 +1,6 @@
 import {isIos} from '../services/util';
 let devMode = true;
-
+let emulator = true;
 let devIp = isIos ? '192.168.179.1' : '10.0.2.2';
 
 export default {
@@ -11,12 +11,15 @@ export default {
   //   : 'android.',
   version: '1.0.0',
   apiUrl: devMode
-    ? 'http://' + devIp + ':8080'
-    : // 'http://localhost:8080'
-      '',
+    ? emulator
+      ? 'http://' + devIp + ':8080/bookApp'
+      : 'http://localhost:8080/bookApp'
+    : '', //product url
   fileApiUrl: devMode
-    ? 'http://' + devIp + ':8080'
-    : // 'http://localhost:8080'
-      '',
+    ? emulator
+      ? 'http://' + devIp + ':8080/bookApp'
+      : 'http://localhost:8080/bookApp'
+    : '', //product url
+
   dialogZindex: 10,
 };
