@@ -21,9 +21,10 @@ export default function InputWrap({
   maxLength,
   secure,
   icon,
+  multiline,
   messageColor = colors.red,
 }) {
-  const handleChange = (t) => {
+  const handleChange = t => {
     if (maxLength && t.length > maxLength) {
       return;
     } else if (number && t && isNaN(t)) {
@@ -64,6 +65,7 @@ export default function InputWrap({
           placeholderTextColor={'#ababab'}
           autoCapitalize="none"
           value={value}
+          multiline={multiline}
           onChangeText={handleChange}
           style={[
             styles.input,
@@ -85,7 +87,7 @@ export default function InputWrap({
 
 const styles = StyleSheet.create({
   root: {
-    alignSelf: 'stretch',
+    // alignSelf: 'stretch',
   },
   message: {
     lineHeight: 18,
@@ -93,11 +95,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   inputWrap: {
+    flex: 1,
     paddingVertical: 7.5,
-    flexDirection: 'row',
-    // alignItems: 'center',
-    // paddingHorizontal: 12,
-    // borderRadius: 8,
+    paddingHorizontal: 7.5,
     borderBottomWidth: 1,
     borderColor: colors.border,
   },
@@ -121,9 +121,8 @@ const styles = StyleSheet.create({
     padding: 0,
     fontSize: 14,
     lineHeight: 17,
-    color: '#c3c3c3',
+    color: '#000000',
     letterSpacing: -0.5,
-    flex: 1,
     fontFamily: fonts.notoSansCjkKrRegular,
   },
 });

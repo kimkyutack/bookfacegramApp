@@ -7,13 +7,13 @@ import fonts from '../../libs/fonts';
 import images from '../../libs/image';
 import {formatTime, screenWidth} from '../../services/util';
 
-export default function EventItem(item) {
+export default function EventItem({item, navigation}) {
   return (
     <View>
       <TouchableOpacity
         style={styles.main}
         onPress={() => {
-          item.navigation.navigate('eventDetail', {item: item.ev_img});
+          navigation.navigate('eventDetail', {item});
         }}>
         <View style={styles.mainContent}>
           <Image

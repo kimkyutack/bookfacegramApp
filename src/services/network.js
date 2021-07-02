@@ -116,7 +116,6 @@ export const requestPut = async ({url, body = {}, headers = {}, file}) => {
   }
 };
 export const requestGet = async ({url, headers, query = {}}) => {
-  console.log(url);
   try {
     const response = await axios.get(
       `${url}?${Object.keys(query)

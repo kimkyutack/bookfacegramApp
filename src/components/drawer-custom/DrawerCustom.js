@@ -20,8 +20,10 @@ export default function DrawerCustom(props) {
             path="https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp"
           />
         </View>
-        <View style={{marginLeft: 15, flexDirection: 'column'}}>
-          <TextWrap style={styles.avatorText}>Undefined 님</TextWrap>
+        <View style={{marginLeft: 15, flexDirection: 'row'}}>
+          <TextWrap style={styles.avatorText}>
+            Undefined <Text style={styles.avatorText2}> 님</Text>
+          </TextWrap>
         </View>
       </View>
 
@@ -145,6 +147,11 @@ const styles = StyleSheet.create({
   avatorText: {
     marginTop: 20,
     marginLeft: 10,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  avatorText2: {
+    fontWeight: '600',
     fontSize: 16,
   },
   label: {

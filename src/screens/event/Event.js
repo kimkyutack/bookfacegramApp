@@ -43,7 +43,7 @@ export default function Event({navigation}) {
         disableVirtualization={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
-          return <EventItem {...item} navigation={navigation} />;
+          return <EventItem item={item} navigation={navigation} />;
         }}
       />
     </RootLayout>
