@@ -11,7 +11,7 @@ import TabBar from './TabBar';
 import Home from '../homeTab';
 
 const BottomTab = createBottomTabNavigator();
-export default function Tabs({}) {
+export default function Tabs({route, navigation}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <BottomTab.Navigator

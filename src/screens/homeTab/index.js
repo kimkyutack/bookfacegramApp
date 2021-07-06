@@ -1,11 +1,5 @@
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import React, {
-  createRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, {createRef, useCallback, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -21,11 +15,10 @@ import Topbar from '../../components/topbar/Topbar';
 import images from '../../libs/image';
 import colors from '../../libs/colors';
 import SearchBar from '../../components/search-bar/SearchBar';
-import TopTabs from '../../components/toptabs/TopTabs';
+import TopTabs from './TopTabs';
 
-export default function TabsHome({navigation}) {
+export default function TabsHome({route, navigation}) {
   const [keyword, setKeyword] = useState('');
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <Topbar
@@ -55,7 +48,7 @@ export default function TabsHome({navigation}) {
 const styles = StyleSheet.create({
   searchBar: {
     marginHorizontal: 16,
-    marginTop: 6,
+    // marginTop: 6,
   },
   backIcon: {
     width: 24,
@@ -63,8 +56,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   input: {
-    margin: 20,
-    marginVertical: 0,
+    marginHorizontal: 18,
     backgroundColor: '#ececec',
   },
 });

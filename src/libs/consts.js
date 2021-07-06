@@ -1,6 +1,6 @@
 import {isIos} from '../services/util';
 let devMode = true;
-let emulator = true;
+let emulator = false;
 let devIp = isIos ? '192.168.179.1' : '10.0.2.2';
 
 export default {

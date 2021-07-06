@@ -1,14 +1,22 @@
 import * as React from 'react';
-import BottomTab from '@react-navigation/bottom-tabs';
-import {StackActions} from '@react-navigation/native';
+import {StackActions, CommonActions} from '@react-navigation/native';
+import routes from '../libs/routes';
 export const navigationRef = React.createRef();
-
 export function navigate(name, params) {
   navigationRef.current?.navigate(name, params);
 }
 
 export function goBack() {
-  navigationRef.current?.goBack();
+  if (navigationRef.current?.canGoBack()) {
+    navigationRef.current?.goBack();
+  } else {
+    navigationRef.current?.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{name: routes.home}],
+      }),
+    );
+  }
 }
 
 export function replace(name, params) {

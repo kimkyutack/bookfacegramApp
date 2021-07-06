@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import fonts from '../../libs/fonts';
 import image from '../../libs/image';
-import {goBack, navigationRef} from '../../services/navigation';
+import {goBack} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
 
 export default function Topbar({title, onGoBack, options, back, navigation}) {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
     alignSelf: 'stretch',
     borderBottomColor: '#e6e6e6',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   center: {
     flex: 1,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   back: {
     // paddingVertical: 18,
-    // paddingHorizontal: 20,
+    // paddingHorizontal: 16,
   },
   backIcon: {
     width: 24,

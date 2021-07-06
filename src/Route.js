@@ -7,23 +7,19 @@ import {NavigationContainer} from '@react-navigation/native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
 import routes from './libs/routes';
-// import Home from './screens/homeTab';
-// import Settings from './screens/settingsTab';
+import {navigationRef} from './services/navigation';
+import DrawerCustom from './components/drawer-custom/DrawerCustom';
+
 import Splash from './screens/splash/Splash';
-// import Tabs from './screens/tabs/Tabs';
 import Login from './screens/login/Login';
-// import RegisterPhoneVerify from './screens/register-phone-verify/RegisterPhoneVerify';
-// import FindIdPassword from './screens/find-id-password/FindIdPassword';
 import Tabs from './screens/tabs/Tabs';
 import homeTab from './screens/homeTab';
-import DrawerCustom from './components/drawer-custom/DrawerCustom';
-import {navigate, navigationRef} from './services/navigation';
-import TopNewBooks from './screens/homeTab/TopNewBooks';
-import TopActivity from './screens/homeTab/TopActivity';
-import TopMyBooks from './screens/homeTab/TopMyBooks';
 import Notice from './screens/notice/Notice';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
+import TopNewBooks from './screens/homeTab/TopNewBooks';
+import TopMyBooks from './screens/homeTab/TopMyBooks';
+import TopActivity from './screens/homeTab/TopActivity';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,6 +66,15 @@ export default function Router({}) {
                   };
                 }}
               />
+              {/* <Drawer.Screen
+                name={routes.topNewBooks}
+                component={TopNewBooks}
+                options={({route, navigation}) => {
+                  return {
+                    swipeEnabled: false,
+                  };
+                }}
+              />
               <Drawer.Screen
                 name={routes.topActivity}
                 component={TopActivity}
@@ -87,16 +92,8 @@ export default function Router({}) {
                     swipeEnabled: false,
                   };
                 }}
-              />
-              <Drawer.Screen
-                name={routes.topNewBooks}
-                component={TopNewBooks}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
+              /> */}
+
               <Drawer.Screen
                 name={routes.notice}
                 component={Notice}

@@ -183,22 +183,6 @@ export const replaceStudentId = st => {
   }
 };
 
-export const replaceDOB = birthday => {
-  if (birthday) {
-    return birthday
-      .split('')
-      .map((x, i) => {
-        if (i === 2 || i === 3) {
-          return '•' || '●';
-        }
-        return x;
-      })
-      .join('');
-  } else {
-    return '';
-  }
-};
-
 export const formatPhone = f => {
   if (!f) {
     return '';
@@ -271,31 +255,18 @@ export const formatLastMessageTime = time => {
     return formatTime(time, 'YYYY-MM-DD hh:mm A');
   }
 };
-// export function generateDigit(n) {
-//   var add = 1,
-//     max = 12 - add; // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.
 
-//   if (n > max) {
-//     return generate(max) + generate(n - max);
-//   }
-
-//   max = Math.pow(10, n + add);
-//   var min = max / 10; // Math.pow(10, n) basically
-//   var number = Math.floor(Math.random() * (max - min + 1)) + min;
-
-//   return ('' + number).substring(add);
-// }
-// export function numFormat(nStr) {
-//   if (!nStr) {
-//     nStr = '0';
-//   }
-//   nStr += '';
-//   let x = nStr.split('.');
-//   let x1 = x[0];
-//   let x2 = x.length > 1 ? '.' + x[1] : '';
-//   let rgx = /(\d+)(\d{3})/;
-//   while (rgx.test(x1)) {
-//     x1 = x1.replace(rgx, '$1' + ',' + '$2');
-//   }
-//   return x1 + x2;
-// }
+export function numFormat(nStr) {
+  if (!nStr) {
+    nStr = '0';
+  }
+  nStr += '';
+  let x = nStr.split('.');
+  let x1 = x[0];
+  let x2 = x.length > 1 ? '.' + x[1] : '';
+  let rgx = /(\d+)(\d{3})/;
+  while (rgx.test(x1)) {
+    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+  }
+  return x1 + x2;
+}

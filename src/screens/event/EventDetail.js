@@ -16,7 +16,6 @@ import InputWrap from '../../components/input-wrap/InputWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import images from '../../libs/image';
-import {goBack} from '../../services/navigation';
 import {requestGet} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
 
@@ -62,7 +61,7 @@ export default function EventDetail({route, navigation}) {
   const [raplyContent, setReplyContent] = useState('');
   const dispathc = useDispatch();
   const routeParams = route.params.item;
-  console.log(routeParams);
+  // console.log(routeParams);
   return (
     <RootLayout
       topbar={{
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'column',
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     marginBottom: 20,
   },
   image: {

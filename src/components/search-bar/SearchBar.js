@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import fonts from '../../libs/fonts';
-import image from '../../libs/image';
+import images from '../../libs/image';
 import TextWrap from '../text-wrap/TextWrap';
 export default function SearchBar({
   onPress,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 6,
+    paddingLeft: 10,
     backgroundColor: '#fafafa',
   },
   icon: {
@@ -92,15 +92,12 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: '#222222',
-    padding: 0,
     paddingVertical: 6,
     fontFamily: fonts.robotoRegular,
   },
   inputText: {
     flex: 1,
     color: '#222222',
-    padding: 0,
-    paddingVertical: 12,
     fontSize: 14,
     lineHeight: 17,
   },

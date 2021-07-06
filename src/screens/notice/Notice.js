@@ -5,7 +5,6 @@ import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import {dialogError} from '../../redux/dialog/DialogActions';
-import {goBack} from '../../services/navigation';
 import {requestGet} from '../../services/network';
 import NoticeItem from './NoticeItem';
 
@@ -15,7 +14,7 @@ export default function Notice({navigation}) {
   useEffect(() => {
     requestGet({url: consts.apiUrl + '/noticeList'})
       .then(x => {
-        console.log(x);
+        // console.log(x);
         setData([...x.noticeList]);
       })
       .catch(e => {

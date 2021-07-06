@@ -34,7 +34,7 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
     // console.log(item);
     return (
       <TouchableWithoutFeedback>
-        <View style={styles.bannerContainer}>
+        <View style={styles.bannerContainer} key={index}>
           <Image style={styles.banner} source={item.title} />
         </View>
       </TouchableWithoutFeedback>
@@ -57,6 +57,7 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
               layout={'default'}
               // layoutCardOffset={'0'}
               data={renderData ? renderData : []}
+              enableSnap={true}
               renderItem={_renderItem}
               sliderWidth={sliderWidth}
               itemWidth={itemWidth}
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     backgroundColor: 'white',
-    marginTop: 25,
+    marginTop: 20,
     height: 150,
   },
 });

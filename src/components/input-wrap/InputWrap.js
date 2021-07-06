@@ -96,8 +96,6 @@ const styles = StyleSheet.create({
   },
   inputWrap: {
     flex: 1,
-    paddingVertical: 7.5,
-    paddingHorizontal: 7.5,
     borderBottomWidth: 1,
     borderColor: colors.border,
   },

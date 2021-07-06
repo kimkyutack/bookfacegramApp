@@ -5,7 +5,6 @@ import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import {dialogError} from '../../redux/dialog/DialogActions';
-import {goBack} from '../../services/navigation';
 import {requestGet} from '../../services/network';
 import EventItem from './EventItem';
 
@@ -15,7 +14,7 @@ export default function Event({navigation}) {
   useEffect(() => {
     requestGet({url: consts.apiUrl + '/eventList'})
       .then(x => {
-        console.log(x);
+        // console.log(x);
         setData([...x.event]);
       })
       .catch(e => {
