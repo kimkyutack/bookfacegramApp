@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import image from '../../libs/image';
 import colors from '../../libs/colors';
@@ -46,7 +47,7 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
       {loading ? (
         <ActivityIndicator
           size="small"
-          style={{alignSelf: 'center'}}
+          style={{alignSelf: 'center', marginBottom: 60}}
           color={colors.primary}
         />
       ) : (
@@ -55,7 +56,6 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
             <Carousel
               ref={isCarousel}
               layout={'default'}
-              // layoutCardOffset={'0'}
               data={renderData ? renderData : []}
               enableSnap={true}
               renderItem={_renderItem}
@@ -85,11 +85,6 @@ export default function SnapCarousel({name, sliderWidth, itemWidth}) {
                 position: 'relative',
                 top: -25,
               }}
-              inactiveDotStyle={
-                {
-                  // Define styles for inactive dots here
-                }
-              }
               inactiveDotOpacity={0.4}
               inactiveDotScale={0.6}
               tappableDots={true}
