@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   safe: {
-    backgroundColor: colors.white,
     flex: 1,
+    backgroundColor: colors.white,
   },
   cameraIcon: {
     width: 24,

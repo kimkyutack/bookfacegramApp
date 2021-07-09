@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+import {addons} from 'react-native';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import {reset} from '../../services/navigation';
@@ -84,15 +85,16 @@ export const userCheckToken = async dispatch => {
     // console.log('ftoken');
     // console.log(ftoken);
 
-    const user = await requestGet({
-      // query: {fcmToken: fcm},
-      url: consts.apiUrl + '/users/tokens/' + token,
-    });
-    if (!user) {
-      throw '';
-    }
+    // const user = await requestGet({
+    //   // query: {fcmToken: fcm},
+    //   url: consts.apiUrl + '/users/tokens/' + token,
+    // });
+    // if (!user) {
+    //   throw '';
+    // }
 
-    dispatch({type: userActionType.token, user});
+    // dispatch({type: userActionType.token, user});
+    dispatch({type: userActionType.token, user: {member_id: 'addons'}});
   } catch (error) {
     dispatch({type: userActionType.init});
   }

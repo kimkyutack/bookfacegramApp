@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Platform,
+} from 'react-native';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -7,36 +13,69 @@ import fonts from '../../libs/fonts';
 import images from '../../libs/image';
 import {formatTime, screenWidth} from '../../services/util';
 import {numFormat} from '../../services/util';
+import FastImage from 'react-native-fast-image';
+import moment from 'moment-timezone';
 
 export default function BookListItem({
   book_cd,
   book_nm,
   buy_price,
-  img_rm,
+  img_nm,
   topic,
   writer,
   index,
+  grade,
+  setTabs,
+  setSelectedBook,
+  th,
+  gradeStyle,
 }) {
   return (
     <>
       {index === 0 ? (
-        <View style={styles.headerContainer}>
-          <TextWrap style={styles.header}>신간을 확인해 보세요!</TextWrap>
-          <TextWrap style={styles.subHeader}>
-            이번 달 새롭게 출간된 신간을 소개합니다.
-          </TextWrap>
-        </View>
+        grade === null ? (
+          <View style={styles.headerContainer}>
+            <TextWrap style={styles.header}>신간을 확인해 보세요!</TextWrap>
+            <TextWrap style={styles.subHeader}>
+              이번 달 새롭게 출간된 신간을 소개합니다.
+            </TextWrap>
+          </View>
+        ) : (
+          <View style={styles.headerContainer}>
+            <TextWrap style={styles.cardHeaderTitle}>
+              {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+              <TextWrap style={styles.blueText}>
+                책과함께, KBS한국어능력시험
+              </TextWrap>
+              <TextWrap style={[colors.black, gradeStyle && gradeStyle]}>
+                {' '}
+                {grade}{' '}
+              </TextWrap>
+              선정도서
+            </TextWrap>
+            <TextWrap style={styles.subHeader}>
+              {grade} 선정도서를 소개합니다.
+            </TextWrap>
+          </View>
+        )
       ) : null}
       <View style={styles.root}>
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
-            //
+            setTabs(2);
+            setSelectedBook(book_cd);
           }}>
           <View style={styles.mainContent}>
-            <Image
+            <FastImage
+              source={{
+                uri: consts.imgUrl + '/' + img_nm,
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
               style={styles.thumbnail}
-              source={require('../../assets/images/book1.png')}
+              onError={() => (img_nm = 'bookDefault.png')}
+              // onError={() => console.log(book_nm)}
             />
             <View style={styles.info}>
               <TextWrap
@@ -90,7 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: screenWidth,
     paddingVertical: 20,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     justifyContent: 'space-between',
   },
   main: {
@@ -123,6 +162,17 @@ const styles = StyleSheet.create({
     height: 120,
     width: 90,
     resizeMode: 'stretch',
+    // ...Platform.select({
+    //   ios: {
+    //     shadowColor: '#000',
+    //     shadowOffset: {width: 0, height: 2},
+    //     shadowOpacity: 0.2,
+    //   },
+    //   android: {
+    //     backgroundColor: 'white',
+    //     elevation: 5,
+    //   },
+    // }),
   },
   info: {
     flex: 1,
@@ -138,7 +188,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignSelf: 'center',
-    // backgroundColor: 'blue',
   },
   button1: {
     width: 40,
@@ -154,8 +203,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   headerContainer: {
-    marginTop: 10,
-    paddingHorizontal: 16,
+    marginTop: 14,
+    paddingHorizontal: 18,
   },
   header: {
     fontSize: 14,
@@ -165,5 +214,12 @@ const styles = StyleSheet.create({
   subHeader: {
     color: colors.black,
     fontSize: 13,
+  },
+  cardHeaderTitle: {
+    fontWeight: '700',
+    lineHeight: 16,
+  },
+  blueText: {
+    color: colors.blue,
   },
 });

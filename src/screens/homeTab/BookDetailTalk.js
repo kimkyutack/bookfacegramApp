@@ -65,6 +65,7 @@ export default function BookDetailTalk({}) {
         onChange={setReplyContent}
         borderColor={colors.border}
         maxLength={200}
+        inputFlex={{flex: 1}}
         optionComponent={
           <TextWrap style={styles.contentCount}>
             ({raplyContent.length} / 200)
@@ -81,14 +82,6 @@ export default function BookDetailTalk({}) {
         {data.map((u, i) => {
           return <BookDetailTalkItem {...u} key={i} />;
         })}
-        {/* <FlatList
-                  data={data}
-                  nestedScrollEnabled
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({item, index}) => {
-                    return <EventReplyItem {...item} />;
-                  }}
-                /> */}
       </View>
     </View>
   );

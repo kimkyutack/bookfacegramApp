@@ -42,17 +42,17 @@ export default function Login({}) {
     }
   }, [username, password]);
 
-  useEffect(() => {
-    getItem('email').then(x => {
-      if (x && validationEmail(x)) {
-        setUsername(x);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   getItem('email').then(x => {
+  //     if (x && validationEmail(x)) {
+  //       setUsername(x);
+  //     }
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (user.signed) {
-      reset(routes.tab);
+      reset(routes.home);
     }
   }, [user.signed]);
 
@@ -237,12 +237,11 @@ export default function Login({}) {
 
 const styles = StyleSheet.create({
   root: {
-    // alignItems: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.background,
-    // paddingTop: 10,
     paddingHorizontal: 40,
+    paddingVertical: 20,
   },
   paragraph: {
     fontSize: 20,
@@ -282,10 +281,10 @@ const styles = StyleSheet.create({
     borderColor: '#777777',
   },
   input: {
-    marginTop: 30,
+    marginTop: 40,
   },
   input2: {
-    marginTop: 9,
+    marginTop: 30,
   },
   logo: {
     // width: screenWidth / 1.5,

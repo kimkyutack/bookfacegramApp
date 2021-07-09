@@ -16,20 +16,37 @@ import {requestGet, requestPost} from '../../services/network';
 import BookListItem from './BookListItem';
 import {screenHeight, screenWidth} from '../../services/util';
 
-export default function TopNewBooksList({newBookList}) {
+export default function TopNewBooksList({
+  BookList,
+  setTabs,
+  grade,
+  setSelectedBook,
+  th,
+  gradeStyle,
+}) {
   return (
     <View style={styles.root}>
-      {!newBookList.length ? (
-        <TextWrap>newBookList가 없습니다.</TextWrap>
+      {!BookList.length ? (
+        <TextWrap>BookList가 없습니다.</TextWrap>
       ) : (
         <View>
           <View>
             <FlatList
-              data={newBookList}
-              extraData={newBookList}
+              data={BookList}
+              extraData={BookList}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item, index}) => {
-                return <BookListItem {...item} index={index} />;
+                return (
+                  <BookListItem
+                    {...item}
+                    index={index}
+                    grade={grade}
+                    setTabs={setTabs}
+                    setSelectedBook={setSelectedBook}
+                    th={th}
+                    gradeStyle={gradeStyle}
+                  />
+                );
               }}
             />
           </View>

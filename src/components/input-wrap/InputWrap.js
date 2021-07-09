@@ -7,6 +7,7 @@ import TextWrap from '../text-wrap/TextWrap';
 export default function InputWrap({
   message,
   style,
+  inputFlex,
   placeholderSize,
   label,
   toolbarComponent,
@@ -49,6 +50,7 @@ export default function InputWrap({
       <View
         style={[
           styles.inputWrap,
+          inputFlex,
           borderColor && {borderColor, borderWidth: 1.5},
           disabled && {
             backgroundColor: '#f2f2f2',
@@ -87,7 +89,7 @@ export default function InputWrap({
 
 const styles = StyleSheet.create({
   root: {
-    // alignSelf: 'stretch',
+    alignSelf: 'stretch',
   },
   message: {
     lineHeight: 18,
@@ -95,7 +97,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   inputWrap: {
-    flex: 1,
     borderBottomWidth: 1,
     borderColor: colors.border,
   },

@@ -21,52 +21,59 @@ import TopNewBooks from './screens/homeTab/TopNewBooks';
 import TopMyBooks from './screens/homeTab/TopMyBooks';
 import TopActivity from './screens/homeTab/TopActivity';
 
-const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function Router({}) {
   const dispatch = useDispatch();
-  const {userId} = useSelector(s => s.user, shallowEqual);
-  const login = true;
+  const {memberId} = useSelector(s => s.user, shallowEqual);
   return (
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef}>
-        {!login ? (
-          <>
-            <Stack.Navigator headerMode="none" initialRouteName={routes.splash}>
-              <Stack.Screen name={routes.splash} component={Splash} />
-              <Stack.Screen name={routes.login} component={Login} />
-            </Stack.Navigator>
-          </>
-        ) : (
-          <>
-            <Drawer.Navigator
-              drawerStyle={{
-                backgroundColor: '#ffffff',
-                width: 240,
-              }}
-              headerMode="none"
-              initialRouteName={routes.home}
-              drawerContent={props => <DrawerCustom {...props} />}>
-              <Drawer.Screen
-                name={routes.home}
-                component={homeTab}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-              <Drawer.Screen
-                name={routes.tab}
-                component={Tabs}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-              {/* <Drawer.Screen
+        <Drawer.Navigator
+          drawerStyle={{
+            backgroundColor: '#ffffff',
+            width: 240,
+          }}
+          headerMode="none"
+          initialRouteName={routes.home}
+          drawerContent={props => <DrawerCustom {...props} />}>
+          <Drawer.Screen
+            name={routes.splash}
+            component={Splash}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.home}
+            component={homeTab}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.login}
+            component={Login}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.tab}
+            component={Tabs}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          {/* <Drawer.Screen
                 name={routes.topNewBooks}
                 component={TopNewBooks}
                 options={({route, navigation}) => {
@@ -94,36 +101,34 @@ export default function Router({}) {
                 }}
               /> */}
 
-              <Drawer.Screen
-                name={routes.notice}
-                component={Notice}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-              <Drawer.Screen
-                name={routes.event}
-                component={Event}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-              <Drawer.Screen
-                name={routes.eventDetail}
-                component={EventDetail}
-                options={({route, navigation}) => {
-                  return {
-                    swipeEnabled: false,
-                  };
-                }}
-              />
-            </Drawer.Navigator>
-          </>
-        )}
+          <Drawer.Screen
+            name={routes.notice}
+            component={Notice}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.event}
+            component={Event}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.eventDetail}
+            component={EventDetail}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+        </Drawer.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );

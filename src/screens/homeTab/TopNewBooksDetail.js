@@ -14,6 +14,7 @@ import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import {requestGet, requestPost} from '../../services/network';
 import {screenWidth} from '../../services/util';
+import FastImage from 'react-native-fast-image';
 
 import TextWrap from '../../components/text-wrap/TextWrap';
 import BookDetailInfo from './BookDetailInfo';
@@ -22,7 +23,7 @@ import BookDetailTalk from './BookDetailTalk';
 
 export default function TopNewBooksDetail({selectedBook}) {
   const [loading, setLoading] = useState(false);
-  const [bookDetail, setBookDetail] = useState();
+  const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
   const fetchRequested = async () => {
     try {
@@ -30,6 +31,7 @@ export default function TopNewBooksDetail({selectedBook}) {
       const book = await requestGet({
         url: consts.apiUrl + '/bookDetail',
         query: {book_cd: selectedBook},
+        // query: {book_cd: '2003121800004'},
       });
       setBookDetail(book.bookDetail[0]);
       setLoading(false);
@@ -69,12 +71,25 @@ export default function TopNewBooksDetail({selectedBook}) {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled">
       <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/book3.png')}
-        />
+        {!loading ? (
+          <FastImage
+            source={{
+              uri: consts.imgUrl + '/' + bookDetail.img_nm,
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+            style={styles.image}
+            onError={() => (bookDetail.img_nm = 'bookDefault.png')}
+            // onError={() => console.log(book_nm)}
+          />
+        ) : (
+          <Image
+            style={styles.image}
+            source={require('../../assets/images/bookDefault.png')}
+          />
+        )}
       </View>
-      <TextWrap style={styles.imageTitle}>{selectedBook}</TextWrap>
+      <TextWrap style={styles.imageTitle}>{bookDetail.book_nm}</TextWrap>
       <View style={styles.tabContainer}>
         <Tab title="도서소개" id={0} isSelected={tabs === 0 ? true : false} />
         <Tab title="독서퀴즈" id={1} isSelected={tabs === 1 ? true : false} />
@@ -122,7 +137,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 200,
-    overflow: 'visible',
+    backgroundColor: colors.white,
   },
   imageTitle: {
     textAlign: 'center',

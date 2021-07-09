@@ -12,7 +12,8 @@ export default function BookDetailInfo({
   book_cd,
   book_nm,
   buy_price,
-  img_nm,
+  publish_dt,
+  publisher,
   summary,
   writer,
 }) {
@@ -31,7 +32,7 @@ export default function BookDetailInfo({
             출판사 | {book_nm}
           </TextWrap>
           <TextWrap font={fonts.robotoMedium} style={styles.title}>
-            출판년도 | {book_cd}
+            출판년도 | {publish_dt ? publish_dt : publisher ? publisher : ''}
           </TextWrap>
         </View>
         <View>

@@ -6280,6 +6280,16 @@ query-string@^6.13.6:
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
 
+query-string@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.1.tgz#45bd149cf586aaa582dffc7ec7a8ad97dd02f75d"
+  integrity sha512-uIw3iRvHnk9to1blJCG3BTc+Ro56CBowJXKmNNAm3RulvPBzWLRqKSiiDk+IplJhsydwtuNMHi8UGQFcCLVfkA==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    filter-obj "^1.1.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
@@ -6380,10 +6390,10 @@ react-native-elements@^3.4.2:
     react-native-ratings "8.0.4"
     react-native-size-matters "^0.3.1"
 
-react-native-fast-image@^8.3.4:
-  version "8.3.4"
-  resolved "https://registry.npmjs.org/react-native-fast-image/-/react-native-fast-image-8.3.4.tgz"
-  integrity sha512-LpzAdjUphihUpVEBn5fEv5AILe55rHav0YiZroPZ1rumKDhAl4u2cG01ku2Pb7l8sayjTsNu7FuURAlXUUDsow==
+react-native-fast-image@^8.3.5:
+  version "8.3.5"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.5.tgz#1802ee69e98cf84310d7fa68f50f842ad0cc9f84"
+  integrity sha512-ouYTbLGk6IfzIUy8wr+CgWnFWJJaE1hEPMZ0jyv39hwfH/U0GeLLMEi5/BTD7LYKxDIRECli5lljONdKglmzWg==
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"

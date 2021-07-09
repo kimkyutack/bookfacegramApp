@@ -25,9 +25,19 @@ export default function Splash({}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
 
-  setTimeout(() => {
-    reset(routes.login);
-  }, 2000);
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(userCheckToken);
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    if (user.signed) {
+      reset(routes.home);
+    } else if (user.inited) {
+      reset(routes.login);
+    }
+  }, [user.inited, user.signed]);
 
   return (
     <RootLayout style={styles.root} safeBackgroundColor={colors.background}>

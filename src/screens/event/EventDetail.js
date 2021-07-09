@@ -101,6 +101,7 @@ export default function EventDetail({route, navigation}) {
               </TextWrap>
               <InputWrap
                 style={styles.input}
+                inputFlex={{flex: 1}}
                 value={raplyContent}
                 onChange={setReplyContent}
                 borderColor={colors.border}
