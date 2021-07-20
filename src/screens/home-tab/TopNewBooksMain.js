@@ -14,10 +14,10 @@ export default function TopNewBooksMain({
   kbsBookList5,
   kbsBookList6,
   bannerList,
+  th,
   setTabs,
   setSelectedBook,
   setGrade,
-  th,
   setTh,
 }) {
   useEffect(() => {

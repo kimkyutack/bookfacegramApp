@@ -69,13 +69,15 @@ export default function BookListItem({
           <View style={styles.mainContent}>
             <FastImage
               source={{
-                uri: consts.imgUrl + '/' + img_nm,
+                uri:
+                  img_nm !== ''
+                    ? consts.imgUrl + '/' + img_nm + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
               style={styles.thumbnail}
-              onError={() => (img_nm = 'bookDefault.png')}
-              // onError={() => console.log(book_nm)}
+              onError={() => (img_nm = 'bookDefault')}
             />
             <View style={styles.info}>
               <TextWrap

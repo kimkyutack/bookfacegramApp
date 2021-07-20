@@ -2,6 +2,7 @@ import * as React from 'react';
 import {StackActions, CommonActions} from '@react-navigation/native';
 import routes from '../libs/routes';
 export const navigationRef = React.createRef();
+export const routeNameRef = React.createRef();
 export function navigate(name, params) {
   navigationRef.current?.navigate(name, params);
 }
@@ -11,7 +12,7 @@ export function goBack() {
     navigationRef.current?.goBack();
   } else {
     navigationRef.current?.dispatch(
-      CommonActions.reset({
+      CommonActions?.reset({
         index: 0,
         routes: [{name: routes.home}],
       }),

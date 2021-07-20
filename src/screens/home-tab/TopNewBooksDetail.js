@@ -37,7 +37,7 @@ export default function TopNewBooksDetail({selectedBook}) {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      // console.log(error);
       // dispatch(dialogError(error));
     }
   };
@@ -74,18 +74,21 @@ export default function TopNewBooksDetail({selectedBook}) {
         {!loading ? (
           <FastImage
             source={{
-              uri: consts.imgUrl + '/' + bookDetail.img_nm,
+              uri:
+                bookDetail.img_nm !== ''
+                  ? consts.imgUrl + '/' + bookDetail.img_nm + '.gif'
+                  : consts.imgUrl + '/bookDefault.gif',
               priority: FastImage.priority.normal,
             }}
             resizeMode={FastImage.resizeMode.cover}
             style={styles.image}
-            onError={() => (bookDetail.img_nm = 'bookDefault.png')}
+            onError={() => (bookDetail.img_nm = 'bookDefault')}
             // onError={() => console.log(book_nm)}
           />
         ) : (
           <Image
             style={styles.image}
-            source={require('../../assets/images/bookDefault.png')}
+            source={require('../../assets/images/bookDefault.gif')}
           />
         )}
       </View>

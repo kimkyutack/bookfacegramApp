@@ -7,6 +7,7 @@ export default {
   text: '#222',
   background: '#0066FF',
   blue: '#0B5EAA',
+  prussianBlue: '#013DFD',
   st1: '#E66D1E',
   st2: '#0E96AC',
   st3: '#CA275C',

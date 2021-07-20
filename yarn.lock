@@ -1194,6 +1194,13 @@
   resolved "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
+"@react-native-seoul/kakao-login@^3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@react-native-seoul/kakao-login/-/kakao-login-3.3.3.tgz#ce01c08d4b9e4fefa65f2e3851c49efcc0d5fa7c"
+  integrity sha512-rDmeFkAg161kLOMcTO/z463pexZulUb6HJokDXKU+bQ2EiDnIk3KC0dqDgXaF2Yxn/1cfMUAu5ndl5YfPbla4w==
+  dependencies:
+    dooboolab-welcome "^1.3.0"
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
@@ -2816,6 +2823,11 @@ domutils@^1.5.1:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+dooboolab-welcome@^1.3.0:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.3.1.tgz#37c4bbae0c84616c37ba9301dc87521ae2e9af86"
+  integrity sha512-KcTf3RVRGO3QADgsEJPFixFqj1c3oZPI3SnS6rVO7soaASi4+iHmVvBFFAf+l/sQsxCbPeV8sGhsdG6ZdSLqmQ==
 
 dot-prop@^4.2.1:
   version "4.2.1"
@@ -6389,6 +6401,11 @@ react-native-elements@^3.4.2:
     opencollective-postinstall "^2.0.3"
     react-native-ratings "8.0.4"
     react-native-size-matters "^0.3.1"
+
+react-native-exit-app@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-exit-app/-/react-native-exit-app-1.1.0.tgz#5ec082152974240e2d6a93f1608efb49a4385f21"
+  integrity sha512-Spne19zfMfJvnUTX909EHUqWMk69rATtLJq9XMBGpNSHhx0M7v5yetx2Z87egBhLOqQm+CWfD/oxWzDG8rbIQA==
 
 react-native-fast-image@^8.3.5:
   version "8.3.5"

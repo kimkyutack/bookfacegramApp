@@ -5,6 +5,7 @@ import image from '../../libs/image';
 import {goBack} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
 import {screenWidth} from '../../services/util';
+import colors from '../../libs/colors';
 
 export default function Topbar({title, onGoBack, options, back, navigation}) {
   const [optionWidth, setOptionWidth] = useState(0);
@@ -47,9 +48,10 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
         {options}
       </View> */}
 
-      <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
+      <TouchableWithoutFeedback
+        onPress={options ? () => navigation.openDrawer() : null}>
         <View style={styles.right} onLayout={handleOptionLayout}>
-          {options}
+          {options ? options : <TextWrap style={styles.noneIcon} />}
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue',
     textAlign: 'center',
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 22,
     letterSpacing: -0.5,
     color: '#000000',
   },
@@ -87,5 +89,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: 'contain',
+  },
+  noneIcon: {
+    width: 24,
+    height: 24,
   },
 });

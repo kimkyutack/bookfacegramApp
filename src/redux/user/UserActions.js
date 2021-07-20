@@ -27,55 +27,64 @@ export const userUpdate =
   };
 
 export const userSignOut = userId => dispatch => {
-  requestPost({url: consts.apiUrl + '/users/' + userId + '/signout'})
-    .then(() => {
-      clearItem('token').then(() => {
-        dispatch({type: 'clear'});
-      });
-    })
-    .catch(e => {
-      console.log(e);
-      dispatch(dialogError('Please check internet'));
+  clearItem('token').then(() => {
+    clearItem('platformType').then(() => {
+      dispatch({type: 'clear'});
     });
+  });
+
+  // requestPost({url: consts.apiUrl + '/users/' + userId + '/signout'})
+  //   .then(() => {
+  //     clearItem('token').then(() => {
+  //       dispatch({type: 'clear'});
+  //     });
+  //   })
+  //   .catch(e => {
+  //     console.log(e);
+  //     dispatch(dialogError('Please check internet'));
+  //   });
 };
 
-export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
-  try {
-    if (toDefault) {
-      await requestPut({
-        url: consts.apiUrl + '/users/' + userId,
-        body: {columns: ['profilePath'], values: ['']},
-      });
-      dispatch({type: userActionType.update, user: {profilePath: ''}});
-    } else {
-      const file = await getImageFromGallery();
-      console.log(file);
-      if (!file) {
-        return;
-      }
+// export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
+//   try {
+//     if (toDefault) {
+//       await requestPut({
+//         url: consts.apiUrl + '/users/' + userId,
+//         body: {columns: ['profilePath'], values: ['']},
+//       });
+//       dispatch({type: userActionType.update, user: {profilePath: ''}});
+//     } else {
+//       const file = await getImageFromGallery();
+//       console.log(file);
+//       if (!file) {
+//         return;
+//       }
 
-      const formData = new FormData();
-      formData.append('profileImage', file);
+//       const formData = new FormData();
+//       formData.append('profileImage', file);
 
-      const user = await requestFile(
-        {url: consts.apiUrl + '/users/' + userId, method: 'put'},
-        formData,
-      );
-      dispatch({type: userActionType.update, user});
-    }
-  } catch (error) {
-    console.log(error);
-    dispatch(dialogError(error));
-  }
-};
+//       const user = await requestFile(
+//         {url: consts.apiUrl + '/users/' + userId, method: 'put'},
+//         formData,
+//       );
+//       dispatch({type: userActionType.update, user});
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     dispatch(dialogError(error));
+//   }
+// };
 
 export const userCheckToken = async dispatch => {
   try {
     const token = await getItem('token');
+    const platformType = await getItem('platformType');
     if (!token) {
-      throw '';
+      throw 'token is null';
     }
-
+    if (!platformType) {
+      throw 'platformType is null';
+    }
     // let fcm = '';
     // const ftoken = await messging().getToken();
 
@@ -85,16 +94,18 @@ export const userCheckToken = async dispatch => {
     // console.log('ftoken');
     // console.log(ftoken);
 
-    // const user = await requestGet({
-    //   // query: {fcmToken: fcm},
-    //   url: consts.apiUrl + '/users/tokens/' + token,
-    // });
-    // if (!user) {
-    //   throw '';
-    // }
+    const {member} = await requestPost({
+      url: consts.apiUrl + '/checkJwt',
+      body: {
+        token,
+        platform_type: platformType,
+      },
+    });
+    if (!member) {
+      throw 'member is null';
+    }
 
-    // dispatch({type: userActionType.token, user});
-    dispatch({type: userActionType.token, user: {member_id: 'addons'}});
+    dispatch({type: userActionType.token, user: member[0]});
   } catch (error) {
     dispatch({type: userActionType.init});
   }

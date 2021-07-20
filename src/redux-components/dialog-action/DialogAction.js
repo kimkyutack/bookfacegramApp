@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -15,7 +15,7 @@ import {dialogClose} from '../../redux/dialog/DialogActions';
 
 export default function DialogAction({}) {
   const dispatch = useDispatch();
-  const {actionDialog} = useSelector((s) => s.dialog, []);
+  const {actionDialog} = useSelector(s => s.dialog, shallowEqual);
 
   useEffect(() => {
     if (actionDialog.open) {
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button2: {
-    borderRightWidth: 1,
+    // borderRightWidth: 1,
     borderRightColor: colors.border,
   },
   title2: {

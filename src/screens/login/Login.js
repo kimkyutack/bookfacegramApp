@@ -7,6 +7,7 @@ import {
   PixelRatio,
   Dimensions,
   Text,
+  BackHandler,
   TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
@@ -20,15 +21,19 @@ import consts from '../../libs/consts';
 import image from '../../libs/image';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import {dialogError, dialogOpenMessage} from '../../redux/dialog/DialogActions';
+import {
+  dialogError,
+  dialogOpenMessage,
+  dialogOpenAction,
+} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
-import {navigate, reset} from '../../services/navigation';
+import {navigationRef, reset, navigate} from '../../services/navigation';
 import {requestPost} from '../../services/network';
 import {getItem, setItem} from '../../services/preference';
 import {screenWidth, validationEmail} from '../../services/util';
 import Avatar from '../../components/avatar/Avatar';
 
-export default function Login({}) {
+export default function Login({route}) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
   const [username, setUsername] = useState('');
@@ -42,59 +47,72 @@ export default function Login({}) {
     }
   }, [username, password]);
 
-  // useEffect(() => {
-  //   getItem('email').then(x => {
-  //     if (x && validationEmail(x)) {
-  //       setUsername(x);
-  //     }
-  //   });
-  // }, []);
-
   useEffect(() => {
     if (user.signed) {
-      reset(routes.home);
+      if (user.intro_setting) {
+        reset(routes.home);
+      } else {
+        navigate(routes.intro1);
+      }
     }
   }, [user.signed]);
 
   const handleLogin = async () => {
-    // setLoading(true);
-    navigate(routes.home);
-
-    // try {
-    //   if (
-    //     !validationEmail(username) ||
-    //     password.length < 8 ||
-    //     password.length > 20
-    //   ) {
-    //     throw '';
-    //   }
-    //   Keyboard.dismiss();
-    //   const {token} = await requestPost({
-    //     url: consts.apiUrl + '/users/signin',
-    //     body: {
-    //       email: username,
-    //       password,
+    // dispatch(
+    //   dialogOpenAction({
+    //     titleColor: '#000',
+    //     cancelTitle: 'Close',
+    //     message:
+    //       'Would you like to leave the chat room?\n(All conversations will be deleted.)',
+    //     onPress: s => {
+    //       console.log(s);
     //     },
-    //   });
-
-    //   await setItem('pushApp', 'true');
-    //   await setItem('token', token);
-    //   // dispatch(userCheckToken);
-    //   await setItem('email', username);
-    // } catch (error) {
-    //   if (error.message === 'Network Error') {
-    //     dispatch(dialogError(error));
-    //   } else {
-    //     setPasswordError(
-    //       'The information does not match.\nPlease check your ID or password.',
-    //     );
-    //   }
-    // }
-    // setLoading(false);
+    //   }),
+    // );
+    // dispatch(
+    //   dialogError({
+    //     message: 'User information does not match.\nPlease check again.',
+    //   }),
+    // );
+    // dispatch(
+    //   dialogOpenMessage({
+    //     message: 'User information does not match.\nPlease check again.',
+    //   }),
+    // );
+    setLoading(true);
+    try {
+      Keyboard.dismiss();
+      const token = await requestPost({
+        url: consts.apiUrl + '/makeJwt',
+        body: {
+          member_id: username,
+          password: password,
+          platform_type: 'app',
+        },
+      });
+      if (token.valid) {
+        await setItem('token', token.token);
+        await setItem('platformType', 'app');
+        dispatch(userCheckToken);
+      } else {
+        setPasswordError(
+          'The information does not match.\nPlease check your ID or password.',
+        );
+      }
+    } catch (error) {
+      if (error.message === 'Network Error') {
+        dispatch(dialogError(error));
+      } else {
+        setPasswordError(
+          'The information does not match.\nPlease check your ID or password.',
+        );
+      }
+    }
+    setLoading(false);
   };
 
   const handleRegister = () => {
-    // navigate(routes.registerPhoneVerify);
+    navigate(routes.registerForm);
   };
 
   const handleFindIdPassword = () => {
@@ -102,7 +120,7 @@ export default function Login({}) {
   };
 
   const onGoogleButtonPress = async () => {
-    console.log('google sign');
+    // console.log('google sign');
   };
 
   return (
@@ -161,10 +179,7 @@ export default function Login({}) {
         </TextButton>
         <TextWrap style={styles.t2}>|</TextWrap>
         <TextButton
-          // onPress={() => {
-          //   navigate(routes.registerPhoneVerify);
-          // }}
-          onPress={handleFindIdPassword}
+          onPress={handleRegister}
           styleTitle={styles.t}
           font={fonts.notoSansCjkKrRegular}>
           회원가입

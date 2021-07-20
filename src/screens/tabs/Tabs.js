@@ -8,7 +8,7 @@ import colors from '../../libs/colors';
 import TabIcon from './TabIcon';
 import TabBar from './TabBar';
 
-import Home from '../homeTab';
+import Home from '../home-tab';
 
 const BottomTab = createBottomTabNavigator();
 export default function Tabs({route, navigation}) {

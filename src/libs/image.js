@@ -22,4 +22,6 @@ export default {
   event2Body: require('../assets/images/event2_body.png'),
   like: require('../assets/images/like2.png'),
   talk: require('../assets/images/talk2.png'),
+  checkboxOn: require('../assets/images/checkbox_on.png'),
+  checkboxOff: require('../assets/images/checkbox_off.png'),
 };

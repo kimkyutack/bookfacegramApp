@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
 import {
   Image,
   StyleSheet,
@@ -18,7 +18,7 @@ import FastImage from 'react-native-fast-image';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import CardWrap from '../../components/card-wrap/CardWrap';
 
-const BookMainCarousel = ({
+export default function BookMainCarousel({
   name,
   grade,
   gradeStyle,
@@ -31,7 +31,7 @@ const BookMainCarousel = ({
   bannerPagination,
   header,
   th,
-}) => {
+}) {
   const isCarousel = useRef(null);
   const [activeSlide, setActiveSlide] = useState(0);
   let renderItem = [];
@@ -56,6 +56,7 @@ const BookMainCarousel = ({
       break;
     case 'new':
       const newRenderItem = ({item, index}) => {
+        // console.log(item.img_nm);
         return (
           <CardWrap
             style={styles.card}
@@ -65,12 +66,16 @@ const BookMainCarousel = ({
             }}>
             <FastImage
               source={{
-                uri: consts.imgUrl + '/' + item.img_nm,
+                uri:
+                  item.img_nm !== ''
+                    ? consts.imgUrl + '/' + item.img_nm + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
               style={styles.image}
-              onError={() => (item.img_nm = 'bookDefault.png')}
+              onError={() => (item.img_nm = 'bookDefault')}
+              // onError={() => console.log(item.book_nm)}
             />
             <TextWrap
               style={styles.info}
@@ -95,12 +100,15 @@ const BookMainCarousel = ({
             }}>
             <FastImage
               source={{
-                uri: consts.imgUrl + '/' + item.img_nm,
+                uri:
+                  item.img_nm !== ''
+                    ? consts.imgUrl + '/' + item.img_nm + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
               style={styles.image}
-              onError={() => (item.img_nm = 'bookDefault.png')}
+              onError={() => (item.img_nm = 'bookDefault')}
             />
             <TextWrap
               style={styles.info}
@@ -115,6 +123,7 @@ const BookMainCarousel = ({
       renderItem = kbsRenderItem;
       break;
   }
+
   const onSnapToItem = useCallback(index => {
     setActiveSlide(index);
   }, []);
@@ -205,9 +214,7 @@ const BookMainCarousel = ({
       )}
     </View>
   );
-};
-
-export default React.memo(BookMainCarousel);
+}
 
 const styles = StyleSheet.create({
   root: {

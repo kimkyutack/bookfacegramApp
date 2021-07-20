@@ -18,7 +18,7 @@ export default function Notice({navigation}) {
         setData([...x.noticeList]);
       })
       .catch(e => {
-        console.log(e);
+        // console.log(e);
         // dispatch(dialogError(e));
       });
   }, []);

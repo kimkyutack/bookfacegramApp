@@ -12,6 +12,7 @@ import images from '../../libs/image';
 import {isIos} from '../../services/util';
 import Topbar from '../../components/topbar/Topbar';
 import {useSelector, shallowEqual} from 'react-redux';
+
 const RootLayout = ({
   backgroundColor,
   safeBackgroundColor,

@@ -9,6 +9,7 @@ import TextWrap from '../text-wrap/TextWrap';
 export default function ButtonWrap({
   onPress,
   disabled,
+  disabledBackgroundColor,
   loading,
   children,
   outline,
@@ -21,6 +22,7 @@ export default function ButtonWrap({
       style={[
         outline ? styles.rootOutLine : styles.root,
         disabled && styles.rootEnabled,
+        disabledBackgroundColor && disabledBackgroundColor,
         style,
       ]}
       disabled={loading || Boolean(disabled)}
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: colors.border,
     borderRadius: 30,
   },
   button: {
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
   },
   buttonOutline: {
     fontSize: 16,
-    color: '#000000',
+    color: colors.border,
     lineHeight: 19,
   },
   rootEnabled: {

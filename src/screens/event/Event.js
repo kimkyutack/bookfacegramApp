@@ -18,7 +18,7 @@ export default function Event({navigation}) {
         setData([...x.event]);
       })
       .catch(e => {
-        console.log(e);
+        // console.log(e);
         // dispatch(dialogError(e));
       });
   }, []);

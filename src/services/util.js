@@ -194,9 +194,9 @@ export const formatPhone = f => {
   const f_val = f.replace(/\D[^\.]/g, '');
   return f_val.slice(0, 3) + '-' + f_val.slice(3, 6) + '-' + f_val.slice(6);
 };
-export const openMail = () => {
-  Linking.openURL('mailto:kdischool.connect@gmail.com?subject=&body=');
-};
+// export const openMail = () => {
+//   Linking.openURL('mailto:kdischool.connect@gmail.com?subject=&body=');
+// };
 // export const toast = message => {
 //   SimpleToast.show(message);
 // };
@@ -269,4 +269,14 @@ export function numFormat(nStr) {
     x1 = x1.replace(rgx, '$1' + ',' + '$2');
   }
   return x1 + x2;
+}
+
+export function containPasswordCheck(str) {
+  /*
+    (?=.*\d)          // should contain at least one digit
+    (?=.*[a-z])       // should contain at least one lower case
+    (?=.*[A-Z])       // should contain at least one upper case
+    [a-zA-Z0-9]{8,}   // should contain at least 8 from the mentioned characters
+  */
+  return str.match(/^(?=.*[0-9])(?=.*[a-z])([a-z0-9]{8,})$/);
 }

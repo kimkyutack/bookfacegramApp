@@ -17,27 +17,46 @@ import image from '../../libs/image';
 import routes from '../../libs/routes';
 import {dialogError, dialogOpenMessage} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
-import {reset} from '../../services/navigation';
+import {
+  reset,
+  isReadyRef,
+  navigationRef,
+  navigate,
+} from '../../services/navigation';
 import {requestPost} from '../../services/network';
 import {isIos} from '../../services/util';
 
-export default function Splash({}) {
+export default function Splash({navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(userCheckToken);
-    }, 1000);
-  }, []);
-
   useEffect(() => {
     if (user.signed) {
-      reset(routes.home);
+      if (user.intro_setting) {
+        reset(routes.home);
+      } else {
+        navigate(routes.intro1);
+      }
     } else if (user.inited) {
       reset(routes.login);
     }
   }, [user.inited, user.signed]);
+
+  useEffect(() => {
+    const listener = (e, a) => {
+      if (e === 'active') {
+        dispatch(userCheckToken);
+      }
+    };
+    AppState.addEventListener('change', listener);
+    let tm = setTimeout(() => {
+      dispatch(userCheckToken);
+    }, 100);
+
+    return () => {
+      AppState.removeEventListener('change', listener);
+      clearTimeout(tm);
+    };
+  }, []);
 
   return (
     <RootLayout style={styles.root} safeBackgroundColor={colors.background}>
@@ -47,7 +66,6 @@ export default function Splash({}) {
       <TextWrap font={fonts.barlowRegular} style={styles.info}>
         © (주)피씨엔씨 OF PUBLIC POLICY AND MANAGEMENT.
       </TextWrap>
-      <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
     </RootLayout>
   );
 }

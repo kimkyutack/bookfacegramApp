@@ -11,6 +11,7 @@ buildscript {
     }
     repositories {
         google()
+        mavenCentral() // New line
         jcenter()
     }
     dependencies {
@@ -19,7 +20,7 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
+com.android.ddmlib.DdmPreferences.setTimeOut(30000)
 allprojects {
     repositories {
         mavenLocal()
@@ -33,7 +34,15 @@ allprojects {
         }
 
         google()
+        mavenCentral() // New line
         jcenter()
         maven { url 'https://www.jitpack.io' }
     }
 }
+subprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
+    }
+}
+

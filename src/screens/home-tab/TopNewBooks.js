@@ -5,7 +5,6 @@ import {
   View,
   ScrollView,
   BackHandler,
-  Alert,
 } from 'react-native';
 import {requestGet, requestPost} from '../../services/network';
 import {navigationRef, reset} from '../../services/navigation';
@@ -15,6 +14,7 @@ import images from '../../libs/image';
 import TopNewBooksMain from './TopNewBooksMain';
 import TopNewBooksDetail from './TopNewBooksDetail';
 import TopNewBooksList from './TopNewBooksList';
+import {getItem, setItem} from '../../services/preference';
 
 export default function TopNewBooks({route, navigation}) {
   const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ export default function TopNewBooks({route, navigation}) {
     }
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     fetchRequested();
   }, []);
 
@@ -124,10 +124,6 @@ export default function TopNewBooks({route, navigation}) {
     const unsubscribe = navigation.addListener('tabPress', e => {
       setTabs(0);
     });
-    // swipe init
-    // navigation.addListener('focus', e => {
-    //   setTabs(0);
-    // });
     return unsubscribe;
   }, [navigation]);
 
@@ -148,11 +144,11 @@ export default function TopNewBooks({route, navigation}) {
           kbsBookList4={kbsBookList4}
           kbsBookList5={kbsBookList5}
           kbsBookList6={kbsBookList6}
+          th={th}
           bannerList={bannerList}
           setTabs={setTabs}
           setGrade={setGrade}
           setSelectedBook={setSelectedBook}
-          th={th}
           setTh={setTh}
         />
       ) : tabs === 1 ? (

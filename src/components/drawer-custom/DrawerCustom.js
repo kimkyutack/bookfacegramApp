@@ -1,15 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import {userSignOut} from '../../redux/user/UserActions';
+import routes from '../../libs/routes';
 import {navigate, navigationRef, reset} from '../../services/navigation';
 import Avatar from '../avatar/Avatar';
 import TextWrap from '../text-wrap/TextWrap';
 export default function DrawerCustom(props) {
+  const dispatch = useDispatch();
+  const user = useSelector(s => s.user, shallowEqual);
+
   return (
     <>
       <View style={styles.userInfo}>
@@ -17,12 +18,17 @@ export default function DrawerCustom(props) {
           <Avatar
             size={84}
             style={styles.avator}
-            path="https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp"
+            path={
+              user?.profile_path
+                ? user?.profile_path
+                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+            }
           />
         </View>
         <View style={{marginLeft: 15, flexDirection: 'row'}}>
           <TextWrap style={styles.avatorText}>
-            Undefined <Text style={styles.avatorText2}> 님</Text>
+            {user?.kor_nm ? user?.kor_nm : 'Undefined'}{' '}
+            <Text style={styles.avatorText2}> 님</Text>
           </TextWrap>
         </View>
       </View>
@@ -115,7 +121,7 @@ export default function DrawerCustom(props) {
               label="ㆍ로그아웃"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('tab');
+                dispatch(userSignOut(user.memberId));
               }}
             />
           </View>

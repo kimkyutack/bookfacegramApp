@@ -9,8 +9,6 @@ import DialogAction from './redux-components/dialog-action/DialogAction';
 
 function App({}) {
   const dispatch = useDispatch();
-  const user = useSelector(s => s.user, shallowEqual);
-  console.log('app', user);
   // const {connected} = useSelector(s => s.socket, []);
 
   useEffect(() => {
@@ -35,8 +33,8 @@ function App({}) {
     <>
       <StatusBar barStyle="dark-content" />
       <Router />
-      {/* <DialogMessage /> */}
-      {/* <DialogAction /> */}
+      <DialogMessage />
+      <DialogAction />
     </>
   );
 }

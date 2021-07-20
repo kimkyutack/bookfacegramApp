@@ -19,6 +19,7 @@ import TopTabs from './TopTabs';
 
 export default function TabsHome({route, navigation}) {
   const [keyword, setKeyword] = useState('');
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <Topbar
@@ -40,7 +41,7 @@ export default function TabsHome({route, navigation}) {
           // fetch();
         }}
       />
-      <TopTabs />
+      <TopTabs route={route} />
     </SafeAreaView>
   );
 }

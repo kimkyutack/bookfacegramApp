@@ -3,10 +3,12 @@ import {Image, StyleSheet, TextInput, View} from 'react-native';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import TextWrap from '../text-wrap/TextWrap';
+import {containPasswordCheck, preventKor} from '../../services/util';
 
 export default function InputWrap({
   message,
   style,
+  inputStyle,
   inputFlex,
   placeholderSize,
   label,
@@ -23,7 +25,8 @@ export default function InputWrap({
   secure,
   icon,
   multiline,
-  messageColor = colors.red,
+  showSoftInputOnFocus,
+  messageColor,
 }) {
   const handleChange = t => {
     if (maxLength && t.length > maxLength) {
@@ -62,6 +65,7 @@ export default function InputWrap({
           onFocus={onFocus}
           secureTextEntry={secure}
           editable={!disabled}
+          showSoftInputOnFocus={showSoftInputOnFocus}
           placeholder={placeholder}
           keyboardType={number ? 'decimal-pad' : 'default'}
           placeholderTextColor={'#ababab'}
@@ -70,7 +74,7 @@ export default function InputWrap({
           multiline={multiline}
           onChangeText={handleChange}
           style={[
-            styles.input,
+            inputStyle ? inputStyle : styles.input,
             disabled && {color: '#999999'},
             !value && placeholderSize && {fontSize: placeholderSize},
           ]}
@@ -93,8 +97,9 @@ const styles = StyleSheet.create({
   },
   message: {
     lineHeight: 18,
-    fontSize: 13,
-    marginTop: 8,
+    fontSize: 11,
+    marginTop: 4,
+    color: '#ababab',
   },
   inputWrap: {
     borderBottomWidth: 1,

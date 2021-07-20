@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -15,7 +15,7 @@ import {dialogClose} from '../../redux/dialog/DialogActions';
 
 export default function DialogMessage({}) {
   const dispatch = useDispatch();
-  const {messageDialog} = useSelector((s) => s.dialog, []);
+  const {messageDialog} = useSelector(s => s.dialog, shallowEqual);
 
   useEffect(() => {
     if (messageDialog.open) {
@@ -36,7 +36,7 @@ export default function DialogMessage({}) {
               style={[
                 styles.label,
                 {
-                  marginTop: Boolean(messageDialog.label) ? 44 : 0,
+                  marginTop: messageDialog.label ? 44 : 0,
                 },
               ]}>
               {messageDialog.label}
@@ -46,7 +46,7 @@ export default function DialogMessage({}) {
             style={[
               styles.message,
               {
-                marginTop: Boolean(messageDialog.label) ? 8 : 44,
+                marginTop: messageDialog.label ? 8 : 44,
               },
             ]}>
             {messageDialog.message}
@@ -101,15 +101,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
     paddingVertical: 18,
-    borderTopColor: '#f2f2f2',
-    alignItems: 'center',
+    paddingHorizontal: 18,
+    // borderTopColor: colors.prussianBlue,
+    alignItems: 'flex-end',
+    // colors: colors.prussianBlue,
     justifyContent: 'center',
   },
   title: {
     fontSize: 15,
     lineHeight: 21,
-    color: '#222222',
+    color: colors.blue,
   },
 });
