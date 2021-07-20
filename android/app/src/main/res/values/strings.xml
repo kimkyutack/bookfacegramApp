@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">bookfacegram</string>
+    <string name="kakao_app_key">test</string>
 </resources>

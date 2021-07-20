@@ -23,6 +23,7 @@ DerivedData
 
 # Android/IntelliJ
 #
+android/app/src/main/res/values/strings.xml
 build/
 .idea
 .gradle
@@ -60,4 +61,4 @@ buck-out/
 .gitignore
 .gitignore
 
-android/app/src/main/res/values/strings.xml
+
