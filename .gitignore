@@ -28,9 +28,7 @@ build/
 .gradle
 local.properties
 *.iml
-/app/src/main/res/values/strings.xml
-/app/src/main/res/values/*
-*/values/strings.xml
+
 # node.js
 #
 node_modules/
@@ -59,3 +57,7 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+.gitignore
+.gitignore
+
+android/app/src/main/res/values/strings.xml
