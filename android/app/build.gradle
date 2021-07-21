@@ -4,6 +4,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: true,  // clean and rebuild if changing
+    bundleInDebug: true, // gradle에게 번들링한 JS와 assets을 개발 서버가 아니라 APK에 패키징 하라고 명령하는 것
 ]
 apply from: "../../node_modules/react-native/react.gradle"
 
@@ -80,9 +81,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    // implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }

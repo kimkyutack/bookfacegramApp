@@ -26,6 +26,8 @@ import RegisterFormInfo from './screens/register-form/RegisterFormInfo';
 import Intro1 from './screens/register-form/Intro1';
 import Intro2 from './screens/register-form/Intro2';
 import Intro3 from './screens/register-form/Intro3';
+import ToapingLogin from './screens/login/ToapingLogin';
+
 import RNExitApp from 'react-native-exit-app';
 
 const Drawer = createDrawerNavigator();
@@ -133,6 +135,15 @@ export default function Router() {
           <Drawer.Screen
             name={routes.policy}
             component={Policy}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.toapingLogin}
+            component={ToapingLogin}
             options={({route, navigation}) => {
               return {
                 swipeEnabled: false,

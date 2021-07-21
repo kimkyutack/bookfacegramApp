@@ -36,7 +36,7 @@ export default function DialogMessage({}) {
               style={[
                 styles.label,
                 {
-                  marginTop: messageDialog.label ? 44 : 0,
+                  marginTop: messageDialog.label ? 23 : 0,
                 },
               ]}>
               {messageDialog.label}
@@ -46,7 +46,7 @@ export default function DialogMessage({}) {
             style={[
               styles.message,
               {
-                marginTop: messageDialog.label ? 8 : 44,
+                marginTop: messageDialog.label ? 8 : 33,
               },
             ]}>
             {messageDialog.message}
@@ -89,16 +89,16 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontSize: 14,
     color: '#222222',
-    textAlign: 'center',
-    marginBottom: 36,
+    textAlign: 'left',
     paddingHorizontal: 30,
+    paddingVertical: 10,
   },
   label: {
     paddingHorizontal: 30,
     color: '#222222',
     lineHeight: 20,
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   button: {
     // borderTopWidth: 1,

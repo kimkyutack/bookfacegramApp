@@ -12,7 +12,7 @@ import {getItem, setItem} from '../../services/preference';
 import {goBack, navigate, reset} from '../../services/navigation';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import {requestGet, requestPost} from '../../services/network';
-import {userCheckToken} from '../../redux/user/UserActions';
+
 import {
   dialogError,
   dialogOpenMessage,
@@ -47,13 +47,12 @@ export default function Intro3({route, navigation}) {
           url: consts.apiUrl + '/memberIntro',
           query: {
             member_id: user.member_id,
-            platform_type: 'app',
+            platform_type: await getItem('platformType'),
             grade: route.params.grade * 1,
             interest_field: pressButtonArr.toString(),
             avg_reading_month: route.params.reading * 1,
           },
         });
-        console.log(update);
         if (update.valid) {
           setLoading(false);
           reset(routes.home);

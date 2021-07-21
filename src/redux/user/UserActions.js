@@ -11,7 +11,8 @@ import {
 } from '../../services/network';
 import {getImageFromGallery} from '../../services/picker';
 import {clearItem, getItem} from '../../services/preference';
-import {dialogError} from '../dialog/DialogActions';
+import {dialogOpenMessage} from '../dialog/DialogActions';
+import {logout, unlink} from '@react-native-seoul/kakao-login';
 // import messging from '@react-native-firebase/messaging';
 export const userActionType = {
   token: 'user/token',
@@ -26,13 +27,19 @@ export const userUpdate =
     dispatch({type: userActionType.update, user});
   };
 
-export const userSignOut = userId => dispatch => {
-  clearItem('token').then(() => {
-    clearItem('platformType').then(() => {
-      dispatch({type: 'clear'});
-    });
+export const userSignOut = userId => async dispatch => {
+  const platformType = await getItem('platformType');
+  await clearItem('token').then(() => {
+    dispatch({type: 'clear'});
+  });
+  await clearItem('platformType').then(() => {
+    dispatch({type: 'clear'});
   });
 
+  if (platformType === 'kakao') {
+    // await logout();
+    await unlink();
+  }
   // requestPost({url: consts.apiUrl + '/users/' + userId + '/signout'})
   //   .then(() => {
   //     clearItem('token').then(() => {
@@ -79,6 +86,7 @@ export const userCheckToken = async dispatch => {
   try {
     const token = await getItem('token');
     const platformType = await getItem('platformType');
+
     if (!token) {
       throw 'token is null';
     }
@@ -94,18 +102,30 @@ export const userCheckToken = async dispatch => {
     // console.log('ftoken');
     // console.log(ftoken);
 
-    const {member} = await requestPost({
-      url: consts.apiUrl + '/checkJwt',
-      body: {
-        token,
-        platform_type: platformType,
-      },
-    });
-    if (!member) {
-      throw 'member is null';
+    if (platformType === 'app' || platformType === 'toaping') {
+      const {member} = await requestPost({
+        url: consts.apiUrl + '/checkJwt',
+        body: {
+          token,
+        },
+      });
+      // if (!member) {
+      //   throw 'member is null';
+      // }
+      dispatch({type: userActionType.token, user: member[0]});
+    } else if (platformType === 'kakao') {
+      const {member} = await requestPost({
+        url: consts.apiUrl + '/checkSnsId',
+        body: {
+          token: token,
+          platform_type: platformType,
+        },
+      });
+      // if (!member) {
+      //   throw 'member is null';
+      // }
+      dispatch({type: userActionType.token, user: member[0]});
     }
-
-    dispatch({type: userActionType.token, user: member[0]});
   } catch (error) {
     dispatch({type: userActionType.init});
   }

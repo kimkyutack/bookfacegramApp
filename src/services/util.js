@@ -1,9 +1,12 @@
 import {Dimensions, Linking, Platform} from 'react-native';
 import moment from 'moment-timezone';
+import {phoneExts} from './bulk';
+
 // import SimpleToast from 'react-native-simple-toast';
 export const screenWidth = Dimensions.get('window').width;
 export const screenHeight = Dimensions.get('window').height;
 export const isIos = Platform.OS === 'ios';
+
 export const validationEmail = email => {
   // eslint-disable-next-line no-useless-escape
   return email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
@@ -279,4 +282,15 @@ export function containPasswordCheck(str) {
     [a-zA-Z0-9]{8,}   // should contain at least 8 from the mentioned characters
   */
   return str.match(/^(?=.*[0-9])(?=.*[a-z])([a-z0-9]{8,})$/);
+}
+
+export function convertKorPhoneFormat(str) {
+  const phoneExtsSelected = phoneExts.find(
+    x => x.indexOf(str.split(' ')[0]) !== -1,
+  );
+  if (phoneExtsSelected.indexOf('Korea(South)') !== -1) {
+    return ('0' + str.split(' ')[1]).replace(/-/g, '');
+  } else {
+    return str;
+  }
 }

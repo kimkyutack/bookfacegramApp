@@ -13,6 +13,7 @@ export default function TopTabs() {
   return (
     <Tab.Navigator
       initialRouteName={routes.topNewBooks}
+      // swipeEnabled={false}
       tabBarOptions={{
         labelStyle: {fontSize: 12},
         style: {

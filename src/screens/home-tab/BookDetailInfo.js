@@ -69,7 +69,7 @@ export default function BookDetailInfo({
             style={styles.descText}
             ellipsizeMode="tail"
             numberOfLines={!open2 ? 2 : 0}>
-            {summary}
+            {/* {summary} */}
           </TextWrap>
         </View>
         <TouchableOpacity
@@ -98,7 +98,7 @@ export default function BookDetailInfo({
             style={styles.descText}
             ellipsizeMode="tail"
             numberOfLines={!open3 ? 2 : 0}>
-            {summary}
+            {/* {summary} */}
           </TextWrap>
         </View>
         <TouchableOpacity

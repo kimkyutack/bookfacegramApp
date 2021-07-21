@@ -21,21 +21,28 @@ import consts from '../../libs/consts';
 import image from '../../libs/image';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
+import {convertKorPhoneFormat, getAgeFromMoment} from '../../services/util';
 import {
   dialogError,
   dialogOpenMessage,
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
-import {userCheckToken} from '../../redux/user/UserActions';
+import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
 import {navigationRef, reset, navigate} from '../../services/navigation';
 import {requestPost} from '../../services/network';
 import {getItem, setItem} from '../../services/preference';
 import {screenWidth, validationEmail} from '../../services/util';
 import Avatar from '../../components/avatar/Avatar';
 
+import {
+  getProfile as getKakaoProfile,
+  login,
+} from '@react-native-seoul/kakao-login';
+
 export default function Login({route}) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -58,27 +65,6 @@ export default function Login({route}) {
   }, [user.signed]);
 
   const handleLogin = async () => {
-    // dispatch(
-    //   dialogOpenAction({
-    //     titleColor: '#000',
-    //     cancelTitle: 'Close',
-    //     message:
-    //       'Would you like to leave the chat room?\n(All conversations will be deleted.)',
-    //     onPress: s => {
-    //       console.log(s);
-    //     },
-    //   }),
-    // );
-    // dispatch(
-    //   dialogError({
-    //     message: 'User information does not match.\nPlease check again.',
-    //   }),
-    // );
-    // dispatch(
-    //   dialogOpenMessage({
-    //     message: 'User information does not match.\nPlease check again.',
-    //   }),
-    // );
     setLoading(true);
     try {
       Keyboard.dismiss();
@@ -95,17 +81,13 @@ export default function Login({route}) {
         await setItem('platformType', 'app');
         dispatch(userCheckToken);
       } else {
-        setPasswordError(
-          'The information does not match.\nPlease check your ID or password.',
-        );
+        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
     } catch (error) {
       if (error.message === 'Network Error') {
         dispatch(dialogError(error));
       } else {
-        setPasswordError(
-          'The information does not match.\nPlease check your ID or password.',
-        );
+        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
     }
     setLoading(false);
@@ -119,8 +101,48 @@ export default function Login({route}) {
     // navigate(routes.findIdPassword);
   };
 
-  const onGoogleButtonPress = async () => {
-    // console.log('google sign');
+  const signInWithToaping = () => {
+    navigate(routes.toapingLogin);
+  };
+
+  const signInWithKakao = async () => {
+    try {
+      const token = await login();
+      const profile = await getKakaoProfile();
+      await setItem('token', JSON.stringify(token.accessToken));
+      await setItem('platformType', 'kakao');
+
+      const platformType = await getItem('platformType');
+      const result = await requestPost({
+        url: consts.apiUrl + '/memberSnsJoin',
+        body: {
+          member_id: profile.email,
+          platform_type: platformType,
+          sex: profile.gender === 'MALE' ? '남' : '여',
+          handphone:
+            profile.phoneNumber === 'null'
+              ? ''
+              : convertKorPhoneFormat(profile.phoneNumber),
+          birth_day: profile.birthday,
+          birth_year: profile.birthyear,
+          age: getAgeFromMoment(
+            profile.birthyear + profile.birthDay,
+            'YYYYMMDD',
+          ),
+          kor_nm: profile.nickname,
+          email: profile.email,
+        },
+      });
+      if (result.valid) {
+        dispatch(userCheckToken);
+      } else {
+        // 타입 이 중복일때는 로그인시키고 찐 에러일때는 에러메시지 보내야함 백에서의 리턴이필요
+        // dispatch(dialogError({message: result.msg}));
+        dispatch(userCheckToken);
+      }
+    } catch (e) {
+      // dispatch(dialogError(e));
+    }
   };
 
   return (
@@ -131,7 +153,7 @@ export default function Login({route}) {
         style={styles.input}
         placeholder="아이디"
         value={username}
-        borderColor={Boolean(passwordError) && colors.red}
+        // borderColor={Boolean(passwordError) && colors.red}
         onChange={setUsername}
         maxLength={50}
       />
@@ -143,8 +165,9 @@ export default function Login({route}) {
         value={password}
         onChange={setPassword}
         maxLength={20}
-        borderColor={Boolean(passwordError) && colors.red}
+        // borderColor={Boolean(passwordError) && colors.red}
         message={passwordError}
+        messageColor={colors.red}
       />
 
       <View style={styles.row}>
@@ -203,7 +226,7 @@ export default function Login({route}) {
         // onPress={onItemPress}
         style={styles.rowAround}>
         <View>
-          <Avatar source={image.toaping} />
+          <Avatar source={image.toaping} onPress={signInWithToaping} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarToapingTitle}>
@@ -211,7 +234,7 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar source={image.kakao} />
+          <Avatar source={image.kakao} onPress={signInWithKakao} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarKakaoTitle}>
@@ -236,10 +259,8 @@ export default function Login({route}) {
         </View>
 
         <View>
-          <Avatar source={image.google} onPress={onGoogleButtonPress} />
+          <Avatar source={image.google} />
           <TextWrap
-            class="g-signin2"
-            data-onsuccess="onSignIn"
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarGoogleTitle}>
             구글

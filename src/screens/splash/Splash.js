@@ -25,6 +25,7 @@ import {
 } from '../../services/navigation';
 import {requestPost} from '../../services/network';
 import {isIos} from '../../services/util';
+import {getItem, setItem} from '../../services/preference';
 
 export default function Splash({navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
@@ -44,12 +45,20 @@ export default function Splash({navigation}) {
   useEffect(() => {
     const listener = (e, a) => {
       if (e === 'active') {
-        dispatch(userCheckToken);
+        try {
+          dispatch(userCheckToken);
+        } catch (e1) {
+          console.log(e1);
+        }
       }
     };
     AppState.addEventListener('change', listener);
     let tm = setTimeout(() => {
-      dispatch(userCheckToken);
+      try {
+        dispatch(userCheckToken);
+      } catch (e2) {
+        console.log(e2);
+      }
     }, 100);
 
     return () => {

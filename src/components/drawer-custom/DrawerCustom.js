@@ -61,7 +61,7 @@ export default function DrawerCustom(props) {
               label="ㆍ책 서랍"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('home');
+                // props.navigation.navigate('home');
               }}
             />
           </View>
@@ -71,7 +71,7 @@ export default function DrawerCustom(props) {
               label="ㆍ피드북"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('topNewBooks');
+                // props.navigation.navigate('topNewBooks');
               }}
             />
           </View>
@@ -81,7 +81,7 @@ export default function DrawerCustom(props) {
               label="ㆍ북핑스토어"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('topMyBooks');
+                // props.navigation.navigate('topMyBooks');
               }}
             />
           </View>
@@ -91,7 +91,7 @@ export default function DrawerCustom(props) {
               label="ㆍ개인정보수정"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('topActivity');
+                // props.navigation.navigate('topActivity');
               }}
             />
           </View>
@@ -101,7 +101,7 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('tab');
+                // props.navigation.navigate('tab');
               }}
             />
           </View>
@@ -111,7 +111,7 @@ export default function DrawerCustom(props) {
               label="ㆍ앱설정"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('tab');
+                // props.navigation.navigate('tab');
               }}
             />
           </View>
