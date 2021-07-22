@@ -38,7 +38,7 @@ export default function TopNewBooksList({
               renderItem={({item, index}) => {
                 return (
                   <BookListItem
-                    {...item}
+                    item={item}
                     index={index}
                     grade={grade}
                     setTabs={setTabs}

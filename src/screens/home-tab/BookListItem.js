@@ -15,13 +15,10 @@ import {formatTime, screenWidth} from '../../services/util';
 import {numFormat} from '../../services/util';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment-timezone';
+import BookMainCarouselImage from './BookMainCarouselImage';
 
 export default function BookListItem({
-  book_cd,
-  book_nm,
-  buy_price,
-  img_nm,
-  topic,
+  item,
   writer,
   index,
   grade,
@@ -64,28 +61,17 @@ export default function BookListItem({
           style={styles.main}
           onPress={() => {
             setTabs(2);
-            setSelectedBook(book_cd);
+            setSelectedBook(item.book_cd);
           }}>
           <View style={styles.mainContent}>
-            <FastImage
-              source={{
-                uri:
-                  img_nm !== ''
-                    ? consts.imgUrl + '/' + img_nm + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.thumbnail}
-              onError={() => (img_nm = 'bookDefault')}
-            />
+            <BookMainCarouselImage item={item} style={styles.thumbnail} />
             <View style={styles.info}>
               <TextWrap
                 ellipsizeMode="tail"
                 numberOfLines={1}
                 font={fonts.robotoMedium}
                 style={styles.title}>
-                {book_nm}
+                {item.book_nm}
               </TextWrap>
               <TextWrap
                 style={styles.title}
@@ -97,10 +83,10 @@ export default function BookListItem({
                 ellipsizeMode="tail"
                 numberOfLines={1}
                 style={styles.title}>
-                "{topic}"
+                "{item.topic}"
               </TextWrap>
               <TextWrap style={[styles.title, styles.date]}>
-                {numFormat(buy_price)}원
+                {numFormat(item.buy_price)}원
               </TextWrap>
             </View>
           </View>
@@ -163,18 +149,18 @@ const styles = StyleSheet.create({
   thumbnail: {
     height: 120,
     width: 90,
-    resizeMode: 'stretch',
-    // ...Platform.select({
-    //   ios: {
-    //     shadowColor: '#000',
-    //     shadowOffset: {width: 0, height: 2},
-    //     shadowOpacity: 0.2,
-    //   },
-    //   android: {
-    //     backgroundColor: 'white',
-    //     elevation: 5,
-    //   },
-    // }),
+    resizeMode: 'cover',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.2,
+      },
+      android: {
+        backgroundColor: 'white',
+        elevation: 5,
+      },
+    }),
   },
   info: {
     flex: 1,

@@ -21,10 +21,18 @@ import BookDetailInfo from './BookDetailInfo';
 import BookDetailQuiz from './BookDetailQuiz';
 import BookDetailTalk from './BookDetailTalk';
 
+FastImage.preload([
+  {
+    uri: 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/books/thumbnail/bookDefault.gif',
+  },
+]);
+
 export default function TopNewBooksDetail({selectedBook}) {
   const [loading, setLoading] = useState(false);
   const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
+  const [bookThumbnail, setBookThumbnail] = useState('');
+
   const fetchRequested = async () => {
     try {
       setLoading(true);
@@ -34,6 +42,7 @@ export default function TopNewBooksDetail({selectedBook}) {
         // query: {book_cd: '2003121800004'},
       });
       setBookDetail(book.bookDetail[0]);
+      setBookThumbnail(book.bookDetail[0].img_nm);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -70,34 +79,6 @@ export default function TopNewBooksDetail({selectedBook}) {
       contentContainerStyle={styles.root}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled">
-      <View style={styles.imageContainer}>
-        {!loading ? (
-          <FastImage
-            source={{
-              uri:
-                bookDetail.img_nm !== ''
-                  ? consts.imgUrl + '/' + bookDetail.img_nm + '.gif'
-                  : consts.imgUrl + '/bookDefault.gif',
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-            style={styles.image}
-            onError={() => (bookDetail.img_nm = 'bookDefault')}
-            // onError={() => console.log(book_nm)}
-          />
-        ) : (
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/bookDefault.gif')}
-          />
-        )}
-      </View>
-      <TextWrap style={styles.imageTitle}>{bookDetail.book_nm}</TextWrap>
-      <View style={styles.tabContainer}>
-        <Tab title="도서소개" id={0} isSelected={tabs === 0 ? true : false} />
-        <Tab title="독서퀴즈" id={1} isSelected={tabs === 1 ? true : false} />
-        <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
-      </View>
       {loading ? (
         <ActivityIndicator
           size="large"
@@ -105,11 +86,101 @@ export default function TopNewBooksDetail({selectedBook}) {
           color={colors.primary}
         />
       ) : tabs === 0 ? (
-        <BookDetailInfo {...bookDetail} />
+        <>
+          <View style={styles.imageContainer}>
+            <FastImage
+              source={{
+                uri:
+                  bookThumbnail !== ''
+                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+              style={styles.image}
+              onError={() => setBookThumbnail('bookDefault')}
+            />
+          </View>
+          <TextWrap style={styles.imageTitle}>{bookDetail.book_nm}</TextWrap>
+          <View style={styles.tabContainer}>
+            <Tab
+              title="도서소개"
+              id={0}
+              isSelected={tabs === 0 ? true : false}
+            />
+            <Tab
+              title="독서퀴즈"
+              id={1}
+              isSelected={tabs === 1 ? true : false}
+            />
+            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+          </View>
+          <BookDetailInfo {...bookDetail} />
+        </>
       ) : tabs === 1 ? (
-        <BookDetailQuiz />
+        <>
+          <View style={styles.imageContainer}>
+            <FastImage
+              source={{
+                uri:
+                  bookThumbnail !== ''
+                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+              style={styles.image}
+              onError={() => setBookThumbnail('bookDefault')}
+            />
+          </View>
+          <TextWrap style={styles.imageTitle}>{bookDetail.book_nm}</TextWrap>
+          <View style={styles.tabContainer}>
+            <Tab
+              title="도서소개"
+              id={0}
+              isSelected={tabs === 0 ? true : false}
+            />
+            <Tab
+              title="독서퀴즈"
+              id={1}
+              isSelected={tabs === 1 ? true : false}
+            />
+            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+          </View>
+          <BookDetailQuiz />
+        </>
       ) : (
-        <BookDetailTalk />
+        <>
+          <View style={styles.imageContainer}>
+            <FastImage
+              source={{
+                uri:
+                  bookThumbnail !== ''
+                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/bookDefault.gif',
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+              style={styles.image}
+              onError={() => setBookThumbnail('bookDefault')}
+            />
+          </View>
+          <TextWrap style={styles.imageTitle}>{bookDetail.book_nm}</TextWrap>
+          <View style={styles.tabContainer}>
+            <Tab
+              title="도서소개"
+              id={0}
+              isSelected={tabs === 0 ? true : false}
+            />
+            <Tab
+              title="독서퀴즈"
+              id={1}
+              isSelected={tabs === 1 ? true : false}
+            />
+            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+          </View>
+          <BookDetailTalk />
+        </>
       )}
     </ScrollView>
   );
@@ -133,14 +204,14 @@ const styles = StyleSheet.create({
       },
       android: {
         backgroundColor: 'white',
-        elevation: 5,
+        elevation: 2,
       },
     }),
   },
   image: {
     width: 150,
     height: 200,
-    backgroundColor: colors.white,
+    resizeMode: 'cover',
   },
   imageTitle: {
     textAlign: 'center',

@@ -27,10 +27,18 @@ export default function Intro3({route, navigation}) {
   const [loading, setLoading] = useState(false);
 
   const pressButton = e => {
-    if (pressButtonArr.indexOf(e) === -1) {
-      setPressButtonArr([...pressButtonArr, e]);
+    if (pressButtonArr.length >= 3) {
+      if (pressButtonArr.indexOf(e) !== -1) {
+        setPressButtonArr(pressButtonArr.filter(item => item !== e));
+      } else {
+        return;
+      }
     } else {
-      setPressButtonArr(pressButtonArr.filter(item => item !== e));
+      if (pressButtonArr.indexOf(e) === -1) {
+        setPressButtonArr([...pressButtonArr, e]);
+      } else {
+        setPressButtonArr(pressButtonArr.filter(item => item !== e));
+      }
     }
   };
 

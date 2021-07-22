@@ -23,7 +23,7 @@ export default function TabsHome({route, navigation}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <Topbar
-        title="BOOKPING"
+        title="TOAPING"
         navigation={navigation}
         options={<Image style={styles.backIcon} source={images.camera} />}
       />

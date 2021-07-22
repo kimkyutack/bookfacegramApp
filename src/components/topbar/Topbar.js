@@ -15,6 +15,7 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
       setOptionWidth(width);
     }
   };
+
   return (
     <View style={styles.root}>
       {back ? (

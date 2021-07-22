@@ -6,6 +6,7 @@ import {
   ScrollView,
   BackHandler,
 } from 'react-native';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {requestGet, requestPost} from '../../services/network';
 import {navigationRef, reset} from '../../services/navigation';
 import consts from '../../libs/consts';
@@ -15,9 +16,10 @@ import TopNewBooksMain from './TopNewBooksMain';
 import TopNewBooksDetail from './TopNewBooksDetail';
 import TopNewBooksList from './TopNewBooksList';
 import {getItem, setItem} from '../../services/preference';
+import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
 
 export default function TopNewBooks({route, navigation}) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [newBookList, setNewBookList] = useState([]);
   const [bannerList, setBannerList] = useState([]);
   const [kbsBookList1, setKbsBookList1] = useState([]); //1급
@@ -30,6 +32,7 @@ export default function TopNewBooks({route, navigation}) {
   const [grade, setGrade] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null); // book detail page arg: book_cd
   const [th, setTh] = useState('18');
+  const dispatch = useDispatch();
 
   const fetchRequested = async () => {
     try {
@@ -37,8 +40,12 @@ export default function TopNewBooks({route, navigation}) {
       const books = await requestGet({
         url: consts.apiUrl + '/bookList',
       });
+      setTh(
+        [...books.kbsBook].filter(
+          x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
+        )[0].recomm_order,
+      );
       setNewBookList([...books.newBook]);
-      // setKbsBookList([...books.kbsBook]);
       setKbsBookList1(
         [...books.kbsBook].filter(
           x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
@@ -68,17 +75,16 @@ export default function TopNewBooks({route, navigation}) {
         [...books.kbsBook].filter(x => x.recomm_grade === '누리급'),
       );
       setBannerList([
-        {id: 1, title: images.bannerOne},
-        {id: 2, title: images.bannerTwo},
+        {index: 0, id: 1, title: images.bannerOne},
+        {index: 1, id: 2, title: images.bannerTwo},
       ]);
     } catch (error) {
       setLoading(false);
-      console.log(error);
-      // dispatch(dialogError(error));
+      dispatch(dialogError(error));
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     fetchRequested();
   }, []);
 
@@ -149,7 +155,6 @@ export default function TopNewBooks({route, navigation}) {
           setTabs={setTabs}
           setGrade={setGrade}
           setSelectedBook={setSelectedBook}
-          setTh={setTh}
         />
       ) : tabs === 1 ? (
         <TopNewBooksList

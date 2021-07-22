@@ -18,6 +18,7 @@ import FastImage from 'react-native-fast-image';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import CardWrap from '../../components/card-wrap/CardWrap';
 
+import BookMainCarouselImage from './BookMainCarouselImage';
 export default function BookMainCarousel({
   name,
   grade,
@@ -28,101 +29,105 @@ export default function BookMainCarousel({
   setTabs,
   renderData,
   setSelectedBook,
-  bannerPagination,
+  pagination,
   header,
   th,
+  isCarouselRef,
 }) {
-  const isCarousel = useRef(null);
   const [activeSlide, setActiveSlide] = useState(0);
-  let renderItem = [];
-  switch (name) {
-    case 'banner':
-      const bannerRenderItem = ({item, index}) => {
-        return (
-          <TouchableWithoutFeedback>
-            <View style={styles.bannerContainer} key={index}>
-              <FastImage
-                style={styles.banner}
-                source={item.title}
-                resizeMode={FastImage.resizeMode.stretch}
-                // onError={() => (item.title = 'bookDefault.png')}
-                // 배너 이미지 가져오기 해야함
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        );
-      };
-      renderItem = bannerRenderItem;
-      break;
-    case 'new':
-      const newRenderItem = ({item, index}) => {
-        // console.log(item.img_nm);
-        return (
-          <CardWrap
-            style={styles.card}
-            onPress={() => {
-              setTabs(2);
-              setSelectedBook(item.book_cd);
-            }}>
-            <FastImage
-              source={{
-                uri:
-                  item.img_nm !== ''
-                    ? consts.imgUrl + '/' + item.img_nm + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.image}
-              onError={() => (item.img_nm = 'bookDefault')}
-              // onError={() => console.log(item.book_nm)}
-            />
-            <TextWrap
-              style={styles.info}
-              ellipsizeMode="tail"
-              numberOfLines={2}>
-              {item.writer}/{'\n'}
-              {item.book_nm}
-            </TextWrap>
-          </CardWrap>
-        );
-      };
-      renderItem = newRenderItem;
-      break;
-    case 'kbs':
-      const kbsRenderItem = ({item, index}) => {
-        return (
-          <CardWrap
-            style={styles.card}
-            onPress={() => {
-              setTabs(2);
-              setSelectedBook(item.book_cd);
-            }}>
-            <FastImage
-              source={{
-                uri:
-                  item.img_nm !== ''
-                    ? consts.imgUrl + '/' + item.img_nm + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.image}
-              onError={() => (item.img_nm = 'bookDefault')}
-            />
-            <TextWrap
-              style={styles.info}
-              ellipsizeMode="tail"
-              numberOfLines={2}>
-              {item.writer}/{'\n'}
-              {item.book_nm}
-            </TextWrap>
-          </CardWrap>
-        );
-      };
-      renderItem = kbsRenderItem;
-      break;
-  }
+
+  const getRenderItem = renderName => {
+    switch (renderName) {
+      case 'banner':
+        const bannerRenderItem = ({item, index}) => {
+          if (item) {
+            return (
+              <TouchableWithoutFeedback>
+                <View style={styles.bannerContainer} key={index}>
+                  <FastImage
+                    style={styles.banner}
+                    source={item.title}
+                    resizeMode={FastImage.resizeMode.stretch}
+                    // onError={() => (item.title = 'bookDefault.gif')}
+                    // 배너 이미지 가져오기 해야함
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            );
+          } else {
+            return;
+          }
+        };
+        return bannerRenderItem;
+      case 'new':
+        const newRenderItem = ({item, index}) => {
+          if (item) {
+            return (
+              <CardWrap
+                style={styles.card}
+                key={index}
+                onPress={() => {
+                  setTabs(2);
+                  setSelectedBook(item.book_cd);
+                }}>
+                <BookMainCarouselImage item={item} index={index} />
+                {/* <FastImage
+                  source={{
+                    uri:
+                      item.img_nm !== ''
+                        ? consts.imgUrl + '/' + item.img_nm + '.gif'
+                        : consts.imgUrl + '/bookDefault.gif',
+                    priority: FastImage.priority.normal,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                  style={styles.image}
+                  onError={() => (item.img_nm = 'bookDefault')}
+                  // onError={() => console.log(item.book_nm)}
+                /> */}
+                <TextWrap
+                  style={styles.info}
+                  ellipsizeMode="tail"
+                  numberOfLines={2}>
+                  {item.writer}/{'\n'}
+                  {item.book_nm}
+                </TextWrap>
+              </CardWrap>
+            );
+          } else {
+            return;
+          }
+        };
+        return newRenderItem;
+      case 'kbs':
+        const kbsRenderItem = ({item, index}) => {
+          if (item) {
+            return (
+              <CardWrap
+                style={styles.card}
+                key={index}
+                onPress={() => {
+                  setTabs(2);
+                  setSelectedBook(item.book_cd);
+                }}>
+                <BookMainCarouselImage item={item} index={index} />
+                <TextWrap
+                  style={styles.info}
+                  ellipsizeMode="tail"
+                  numberOfLines={2}>
+                  {item.writer}/{'\n'}
+                  {item.book_nm}
+                </TextWrap>
+              </CardWrap>
+            );
+          } else {
+            return;
+          }
+        };
+        return kbsRenderItem;
+    }
+  };
+  const memoRenderData = useMemo(() => renderData, []);
+  const memoRenderItem = useMemo(() => getRenderItem(name), []);
 
   const onSnapToItem = useCallback(index => {
     setActiveSlide(index);
@@ -168,30 +173,30 @@ export default function BookMainCarousel({
         ))}
       <View style={name === 'banner' ? '' : styles.cardContainer}>
         <Carousel
-          removeClippedSubviews={true}
+          ref={isCarouselRef}
           lockScrollWhileSnapping={true}
-          ref={isCarousel}
           layout={'default'}
-          data={renderData ? renderData : []}
-          extraData={renderData ? renderData : []}
+          data={memoRenderData}
+          extraData={memoRenderData}
           enableSnap={true}
-          renderItem={renderItem}
+          renderItem={memoRenderItem}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
           activeSlideAlignment={'start'}
           inactiveSlideScale={1}
           inactiveSlideOpacity={1}
           onSnapToItem={name === 'banner' ? onSnapToItem : null}
+          removeClippedSubviews={false}
           autoplay={true}
           loop={true}
           autoplayInterval={3000}
         />
       </View>
-      {bannerPagination && (
+      {pagination && (
         <View>
           <Pagination
-            dotsLength={renderData ? renderData.length : 0}
-            carouselRef={isCarousel}
+            dotsLength={memoRenderData.length ? renderData.length : 0}
+            carouselRef={isCarouselRef}
             activeDotIndex={activeSlide}
             containerStyle={{
               backgroundColor: 'transparent',
