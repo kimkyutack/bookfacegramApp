@@ -15,7 +15,7 @@ import image from '../../libs/image';
 import routes from '../../libs/routes';
 import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
-import {goBack, reset} from '../../services/navigation';
+import {goBack, reset, navigate} from '../../services/navigation';
 import {requestGet, requestPost} from '../../services/network';
 import {setItem} from '../../services/preference';
 import {containPasswordCheck, preventKor} from '../../services/util';
@@ -99,7 +99,11 @@ export default function RegisterFormInfo({}) {
 
   useEffect(() => {
     if (user.signed) {
-      reset(routes.home);
+      if (user.intro_setting) {
+        reset(routes.home);
+      } else {
+        navigate(routes.intro1, {age: user.age});
+      }
     }
   }, [user.signed]);
 

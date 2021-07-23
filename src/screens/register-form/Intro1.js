@@ -41,7 +41,6 @@ export default function Intro1({route, navigation}) {
     }
   }, []);
 
-  console.log(pressButtonIdx);
   return (
     <RootLayout style={styles.root}>
       <ScrollView

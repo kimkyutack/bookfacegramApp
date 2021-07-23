@@ -123,7 +123,10 @@ export default function Login({route}) {
             profile.phoneNumber === 'null'
               ? ''
               : convertKorPhoneFormat(profile.phoneNumber),
-          birth_day: profile.birthday,
+          birth_day:
+            profile?.birthday.length === 4
+              ? profile.birthday
+              : '0' + profile.birthday,
           birth_year: profile.birthyear,
           age: getAgeFromMoment(
             profile.birthyear + profile.birthDay,
