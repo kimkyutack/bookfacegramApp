@@ -30,12 +30,13 @@ import {getItem, setItem} from '../../services/preference';
 export default function Splash({navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (user.signed) {
       if (user.intro_setting) {
         reset(routes.home);
       } else {
-        navigate(routes.intro1);
+        navigate(routes.intro1, {age: user.age});
       }
     } else if (user.inited) {
       reset(routes.login);

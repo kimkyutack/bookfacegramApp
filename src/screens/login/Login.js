@@ -59,7 +59,7 @@ export default function Login({route}) {
       if (user.intro_setting) {
         reset(routes.home);
       } else {
-        navigate(routes.intro1);
+        navigate(routes.intro1, {age: user.age});
       }
     }
   }, [user.signed]);

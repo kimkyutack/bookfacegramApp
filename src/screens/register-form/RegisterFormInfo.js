@@ -41,7 +41,6 @@ export default function RegisterFormInfo({}) {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
-  console.log(params);
   useEffect(() => {
     // sns 로그인 일때 필요함
     // setEmail(params.email);

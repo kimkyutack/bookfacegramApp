@@ -109,9 +109,9 @@ export const userCheckToken = async dispatch => {
           token,
         },
       });
-      // if (!member) {
-      //   throw 'member is null';
-      // }
+      if (!member) {
+        throw 'member is null';
+      }
       dispatch({type: userActionType.token, user: member[0]});
     } else if (platformType === 'kakao') {
       const {member} = await requestPost({
@@ -121,9 +121,9 @@ export const userCheckToken = async dispatch => {
           platform_type: platformType,
         },
       });
-      // if (!member) {
-      //   throw 'member is null';
-      // }
+      if (!member) {
+        throw 'member is null';
+      }
       dispatch({type: userActionType.token, user: member[0]});
     }
   } catch (error) {

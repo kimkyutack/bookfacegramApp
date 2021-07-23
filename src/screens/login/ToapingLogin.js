@@ -63,6 +63,8 @@ export default function ToapingLogin({}) {
               '입력하신 이름과 이메일에 해당하는 회원정보를 찾지 못했습니다. 다시 입력해주세요.',
           }),
         );
+        setUsername('');
+        setPassword('');
       }
     } catch (error) {
       if (error.message === 'Network Error') {
@@ -77,6 +79,8 @@ export default function ToapingLogin({}) {
           }),
         );
       }
+      setUsername('');
+      setPassword('');
     }
   };
 

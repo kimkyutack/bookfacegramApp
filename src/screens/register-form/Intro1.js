@@ -12,6 +12,36 @@ export default function Intro1({route, navigation}) {
   const scrollRef = useRef();
   const [pressButtonIdx, setPressButtonIdx] = useState(null);
 
+  const age = route.params.age * 1;
+  useEffect(() => {
+    if (age) {
+      if (age < 8) {
+        setPressButtonIdx(2);
+      } else if (age === 8) {
+        setPressButtonIdx(3);
+      } else if (age === 9) {
+        setPressButtonIdx(4);
+      } else if (age === 10) {
+        setPressButtonIdx(5);
+      } else if (age === 11) {
+        setPressButtonIdx(6);
+      } else if (age === 12) {
+        setPressButtonIdx(7);
+      } else if (age === 13) {
+        setPressButtonIdx(8);
+      } else if (age === 14) {
+        setPressButtonIdx(9);
+      } else if (age === 15) {
+        setPressButtonIdx(10);
+      } else if (age === 16) {
+        setPressButtonIdx(11);
+      } else if (age === 17) {
+        setPressButtonIdx(12);
+      }
+    }
+  }, []);
+
+  console.log(pressButtonIdx);
   return (
     <RootLayout style={styles.root}>
       <ScrollView
