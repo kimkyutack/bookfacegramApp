@@ -14,6 +14,13 @@ const initDialog = {
     title: '',
     cancelTitle: '',
   },
+  selectDialog: {
+    open: false,
+    onPress: null,
+    item: [],
+    title: '',
+    cancelTitle: '',
+  },
 };
 
 export default function dialog(state = initDialog, action) {
@@ -38,6 +45,18 @@ export default function dialog(state = initDialog, action) {
           open: true,
           onPress: action.onPress,
           message: action.message,
+          titleColor: action.titleColor,
+          title: action.title,
+          cancelTitle: action.cancelTitle,
+        },
+      };
+    case dialogActionType.openSelect:
+      return {
+        ...state,
+        selectDialog: {
+          open: true,
+          onPress: action.onPress,
+          item: action.item,
           titleColor: action.titleColor,
           title: action.title,
           cancelTitle: action.cancelTitle,

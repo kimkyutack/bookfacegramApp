@@ -1,7 +1,59 @@
 import ImageCropPicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
-import {check, PERMISSIONS, request} from 'react-native-permissions';
+import {
+  check,
+  checkMultiple,
+  PERMISSIONS,
+  request,
+  requestMultiple,
+  openSettings,
+  RESULTS,
+} from 'react-native-permissions';
 import {isIos} from './util';
+
+export async function splashCheckMultiplePermissions(permissions) {
+  if (!isIos) {
+    for (var index in permissions) {
+      let result = await check(permissions[index]);
+      if (result !== 'granted' && result !== 'limited') {
+        await request(permissions[index]);
+      }
+    }
+  }
+  return true;
+}
+
+export async function checkMultiplePermissions(permissions) {
+  const statuses = await requestMultiple(permissions);
+  for (var index in permissions) {
+    if (statuses[permissions[index]] !== RESULTS.GRANTED) {
+      throw 'checkMultiplePermissions';
+      // throw '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.';
+    }
+  }
+  return true;
+}
+
+// In case you want to check a single permission
+export async function checkPermission(permission) {
+  var isPermissionGranted = false;
+  const result = await check(permission);
+  switch (result) {
+    case RESULTS.GRANTED:
+      isPermissionGranted = true;
+      break;
+    case RESULTS.DENIED:
+      isPermissionGranted = false;
+      break;
+    case RESULTS.BLOCKED:
+      isPermissionGranted = false;
+      break;
+    case RESULTS.UNAVAILABLE:
+      isPermissionGranted = false;
+      break;
+  }
+  return isPermissionGranted;
+}
 
 export const getImageFromCamera = async () => {
   try {
@@ -18,7 +70,10 @@ export const getImageFromCamera = async () => {
     };
   } catch (error) {
     if (error.code !== 'E_PICKER_CANCELLED') {
-      throw error;
+      throw 'getImageFromCamera';
+      // throw error;
+    } else {
+      return false;
     }
   }
 };
@@ -29,7 +84,7 @@ export const getMultiplePhoto = async () => {
       mediaType: 'photo',
       multiple: true,
     });
-    return data.map((item) => {
+    return data.map(item => {
       return {
         name: item.path.split('/')[item.path.split('/').length - 1],
         type: item.mime,
@@ -52,7 +107,7 @@ export const getMUltipleVideo = async () => {
       mediaType: 'video',
       multiple: true,
     });
-    return data.map((item) => {
+    return data.map(item => {
       return {
         name: item.path.split('/')[item.path.split('/').length - 1],
         type: item.mime,
@@ -69,7 +124,7 @@ export const getMUltipleVideo = async () => {
   }
 };
 
-export const getImageFromGallery = async (canVideo) => {
+export const getImageFromGallery = async canVideo => {
   try {
     let p = isIos
       ? PERMISSIONS.IOS.PHOTO_LIBRARY
@@ -85,7 +140,8 @@ export const getImageFromGallery = async (canVideo) => {
     const item = await ImageCropPicker.openPicker({
       mediaType: canVideo ? 'any' : 'photo',
     });
-
+    console.log('item');
+    console.log(item);
     if (
       !['video/mp4', 'video/quicktime', 'video/x-msvideo'].includes(
         item.mime,
@@ -103,6 +159,8 @@ export const getImageFromGallery = async (canVideo) => {
       uri: item.path,
     };
   } catch (error) {
+    console.log('error');
+    console.log(error);
     if (error.code === 'E_PERMISSION_MISSING') {
       throw '설정에서 카메라 권한을 허용해주세요.';
     } else if (error.code !== 'E_PICKER_CANCELLED') {

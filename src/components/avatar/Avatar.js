@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import consts from '../../libs/consts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 //react-native-fast-image.import FastImage from 'react-native-fast-image'
 import FastImage from 'react-native-fast-image';
 
@@ -49,7 +49,7 @@ export default function Avatar({
               ? source
               : path
               ? {uri: consts.fileApiUrl + '/' + path}
-              : image.avatarDefault
+              : images.avatarDefault
           }
           borderRadius={100}
           style={[styles.image, {resizeMode: resizeMode || 'cover'}]}
@@ -57,7 +57,7 @@ export default function Avatar({
       )}
 
       {Boolean(onUpdate) && (
-        <Image source={image.camera_edit} style={styles.edit} />
+        <Image source={images.camera_edit} style={styles.edit} />
       )}
       {children && children}
     </TouchableOpacity>

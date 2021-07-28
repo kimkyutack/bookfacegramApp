@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import consts from '../../libs/consts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import TextWrap from '../text-wrap/TextWrap';
 
 export default function Avatars({plus, paths}) {
@@ -20,9 +20,9 @@ export default function Avatars({plus, paths}) {
                 <Image
                   style={[styles.icon]}
                   source={
-                    Boolean(path)
+                    path
                       ? {uri: consts.fileApiUrl + '/' + path}
-                      : image.avatarDefault
+                      : images.avatarDefault
                   }
                 />
               </View>
@@ -30,7 +30,7 @@ export default function Avatars({plus, paths}) {
           })
         ) : (
           <View style={[styles.iconWrap]}>
-            <Image style={[styles.icon]} source={image.avatarDefault} />
+            <Image style={[styles.icon]} source={images.avatarDefault} />
           </View>
         )}
       </View>

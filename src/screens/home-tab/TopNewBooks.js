@@ -11,7 +11,7 @@ import {requestGet, requestPost} from '../../services/network';
 import {navigationRef, reset} from '../../services/navigation';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import TopNewBooksMain from './TopNewBooksMain';
 import TopNewBooksDetail from './TopNewBooksDetail';
 import TopNewBooksList from './TopNewBooksList';

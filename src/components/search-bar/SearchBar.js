@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import fonts from '../../libs/fonts';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import TextWrap from '../text-wrap/TextWrap';
 export default function SearchBar({
   onPress,

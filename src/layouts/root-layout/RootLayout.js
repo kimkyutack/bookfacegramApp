@@ -8,10 +8,11 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../libs/colors';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import {isIos} from '../../services/util';
 import Topbar from '../../components/topbar/Topbar';
 import {useSelector, shallowEqual} from 'react-redux';
+import TextWrap from '../../components/text-wrap/TextWrap';
 
 const RootLayout = ({
   backgroundColor,
@@ -22,17 +23,6 @@ const RootLayout = ({
   rootComponent,
   absoluteComponent,
 }) => {
-  if (topbar) {
-    switch (topbar.options) {
-      case 'camera':
-        topbar.options = (
-          <Image style={styles.cameraIcon} source={images.camera} />
-        );
-        break;
-      default:
-        break;
-    }
-  }
   const {show} = useSelector(s => s.keyboard, shallowEqual);
   const render = (
     <SafeAreaView
@@ -78,5 +68,11 @@ const styles = StyleSheet.create({
     height: 24,
     resizeMode: 'contain',
   },
+  textIcon: {
+    // width: 24,
+    // height: 24,
+    fontWeight: '700',
+  },
 });
+
 export default React.memo(RootLayout);

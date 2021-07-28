@@ -18,7 +18,7 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
 import {convertKorPhoneFormat, getAgeFromMoment} from '../../services/util';
@@ -37,6 +37,7 @@ import Avatar from '../../components/avatar/Avatar';
 import {
   getProfile as getKakaoProfile,
   login,
+  loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
 
 export default function Login({route}) {
@@ -108,6 +109,7 @@ export default function Login({route}) {
   const signInWithKakao = async () => {
     try {
       const token = await login();
+      // const token = await loginWithKakaoAccount();
       const profile = await getKakaoProfile();
       await setItem('token', JSON.stringify(token.accessToken));
       await setItem('platformType', 'kakao');
@@ -150,7 +152,7 @@ export default function Login({route}) {
 
   return (
     <RootLayout style={styles.root}>
-      <Image source={image.login} style={styles.logo} />
+      <Image source={images.login} style={styles.logo} />
       <InputWrap
         // icon={image.idIcon}
         style={styles.input}
@@ -229,7 +231,7 @@ export default function Login({route}) {
         // onPress={onItemPress}
         style={styles.rowAround}>
         <View>
-          <Avatar source={image.toaping} onPress={signInWithToaping} />
+          <Avatar source={images.toaping} onPress={signInWithToaping} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarToapingTitle}>
@@ -237,7 +239,7 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar source={image.kakao} onPress={signInWithKakao} />
+          <Avatar source={images.kakao} onPress={signInWithKakao} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarKakaoTitle}>
@@ -245,7 +247,7 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar source={image.facebook} />
+          <Avatar source={images.facebook} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarFacebookTitle}>
@@ -253,7 +255,7 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar source={image.naver} />
+          <Avatar source={images.naver} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarNaverTitle}>
@@ -262,7 +264,7 @@ export default function Login({route}) {
         </View>
 
         <View>
-          <Avatar source={image.google} />
+          <Avatar source={images.google} />
           <TextWrap
             font={fonts.notoSansCjkKrRegular}
             style={styles.avatarGoogleTitle}>

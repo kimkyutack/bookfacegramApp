@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, View, Image, StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
@@ -7,6 +7,8 @@ import consts from '../../libs/consts';
 import {dialogError} from '../../redux/dialog/DialogActions';
 import {requestGet} from '../../services/network';
 import EventItem from './EventItem';
+import routes from '../../libs/routes';
+import images from '../../libs/images';
 
 export default function Event({navigation}) {
   const [data, setData] = useState([]);
@@ -27,9 +29,18 @@ export default function Event({navigation}) {
     <RootLayout
       topbar={{
         title: '이벤트',
-        options: 'camera',
         navigation: navigation,
         back: true,
+        options: {
+          name: 'camera',
+          component: <Image style={styles.cameraIcon} source={images.camera} />,
+          onPress: () =>
+            navigation.navigate(routes.cameraRollPicker, {
+              route: routes.message,
+              dataKey: 'image',
+              key: Date.now(),
+            }),
+        },
       }}>
       {/* <View
         style={{
@@ -48,3 +59,11 @@ export default function Event({navigation}) {
     </RootLayout>
   );
 }
+
+const styles = StyleSheet.create({
+  cameraIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+  },
+});

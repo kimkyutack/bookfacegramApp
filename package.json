@@ -11,6 +11,7 @@
     "android-apk": "adb reverse tcp:8080 tcp:8080 && react-native run-android"
   },
   "dependencies": {
+    "@react-native-community/cameraroll": "^4.0.4",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-seoul/kakao-login": "^3.3.3",
     "@react-navigation/bottom-tabs": "^5.11.11",
@@ -45,7 +46,8 @@
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",

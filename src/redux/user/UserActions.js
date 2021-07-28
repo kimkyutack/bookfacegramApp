@@ -11,7 +11,7 @@ import {
 } from '../../services/network';
 import {getImageFromGallery} from '../../services/picker';
 import {clearItem, getItem} from '../../services/preference';
-import {dialogOpenMessage} from '../dialog/DialogActions';
+import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
 // import messging from '@react-native-firebase/messaging';
 export const userActionType = {
@@ -38,7 +38,7 @@ export const userSignOut = userId => async dispatch => {
 
   if (platformType === 'kakao') {
     // await logout();
-    await unlink();
+    await logout();
   }
   // requestPost({url: consts.apiUrl + '/users/' + userId + '/signout'})
   //   .then(() => {
@@ -52,35 +52,35 @@ export const userSignOut = userId => async dispatch => {
   //   });
 };
 
-// export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
-//   try {
-//     if (toDefault) {
-//       await requestPut({
-//         url: consts.apiUrl + '/users/' + userId,
-//         body: {columns: ['profilePath'], values: ['']},
-//       });
-//       dispatch({type: userActionType.update, user: {profilePath: ''}});
-//     } else {
-//       const file = await getImageFromGallery();
-//       console.log(file);
-//       if (!file) {
-//         return;
-//       }
+export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
+  try {
+    if (toDefault) {
+      await requestPut({
+        url: consts.apiUrl + '/users/' + userId,
+        body: {columns: ['profilePath'], values: ['']},
+      });
+      dispatch({type: userActionType.update, user: {profilePath: ''}});
+    } else {
+      const file = await getImageFromGallery();
+      console.log(file);
+      if (!file) {
+        return;
+      }
 
-//       const formData = new FormData();
-//       formData.append('profileImage', file);
+      const formData = new FormData();
+      formData.append('profileImage', file);
 
-//       const user = await requestFile(
-//         {url: consts.apiUrl + '/users/' + userId, method: 'put'},
-//         formData,
-//       );
-//       dispatch({type: userActionType.update, user});
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     dispatch(dialogError(error));
-//   }
-// };
+      const user = await requestFile(
+        {url: consts.apiUrl + '/users/' + userId, method: 'put'},
+        formData,
+      );
+      dispatch({type: userActionType.update, user});
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch(dialogError(error));
+  }
+};
 
 export const userCheckToken = async dispatch => {
   try {

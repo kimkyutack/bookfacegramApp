@@ -10,7 +10,7 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import {formatTime, screenWidth} from '../../services/util';
 import {numFormat} from '../../services/util';
 import FastImage from 'react-native-fast-image';

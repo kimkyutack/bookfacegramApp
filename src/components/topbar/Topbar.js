@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import fonts from '../../libs/fonts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import {goBack} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
 import {screenWidth} from '../../services/util';
 import colors from '../../libs/colors';
+import routes from '../../libs/routes';
 
 export default function Topbar({title, onGoBack, options, back, navigation}) {
   const [optionWidth, setOptionWidth] = useState(0);
@@ -21,13 +22,13 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
       {back ? (
         <TouchableWithoutFeedback onPress={onGoBack || goBack}>
           <View style={styles.back} onLayout={handleOptionLayout}>
-            <Image style={styles.backIcon} source={image.back} />
+            <Image style={styles.backIcon} source={images.back} />
           </View>
         </TouchableWithoutFeedback>
       ) : (
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
           <View style={styles.back} onLayout={handleOptionLayout}>
-            <Image style={styles.backIcon} source={image.hamberger} />
+            <Image style={styles.backIcon} source={images.hamberger} />
           </View>
         </TouchableWithoutFeedback>
       )}
@@ -50,9 +51,13 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
       </View> */}
 
       <TouchableWithoutFeedback
-        onPress={options ? () => navigation.openDrawer() : null}>
+        onPress={options?.onPress ? options.onPress : null}>
         <View style={styles.right} onLayout={handleOptionLayout}>
-          {options ? options : <TextWrap style={styles.noneIcon} />}
+          {options?.component ? (
+            options.component
+          ) : (
+            <TextWrap style={styles.noneIcon} />
+          )}
         </View>
       </TouchableWithoutFeedback>
     </View>

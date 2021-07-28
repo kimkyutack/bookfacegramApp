@@ -2,7 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, SafeAreaView} from 'react-native';
 import routes from '../../libs/routes';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import Splash from '../splash/Splash';
 import colors from '../../libs/colors';
 import TabIcon from './TabIcon';

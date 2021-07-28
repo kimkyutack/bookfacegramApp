@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import fonts from '../../libs/fonts';
 import TextWrap from '../text-wrap/TextWrap';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import {phoneExts} from '../../services/bulk';
 import ExtPopup from './ExtPopup';
 import colors from '../../libs/colors';
@@ -46,7 +46,7 @@ export default function InputPhone({value, onChange, style, ext, onExtChange}) {
           onClose={() => {
             setOpen(false);
           }}
-          onSelect={(ext) => {
+          onSelect={ext => {
             onExtChange && onExtChange(ext);
           }}
         />
@@ -61,7 +61,7 @@ export default function InputPhone({value, onChange, style, ext, onExtChange}) {
           }}
           style={styles.ext}>
           <TextWrap style={styles.extText}>+ {ext || '82'}</TextWrap>
-          <Image source={image.down} style={styles.own} />
+          <Image source={images.down} style={styles.own} />
         </TouchableOpacity>
         <TextInput
           maxLength={30}
@@ -69,7 +69,7 @@ export default function InputPhone({value, onChange, style, ext, onExtChange}) {
           value={getValue()}
           placeholderTextColor="#ababab"
           style={styles.input}
-          onChangeText={(t) => {
+          onChangeText={t => {
             if (t && isNaN(t.replace(/-/g, ''))) {
               return;
             }

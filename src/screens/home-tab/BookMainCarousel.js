@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import moment from 'moment-timezone';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import {screenWidth} from '../../services/util';
@@ -187,8 +187,8 @@ export default function BookMainCarousel({
           inactiveSlideOpacity={1}
           onSnapToItem={name === 'banner' ? onSnapToItem : null}
           removeClippedSubviews={false}
-          autoplay={true}
-          loop={true}
+          autoplay={name === 'banner' ? true : false}
+          loop={name === 'banner' ? true : false}
           autoplayInterval={3000}
         />
       </View>

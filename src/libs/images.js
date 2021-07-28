@@ -24,4 +24,6 @@ export default {
   talk: require('../assets/images/talk2.png'),
   checkboxOn: require('../assets/images/checkbox_on.png'),
   checkboxOff: require('../assets/images/checkbox_off.png'),
+  radioOn: require('../assets/images/radio_on.png'),
+  radioOff: require('../assets/images/radio_off.png'),
 };

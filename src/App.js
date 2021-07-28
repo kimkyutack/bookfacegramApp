@@ -6,6 +6,7 @@ import {Keyboard, StatusBar} from 'react-native';
 import {keyboardActionType} from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogAction from './redux-components/dialog-action/DialogAction';
+import DialogSelect from './redux-components/dialog-select/DialogSelect';
 
 function App({}) {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App({}) {
       <Router />
       <DialogMessage />
       <DialogAction />
+      <DialogSelect />
     </>
   );
 }

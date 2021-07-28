@@ -6,7 +6,7 @@ import InputWrap from '../../components/input-wrap/InputWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import {formatTime, screenWidth} from '../../services/util';
 import BookDetailTalkItem from './BookDetailTalkItem';
 

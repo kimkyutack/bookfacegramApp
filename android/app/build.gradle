@@ -3,8 +3,8 @@ apply plugin: "com.android.application"
 import com.android.build.OutputFile
 
 project.ext.react = [
-    enableHermes: true,  // clean and rebuild if changing
-    bundleInDebug: true, // gradle에게 번들링한 JS와 assets을 개발 서버가 아니라 APK에 패키징 하라고 명령하는 것
+    enableHermes: true,
+    bundleInDebug: true,
 ]
 apply from: "../../node_modules/react-native/react.gradle"
 
@@ -30,6 +30,7 @@ android {
         applicationId "com.bookfacegram"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
         versionCode 1
         versionName "1.0"
     }
@@ -79,10 +80,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:+"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    // implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
@@ -96,6 +97,7 @@ dependencies {
         exclude group:'com.facebook.flipper'
     }
 
+    
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

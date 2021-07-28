@@ -1,6 +1,7 @@
 export const dialogActionType = {
   openAction: 'dialog/openAction',
   openMessage: 'dialog/openMessage',
+  openSelect: 'dialog/openSelect',
   close: 'dialog/close',
 };
 
@@ -39,7 +40,15 @@ export const dialogOpenAction =
       cancelTitle,
     });
   };
-
+export const dialogOpenSelect =
+  ({onPress, item}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openSelect,
+      onPress,
+      item,
+    });
+  };
 export const dialogClose = () => dispatch => {
   dispatch({
     type: dialogActionType.close,

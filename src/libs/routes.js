@@ -19,4 +19,6 @@ export default {
   intro2: 'intro2',
   intro3: 'intro3',
   toapingLogin: 'toapingLogin',
+  cameraRollPicker: 'cameraRollPicker',
+  photoEditor: 'photoEditor',
 };

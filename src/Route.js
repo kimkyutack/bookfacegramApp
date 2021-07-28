@@ -27,6 +27,8 @@ import Intro1 from './screens/register-form/Intro1';
 import Intro2 from './screens/register-form/Intro2';
 import Intro3 from './screens/register-form/Intro3';
 import ToapingLogin from './screens/login/ToapingLogin';
+import CameraRollPicker from './screens/cameraroll-picker/CameraRollPicker';
+import PhotoEditor from './screens/photo-editor/PhotoEditor';
 
 import RNExitApp from 'react-native-exit-app';
 
@@ -132,6 +134,16 @@ export default function Router() {
               };
             }}
           />
+          <Drawer.Screen
+            name={routes.cameraRollPicker}
+            component={CameraRollPicker}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+
           <Drawer.Screen
             name={routes.policy}
             component={Policy}
@@ -254,6 +266,15 @@ export default function Router() {
           <Drawer.Screen
             name={routes.eventDetail}
             component={EventDetail}
+            options={({route, navigation}) => {
+              return {
+                swipeEnabled: false,
+              };
+            }}
+          />
+          <Drawer.Screen
+            name={routes.photoEditor}
+            component={PhotoEditor}
             options={({route, navigation}) => {
               return {
                 swipeEnabled: false,

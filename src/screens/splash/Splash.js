@@ -13,7 +13,7 @@ import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import routes from '../../libs/routes';
 import {dialogError, dialogOpenMessage} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
@@ -26,7 +26,8 @@ import {
 import {requestPost} from '../../services/network';
 import {isIos} from '../../services/util';
 import {getItem, setItem} from '../../services/preference';
-
+import {splashCheckMultiplePermissions} from '../../services/picker';
+import {PERMISSIONS} from 'react-native-permissions';
 export default function Splash({navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
@@ -54,13 +55,17 @@ export default function Splash({navigation}) {
       }
     };
     AppState.addEventListener('change', listener);
-    let tm = setTimeout(() => {
+    let tm = setTimeout(async () => {
       try {
+        await splashCheckMultiplePermissions([
+          PERMISSIONS.ANDROID.CAMERA,
+          PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+        ]);
         dispatch(userCheckToken);
       } catch (e2) {
         console.log(e2);
       }
-    }, 100);
+    }, 1000);
 
     return () => {
       AppState.removeEventListener('change', listener);
@@ -71,7 +76,7 @@ export default function Splash({navigation}) {
   return (
     <RootLayout style={styles.root} safeBackgroundColor={colors.background}>
       <View style={styles.view}>
-        <Image source={image.splash} style={styles.logo} />
+        <Image source={images.splash} style={styles.logo} />
       </View>
       <TextWrap font={fonts.barlowRegular} style={styles.info}>
         © (주)피씨엔씨 OF PUBLIC POLICY AND MANAGEMENT.

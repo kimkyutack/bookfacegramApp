@@ -15,9 +15,10 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
-import images from '../../libs/image';
+import images from '../../libs/images';
 import {requestGet} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
+import routes from '../../libs/routes';
 
 export default function EventDetail({route, navigation}) {
   const [data, setData] = useState([
@@ -42,9 +43,18 @@ export default function EventDetail({route, navigation}) {
     <RootLayout
       topbar={{
         title: '이벤트',
-        options: 'camera',
         navigation: navigation,
         back: true,
+        options: {
+          name: 'camera',
+          component: <Image style={styles.cameraIcon} source={images.camera} />,
+          onPress: () =>
+            navigation.navigate(routes.cameraRollPicker, {
+              route: routes.message,
+              dataKey: 'image',
+              key: Date.now(),
+            }),
+        },
       }}>
       <ScrollView contentContainerStyle={{flexGrow: 2}} scrollEnabled>
         <View style={styles.root}>
@@ -173,5 +183,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     bottom: -8,
     right: 4,
+  },
+  cameraIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
 });

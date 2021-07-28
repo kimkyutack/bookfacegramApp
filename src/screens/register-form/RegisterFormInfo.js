@@ -11,7 +11,7 @@ import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import image from '../../libs/image';
+import images from '../../libs/images';
 import routes from '../../libs/routes';
 import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
