@@ -21,4 +21,5 @@ export default {
   toapingLogin: 'toapingLogin',
   cameraRollPicker: 'cameraRollPicker',
   photoEditor: 'photoEditor',
+  feed: 'feed',
 };

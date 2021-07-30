@@ -26,4 +26,7 @@ export default {
   checkboxOff: require('../assets/images/checkbox_off.png'),
   radioOn: require('../assets/images/radio_on.png'),
   radioOff: require('../assets/images/radio_off.png'),
+  cameraBtn: require('../assets/images/camera_btn.png'),
+  albumBtn: require('../assets/images/album_btn.png'),
+  fileBtn: require('../assets/images/file_btn.png'),
 };

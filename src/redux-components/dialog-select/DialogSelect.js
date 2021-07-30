@@ -38,30 +38,36 @@ export default function DialogSelect({}) {
       <TouchableOpacity
         style={styles.wrap}
         onPress={() => dispatch(dialogClose())}>
-        <TouchableHighlight style={styles.dialog}>
-          <>
-            {selectDialog.item.length > 0 &&
-              selectDialog.item.map((x, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.iconContainer}
-                    // onPress={x.onPress}
-                    onPress={() => handleOnpress(x.onPress)}>
-                    <Image style={styles.icon} source={x.source} />
-                    <TextWrap style={styles.message}>{x.name}</TextWrap>
-                  </TouchableOpacity>
-                );
-              })}
-          </>
-        </TouchableHighlight>
+        <View style={styles.dialog}>
+          <TouchableHighlight style={styles.dialog2}>
+            <View>
+              <TextWrap style={styles.message2}>선택하세요.</TextWrap>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.dialog3}>
+            <>
+              {selectDialog.item.length > 0 &&
+                selectDialog.item.map((x, index) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.iconContainer}
+                      // onPress={x.onPress}
+                      onPress={() => handleOnpress(x.onPress)}>
+                      <Image style={styles.icon} source={x.source} />
+                      <TextWrap style={styles.message}>{x.name}</TextWrap>
+                    </TouchableOpacity>
+                  );
+                })}
+            </>
+          </TouchableHighlight>
+        </View>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {flexDirection: 'row', alignItems: 'center'},
   root: {
     position: 'absolute',
     left: 0,
@@ -71,14 +77,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: consts.dialogZindex,
   },
-  wrap: {flex: 1, justifyContent: 'center'},
+  wrap: {flex: 1, justifyContent: 'flex-end'},
   dialog: {
+    flexDirection: 'column',
+  },
+  dialog2: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     backgroundColor: colors.white,
-    marginHorizontal: 30,
-    paddingHorizontal: 50,
-    borderRadius: 8,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+  },
+  dialog3: {
+    // flex: 1,
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
+    backgroundColor: colors.white,
+    // paddingHorizontal: 3,
   },
   message: {
     lineHeight: 21,
@@ -87,11 +102,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
+  message2: {
+    lineHeight: 21,
+    fontSize: 18,
+    marginTop: 30,
+    color: '#222222',
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   iconContainer: {
-    width: '20%',
-    paddingBottom: 20,
-    paddingTop: 30,
+    // marginVertical: 30,
+    // marginHorizontal: 20,
+
+    paddingVertical: 20,
     alignItems: 'center',
+    // backgroundColor: colors.red,
   },
   icon: {
     width: 40,

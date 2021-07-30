@@ -16,7 +16,7 @@ import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import {dialogError, dialogOpenAction} from '../../redux/dialog/DialogActions';
+import {dialogError, dialogOpenMessage} from '../../redux/dialog/DialogActions';
 import {goBack, navigate} from '../../services/navigation';
 import {screenWidth, isIos} from '../../services/util';
 
@@ -31,6 +31,7 @@ export default function CameraRollPicker({navigation}) {
   const [page, setPage] = useState(1);
   const [canNext, setCanNtext] = useState(false);
   const [selectedArr, setSelectedArr] = useState([]);
+  const [convertFileArr, setConvertFileArr] = useState([]);
 
   // const handleMomentScrollEnd = e => {
   //   const {contentOffset, contentSize, layoutMeasurement} = e.nativeEvent;
@@ -52,6 +53,22 @@ export default function CameraRollPicker({navigation}) {
   useEffect(() => {
     setAssetType('Photos');
   }, []);
+
+  useEffect(() => {
+    if (page === 1) {
+      setAssetType('');
+      setPage(1);
+      setLimit(18);
+      setSelectedArr([]);
+      setConvertFileArr([]);
+    } else {
+      setSelectedArr([]);
+      setConvertFileArr([]);
+      setAssetType('');
+      setPage(1);
+      setLimit(18);
+    }
+  }, [params.key]);
 
   useEffect(() => {
     setLoading(true);
@@ -89,7 +106,7 @@ export default function CameraRollPicker({navigation}) {
         setLoading(false);
         dispatch(dialogError(e));
       });
-  }, [assetType, page, limit]);
+  }, [assetType, page, limit, params.key]);
 
   return (
     <RootLayout
@@ -109,8 +126,13 @@ export default function CameraRollPicker({navigation}) {
               완료
             </TextWrap>
           ),
-          onPress:
-            selectedArr.length > 0 ? () => console.log('complete1') : null,
+          onPress: () =>
+            navigation.navigate(routes.photoEditor, {
+              route: routes.home,
+              image: convertFileArr,
+              dataKey: 'image',
+              key: Date.now(),
+            }),
         },
       }}>
       {/* <View style={styles.root}>
@@ -182,62 +204,38 @@ export default function CameraRollPicker({navigation}) {
         }
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
+          let ext = item.node.image.filename.split('.').pop().toLowerCase();
+          if (ext === 'jpg') {
+            ext = 'jpeg';
+          }
+          const file = {
+            uri: item.node.image.uri,
+            type: `image/${ext}`,
+            name: item.node.image.filename,
+          };
           return (
             <TouchableOpacity
               onPress={() => {
-                if (params && params.route) {
-                  let ext = item.node.image.filename
-                    .split('.')
-                    .pop()
-                    .toLowerCase();
-                  if (ext === 'jpg') {
-                    ext = 'jpeg';
-                  }
-                  navigate(params.route, {
-                    [params.dataKey]: {
-                      name: item.node.image.filename,
-                      uri: item.node.image.uri,
-                      size: item.node.image.fileSize,
-                      width: item.node.image.width,
-                      height: item.node.image.height,
-                      type: `${
-                        assetType === 'Photos' ? 'image' : 'video'
-                      }/${ext}`,
-                    },
-                    key: params.key,
-                    isImage: assetType === 'Photos',
+                const idx = selectedArr.indexOf(index);
+                if (idx !== -1) {
+                  const tmpArr = selectedArr;
+                  const convertArr = selectedArr.filter(function (item2) {
+                    return item2 !== index;
                   });
+                  setSelectedArr(convertArr);
+                  convertFileArr.splice(tmpArr.indexOf(index), 1);
+                  setConvertFileArr(convertFileArr);
                 } else {
-                  const idx = selectedArr.indexOf(index);
-                  if (idx !== -1) {
-                    setSelectedArr(
-                      selectedArr.filter(function (item2) {
-                        return item2 !== index;
+                  if (selectedArr.length > 9) {
+                    dispatch(
+                      dialogOpenMessage({
+                        message: '최대 10개까지 선택가능합니다.',
                       }),
                     );
                   } else {
                     setSelectedArr([...selectedArr, index]);
+                    setConvertFileArr([...convertFileArr, file]);
                   }
-
-                  let ext = item.node.image.filename
-                    .split('.')
-                    .pop()
-                    .toLowerCase();
-                  if (ext === 'jpg') {
-                    ext = 'jpeg';
-                  }
-                  // console.log({
-                  //   name: item.node.image.filename,
-                  //   uri: item.node.image.uri,
-                  //   size: item.node.image.fileSize,
-                  //   width: item.node.image.width,
-                  //   height: item.node.image.height,
-                  //   type: `${
-                  //     assetType === 'Photos' ? 'image' : 'video'
-                  //   }/${ext}`,
-                  //   key: params.key,
-                  //   isImage: assetType === 'Photos',
-                  // });
                 }
               }}
               style={{
@@ -252,9 +250,18 @@ export default function CameraRollPicker({navigation}) {
                   selectedArr.indexOf(index) !== -1 && styles.selectedImage
                 }>
                 {selectedArr.indexOf(index) !== -1 ? (
-                  <TextWrap style={styles.selectedCount}>
-                    {selectedArr.indexOf(index) * 1 + 1}
-                  </TextWrap>
+                  selectedArr.indexOf(index) * 1 + 1 === 1 ? (
+                    <>
+                      <TextWrap style={styles.thumbnail}>대표 이미지</TextWrap>
+                      <TextWrap style={styles.selectedCount}>
+                        {selectedArr.indexOf(index) * 1 + 1}
+                      </TextWrap>
+                    </>
+                  ) : (
+                    <TextWrap style={styles.selectedCount}>
+                      {selectedArr.indexOf(index) * 1 + 1}
+                    </TextWrap>
+                  )
                 ) : (
                   <TextWrap style={styles.notSelectedCount} />
                 )}
@@ -297,6 +304,14 @@ const styles = StyleSheet.create({
     borderColor: 'yellow',
     width: 20,
     height: 20,
+  },
+  thumbnail: {
+    position: 'absolute',
+    left: 8,
+    top: 5,
+    color: colors.red,
+    fontWeight: '700',
+    zIndex: 1,
   },
   notSelectedCount: {
     position: 'absolute',

@@ -16,6 +16,8 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def useIntlJsc = false
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -31,6 +33,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         vectorDrawables.useSupportLibrary = true
+        minSdkVersion 21
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
@@ -80,9 +84,22 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"
+    // implementation "com.facebook.react:react-native:+"
+    implementation 'com.facebook.fbjni:fbjni-java-only:0.0.4'
+    implementation('com.facebook.react:react-native:+') {
+        exclude group: 'com.facebook.fbjni', module: 'fbjni-java-only'
+        exclude group: 'com.facebook.yoga', module: 'proguard-annotations'
+    }
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'com.android.support:multidex:1.0.3'
+
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
+
+    implementation "com.kakao.sdk:v2-user:2.5.2" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.5.2" // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-story:2.5.2" // 카카오스토리
+    implementation "com.kakao.sdk:v2-link:2.5.2" // 메시지(카카오링크)
+    implementation "com.kakao.sdk:v2-navi:2.5.2" // 카카오내비
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
@@ -104,6 +121,12 @@ dependencies {
         releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor
+    }
+
+     if (useIntlJsc) {
+        implementation 'org.webkit:android-jsc-intl:+'
+    } else {
+        implementation 'org.webkit:android-jsc:+'
     }
 }
 

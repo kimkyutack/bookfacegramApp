@@ -1,6 +1,5 @@
 import React, {createRef, useCallback, useState} from 'react';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import CameraRoll from '@react-native-community/cameraroll';
 import RNFetchBlob from 'rn-fetch-blob';
 import {useDispatch} from 'react-redux';
 import {
@@ -27,6 +26,7 @@ import {
 import {
   getImageFromCamera,
   checkMultiplePermissions,
+  getImageFromGallery,
 } from '../../services/picker';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import Topbar from '../../components/topbar/Topbar';
@@ -57,72 +57,25 @@ export default function TabsHome({route, navigation}) {
                 item: [
                   {
                     name: '카메라',
-                    source: images.like,
+                    source: images.cameraBtn,
                     onPress: () =>
                       getImageFromCamera()
                         .then(async file => {
-                          console.log('file');
-                          console.log(file);
                           if (!file) {
                             return;
                           }
-                          if (!isIos) {
-                            let ps = await check(
-                              PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
-                            );
-                            if (ps !== 'granted') {
-                              ps = await request(
-                                PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
-                              );
-                              if (ps !== 'granted') {
-                                dispatch(
-                                  dialogOpenAction({
-                                    title: '설정',
-                                    titleColor: colors.blue,
-                                    cancelTitle: '닫기',
-                                    message:
-                                      '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.',
-                                    onPress: a => {
-                                      if (a) {
-                                        openSettings();
-                                      }
-                                    },
-                                  }),
-                                );
-                              }
-                            } else {
-                              // android file write on phone
-                              const result = await CameraRoll.save(file.uri, {
-                                type: 'photo',
-                                album: 'toaping',
-                              });
-                              console.log('🐤result', result);
-                            }
-                          } else {
-                            // ios ~
-                          }
-
-                          // const savedPath =
-                          //   (isIos
-                          //     ? RNFetchBlob.fs.dirs.DocumentDir
-                          //     : RNFetchBlob.fs.dirs.PictureDir) +
-                          //   '/toaping/' +
-                          //   file.name;
-
-                          // console.log('savedPath');
-                          // console.log((isIos ? '' : 'file://') + savedPath);
-                          // await CameraRoll.save(
-                          //   (isIos ? '' : 'file://') + savedPath,
-                          //   {
-                          //     type: 'photo',
-                          //     album: 'toaping',
-                          //   },
-                          // );
+                          navigation.navigate(routes.photoEditor, {
+                            route: routes.home,
+                            image: file,
+                            dataKey: 'image',
+                            key: Date.now(),
+                          });
                         })
                         .catch(error => {
                           if (
                             error === 'getImageFromCamera' ||
-                            error === 'checkMultiplePermissions'
+                            error === 'checkMultiplePermissions' ||
+                            error === 'getImageFromGallery'
                           ) {
                             dispatch(
                               dialogOpenAction({
@@ -145,7 +98,48 @@ export default function TabsHome({route, navigation}) {
                   },
                   {
                     name: '파일',
-                    source: images.talk,
+                    source: images.fileBtn,
+                    onPress: async () =>
+                      await getImageFromGallery()
+                        .then(async file => {
+                          if (!file) {
+                            return;
+                          }
+                          navigation.navigate(routes.photoEditor, {
+                            route: routes.home,
+                            image: file,
+                            dataKey: 'image',
+                            key: Date.now(),
+                          });
+                        })
+                        .catch(error => {
+                          if (
+                            error === 'getImageFromCamera' ||
+                            error === 'checkMultiplePermissions' ||
+                            error === 'getImageFromGallery'
+                          ) {
+                            dispatch(
+                              dialogOpenAction({
+                                title: '설정',
+                                titleColor: colors.blue,
+                                cancelTitle: '닫기',
+                                message:
+                                  '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.',
+                                onPress: a => {
+                                  if (a) {
+                                    openSettings();
+                                  }
+                                },
+                              }),
+                            );
+                          } else {
+                            dispatch(dialogError(error));
+                          }
+                        }),
+                  },
+                  {
+                    name: '갤러리',
+                    source: images.albumBtn,
                     onPress: async () =>
                       await checkMultiplePermissions([
                         PERMISSIONS.ANDROID.CAMERA,
@@ -155,7 +149,7 @@ export default function TabsHome({route, navigation}) {
                         .then(result => {
                           if (result) {
                             navigation.navigate(routes.cameraRollPicker, {
-                              route: routes.message,
+                              route: routes.home,
                               dataKey: 'image',
                               key: Date.now(),
                             });
@@ -164,7 +158,8 @@ export default function TabsHome({route, navigation}) {
                         .catch(error => {
                           if (
                             error === 'getImageFromCamera' ||
-                            error === 'checkMultiplePermissions'
+                            error === 'checkMultiplePermissions' ||
+                            error === 'getImageFromGallery'
                           ) {
                             dispatch(
                               dialogOpenAction({

@@ -5,6 +5,7 @@ import {phoneExts} from './bulk';
 // import SimpleToast from 'react-native-simple-toast';
 export const screenWidth = Dimensions.get('window').width;
 export const screenHeight = Dimensions.get('window').height;
+
 export const isIos = Platform.OS === 'ios';
 
 export const validationEmail = email => {

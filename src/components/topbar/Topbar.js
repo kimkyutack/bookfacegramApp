@@ -1,15 +1,22 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  Dimensions,
+} from 'react-native';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import {goBack} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
-import {screenWidth} from '../../services/util';
+import {screenWidth as defaultScreenWidth} from '../../services/util';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 
 export default function Topbar({title, onGoBack, options, back, navigation}) {
   const [optionWidth, setOptionWidth] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(defaultScreenWidth);
   const handleOptionLayout = e => {
     const {width} = e.nativeEvent.layout;
     if (width > optionWidth) {
@@ -17,8 +24,19 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
     }
   };
 
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      'change',
+      // eslint-disable-next-line no-shadow
+      ({window, screen}) => {
+        setScreenWidth(screen.width);
+      },
+    );
+    return () => subscription?.remove();
+  }, []);
+
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, {width: screenWidth}]}>
       {back ? (
         <TouchableWithoutFeedback onPress={onGoBack || goBack}>
           <View style={styles.back} onLayout={handleOptionLayout}>
@@ -66,7 +84,7 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    width: screenWidth,
+    // width: screenWidth,
     // backgroundColor: 'red',
     flexDirection: 'row',
     alignItems: 'center',

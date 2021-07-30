@@ -10,6 +10,8 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 import {isIos} from './util';
+import {requestFile} from './network';
+import consts from '../libs/consts';
 
 export async function splashCheckMultiplePermissions(permissions) {
   if (!isIos) {
@@ -32,27 +34,6 @@ export async function checkMultiplePermissions(permissions) {
     }
   }
   return true;
-}
-
-// In case you want to check a single permission
-export async function checkPermission(permission) {
-  var isPermissionGranted = false;
-  const result = await check(permission);
-  switch (result) {
-    case RESULTS.GRANTED:
-      isPermissionGranted = true;
-      break;
-    case RESULTS.DENIED:
-      isPermissionGranted = false;
-      break;
-    case RESULTS.BLOCKED:
-      isPermissionGranted = false;
-      break;
-    case RESULTS.UNAVAILABLE:
-      isPermissionGranted = false;
-      break;
-  }
-  return isPermissionGranted;
 }
 
 export const getImageFromCamera = async () => {
@@ -134,14 +115,13 @@ export const getImageFromGallery = async canVideo => {
     if (result !== 'granted' && result !== 'limited') {
       result = await request(p);
       if (result !== 'granted' && result !== 'limited') {
-        throw 'Please allow permission in settings';
+        throw 'getImageFromGallery';
       }
     }
     const item = await ImageCropPicker.openPicker({
       mediaType: canVideo ? 'any' : 'photo',
     });
-    console.log('item');
-    console.log(item);
+
     if (
       !['video/mp4', 'video/quicktime', 'video/x-msvideo'].includes(
         item.mime,
@@ -159,8 +139,6 @@ export const getImageFromGallery = async canVideo => {
       uri: item.path,
     };
   } catch (error) {
-    console.log('error');
-    console.log(error);
     if (error.code === 'E_PERMISSION_MISSING') {
       throw '설정에서 카메라 권한을 허용해주세요.';
     } else if (error.code !== 'E_PICKER_CANCELLED') {

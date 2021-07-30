@@ -4,7 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {BackHandler} from 'react-native';
-import {dialogOpenAction} from './redux/dialog/DialogActions';
+import {dialogOpenAction, dialogClose} from './redux/dialog/DialogActions';
 import routes from './libs/routes';
 import {navigationRef, reset, routeNameRef} from './services/navigation';
 import DrawerCustom from './components/drawer-custom/DrawerCustom';
@@ -37,7 +37,9 @@ const Drawer = createDrawerNavigator();
 export default function Router() {
   const [currentRouteName, setCurrentRoutName] = useState(null);
   const user = useSelector(s => s.user, shallowEqual);
+  const dialog = useSelector(s => s.dialog, shallowEqual);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!user.signed) {
       reset(routes.splash);
