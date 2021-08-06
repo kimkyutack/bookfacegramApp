@@ -22,7 +22,7 @@ export default function EventItem({item, navigation}) {
             }
             style={styles.thumbnail}
           />
-          <TextWrap font={fonts.robotoMedium} style={styles.title}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             {item.ev_title}
           </TextWrap>
           <TextWrap style={styles.date}>

@@ -7,8 +7,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
+import {widthPercentage} from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 export default function SearchBar({
   onPress,
@@ -29,7 +31,6 @@ export default function SearchBar({
       onPress={onPress}
       disabled={!onPress}
       style={[styles.root, style]}>
-      {/* <Image style={styles.icon} source={image.search} /> */}
       {onPress ? (
         <TextWrap
           style={[styles.inputText, {color: value ? '#222222' : '#ababab'}]}>
@@ -77,11 +78,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   root: {
-    alignSelf: 'stretch',
+    width: widthPercentage(332),
+    justifyContent: 'center',
+    alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
-    backgroundColor: '#fafafa',
+    backgroundColor: colors.white,
   },
   icon: {
     width: 20,
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#222222',
     paddingVertical: 6,
-    fontFamily: fonts.robotoRegular,
+    fontFamily: fonts.kopubWorldDotumProMedium,
   },
   inputText: {
     flex: 1,

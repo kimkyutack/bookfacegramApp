@@ -18,8 +18,13 @@ import {userCheckToken} from '../../redux/user/UserActions';
 import {goBack, reset, navigate} from '../../services/navigation';
 import {requestGet, requestPost} from '../../services/network';
 import {setItem} from '../../services/preference';
-import {containPasswordCheck, preventKor} from '../../services/util';
-import Policy from './Policy';
+import {
+  containPasswordCheck,
+  preventKor,
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 
 export default function RegisterFormInfo({}) {
   const scrollRef = useRef();
@@ -268,23 +273,27 @@ export default function RegisterFormInfo({}) {
           회원가입에 필요한 최소한의 정보만 입력받음으로써{'\n'}
           개인정보 수집을 최소화하고 편리한 회원가입을 제공합니다.
         </TextWrap>
-        <TextWrap style={styles.label} font={fonts.robotoMedium}>
+        <TextWrap style={styles.label} font={fonts.kopubWorldDotumProBold}>
           2.개인정보 입력
         </TextWrap>
 
         <View style={styles.forms}>
           <InputWrap
             style={styles.input}
+            inputStyle={styles.inputValue}
             onChange={setName}
             value={name}
             placeholder="이름(필수)"
+            placeholderTextColor="#acacac"
             maxLength={20}
           />
           <InputWrap
             style={[styles.input, {marginTop: 30}]}
+            inputStyle={styles.inputValue}
             onChange={memberIdDuplicatedCheck}
             value={memberId}
             placeholder="아이디(필수)"
+            placeholderTextColor="#acacac"
             maxLength={20}
             message={
               memberId
@@ -307,12 +316,13 @@ export default function RegisterFormInfo({}) {
           />
           <InputWrap
             style={styles.input}
+            inputStyle={styles.inputValue}
             value={password}
             onChange={setPassword}
             secure
             maxLength={20}
-            // borderColor={Boolean(passwordError) && colors.red}
             placeholder="비밀번호(필수)"
+            placeholderTextColor="#acacac"
             message={
               passwordError
                 ? passwordError
@@ -330,11 +340,12 @@ export default function RegisterFormInfo({}) {
           />
           <InputWrap
             style={styles.input}
+            inputStyle={styles.inputValue}
             value={passwordConfirm}
             onChange={setPasswordConfirm}
             secure
             maxLength={20}
-            // borderColor={Boolean(passwordConfirmError) && colors.red}
+            placeholderTextColor="#acacac"
             placeholder="비밀번호 확인(필수)"
             message={
               passwordConfirmError
@@ -354,20 +365,23 @@ export default function RegisterFormInfo({}) {
 
           <InputWrap
             style={styles.input}
+            inputStyle={styles.inputValue}
             value={phone}
             onChange={setPhone}
             maxLength={11}
             placeholder="핸드폰번호(필수)"
+            placeholderTextColor="#acacac"
             number
             message={phone ? 'ex) 01033334444' : '-없이 숫자만 입력'}
             messageColor={phone ? colors.blue : colors.black}
           />
           <InputWrap
             style={styles.input}
-            // onChange={e => emailDuplicatedCheck(e)}
+            inputStyle={styles.inputValue}
             onChange={emailDuplicatedCheck}
             value={email}
             placeholder="이메일 주소(필수)"
+            placeholderTextColor="#acacac"
             message={
               email
                 ? emailLoading
@@ -394,18 +408,20 @@ export default function RegisterFormInfo({}) {
             onPress={() => goBack()}
             style={styles.button}
             outline
-            styleTitle={{color: colors.border}}>
+            styleTitle={styles.buttonTitle}>
             취소
           </ButtonWrap>
           <ButtonWrap
             disabled={buttonDisabled}
             onPress={signUp}
-            style={styles.button}
-            styleTitle={styles.buttonTitle}
+            style={buttonDisabled ? styles.diabledButton : styles.button}
+            styleTitle={
+              buttonDisabled ? styles.buttonTitle1 : styles.buttonTitle2
+            }
             disabledBackgroundColor={
               !buttonDisabled && styles.buttonBackground
             }>
-            다음
+            가입하기
           </ButtonWrap>
         </View>
       </ScrollView>
@@ -414,13 +430,24 @@ export default function RegisterFormInfo({}) {
 }
 
 const styles = StyleSheet.create({
+  root: {flex: 1, paddingHorizontal: 16},
+
   forms: {
-    marginHorizontal: 16,
+    flex: 1,
   },
   input: {
     marginTop: 20,
+    color: colors.black,
   },
-  root: {flex: 1},
+  inputValue: {
+    color: colors.black,
+    padding: 0,
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(20),
+    letterSpacing: -0.5,
+    textDecorationLine: 'none',
+    fontFamily: fonts.kopubWorldDotumProMedium,
+  },
   title: {
     marginHorizontal: 16,
     fontSize: 22,
@@ -429,79 +456,57 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   subTitle: {
-    backgroundColor: colors.border,
-    marginHorizontal: 16,
-    paddingVertical: 12,
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 10,
     textAlign: 'center',
-    color: '#777',
-    fontSize: 12,
-    lineHeight: 22,
-    marginTop: 10,
+    color: '#333333',
+    fontSize: fontPercentage(10),
+    lineHeight: fontPercentage(14),
   },
   label: {
-    marginTop: 20,
-    fontSize: 16,
-    paddingHorizontal: 16,
-    lineHeight: 20,
+    marginTop: 11,
+    fontSize: fontPercentage(15),
     color: '#222',
   },
   buttonWrap: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 16,
-    marginTop: 20,
+    marginTop: 30,
+    paddingVertical: 1,
   },
   button: {
     alignSelf: 'center',
     justifyContent: 'center',
-    width: '40%',
-    marginTop: 10,
+    width: widthPercentage(130),
+    height: heightPercentage(43),
+  },
+  diabledButton: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: widthPercentage(130),
+    height: heightPercentage(43),
+    backgroundColor: '#c9c9c9',
   },
   buttonTitle: {
+    fontSize: fontPercentage(15),
+    lineHeight: fontPercentage(23),
+    color: colors.border,
+    backgroundColor: 'transparent',
+  },
+  buttonTitle1: {
+    fontSize: fontPercentage(15),
+    lineHeight: fontPercentage(23),
+    backgroundColor: 'transparent',
+    color: colors.white,
+  },
+  buttonTitle2: {
+    fontSize: fontPercentage(15),
+    lineHeight: fontPercentage(23),
+    backgroundColor: 'transparent',
     color: colors.white,
   },
   buttonBackground: {
     backgroundColor: colors.prussianBlue,
-  },
-  clock: {width: 15, height: 15, marginRight: 2},
-  footer3: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  footer3T1: {
-    lineHeight: 15,
-    fontSize: 12,
-    color: '#777777',
-  },
-  footerWrap: {
-    flexDirection: 'row',
-    marginBottom: 14,
-    alignItems: 'center',
-  },
-  arrowHalfRight: {
-    resizeMode: 'contain',
-    width: 10,
-    height: 4.2,
-    marginLeft: 4,
-  },
-  footer: {
-    color: '#999999',
-    lineHeight: 18,
-    marginTop: 40,
-    fontSize: 12,
-  },
-  footer2: {
-    color: '#999999',
-    lineHeight: 18,
-    fontSize: 12,
-  },
-  footerBold: {
-    fontSize: 12,
-    lineHeight: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#222222',
-    color: '#222222',
   },
 });

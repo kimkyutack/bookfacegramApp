@@ -13,13 +13,19 @@ import {userSignOut} from './redux/user/UserActions';
 import Splash from './screens/splash/Splash';
 import Login from './screens/login/Login';
 import Tabs from './screens/tabs/Tabs';
-import homeTab from './screens/home-tab';
+import Home from './screens/home/homeMain';
+import HomeList from './screens/home/homeList';
+import HomeDetail from './screens/home/homeDetail';
 import Notice from './screens/notice/Notice';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
-import TopNewBooks from './screens/home-tab/TopNewBooks';
-import TopMyBooks from './screens/home-tab/TopMyBooks';
-import TopActivity from './screens/home-tab/TopActivity';
+import TopNewBooks from './screens/home/TopNewBooks';
+import TopNewBooksMain from './screens/home/homeMain/TopNewBooksMain';
+import TopNewBooksList from './screens/home/homeList/TopNewBooksList';
+import TopNewBooksDetail from './screens/home/homeDetail/TopNewBooksDetail';
+
+import TopMyBooks from './screens/home/TopMyBooks';
+import TopActivity from './screens/home/TopActivity';
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
 import RegisterFormInfo from './screens/register-form/RegisterFormInfo';
@@ -31,6 +37,8 @@ import CameraRollPicker from './screens/cameraroll-picker/CameraRollPicker';
 import PhotoEditor from './screens/photo-editor/PhotoEditor';
 
 import RNExitApp from 'react-native-exit-app';
+import {widthPercentage} from './services/util';
+import colors from './libs/colors';
 
 const Drawer = createDrawerNavigator();
 
@@ -68,8 +76,9 @@ export default function Router() {
     };
     if (
       currentRouteName === 'splash' ||
-      currentRouteName === 'login' ||
-      currentRouteName === 'topNewBooks'
+      currentRouteName === 'login'
+      //  ||
+      // currentRouteName === 'topNewBooks'
     ) {
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
@@ -87,204 +96,275 @@ export default function Router() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={() =>
-          (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
-        }
-        onStateChange={async () => {
-          const preRouteName = routeNameRef.current;
-          const curRouteName = navigationRef.current.getCurrentRoute().name;
-
-          if (preRouteName !== curRouteName) {
-            setCurrentRoutName(curRouteName);
+      {!user.signed ? (
+        <NavigationContainer
+          ref={navigationRef}
+          onReady={() =>
+            (routeNameRef.current =
+              navigationRef.current.getCurrentRoute().name)
           }
-          routeNameRef.current = curRouteName;
-        }}>
-        <Drawer.Navigator
-          drawerStyle={{
-            backgroundColor: '#ffffff',
-            width: 240,
-          }}
-          headerMode="none"
-          initialRouteName={routes.splash}
-          drawerContent={props => <DrawerCustom {...props} />}>
-          <Drawer.Screen
-            name={routes.splash}
-            component={Splash}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
+          onStateChange={async () => {
+            const preRouteName = routeNameRef.current;
+            const curRouteName = navigationRef.current.getCurrentRoute().name;
+            if (preRouteName !== curRouteName) {
+              setCurrentRoutName(curRouteName);
+            }
+            routeNameRef.current = curRouteName;
+          }}>
+          <Drawer.Navigator
+            drawerStyle={{
+              backgroundColor: colors.white,
+              width: widthPercentage(210),
             }}
-          />
-          <Drawer.Screen
-            name={routes.login}
-            component={Login}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
+            headerMode="none"
+            initialRouteName={routes.splash}
+            drawerContent={props => <DrawerCustom {...props} />}>
+            <Drawer.Screen
+              name={routes.splash}
+              component={Splash}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.login}
+              component={Login}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.policy}
+              component={Policy}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.toapingLogin}
+              component={ToapingLogin}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.registerForm}
+              component={RegisterForm}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              initialParams={{}}
+              name={routes.registerFormInfo}
+              component={RegisterFormInfo}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro1}
+              component={Intro1}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro2}
+              component={Intro2}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro3}
+              component={Intro3}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      ) : (
+        <NavigationContainer
+          ref={navigationRef}
+          onReady={() =>
+            (routeNameRef.current =
+              navigationRef.current.getCurrentRoute().name)
+          }
+          onStateChange={async () => {
+            const preRouteName = routeNameRef.current;
+            const curRouteName = navigationRef.current.getCurrentRoute().name;
+            if (preRouteName !== curRouteName) {
+              setCurrentRoutName(curRouteName);
+            }
+            routeNameRef.current = curRouteName;
+          }}>
+          <Drawer.Navigator
+            drawerStyle={{
+              backgroundColor: colors.white,
+              width: widthPercentage(210),
             }}
-          />
-          <Drawer.Screen
-            name={routes.home}
-            component={homeTab}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.cameraRollPicker}
-            component={CameraRollPicker}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
+            headerMode="none"
+            initialRouteName={routes.home}
+            drawerContent={props => <DrawerCustom {...props} />}>
+            <Drawer.Screen
+              name={routes.home}
+              component={Home}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.homeList}
+              component={HomeList}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.homeDetail}
+              component={HomeDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.cameraRollPicker}
+              component={CameraRollPicker}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
 
-          <Drawer.Screen
-            name={routes.policy}
-            component={Policy}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.toapingLogin}
-            component={ToapingLogin}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.registerForm}
-            component={RegisterForm}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            initialParams={{}}
-            name={routes.registerFormInfo}
-            component={RegisterFormInfo}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.intro1}
-            component={Intro1}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.intro2}
-            component={Intro2}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.intro3}
-            component={Intro3}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.tab}
-            component={Tabs}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.topNewBooks}
-            component={TopNewBooks}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.topActivity}
-            component={TopActivity}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.topMyBooks}
-            component={TopMyBooks}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-
-          <Drawer.Screen
-            name={routes.notice}
-            component={Notice}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.event}
-            component={Event}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.eventDetail}
-            component={EventDetail}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-          <Drawer.Screen
-            name={routes.photoEditor}
-            component={PhotoEditor}
-            options={({route, navigation}) => {
-              return {
-                swipeEnabled: false,
-              };
-            }}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
+            <Drawer.Screen
+              name={routes.tab}
+              component={Tabs}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topNewBooks}
+              component={TopNewBooks}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topNewBooksMain}
+              component={TopNewBooksMain}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topNewBooksList}
+              component={TopNewBooksList}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topNewBooksDetail}
+              component={TopNewBooksDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topActivity}
+              component={TopActivity}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.topMyBooks}
+              component={TopMyBooks}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.notice}
+              component={Notice}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.event}
+              component={Event}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.eventDetail}
+              component={EventDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.photoEditor}
+              component={PhotoEditor}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      )}
     </SafeAreaProvider>
   );
 }

@@ -7,13 +7,20 @@ import routes from '../../libs/routes';
 import {navigate, navigationRef, reset} from '../../services/navigation';
 import Avatar from '../avatar/Avatar';
 import TextWrap from '../text-wrap/TextWrap';
+import fonts from '../../libs/fonts';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
+
 export default function DrawerCustom(props) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
 
   return (
-    <>
-      <View style={styles.userInfo}>
+    <View style={styles.root}>
+      <View style={styles.userInfoContainer}>
         <View style={styles.avator}>
           <Avatar
             size={84}
@@ -25,16 +32,18 @@ export default function DrawerCustom(props) {
             }
           />
         </View>
-        <View style={{marginLeft: 15, flexDirection: 'row'}}>
-          <TextWrap style={styles.avatorText}>
+        <View style={styles.avatorTextContainer}>
+          <TextWrap
+            style={styles.avatorText}
+            font={fonts.kopubWorldDotumProBold}>
             {user?.kor_nm ? user?.kor_nm : 'Undefined'}{' '}
-            <Text style={styles.avatorText2}> 님</Text>
+            <Text style={styles.avatorText2}>님</Text>
           </TextWrap>
         </View>
       </View>
 
       <DrawerContentScrollView {...props}>
-        <View style={styles.container}>
+        <View style={styles.drawerContainer}>
           <View style={styles.itemList}>
             <DrawerItem
               style={styles.drawerItem}
@@ -101,7 +110,7 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                // props.navigation.navigate('tab');
+                props.navigation.navigate('tab');
               }}
             />
           </View>
@@ -127,44 +136,40 @@ export default function DrawerCustom(props) {
           </View>
         </View>
       </DrawerContentScrollView>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
-  userInfo: {
+  drawerContainer: {},
+  userInfoContainer: {
     backgroundColor: '#FED500',
-    height: 180,
-    width: 240,
+    height: heightPercentage(170),
   },
-  itemList: {
-    height: 54,
-  },
+  itemList: {},
   avator: {
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 10,
   },
+  avatorTextContainer: {marginLeft: 15, flexDirection: 'row'},
   avatorText: {
     marginTop: 20,
     marginLeft: 10,
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: fontPercentage(16),
+    fontFamily: fonts.kopubWorldDotumProBold,
   },
   avatorText2: {
-    fontWeight: '600',
-    fontSize: 16,
+    fontSize: fontPercentage(16),
+    fontFamily: fonts.kopubWorldDotumProBold,
   },
   label: {
     color: '#000000',
-    fontSize: 14,
+    fontSize: fontPercentage(14),
+    lineHeight: fontPercentage(19),
+    fontFamily: fonts.kopubWorldDotumProLight,
   },
-  drawerItem: {
-    width: 220,
-  },
+  drawerItem: {},
 });

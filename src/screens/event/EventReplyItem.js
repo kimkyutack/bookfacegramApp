@@ -5,7 +5,7 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import {formatTime, screenWidth} from '../../services/util';
+import {formatTime, fontPercentage} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 
 export default function EventReplyItem({
@@ -17,13 +17,15 @@ export default function EventReplyItem({
   return (
     <View style={[styles.mainContent && {marginTop: 10}]}>
       <View style={styles.titleContainer}>
-        <TextWrap font={fonts.robotoMedium} style={styles.title}>
+        <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
           {register}
         </TextWrap>
-        <TextWrap style={styles.title}>{register_dt}</TextWrap>
+        <TextWrap style={styles.title} font={fonts.kopubWorldDotumProMedium}>
+          {register_dt}
+        </TextWrap>
       </View>
 
-      <TextWrap font={fonts.robotoMedium} style={styles.descText}>
+      <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.descText}>
         {comment}
       </TextWrap>
     </View>
@@ -33,8 +35,8 @@ export default function EventReplyItem({
 const styles = StyleSheet.create({
   descText: {
     color: colors.black,
-    fontSize: 12,
-    lineHeight: 14,
+    fontSize: fontPercentage(12),
+    lineHeight: fontPercentage(16),
   },
   main: {
     alignItems: 'center',
@@ -52,8 +54,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#9D9D9D',
-    fontWeight: '600',
-    fontSize: 13,
-    lineHeight: 15,
+    fontSize: fontPercentage(13),
   },
 });

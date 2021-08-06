@@ -10,7 +10,12 @@ import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import {goBack} from '../../services/navigation';
 import TextWrap from '../text-wrap/TextWrap';
-import {screenWidth as defaultScreenWidth} from '../../services/util';
+import {
+  screenWidth as defaultScreenWidth,
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 
@@ -36,7 +41,7 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
   }, []);
 
   return (
-    <View style={[styles.root, {width: screenWidth}]}>
+    <View style={styles.root}>
       {back ? (
         <TouchableWithoutFeedback onPress={onGoBack || goBack}>
           <View style={styles.back} onLayout={handleOptionLayout}>
@@ -46,7 +51,7 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
       ) : (
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
           <View style={styles.back} onLayout={handleOptionLayout}>
-            <Image style={styles.backIcon} source={images.hamberger} />
+            <Image style={styles.hambergerIcon} source={images.hamberger} />
           </View>
         </TouchableWithoutFeedback>
       )}
@@ -56,7 +61,7 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
           <TextWrap
             numberOfLines={1}
             ellipsizeMode="tail"
-            font={fonts.notoSansCjkKrRegular}
+            font={fonts.kopubWorldDotumProBold}
             style={styles.title}>
             {title}
           </TextWrap>
@@ -84,38 +89,38 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    // width: screenWidth,
-    // backgroundColor: 'red',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 0,
-    minHeight: 44,
-    maxHeight: 44,
-    // alignSelf: 'stretch',
-    borderBottomColor: '#e6e6e6',
-    paddingLeft: 16,
-    paddingRight: 18,
-    alignContent: 'space-between',
+    minHeight: heightPercentage(68),
+    maxHeight: heightPercentage(68),
+    paddingHorizontal: 16,
     justifyContent: 'space-between',
   },
-  back: {},
+  back: {width: widthPercentage(24)},
   center: {},
-  right: {},
+  right: {width: widthPercentage(24)},
   title: {
-    // backgroundColor: 'blue',
-    textAlign: 'center',
-    fontSize: 16,
-    lineHeight: 22,
+    fontSize: fontPercentage(19),
     letterSpacing: -0.5,
     color: '#000000',
   },
   backIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
+    width: widthPercentage(20),
+    height: heightPercentage(20),
+    resizeMode: 'cover',
+    marginBottom: 5,
+  },
+  hambergerIcon: {
+    width: widthPercentage(18),
+    height: heightPercentage(18),
+    resizeMode: 'cover',
+    marginBottom: 5,
   },
   noneIcon: {
-    width: 24,
-    height: 24,
+    width: widthPercentage(20),
+    height: heightPercentage(20),
+    marginBottom: 3,
   },
 });

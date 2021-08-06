@@ -51,7 +51,7 @@ export default function InputPhone({value, onChange, style, ext, onExtChange}) {
           }}
         />
       )}
-      <TextWrap style={styles.label} font={fonts.robotoMedium}>
+      <TextWrap style={styles.label} font={fonts.kopubWorldDotumProMedium}>
         Cell phone number
       </TextWrap>
       <View style={styles.row}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   input: {
     color: colors.text,
     flex: 1,
-    fontFamily: fonts.robotoRegular,
+    fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: 14,
     lineHeight: 19,
     borderColor: '#e5e5e5',

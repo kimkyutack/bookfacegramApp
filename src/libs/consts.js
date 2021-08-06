@@ -5,10 +5,7 @@ let devIp = isIos ? '192.168.179.1' : '10.0.2.2';
 
 export default {
   devMode,
-  // androidPushChannel: 'bookfagegram-push',
-  // packageName: isIos
-  //   ? 'ios.'
-  //   : 'android.',
+  packageName: isIos ? 'ios.' : 'android.',
   version: '1.0.0',
   apiUrl: devMode
     ? emulator
@@ -22,6 +19,5 @@ export default {
     : ' http://133.186.219.126/bookApp',
   imgUrl:
     'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/books/thumbnail',
-
   dialogZindex: 10,
 };

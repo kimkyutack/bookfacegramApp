@@ -3,7 +3,13 @@ import {Image, StyleSheet, TextInput, View} from 'react-native';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import TextWrap from '../text-wrap/TextWrap';
-import {containPasswordCheck, preventKor} from '../../services/util';
+import {
+  containPasswordCheck,
+  fontPercentage,
+  heightPercentage,
+  preventKor,
+  widthPercentage,
+} from '../../services/util';
 
 export default function InputWrap({
   message,
@@ -19,6 +25,7 @@ export default function InputWrap({
   borderColor,
   value,
   placeholder,
+  placeholderTextColor,
   onChange,
   disabled,
   maxLength,
@@ -27,6 +34,7 @@ export default function InputWrap({
   multiline,
   showSoftInputOnFocus,
   messageColor,
+  selectionColor,
 }) {
   const handleChange = t => {
     if (maxLength && t.length > maxLength) {
@@ -43,7 +51,7 @@ export default function InputWrap({
     <View style={[styles.root, style]}>
       <View style={[styles.toolbar, {marginBottom: label ? 8 : 0}]}>
         {Boolean(label) && (
-          <TextWrap font={fonts.robotoMedium} style={styles.label}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.label}>
             {label}
           </TextWrap>
         )}
@@ -63,16 +71,21 @@ export default function InputWrap({
         {icon && <Image source={icon} style={styles.icon} />}
         <TextInput
           onFocus={onFocus}
+          selectionColor={selectionColor ? selectionColor : colors.border}
           secureTextEntry={secure}
           editable={!disabled}
           showSoftInputOnFocus={showSoftInputOnFocus}
           placeholder={placeholder}
           keyboardType={number ? 'decimal-pad' : 'default'}
-          placeholderTextColor={'#ababab'}
+          placeholderTextColor={
+            placeholderTextColor ? placeholderTextColor : '#ffffff'
+          }
           autoCapitalize="none"
           value={value}
+          autoCorrect={false}
           multiline={multiline}
           onChangeText={handleChange}
+          underlineColorAndroid="transparent"
           style={[
             inputStyle ? inputStyle : styles.input,
             disabled && {color: '#999999'},
@@ -107,8 +120,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 8,
-    width: 19,
-    height: 19,
+    width: widthPercentage(19),
+    height: heightPercentage(19),
   },
   label: {
     fontSize: 13,
@@ -123,10 +136,10 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 0,
-    fontSize: 14,
-    lineHeight: 17,
-    color: '#000000',
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(20),
+    color: '#ffffff',
     letterSpacing: -0.5,
-    fontFamily: fonts.notoSansCjkKrRegular,
+    textDecorationLine: 'none',
   },
 });

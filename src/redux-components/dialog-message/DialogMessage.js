@@ -32,7 +32,7 @@ export default function DialogMessage({}) {
         <View style={styles.dialog}>
           {Boolean(messageDialog.label) && (
             <TextWrap
-              font={fonts.robotoBold}
+              font={fonts.kopubWorldDotumProBold}
               style={[
                 styles.label,
                 {
@@ -59,7 +59,9 @@ export default function DialogMessage({}) {
                 messageDialog.onPress();
               }
             }}>
-            <TextWrap font={fonts.robotoMedium} style={styles.title}>
+            <TextWrap
+              font={fonts.kopubWorldDotumProMedium}
+              style={styles.title}>
               {messageDialog.title}
             </TextWrap>
           </TouchableOpacity>

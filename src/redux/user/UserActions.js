@@ -62,7 +62,6 @@ export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
       dispatch({type: userActionType.update, user: {profilePath: ''}});
     } else {
       const file = await getImageFromGallery();
-      console.log(file);
       if (!file) {
         return;
       }
@@ -77,7 +76,7 @@ export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
       dispatch({type: userActionType.update, user});
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     dispatch(dialogError(error));
   }
 };

@@ -8,7 +8,7 @@ export default function TextWrap(props) {
       {...props}
       style={[
         props.style,
-        {fontFamily: props.font || fonts.notoSansCjkKrLight},
+        {fontFamily: props.font || fonts.kopubWorldDotumProLight},
       ]}>
       {props.children}
     </Text>

@@ -21,11 +21,18 @@ import consts from '../../libs/consts';
 import images from '../../libs/images';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import {convertKorPhoneFormat, getAgeFromMoment} from '../../services/util';
+import {
+  convertKorPhoneFormat,
+  getAgeFromMoment,
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 import {
   dialogError,
   dialogOpenMessage,
   dialogOpenAction,
+  dialogOpenSelect,
 } from '../../redux/dialog/DialogActions';
 import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
 import {navigationRef, reset, navigate} from '../../services/navigation';
@@ -33,7 +40,6 @@ import {requestPost} from '../../services/network';
 import {getItem, setItem} from '../../services/preference';
 import {screenWidth, validationEmail} from '../../services/util';
 import Avatar from '../../components/avatar/Avatar';
-
 import {
   getProfile as getKakaoProfile,
   login,
@@ -43,7 +49,6 @@ import {
 export default function Login({route}) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -65,21 +70,33 @@ export default function Login({route}) {
     }
   }, [user.signed]);
 
-  const handleLogin = async () => {
+  const handleLogin = async type => {
     setLoading(true);
     try {
       Keyboard.dismiss();
+      let userId = '';
+      let userPw = '';
+      if (type === 'app') {
+        userId = username;
+        userPw = password;
+      } else if (type === 'toaping') {
+        userId = await getItem('toapingId');
+        userPw = await getItem('toapingPw');
+        if (!userId || !userPw) {
+          throw 'toapingError';
+        }
+      }
       const token = await requestPost({
         url: consts.apiUrl + '/makeJwt',
         body: {
-          member_id: username,
-          password: password,
-          platform_type: 'app',
+          member_id: userId,
+          password: userPw,
+          platform_type: type,
         },
       });
       if (token.valid) {
         await setItem('token', token.token);
-        await setItem('platformType', 'app');
+        await setItem('platformType', type);
         dispatch(userCheckToken);
       } else {
         setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
@@ -87,8 +104,10 @@ export default function Login({route}) {
     } catch (error) {
       if (error.message === 'Network Error') {
         dispatch(dialogError(error));
+      } else if (error === 'toapingError') {
+        navigate(routes.toapingLogin);
       } else {
-        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+        dispatch(dialogError(error));
       }
     }
     setLoading(false);
@@ -103,17 +122,66 @@ export default function Login({route}) {
   };
 
   const signInWithToaping = () => {
-    navigate(routes.toapingLogin);
+    dispatch(
+      dialogOpenSelect({
+        item: [
+          {
+            name: '토핑계정으로 간편로그인',
+            source: images.toapingIcon,
+            type: 'login',
+            onPress: () => signInWithToapingType(),
+          },
+          {
+            name: '다른 토핑계정으로 로그인',
+            source: images.toapingIcon,
+            type: 'login',
+            onPress: () => navigate(routes.toapingLogin),
+          },
+        ],
+      }),
+    );
+  };
+
+  const signInWithToapingType = async () => {
+    try {
+      handleLogin('toaping');
+    } catch (e) {
+      dispatch(dialogError(e));
+    }
   };
 
   const signInWithKakao = async () => {
+    dispatch(
+      dialogOpenSelect({
+        item: [
+          {
+            name: '카카오톡으로 간편로그인',
+            source: images.kakaoIcon,
+            type: 'login',
+            onPress: () => signInWithKakaoType('exist'),
+          },
+          {
+            name: '다른 카카오계정으로 로그인',
+            source: images.kakaoIcon,
+            type: 'login',
+            onPress: () => signInWithKakaoType('change'),
+          },
+        ],
+      }),
+    );
+  };
+
+  const signInWithKakaoType = async type => {
     try {
-      const token = await login();
-      // const token = await loginWithKakaoAccount();
+      let token = '';
+      if (type === 'exist') {
+        token = await login();
+      } else if (type === 'change') {
+        token = await loginWithKakaoAccount('change');
+      }
       const profile = await getKakaoProfile();
       await setItem('token', JSON.stringify(token.accessToken));
       await setItem('platformType', 'kakao');
-
       const platformType = await getItem('platformType');
       const result = await requestPost({
         url: consts.apiUrl + '/memberSnsJoin',
@@ -146,53 +214,56 @@ export default function Login({route}) {
         dispatch(userCheckToken);
       }
     } catch (e) {
+      // 그냥 아무반응 없는게 나음 팝업알람보단
       // dispatch(dialogError(e));
     }
   };
 
   return (
     <RootLayout style={styles.root}>
-      <Image source={images.login} style={styles.logo} />
-      <InputWrap
-        // icon={image.idIcon}
-        style={styles.input}
-        placeholder="아이디"
-        value={username}
-        // borderColor={Boolean(passwordError) && colors.red}
-        onChange={setUsername}
-        maxLength={50}
-      />
-      <InputWrap
-        // icon={image.pwIcon}
-        style={styles.input2}
-        placeholder="비밀번호"
-        secure
-        value={password}
-        onChange={setPassword}
-        maxLength={20}
-        // borderColor={Boolean(passwordError) && colors.red}
-        message={passwordError}
-        messageColor={colors.red}
-      />
+      <View style={styles.inputRow}>
+        <Image source={images.login} style={styles.logo} />
+        <InputWrap
+          // icon={image.idIcon}
+          style={styles.input}
+          placeholder="아이디"
+          value={username}
+          selectionColor={colors.white}
+          onChange={setUsername}
+          maxLength={50}
+        />
+        <InputWrap
+          // icon={image.pwIcon}
+          style={styles.input2}
+          placeholder="비밀번호"
+          selectionColor={colors.white}
+          secure
+          value={password}
+          onChange={setPassword}
+          maxLength={20}
+          message={passwordError}
+          messageColor={colors.red}
+        />
+      </View>
 
       <View style={styles.row}>
         <ButtonWrap
           loading={loading}
-          onPress={handleLogin}
+          onPress={() => handleLogin('app')}
           disabled={!password || !username || passwordError}
           style={styles.button}
           styleTitle={styles.buttonTitle}>
           로그인
         </ButtonWrap>
       </View>
-      <View style={styles.row}>
+      <View style={styles.row1}>
         <TextButton
           // onPress={() => {
           //   navigate(routes.registerPhoneVerify);
           // }}
           onPress={handleFindIdPassword}
           styleTitle={styles.t}
-          font={fonts.notoSansCjkKrRegular}>
+          font={fonts.kopubWorldDotumProMedium}>
           아이디 찾기
         </TextButton>
         <TextWrap style={styles.t2}>|</TextWrap>
@@ -202,14 +273,14 @@ export default function Login({route}) {
           // }}
           onPress={handleFindIdPassword}
           styleTitle={styles.t}
-          font={fonts.notoSansCjkKrRegular}>
+          font={fonts.kopubWorldDotumProMedium}>
           비밀번호 찾기
         </TextButton>
         <TextWrap style={styles.t2}>|</TextWrap>
         <TextButton
           onPress={handleRegister}
           styleTitle={styles.t}
-          font={fonts.notoSansCjkKrRegular}>
+          font={fonts.kopubWorldDotumProMedium}>
           회원가입
         </TextButton>
       </View>
@@ -221,53 +292,57 @@ export default function Login({route}) {
           }}
           disabled
           styleTitle={styles.text}
-          font={fonts.notoSansCjkKrRegular}>
+          font={fonts.kopubWorldDotumProMedium}>
           간편 로그인
         </TextButton>
       </View>
 
-      <View
-        // disabled={!onItemPress}
-        // onPress={onItemPress}
-        style={styles.rowAround}>
+      <View style={styles.rowAround}>
         <View>
-          <Avatar source={images.toaping} onPress={signInWithToaping} />
+          <Avatar
+            style={styles.avator}
+            source={images.toapingIcon}
+            onPress={signInWithToaping}
+          />
           <TextWrap
-            font={fonts.notoSansCjkKrRegular}
-            style={styles.avatarToapingTitle}>
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
             토핑
           </TextWrap>
         </View>
         <View>
-          <Avatar source={images.kakao} onPress={signInWithKakao} />
+          <Avatar
+            style={styles.avator}
+            source={images.kakaoIcon}
+            onPress={signInWithKakao}
+          />
           <TextWrap
-            font={fonts.notoSansCjkKrRegular}
-            style={styles.avatarKakaoTitle}>
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
             카카오톡
           </TextWrap>
         </View>
         <View>
-          <Avatar source={images.facebook} />
+          <Avatar style={styles.avator} source={images.naverIcon} />
           <TextWrap
-            font={fonts.notoSansCjkKrRegular}
-            style={styles.avatarFacebookTitle}>
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
+            네이버
+          </TextWrap>
+        </View>
+        <View>
+          <Avatar style={styles.avator} source={images.facebookIcon} />
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
             페이스북
           </TextWrap>
         </View>
         <View>
-          <Avatar source={images.naver} />
+          <Avatar style={styles.avator} source={images.googleIcon} />
           <TextWrap
-            font={fonts.notoSansCjkKrRegular}
-            style={styles.avatarNaverTitle}>
-            네이버
-          </TextWrap>
-        </View>
-
-        <View>
-          <Avatar source={images.google} />
-          <TextWrap
-            font={fonts.notoSansCjkKrRegular}
-            style={styles.avatarGoogleTitle}>
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
             구글
           </TextWrap>
         </View>
@@ -278,98 +353,90 @@ export default function Login({route}) {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
     backgroundColor: colors.background,
-    paddingHorizontal: 40,
-    paddingVertical: 20,
   },
-  paragraph: {
-    fontSize: 20,
+  inputRow: {
+    flexDirection: 'column',
+    width: '100%',
+    paddingHorizontal: widthPercentage(40),
   },
-  row: {flexDirection: 'row', marginTop: 10},
-  rowCenter: {flexDirection: 'row', justifyContent: 'center'},
-  rowAround: {
+  row: {flexDirection: 'row'},
+  row1: {
     flexDirection: 'row',
-    marginTop: 18,
-    width: '80%',
-    justifyContent: 'space-between',
+    marginTop: heightPercentage(37.4),
+  },
+  rowCenter: {
+    flexDirection: 'row',
+    marginTop: heightPercentage(71),
+  },
+  rowAround: {
+    marginTop: heightPercentage(23),
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: widthPercentage(70),
+    justifyContent: 'space-around',
   },
   t: {
-    fontSize: 12,
-    fontFamily: fonts.notoSansCjkKrRegular,
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(14),
+    fontFamily: fonts.kopubWorldDotumProMedium,
     color: '#ffffff',
-    marginTop: 10,
-    paddingLeft: 10,
+    marginTop: 9,
   },
   t2: {
-    fontSize: 13,
-    fontFamily: fonts.notoSansCjkKrRegular,
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(14),
+    fontFamily: fonts.kopubWorldDotumProMedium,
     color: '#ffffff',
-    marginTop: 7,
-    paddingLeft: 10,
+    marginTop: 10,
+    paddingHorizontal: 5,
   },
   text: {
-    marginTop: 71,
-    fontSize: 14,
-    lineHeight: 16,
-    fontFamily: fonts.notoSansCjkKrRegular,
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(17),
+    fontFamily: fonts.kopubWorldDotumProMedium,
     color: '#ffffff',
-    textDecorationLine: 'underline',
-  },
-  t1: {
-    borderRightWidth: 1,
-    borderColor: '#777777',
+    borderBottomWidth: 0.2,
+    textAlign: 'center',
+    borderBottomColor: colors.white,
   },
   input: {
-    marginTop: 40,
+    marginTop: heightPercentage(33.5),
   },
   input2: {
-    marginTop: 30,
+    marginTop: heightPercentage(26),
   },
   logo: {
-    // width: screenWidth / 1.5,
+    width: widthPercentage(161),
+    height: heightPercentage(68.5),
     resizeMode: 'contain',
+    alignSelf: 'center',
   },
   button: {
     justifyContent: 'center',
-    width: '80%',
-    marginTop: 30,
+    width: widthPercentage(250),
+    height: heightPercentage(42.6),
+    marginTop: heightPercentage(37.5),
   },
   buttonTitle: {
     color: '#000000',
+    fontSize: fontPercentage(15),
+    lineHeight: fontPercentage(23),
   },
-  button2: {
-    marginTop: 10,
+  avator: {
+    width: widthPercentage(32),
+    height: heightPercentage(32),
   },
-  avatarFacebookTitle: {
-    fontSize: 12,
+  avatarTitle: {
+    fontSize: fontPercentage(8),
+    lineHeight: fontPercentage(12),
     alignSelf: 'center',
     color: '#ffffff',
     letterSpacing: -0.5,
-  },
-  avatarKakaoTitle: {
-    fontSize: 12,
-    alignSelf: 'center',
-    color: '#ffffff',
-    letterSpacing: -0.5,
-  },
-  avatarNaverTitle: {
-    fontSize: 12,
-    alignSelf: 'center',
-    color: '#ffffff',
-    letterSpacing: -0.5,
-  },
-  avatarToapingTitle: {
-    fontSize: 12,
-    alignSelf: 'center',
-    color: '#ffffff',
-    letterSpacing: -0.5,
-  },
-  avatarGoogleTitle: {
-    fontSize: 12,
-    alignSelf: 'center',
-    color: '#ffffff',
-    letterSpacing: -0.5,
+    marginTop: 5,
   },
 });

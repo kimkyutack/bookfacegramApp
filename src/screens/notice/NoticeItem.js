@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import {formatTime, screenWidth} from '../../services/util';
+import {fontPercentage, formatTime, screenWidth} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 
 export default function NoticeItem({
@@ -13,9 +13,13 @@ export default function NoticeItem({
   title,
   contents,
   filePath,
-  index,
+  isFocused,
 }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [isFocused]);
   return (
     <View>
       <TouchableOpacity
@@ -23,11 +27,13 @@ export default function NoticeItem({
         onPress={() => {
           setOpen(!open);
         }}>
-        <View style={[styles.mainContent, open && {marginTop: 10}]}>
-          <TextWrap font={fonts.robotoMedium} style={styles.title}>
+        <View style={[styles.mainContent, open && {marginTop: 6}]}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             {title}
           </TextWrap>
-          <TextWrap style={styles.date}>{register_dt}</TextWrap>
+          <TextWrap style={styles.date} font={fonts.kopubWorldDotumProMedium}>
+            {register_dt}
+          </TextWrap>
         </View>
         <Image
           source={open ? images.angleUp : images.angleDown}
@@ -54,10 +60,7 @@ export default function NoticeItem({
           )} */}
           {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
           <View style={styles.descText}>
-            <HTMLView
-              value={contents}
-              // stylesheet={styles.descText}
-            />
+            <HTMLView value={contents} />
           </View>
         </View>
       )}
@@ -67,15 +70,21 @@ export default function NoticeItem({
 }
 
 const styles = StyleSheet.create({
-  descDate: {fontSize: 13, lineHeight: 15, color: '#777777', marginTop: 12},
+  descDate: {
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(15),
+    color: '#777777',
+    marginTop: 12,
+  },
   desc: {
     padding: 16,
     paddingBottom: 0,
   },
   descText: {
     color: '#555555',
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: fontPercentage(14),
+    fontFamily: fonts.kopubWorldDotumProLight,
+    lineHeight: fontPercentage(20),
     backgroundColor: '#F9F9F9',
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -90,15 +99,15 @@ const styles = StyleSheet.create({
   mainContent: {flex: 1},
   mainOpend: {paddingVertical: 10},
   date: {
-    fontSize: 12,
-    lineHeight: 13,
+    fontSize: fontPercentage(12),
+    lineHeight: fontPercentage(15),
     color: '#999999',
     marginTop: 10,
   },
   title: {
     color: colors.black,
-    fontSize: 16,
-    lineHeight: 19,
+    fontSize: fontPercentage(16),
+    lineHeight: fontPercentage(21),
   },
   up: {
     width: 20,

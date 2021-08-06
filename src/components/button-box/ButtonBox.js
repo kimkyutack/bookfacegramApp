@@ -5,7 +5,11 @@ import Ripple from 'react-native-material-ripple';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import TextWrap from '../text-wrap/TextWrap';
-
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 export default function ButtonBox({
   grade,
   pressButtonIdx,
@@ -27,14 +31,14 @@ export default function ButtonBox({
         disabledStyle && disabledStyle,
         pressButtonArr
           ? pressButtonArr.indexOf(grade) !== -1 && {
-              backgroundColor: colors.primary,
+              backgroundColor: colors.prussianBlue,
             }
-          : grade === pressButtonIdx && {backgroundColor: colors.primary},
+          : grade === pressButtonIdx && {backgroundColor: colors.prussianBlue},
       ]}
       disabled={loading || disabled}
       onPress={onPress}>
       <TextWrap
-        font={fonts.robotoMedium}
+        font={fonts.kopubWorldDotumProMedium}
         style={[
           styles.label,
           disabled && styles.labelDisabled,
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
   root: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 50,
+    height: heightPercentage(46),
     alignSelf: 'stretch',
     backgroundColor: colors.white,
   },

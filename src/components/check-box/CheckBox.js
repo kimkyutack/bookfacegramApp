@@ -11,6 +11,7 @@ export default function CheckBox({
   bold,
   label,
   border,
+  labelStyle,
 }) {
   return (
     <TouchableOpacity
@@ -23,7 +24,9 @@ export default function CheckBox({
         style={styles.check}
       />
       <TextWrap
-        font={bold ? fonts.robotoMedium : fonts.robotoRegular}
+        font={
+          bold ? fonts.kopubWorldDotumProBold : fonts.kopubWorldDotumProMedium
+        }
         style={[
           styles.label,
           bold && {color: '#222'},
@@ -31,6 +34,7 @@ export default function CheckBox({
             borderBottomWidth: 1,
             borderBottomColor: '#777',
           },
+          labelStyle && labelStyle,
         ]}>
         {label}
       </TextWrap>
@@ -45,8 +49,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   check: {
-    width: 20,
-    height: 20,
+    width: 18,
+    height: 18,
+    marginBottom: 1,
     marginRight: 10,
     resizeMode: 'contain',
   },

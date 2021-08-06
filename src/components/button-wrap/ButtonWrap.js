@@ -4,6 +4,7 @@ import {StyleSheet} from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
+import {fontPercentage} from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 
 export default function ButtonWrap({
@@ -33,7 +34,7 @@ export default function ButtonWrap({
           disabled && styles.rootEnabled,
           styleTitle,
         ]}
-        font={font || fonts.notoSansCjkKrRegular}>
+        font={font || fonts.kopubWorldDotumProMedium}>
         {children}
       </TextWrap>
     </Ripple>
@@ -42,27 +43,23 @@ export default function ButtonWrap({
 
 const styles = StyleSheet.create({
   root: {
-    paddingVertical: 13,
     alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'stretch',
     backgroundColor: '#fec400',
     borderRadius: 30,
   },
   rootOutLine: {
-    paddingVertical: 13,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'stretch',
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 30,
   },
   button: {
-    fontSize: 16,
-    color: '#000000',
-    lineHeight: 19,
+    fontSize: fontPercentage(15),
+    color: colors.black,
+    lineHeight: fontPercentage(23),
   },
   buttonOutline: {
     fontSize: 16,
@@ -70,9 +67,9 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
   rootEnabled: {
-    backgroundColor: '#c7c7c7',
+    backgroundColor: colors.white,
     borderWidth: 0,
-    color: '#000000',
+    color: colors.black,
   },
   buttonEnabled: {
     color: colors.white,

@@ -32,7 +32,9 @@ export default function Tabs(props) {
               <TextWrap
                 style={[styles.label, sel && styles.labelSel]}
                 font={
-                  sel ? fonts.notoSansCjkKrRegular : fonts.notoSansCjkKrRegular
+                  sel
+                    ? fonts.kopubWorldDotumProMedium
+                    : fonts.kopubWorldDotumProMedium
                 }>
                 {tab}
               </TextWrap>

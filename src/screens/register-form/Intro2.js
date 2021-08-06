@@ -7,6 +7,11 @@ import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import {goBack, navigate} from '../../services/navigation';
 import RootLayout from '../../layouts/root-layout/RootLayout';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 
 export default function Intro2({route, navigation}) {
   const scrollRef = useRef();
@@ -18,84 +23,88 @@ export default function Intro2({route, navigation}) {
         ref={scrollRef}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headerTitle}>
-          한 달 평균 독서량은?
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={[styles.head, styles.buttonBoxParagraph]}>
-          나(자녀)는 한 달 동안 몇 권의 책을 읽고 있는지 알려주세요.
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headCheck}>
-          *1개 선택
-        </TextWrap>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            {/* 1은 유야기 제외 */}
-            <ButtonBox
-              grade={0}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(0)}>
-              0권
-            </ButtonBox>
-          </View>
+        contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.paragraphContainer}>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headerTitle}>
+            한 달 평균 독서량은?
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.head}>
+            나(자녀)는 한 달 동안 몇 권의 책을 읽고 있는지 알려주세요.
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headCheck}>
+            *1개 선택
+          </TextWrap>
         </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={1}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(1)}>
-              1권 ~ 2권
-            </ButtonBox>
+        <View style={styles.buttonBoxFlexContainer}>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              {/* 1은 유야기 제외 */}
+              <ButtonBox
+                grade={0}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(0)}>
+                0권
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={3}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(3)}>
-              3권 ~ 5권
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={1}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(1)}>
+                1권 ~ 2권
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={6}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(6)}>
-              6권 ~ 9권
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={3}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(3)}>
+                3권 ~ 5권
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={10}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(10)}>
-              10권 이상
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={6}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(6)}>
+                6권 ~ 9권
+              </ButtonBox>
+            </View>
+          </View>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={10}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(10)}>
+                10권 이상
+              </ButtonBox>
+            </View>
           </View>
         </View>
 
@@ -106,7 +115,11 @@ export default function Intro2({route, navigation}) {
               style={styles.buttonBox2}
               onPress={() => goBack()}
               disabled={route.name === 'intro1' ? true : false}
-              disabledStyle={styles.disabledStyle2}
+              disabledStyle={
+                route.name === 'intro1'
+                  ? styles.disabledStyle2
+                  : styles.disabledStyle
+              }
               fontStyle={styles.buttonBox}>
               이전
             </ButtonBox>
@@ -120,7 +133,7 @@ export default function Intro2({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -130,7 +143,7 @@ export default function Intro2({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -140,7 +153,7 @@ export default function Intro2({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
           </View>
           <View>
@@ -167,50 +180,69 @@ export default function Intro2({route, navigation}) {
 }
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: colors.border,
-    paddingVertical: 30,
+    backgroundColor: colors.backgroundGray,
+    flex: 1,
+    flexDirection: 'column',
     paddingHorizontal: 16,
   },
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  paragraphContainer: {
+    height: heightPercentage(136),
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+  },
+  buttonBoxFlexContainer: {
+    flex: 1,
+  },
+  buttonBoxContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: heightPercentage(10),
+    // backgroundColor: 'blue',
+  },
+  paginationContainer: {
+    height: heightPercentage(77),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // backgroundColor: 'green',
+  },
+
   headerTitle: {
-    fontSize: 30,
-    fontWeight: '700',
+    fontSize: fontPercentage(25),
     color: colors.black,
     alignSelf: 'flex-start',
+    width: '100%',
   },
   head: {
     color: colors.black,
-    fontSize: 14,
-    marginTop: 20,
+    fontSize: fontPercentage(12),
+    width: '100%',
+    marginTop: 7,
   },
   headCheck: {
-    marginTop: 10,
+    marginTop: 4,
     color: colors.prussianBlue,
-    fontSize: 12,
-    top: -10,
+    fontSize: fontPercentage(9),
   },
-  buttonBoxContainer: {
-    marginVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   buttonBoxRow: {
     width: '100%',
+    height: heightPercentage(46),
   },
   buttonBox: {
     color: colors.black,
-  },
-  buttonBoxParagraph: {
-    fontWeight: '700',
+    fontSize: fontPercentage(11),
   },
   buttonBox2: {
     color: colors.black,
     backgroundColor: 'transparent',
   },
-  paginationContainer: {
-    marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   disabledStyle: {
     color: colors.blue,
     backgroundColor: 'transparent',
@@ -222,18 +254,18 @@ const styles = StyleSheet.create({
   paginationCircleActive: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: colors.blue,
+    width: 12,
+    height: 12,
+    backgroundColor: '#60b8f7',
     justifyContent: 'center',
     alignItems: 'center',
   },
   paginationCircle: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: '#cecece',
+    width: 12,
+    height: 12,
+    backgroundColor: '#d8d8d8',
     justifyContent: 'center',
     alignItems: 'center',
   },

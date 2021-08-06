@@ -2,8 +2,6 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 
 import {TouchableOpacity, View, Text, Image} from 'react-native';
-import {Card, ListItem, Button, Icon} from 'react-native-elements';
-import TextWrap from '../text-wrap/TextWrap';
 
 export default function CardWrap({
   onPress,

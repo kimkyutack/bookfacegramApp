@@ -12,7 +12,11 @@ import {getItem, setItem} from '../../services/preference';
 import {goBack, navigate, reset} from '../../services/navigation';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import {requestGet, requestPost} from '../../services/network';
-
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 import {
   dialogError,
   dialogOpenMessage,
@@ -44,9 +48,7 @@ export default function Intro3({route, navigation}) {
 
   const handleInfoRegister = async () => {
     if (pressButtonArr.length <= 2) {
-      dispatch(
-        dialogOpenMessage({message: '관신분야를 3개 이상 선택해주세요.'}),
-      );
+      dispatch(dialogOpenMessage({message: '관신분야를 3개 선택해주세요.'}));
       return;
     } else {
       try {
@@ -81,201 +83,205 @@ export default function Intro3({route, navigation}) {
         ref={scrollRef}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headerTitle}>
-          관심있는 분야는?
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={[styles.head, styles.buttonBoxParagraph]}>
-          나(자녀)는 어떤 분야를 좋아하는지 알려주세요.
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headCheck}>
-          *3개 선택
-        </TextWrap>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            {/* 1은 유야기 제외 */}
-            <ButtonBox
-              grade={'소설'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              // onPress={() => setPressButtonArr([...pressButtonArr, '소설'])}>
-              onPress={() => pressButton('소설')}>
-              소설
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'시'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('시')}>
-              시
-            </ButtonBox>
-          </View>
+        contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.paragraphContainer}>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headerTitle}>
+            관심있는 분야는?
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.head}>
+            나(자녀)는 어떤 분야를 좋아하는지 알려주세요.
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headCheck}>
+            *3개 선택
+          </TextWrap>
         </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'에세이'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('에세이')}>
-              에세이
-            </ButtonBox>
+        <View style={styles.buttonBoxFlexContainer}>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              {/* 1은 유야기 제외 */}
+              <ButtonBox
+                grade={'소설'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                // onPress={() => setPressButtonArr([...pressButtonArr, '소설'])}>
+                onPress={() => pressButton('소설')}>
+                소설
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'시'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('시')}>
+                시
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'인문학'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('인문학')}>
-              인문학
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'에세이'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('에세이')}>
+                에세이
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'인문학'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('인문학')}>
+                인문학
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'역사'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('역사')}>
-              역사
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'역사'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('역사')}>
+                역사
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'수학'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('수학')}>
+                수학
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'수학'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('수학')}>
-              수학
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'과학'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('과학')}>
+                과학
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'사회'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('사회')}>
+                사회
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'과학'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('과학')}>
-              과학
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'경제'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('경제')}>
+                경제
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'정치'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('정치')}>
+                정치
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'사회'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('사회')}>
-              사회
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'운동'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('운동')}>
+                운동
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'자기계발'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('자기계발')}>
+                자기계발
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'경제'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('경제')}>
-              경제
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'만들기'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('만들기')}>
+                만들기
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'외국어'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('외국어')}>
+                외국어
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'정치'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('정치')}>
-              정치
-            </ButtonBox>
-          </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'운동'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('운동')}>
-              운동
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'자기계발'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('자기계발')}>
-              자기계발
-            </ButtonBox>
-          </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'만들기'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('만들기')}>
-              만들기
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'외국어'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('외국어')}>
-              외국어
-            </ButtonBox>
-          </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'여행'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('여행')}>
-              여행
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={'만화'}
-              pressButtonArr={pressButtonArr}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => pressButton('만화')}>
-              만화
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'여행'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('여행')}>
+                여행
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={'만화'}
+                pressButtonArr={pressButtonArr}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => pressButton('만화')}>
+                만화
+              </ButtonBox>
+            </View>
           </View>
         </View>
 
@@ -286,7 +292,11 @@ export default function Intro3({route, navigation}) {
               style={styles.buttonBox2}
               onPress={() => goBack()}
               disabled={route.name === 'intro1' ? true : false}
-              disabledStyle={styles.disabledStyle2}
+              disabledStyle={
+                route.name === 'intro1'
+                  ? styles.disabledStyle2
+                  : styles.disabledStyle
+              }
               fontStyle={styles.buttonBox}>
               이전
             </ButtonBox>
@@ -300,7 +310,7 @@ export default function Intro3({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -310,7 +320,7 @@ export default function Intro3({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -320,7 +330,7 @@ export default function Intro3({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
           </View>
           <View>
@@ -345,50 +355,66 @@ export default function Intro3({route, navigation}) {
 }
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: colors.border,
-    paddingVertical: 30,
+    backgroundColor: colors.backgroundGray,
+    flex: 1,
+    flexDirection: 'column',
     paddingHorizontal: 16,
   },
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  paragraphContainer: {
+    height: heightPercentage(136),
+    justifyContent: 'center',
+    // backgroundColor: 'red',
+  },
+  buttonBoxFlexContainer: {
+    flex: 1,
+  },
+  buttonBoxContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: heightPercentage(5),
+    // backgroundColor: 'blue',
+  },
+  paginationContainer: {
+    height: heightPercentage(77),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // backgroundColor: 'green',
+  },
   headerTitle: {
-    fontSize: 30,
-    fontWeight: '700',
+    fontSize: fontPercentage(25),
     color: colors.black,
     alignSelf: 'flex-start',
+    width: '100%',
   },
   head: {
     color: colors.black,
-    fontSize: 14,
-    marginTop: 20,
+    fontSize: fontPercentage(12),
+    width: '100%',
+    marginTop: 7,
   },
   headCheck: {
-    marginTop: 10,
+    marginTop: 4,
     color: colors.prussianBlue,
-    fontSize: 12,
-    top: -10,
+    fontSize: fontPercentage(9),
   },
-  buttonBoxContainer: {
-    // flex: 1,
-    marginVertical: 4,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   buttonBoxRow: {
-    width: '48%',
+    width: widthPercentage(156),
+    height: heightPercentage(46),
   },
   buttonBox: {
     color: colors.black,
-  },
-  buttonBoxParagraph: {
-    fontWeight: '700',
+    fontSize: fontPercentage(11),
   },
   buttonBox2: {
     color: colors.black,
     backgroundColor: 'transparent',
-  },
-  paginationContainer: {
-    marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   disabledStyle: {
     color: colors.blue,
@@ -401,18 +427,18 @@ const styles = StyleSheet.create({
   paginationCircleActive: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: colors.blue,
+    width: 12,
+    height: 12,
+    backgroundColor: '#60b8f7',
     justifyContent: 'center',
     alignItems: 'center',
   },
   paginationCircle: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: '#cecece',
+    width: 12,
+    height: 12,
+    backgroundColor: '#d8d8d8',
     justifyContent: 'center',
     alignItems: 'center',
   },

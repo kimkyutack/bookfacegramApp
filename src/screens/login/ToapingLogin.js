@@ -17,7 +17,13 @@ import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
-
+import {
+  containPasswordCheck,
+  preventKor,
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 export default function ToapingLogin({}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
@@ -43,6 +49,8 @@ export default function ToapingLogin({}) {
       if (token.valid) {
         await setItem('token', token.token);
         await setItem('platformType', 'toaping');
+        await setItem('toapingId', username);
+        await setItem('toapingPw', password);
         dispatch(
           dialogOpenMessage({
             label: '확인',
@@ -101,7 +109,9 @@ export default function ToapingLogin({}) {
         <InputWrap
           // icon={image.idIcon}
           style={styles.input}
+          inputStyle={styles.inputValue}
           placeholder="아이디"
+          placeholderTextColor="#acacac"
           value={username}
           // borderColor={Boolean(passwordError) && colors.red}
           onChange={setUsername}
@@ -110,7 +120,9 @@ export default function ToapingLogin({}) {
         <InputWrap
           // icon={image.pwIcon}
           style={styles.input2}
+          inputStyle={styles.inputValue}
           placeholder="비밀번호"
+          placeholderTextColor="#acacac"
           secure
           value={password}
           onChange={setPassword}
@@ -119,7 +131,7 @@ export default function ToapingLogin({}) {
         <ButtonWrap
           disabled={buttonDisabled}
           onPress={handleLogin}
-          style={styles.button}
+          style={buttonDisabled ? styles.diabledButton : styles.button}
           styleTitle={styles.buttonTitle}
           disabledBackgroundColor={!buttonDisabled && styles.buttonBackground}>
           로그인
@@ -148,19 +160,28 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   subTitle: {
-    backgroundColor: colors.border,
+    backgroundColor: '#fbfbfb',
     paddingVertical: 20,
     textAlign: 'center',
-    color: '#777',
-    fontSize: 12,
-    lineHeight: 22,
+    color: '#333333',
+    fontSize: fontPercentage(10),
+    lineHeight: fontPercentage(14),
     marginTop: 10,
   },
   button: {
     alignSelf: 'center',
     justifyContent: 'center',
-    width: '60%',
+    width: widthPercentage(130),
+    height: heightPercentage(43),
     marginTop: 50,
+  },
+  diabledButton: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: widthPercentage(130),
+    height: heightPercentage(43),
+    marginTop: 50,
+    backgroundColor: '#c9c9c9',
   },
   buttonTitle: {
     backgroundColor: 'transparent',
@@ -168,5 +189,14 @@ const styles = StyleSheet.create({
   },
   buttonBackground: {
     backgroundColor: colors.prussianBlue,
+  },
+  inputValue: {
+    color: colors.black,
+    padding: 0,
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(20),
+    letterSpacing: -0.5,
+    textDecorationLine: 'none',
+    fontFamily: fonts.kopubWorldDotumProMedium,
   },
 });

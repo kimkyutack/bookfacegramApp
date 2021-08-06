@@ -7,25 +7,10 @@ import {keyboardActionType} from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
-
-const window = Dimensions.get('window');
-const screen = Dimensions.get('screen');
+console.reportErrorsAsExceptions = false;
 
 function App({}) {
-  const [dimensions, setDimensions] = useState({window, screen});
   const dispatch = useDispatch();
-  // const {connected} = useSelector(s => s.socket, []);
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      'change',
-      // eslint-disable-next-line no-shadow
-      ({window, screen}) => {
-        setDimensions({window, screen});
-      },
-    );
-    return () => subscription?.remove();
-  }, []);
 
   useEffect(() => {
     const hideListenr = () => {

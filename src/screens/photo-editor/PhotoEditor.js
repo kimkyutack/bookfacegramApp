@@ -28,11 +28,7 @@ import {
   check,
   request,
 } from 'react-native-permissions';
-import {
-  dialogOpenSelect,
-  dialogOpenAction,
-  dialogError,
-} from '../../redux/dialog/DialogActions';
+import {dialogOpenAction} from '../../redux/dialog/DialogActions';
 import {
   getImageFromCamera,
   checkMultiplePermissions,
@@ -137,8 +133,6 @@ export default function PhotoEditor({}) {
   const memoRenderItem = useMemo(
     () =>
       ({item, index}) => {
-        console.log('item', index);
-        console.log(item);
         if (item) {
           return (
             <Image
@@ -182,7 +176,7 @@ export default function PhotoEditor({}) {
               justifyContent: 'center',
             }}>
             <TextWrap
-              font={fonts.robotoMedium}
+              font={fonts.kopubWorldDotumProMedium}
               style={{fontSize: 15, color: '#fff', lineHeight: 19}}>
               등록
             </TextWrap>

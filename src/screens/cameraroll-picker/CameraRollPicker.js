@@ -182,7 +182,7 @@ export default function CameraRollPicker({navigation}) {
                   }}
                   style={{alignSelf: 'center', paddingVertical: 10}}>
                   <TextWrap
-                    font={fonts.barlowBold}
+                    font={fonts.kopubWorldDotumProBold}
                     style={{
                       color: 'black',
                     }}>
@@ -191,7 +191,7 @@ export default function CameraRollPicker({navigation}) {
                 </TouchableOpacity>
               ) : (
                 <TextWrap
-                  font={fonts.barlowBold}
+                  font={fonts.kopubWorldDotumProBold}
                   style={{
                     color: 'black',
                     alignSelf: 'center',
@@ -333,10 +333,13 @@ const styles = StyleSheet.create({
     // height: 24,
     color: colors.white,
     fontWeight: '700',
+    marginBottom: 1,
   },
   completeTextIcon: {
     // width: 24,
     // height: 24,
+    marginBottom: 1,
+
     fontWeight: '700',
     color: colors.blue,
   },

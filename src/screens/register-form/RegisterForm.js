@@ -7,12 +7,15 @@ import InputWrap from '../../components/input-wrap/InputWrap';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import {navigate} from '../../services/navigation';
-
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
-
 import Policy from './Policy';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 
 export default function RegisterForm({}) {
   const scrollRef = useRef();
@@ -49,7 +52,7 @@ export default function RegisterForm({}) {
           회원가입에 필요한 최소한의 정보만 입력받음으로써{'\n'}
           개인정보 수집을 최소화하고 편리한 회원가입을 제공합니다.
         </TextWrap>
-        <TextWrap style={styles.label} font={fonts.robotoMedium}>
+        <TextWrap style={styles.label} font={fonts.kopubWorldDotumProBold}>
           1.약관동의
         </TextWrap>
 
@@ -70,7 +73,7 @@ export default function RegisterForm({}) {
         <ButtonWrap
           disabled={buttonDisabled}
           onPress={handleGoRegister}
-          style={styles.button}
+          style={buttonDisabled ? styles.diabledButton : styles.button}
           styleTitle={styles.buttonTitle}
           disabledBackgroundColor={!buttonDisabled && styles.buttonBackground}>
           다음
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 20,
   },
-  root: {flex: 1},
+  root: {flex: 1, paddingHorizontal: 16},
   title: {
     marginHorizontal: 16,
     fontSize: 22,
@@ -93,30 +96,36 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   subTitle: {
-    backgroundColor: colors.border,
-    marginHorizontal: 16,
-    paddingVertical: 12,
+    backgroundColor: '#fbfbfb',
+    paddingVertical: 10,
     textAlign: 'center',
-    color: '#777',
-    fontSize: 12,
-    lineHeight: 22,
-    marginTop: 10,
+    color: '#333333',
+    fontSize: fontPercentage(10),
+    lineHeight: fontPercentage(14),
   },
   label: {
-    marginTop: 20,
-    fontSize: 16,
-    paddingHorizontal: 16,
-    lineHeight: 20,
+    marginTop: 11,
+    fontSize: fontPercentage(15),
     color: '#222',
   },
   button: {
     alignSelf: 'center',
     justifyContent: 'center',
-    width: '40%',
+    width: widthPercentage(130),
+    height: heightPercentage(43),
     marginTop: 10,
+  },
+  diabledButton: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: widthPercentage(130),
+    height: heightPercentage(43),
+    marginTop: 10,
+    backgroundColor: '#c9c9c9',
   },
   buttonTitle: {
     color: colors.white,
+    backgroundColor: 'transparent',
   },
   buttonBackground: {
     backgroundColor: colors.prussianBlue,

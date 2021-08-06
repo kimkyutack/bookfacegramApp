@@ -54,7 +54,12 @@ export default function DialogSelect({}) {
                       style={styles.iconContainer}
                       // onPress={x.onPress}
                       onPress={() => handleOnpress(x.onPress)}>
-                      <Image style={styles.icon} source={x.source} />
+                      <Image
+                        style={
+                          x.type === 'login' ? styles.loginIcon : styles.icon
+                        }
+                        source={x.source}
+                      />
                       <TextWrap style={styles.message}>{x.name}</TextWrap>
                     </TouchableOpacity>
                   );
@@ -111,16 +116,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   iconContainer: {
-    // marginVertical: 30,
-    // marginHorizontal: 20,
-
     paddingVertical: 20,
     alignItems: 'center',
-    // backgroundColor: colors.red,
   },
   icon: {
     width: 40,
     height: 40,
+    resizeMode: 'contain',
+  },
+  loginIcon: {
+    width: 60,
+    height: 60,
     resizeMode: 'contain',
   },
 });

@@ -40,7 +40,9 @@ export default function DialogAction({}) {
                   actionDialog.onPress(false);
                 }
               }}>
-              <TextWrap font={fonts.robotoMedium} style={styles.title}>
+              <TextWrap
+                font={fonts.kopubWorldDotumProMedium}
+                style={styles.title}>
                 {actionDialog.cancelTitle}
               </TextWrap>
             </TouchableOpacity>
@@ -53,7 +55,7 @@ export default function DialogAction({}) {
                 }
               }}>
               <TextWrap
-                font={fonts.robotoMedium}
+                font={fonts.kopubWorldDotumProMedium}
                 style={[
                   styles.title2,
                   actionDialog.titleColor && {color: actionDialog.titleColor},

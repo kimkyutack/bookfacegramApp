@@ -1,12 +1,33 @@
-import {Dimensions, Linking, Platform} from 'react-native';
+import {Dimensions, Linking, Platform, PixelRatio} from 'react-native';
+import {Provider, useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 import moment from 'moment-timezone';
 import {phoneExts} from './bulk';
-
 // import SimpleToast from 'react-native-simple-toast';
+
+let ZEPLIN_UI_WIDTH = 360;
+let ZEPLIN_UI_HEIGHT = 740;
+
 export const screenWidth = Dimensions.get('window').width;
 export const screenHeight = Dimensions.get('window').height;
-
 export const isIos = Platform.OS === 'ios';
+
+export const widthPercentage = width => {
+  const percentage = ((width / ZEPLIN_UI_WIDTH) * 100)?.toFixed(1) * 1;
+  return responsiveWidth(percentage);
+};
+export const heightPercentage = height => {
+  const percentage = (height / ZEPLIN_UI_HEIGHT) * 100;
+  return responsiveHeight(percentage)?.toFixed(1) * 1;
+};
+export const fontPercentage = size => {
+  const percentage = size * 0.125;
+  return responsiveFontSize(percentage)?.toFixed(1) * 1;
+};
 
 export const validationEmail = email => {
   // eslint-disable-next-line no-useless-escape

@@ -7,6 +7,11 @@ import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
 import RootLayout from '../../layouts/root-layout/RootLayout';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 
 export default function Intro1({route, navigation}) {
   const scrollRef = useRef();
@@ -47,148 +52,153 @@ export default function Intro1({route, navigation}) {
         ref={scrollRef}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headerTitle}>
-          몇 학년 인가요?
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={[styles.head, styles.buttonBoxParagraph]}>
-          나(자녀)는 몇 학년인지 알려주세요.
-        </TextWrap>
-        <TextWrap
-          font={fonts.barlowRegular}
-          fontStyle={styles.buttonBox}
-          style={styles.headCheck}>
-          *1개 선택
-        </TextWrap>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            {/* 1은 유야기 제외 */}
-            <ButtonBox
-              grade={2}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(2)}>
-              유치원
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={3}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(3)}>
-              초등학교 1학년
-            </ButtonBox>
-          </View>
+        contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.paragraphContainer}>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headerTitle}>
+            몇 학년 인가요?
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.head}>
+            나(자녀)는 몇 학년인지 알려주세요.
+          </TextWrap>
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            fontStyle={styles.buttonBox}
+            style={styles.headCheck}>
+            *1개 선택
+          </TextWrap>
         </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={4}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(4)}>
-              초등학교 2학년
-            </ButtonBox>
+
+        <View style={styles.buttonBoxFlexContainer}>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              {/* 1은 유야기 제외 */}
+              <ButtonBox
+                grade={2}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(2)}>
+                유치원
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={3}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(3)}>
+                초등학교 1학년
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={5}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(5)}>
-              초등학교 3학년
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={4}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(4)}>
+                초등학교 2학년
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={5}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(5)}>
+                초등학교 3학년
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={6}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(6)}>
-              초등학교 4학년
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={6}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(6)}>
+                초등학교 4학년
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={7}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(7)}>
+                초등학교 5학년
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={7}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(7)}>
-              초등학교 5학년
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={8}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(8)}>
+                초등학교 6학년
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={9}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(9)}>
+                중학교 1학년
+              </ButtonBox>
+            </View>
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={8}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(8)}>
-              초등학교 6학년
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={10}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(10)}>
+                중학교 2학년
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={11}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                fontStyle={styles.buttonBox}
+                onPress={() => setPressButtonIdx(11)}>
+                중학교 3학년
+              </ButtonBox>
+            </View>
           </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={9}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(9)}>
-              중학교 1학년
-            </ButtonBox>
+          <View style={styles.buttonBoxContainer}>
+            <View style={styles.buttonBoxRow}>
+              <ButtonBox
+                grade={12}
+                pressButtonIdx={pressButtonIdx}
+                style={styles.buttonBox}
+                onPress={() => setPressButtonIdx(12)}
+                fontStyle={styles.buttonBox}>
+                고등학교 1학년
+              </ButtonBox>
+            </View>
+            <View style={styles.buttonBoxRow} fontStyle={styles.buttonBox} />
           </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={10}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(10)}>
-              중학교 2학년
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={11}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              fontStyle={styles.buttonBox}
-              onPress={() => setPressButtonIdx(11)}>
-              중학교 3학년
-            </ButtonBox>
-          </View>
-        </View>
-        <View style={styles.buttonBoxContainer}>
-          <View style={styles.buttonBoxRow}>
-            <ButtonBox
-              grade={12}
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox}
-              onPress={() => setPressButtonIdx(12)}
-              fontStyle={styles.buttonBox}>
-              고등학교 1학년
-            </ButtonBox>
-          </View>
-          <View style={styles.buttonBoxRow} fontStyle={styles.buttonBox} />
         </View>
 
         <View style={styles.paginationContainer}>
@@ -212,7 +222,7 @@ export default function Intro1({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -222,7 +232,7 @@ export default function Intro1({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
             <TouchableHighlight
               style={
@@ -232,7 +242,7 @@ export default function Intro1({route, navigation}) {
               }
               underlayColor="#ccc"
               disabled>
-              <TextWrap>ㅇ</TextWrap>
+              <TextWrap />
             </TouchableHighlight>
           </View>
           <View>
@@ -257,56 +267,70 @@ export default function Intro1({route, navigation}) {
 }
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: colors.border,
+    backgroundColor: colors.backgroundGray,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingVertical: 30,
     paddingHorizontal: 16,
   },
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  paragraphContainer: {
+    height: heightPercentage(136),
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+  },
+  buttonBoxFlexContainer: {
+    flex: 1,
+  },
+  buttonBoxContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: heightPercentage(10),
+    // backgroundColor: 'blue',
+  },
+  paginationContainer: {
+    height: heightPercentage(77),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    // backgroundColor: 'green',
+  },
   headerTitle: {
-    fontSize: 30,
-    fontWeight: '700',
+    fontSize: fontPercentage(25),
     color: colors.black,
     alignSelf: 'flex-start',
+    width: '100%',
   },
   head: {
     color: colors.black,
-    fontSize: 14,
-    marginTop: 20,
+    fontSize: fontPercentage(12),
+    width: '100%',
+    marginTop: 7,
   },
   headCheck: {
-    marginTop: 10,
+    marginTop: 4,
     color: colors.prussianBlue,
-    fontSize: 12,
-    top: -10,
+    fontSize: fontPercentage(9),
   },
-  buttonBoxContainer: {
-    // flex: 1,
-    marginVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   buttonBoxRow: {
-    width: '48%',
+    width: widthPercentage(156),
+    height: heightPercentage(46),
   },
   buttonBox: {
     color: colors.black,
-  },
-  buttonBoxParagraph: {
-    fontWeight: '700',
+    fontSize: fontPercentage(11),
   },
   buttonBox2: {
     color: colors.black,
     backgroundColor: 'transparent',
   },
-  paginationContainer: {
-    marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+
   disabledStyle: {
-    color: colors.blue,
+    color: colors.prussianBlue,
     backgroundColor: 'transparent',
   },
   disabledStyle2: {
@@ -316,18 +340,18 @@ const styles = StyleSheet.create({
   paginationCircleActive: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: colors.blue,
+    width: 12,
+    height: 12,
+    backgroundColor: '#60b8f7',
     justifyContent: 'center',
     alignItems: 'center',
   },
   paginationCircle: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 10,
-    height: 10,
-    backgroundColor: '#cecece',
+    width: 12,
+    height: 12,
+    backgroundColor: '#d8d8d8',
     justifyContent: 'center',
     alignItems: 'center',
   },

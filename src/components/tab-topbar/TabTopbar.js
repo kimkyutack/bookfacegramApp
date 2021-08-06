@@ -6,7 +6,7 @@ import TextWrap from '../text-wrap/TextWrap';
 export default function TabTopBar({title, children}) {
   return (
     <View style={styles.root}>
-      <TextWrap font={fonts.barlowBold} style={styles.title}>
+      <TextWrap font={fonts.kopubWorldDotumProBold} style={styles.title}>
         {title}
       </TextWrap>
       <View style={styles.options}>{children}</View>

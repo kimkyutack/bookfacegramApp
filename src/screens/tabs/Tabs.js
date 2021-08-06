@@ -7,8 +7,11 @@ import Splash from '../splash/Splash';
 import colors from '../../libs/colors';
 import TabIcon from './TabIcon';
 import TabBar from './TabBar';
-
-import Home from '../home-tab';
+import TopActivity from '../home/TopActivity';
+import TopMyBooks from '../home/TopMyBooks';
+import Event from '../event/Event';
+import Notice from '../notice/Notice';
+import Home from '../home/homeMain';
 
 const BottomTab = createBottomTabNavigator();
 export default function Tabs({route, navigation}) {
@@ -25,41 +28,41 @@ export default function Tabs({route, navigation}) {
         <BottomTab.Screen
           options={{
             tabBarLabel: 'menu',
-            // tabBarIcon: props => (
-            //   <TabIcon
-            //     {...props}
-            //     icon={image.tabFriendOff}
-            //     focusedIcon={image.tabFriendOn}
-            //   />
-            // ),
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
           }}
-          name={routes.topActivity}
-          component={Home}
+          name={routes.event}
+          component={Event}
         />
         <BottomTab.Screen
           options={{
             tabBarLabel: '<',
-            // tabBarIcon: (props) => (
-            //   <TabIcon
-            //     {...props}
-            //     icon={image.tabChatOff}
-            //     focusedIcon={image.tabChatOn}
-            //   />
-            // ),
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
           }}
-          name={routes.login}
-          component={Home}
+          name={routes.topActivity}
+          component={TopActivity}
         />
         <BottomTab.Screen
           options={{
             tabBarLabel: 'home',
-            // tabBarIcon: (props) => (
-            //   <TabIcon
-            //     {...props}
-            //     icon={image.tabChatOff}
-            //     focusedIcon={image.tabChatOn}
-            //   />
-            // ),
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
           }}
           name={routes.home}
           component={Home}
@@ -67,30 +70,30 @@ export default function Tabs({route, navigation}) {
         <BottomTab.Screen
           options={{
             tabBarLabel: 'feed',
-            // tabBarIcon: (props) => (
-            //   <TabIcon
-            //     {...props}
-            //     icon={image.tabFindOff}
-            //     focusedIcon={image.tabFindOn}
-            //   />
-            // ),
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
           }}
-          name={routes.event}
-          component={Home}
+          name={routes.topMyBooks}
+          component={TopMyBooks}
         />
         <BottomTab.Screen
           options={{
             tabBarLabel: 'my',
-            // tabBarIcon: (props) => (
-            //   <TabIcon
-            //     {...props}
-            //     icon={image.tabFindOff}
-            //     focusedIcon={image.tabFindOn}
-            //   />
-            // ),
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
           }}
-          name={routes.tab}
-          component={Home}
+          name={routes.notice}
+          component={Notice}
         />
       </BottomTab.Navigator>
     </SafeAreaView>

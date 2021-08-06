@@ -63,16 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  cameraIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
-  textIcon: {
-    // width: 24,
-    // height: 24,
-    fontWeight: '700',
-  },
 });
 
 export default React.memo(RootLayout);

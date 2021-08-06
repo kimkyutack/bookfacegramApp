@@ -36,6 +36,9 @@
 		E34159C2F6ED4432A6A4BEBD /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7E6FCE4B7FA41968F7EDF51 /* Octicons.ttf */; };
 		AEAEC2B11A0D416CB9BBD5CB /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE68F61B867F473286F84971 /* SimpleLineIcons.ttf */; };
 		A638A32F6A1D4C1EB417B3BE /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0730D206D51445B913CC2B9 /* Zocial.ttf */; };
+		36C2751D74AB44E884EF805A /* KopubWorld-Dotum-Pro-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0DFD7F861F4F486DB4EA74A5 /* KopubWorld-Dotum-Pro-Bold.otf */; };
+		B7A02156F52A434180A9BEB3 /* KopubWorld-Dotum-Pro-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4AB59B3E6BB94F13A606726F /* KopubWorld-Dotum-Pro-Light.otf */; };
+		7B700261C497419E810516D3 /* KopubWorld-Dotum-Pro-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9A9257A3328341DEABCAF77A /* KopubWorld-Dotum-Pro-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +87,9 @@
 		D7E6FCE4B7FA41968F7EDF51 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		CE68F61B867F473286F84971 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		E0730D206D51445B913CC2B9 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0DFD7F861F4F486DB4EA74A5 /* KopubWorld-Dotum-Pro-Bold.otf */ = {isa = PBXFileReference; name = "KopubWorld-Dotum-Pro-Bold.otf"; path = "../src/assets/fonts/KopubWorld-Dotum-Pro-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4AB59B3E6BB94F13A606726F /* KopubWorld-Dotum-Pro-Light.otf */ = {isa = PBXFileReference; name = "KopubWorld-Dotum-Pro-Light.otf"; path = "../src/assets/fonts/KopubWorld-Dotum-Pro-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9A9257A3328341DEABCAF77A /* KopubWorld-Dotum-Pro-Medium.otf */ = {isa = PBXFileReference; name = "KopubWorld-Dotum-Pro-Medium.otf"; path = "../src/assets/fonts/KopubWorld-Dotum-Pro-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +206,9 @@
 				D7E6FCE4B7FA41968F7EDF51 /* Octicons.ttf */,
 				CE68F61B867F473286F84971 /* SimpleLineIcons.ttf */,
 				E0730D206D51445B913CC2B9 /* Zocial.ttf */,
+				0DFD7F861F4F486DB4EA74A5 /* KopubWorld-Dotum-Pro-Bold.otf */,
+				4AB59B3E6BB94F13A606726F /* KopubWorld-Dotum-Pro-Light.otf */,
+				9A9257A3328341DEABCAF77A /* KopubWorld-Dotum-Pro-Medium.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -319,6 +328,9 @@
 				E34159C2F6ED4432A6A4BEBD /* Octicons.ttf in Resources */,
 				AEAEC2B11A0D416CB9BBD5CB /* SimpleLineIcons.ttf in Resources */,
 				A638A32F6A1D4C1EB417B3BE /* Zocial.ttf in Resources */,
+				36C2751D74AB44E884EF805A /* KopubWorld-Dotum-Pro-Bold.otf in Resources */,
+				B7A02156F52A434180A9BEB3 /* KopubWorld-Dotum-Pro-Light.otf in Resources */,
+				7B700261C497419E810516D3 /* KopubWorld-Dotum-Pro-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -42,9 +42,9 @@ export default function TabBar({state, descriptors, navigation}) {
             testID={options.tabBarTestID}
             onPress={onPress}
             style={[styles.tabItem, {borderTopWidth: isFocused ? 2 : 0}]}>
-            {/* {options.tabBarIcon({focused: isFocused, name: route.name})} */}
+            {options?.tabBarIcon({focused: isFocused, name: route.name})}
             <TextWrap
-              font={fonts.barlowMedium}
+              font={fonts.kopubWorldDotumProMedium}
               style={[
                 styles.label,
                 {

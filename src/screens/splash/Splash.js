@@ -23,8 +23,11 @@ import {
   navigationRef,
   navigate,
 } from '../../services/navigation';
-import {requestPost} from '../../services/network';
-import {isIos} from '../../services/util';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../../services/util';
 import {getItem, setItem} from '../../services/preference';
 import {splashCheckMultiplePermissions} from '../../services/picker';
 import {PERMISSIONS} from 'react-native-permissions';
@@ -50,7 +53,7 @@ export default function Splash({navigation}) {
         try {
           dispatch(userCheckToken);
         } catch (e1) {
-          console.log(e1);
+          // console.log(e1);
         }
       }
     };
@@ -63,7 +66,7 @@ export default function Splash({navigation}) {
         ]);
         dispatch(userCheckToken);
       } catch (e2) {
-        console.log(e2);
+        // console.log(e2);
       }
     }, 1000);
 
@@ -77,10 +80,14 @@ export default function Splash({navigation}) {
     <RootLayout style={styles.root} safeBackgroundColor={colors.background}>
       <View style={styles.view}>
         <Image source={images.splash} style={styles.logo} />
+        <TextWrap font={fonts.kopubWorldDotumProBold} style={styles.title}>
+          골라보는 맛있는 독서!
+        </TextWrap>
+        <TextWrap font={fonts.kopubWorldDotumProLight} style={styles.subTitle}>
+          개인 맞춤 추천도서를 통해 지루한 독서 대신 맛있고 재밌는 독서를
+          즐겨보세요.
+        </TextWrap>
       </View>
-      <TextWrap font={fonts.barlowRegular} style={styles.info}>
-        © (주)피씨엔씨 OF PUBLIC POLICY AND MANAGEMENT.
-      </TextWrap>
     </RootLayout>
   );
 }
@@ -89,21 +96,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   logo: {
-    // marginLeft: 30,
-    // width: '100%',
+    width: widthPercentage(161),
+    height: heightPercentage(113),
     resizeMode: 'contain',
     alignSelf: 'center',
-    // tintColor: colors.white,
   },
   view: {
     flex: 1,
     justifyContent: 'center',
   },
-  info: {
-    fontSize: 12,
-    lineHeight: 30,
-    color: '#a0e5be',
-    marginBottom: 30,
+  title: {
+    color: '#ffffff',
     alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: 15,
+    width: widthPercentage(192),
+    fontSize: fontPercentage(22, 'title'),
+    lineHeight: fontPercentage(34),
+  },
+  subTitle: {
+    color: '#ffffff',
+    marginTop: 25,
+    alignSelf: 'center',
+    width: widthPercentage(226),
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(18),
+    textAlign: 'center',
   },
 });

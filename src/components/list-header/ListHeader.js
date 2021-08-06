@@ -13,7 +13,7 @@ export default function ListHeader({
 }) {
   return (
     <View style={styles.header}>
-      <TextWrap font={fonts.barlowMedium} style={styles.label}>
+      <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.label}>
         {label}
       </TextWrap>
       {button && (
