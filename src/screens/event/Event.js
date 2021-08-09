@@ -201,6 +201,5 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-    marginBottom: 5,
   },
 });

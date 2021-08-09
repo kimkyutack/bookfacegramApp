@@ -169,7 +169,11 @@ export default function TopNewBooksDetail({route}) {
               onError={() => setBookThumbnail('bookDefault')}
             />
           </View>
-          <TextWrap style={styles.imageTitle}>{bookDetail?.book_nm}</TextWrap>
+          <TextWrap
+            style={styles.imageTitle}
+            font={fonts.kopubWorldDotumProBold}>
+            {bookDetail?.book_nm}
+          </TextWrap>
           <View style={styles.tabContainer}>
             <Tab
               title="도서소개"
@@ -201,7 +205,11 @@ export default function TopNewBooksDetail({route}) {
               onError={() => setBookThumbnail('bookDefault')}
             />
           </View>
-          <TextWrap style={styles.imageTitle}>{bookDetail?.book_nm}</TextWrap>
+          <TextWrap
+            style={styles.imageTitle}
+            font={fonts.kopubWorldDotumProBold}>
+            {bookDetail?.book_nm}
+          </TextWrap>
           <View style={styles.tabContainer}>
             <Tab
               title="도서소개"
@@ -291,6 +299,5 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-    marginBottom: 5,
   },
 });

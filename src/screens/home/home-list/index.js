@@ -37,7 +37,7 @@ import {
   fontPercentage,
 } from '../../../services/util';
 
-export default function HomeMain({route, navigation}) {
+export default function HomeList({route, navigation}) {
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
 
@@ -197,10 +197,7 @@ export default function HomeMain({route, navigation}) {
           // fetch();
         }}
       />
-      <TopTabs
-        grade={route.params?.grade}
-        type={route.params?.type ? route.params?.type : 'main'}
-      />
+      <TopTabs type={route.params?.type ? route.params?.type : 'list'} />
     </SafeAreaView>
   );
 }
@@ -208,13 +205,11 @@ export default function HomeMain({route, navigation}) {
 const styles = StyleSheet.create({
   searchBar: {
     marginHorizontal: 16,
-    // marginTop: 6,
   },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-    marginBottom: 5,
   },
   input: {
     marginHorizontal: 18,

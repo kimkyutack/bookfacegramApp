@@ -25,7 +25,7 @@ import {
 } from '../../../services/util';
 import {numFormat} from '../../../services/util';
 import TextWrap from '../../../components/text-wrap/TextWrap';
-import BookMainCarouselImage from '../homeMain/BookMainCarouselImage';
+import BookMainCarouselImage from '../home-main/BookMainCarouselImage';
 import {setTab} from '../../../redux/tab/TabAction';
 
 export default function BookListItem({item, index, grade, th, gradeStyle}) {

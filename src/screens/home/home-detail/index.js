@@ -1,4 +1,4 @@
-import React, {createRef, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {
   FlatList,
@@ -37,7 +37,7 @@ import {
   fontPercentage,
 } from '../../../services/util';
 
-export default function HomeList({route, navigation}) {
+export default function HomeDetail({route, navigation}) {
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
 
@@ -197,7 +197,7 @@ export default function HomeList({route, navigation}) {
           // fetch();
         }}
       />
-      <TopTabs type={route.params?.type ? route.params?.type : 'list'} />
+      <TopTabs type={route.params?.type ? route.params?.type : 'detail'} />
     </SafeAreaView>
   );
 }
@@ -211,7 +211,6 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-    marginBottom: 5,
   },
   input: {
     marginHorizontal: 18,

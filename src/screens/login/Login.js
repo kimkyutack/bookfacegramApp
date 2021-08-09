@@ -214,7 +214,7 @@ export default function Login({route}) {
         dispatch(userCheckToken);
       }
     } catch (e) {
-      // 그냥 아무반응 없는게 나음 팝업알람보단
+      console.log(e);
       // dispatch(dialogError(e));
     }
   };

@@ -80,7 +80,7 @@ export default function DrawerCustom(props) {
               label="ㆍ피드북"
               labelStyle={styles.label}
               onPress={() => {
-                // props.navigation.navigate('topNewBooks');
+                props.navigation.navigate('feedBook');
               }}
             />
           </View>

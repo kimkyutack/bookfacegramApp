@@ -1,17 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, SafeAreaView} from 'react-native';
 import routes from '../../libs/routes';
 import images from '../../libs/images';
-import Splash from '../splash/Splash';
 import colors from '../../libs/colors';
 import TabIcon from './TabIcon';
 import TabBar from './TabBar';
-import TopActivity from '../home/TopActivity';
-import TopMyBooks from '../home/TopMyBooks';
-import Event from '../event/Event';
 import Notice from '../notice/Notice';
-import Home from '../home/homeMain';
+import Home from './TabsHome';
+import Back from './TabsBack';
+import Menu from './TabsMenu';
+import FeedBook from '../feed-book/FeedBook';
 
 const BottomTab = createBottomTabNavigator();
 export default function Tabs({route, navigation}) {
@@ -19,7 +18,8 @@ export default function Tabs({route, navigation}) {
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <BottomTab.Navigator
         tabBar={props => <TabBar {...props} />}
-        initialRouteName={routes.home}
+        initialRouteName={routes.feedBook}
+        lazy={false}
         tabBarOptions={{
           keyboardHidesTabBar: true,
           activeTintColor: colors.primary,
@@ -36,8 +36,8 @@ export default function Tabs({route, navigation}) {
               />
             ),
           }}
-          name={routes.event}
-          component={Event}
+          name={routes.tabMenu}
+          component={Menu}
         />
         <BottomTab.Screen
           options={{
@@ -50,8 +50,8 @@ export default function Tabs({route, navigation}) {
               />
             ),
           }}
-          name={routes.topActivity}
-          component={TopActivity}
+          name={routes.tabBack}
+          component={Back}
         />
         <BottomTab.Screen
           options={{
@@ -64,7 +64,7 @@ export default function Tabs({route, navigation}) {
               />
             ),
           }}
-          name={routes.home}
+          name={routes.tabHome}
           component={Home}
         />
         <BottomTab.Screen
@@ -78,8 +78,8 @@ export default function Tabs({route, navigation}) {
               />
             ),
           }}
-          name={routes.topMyBooks}
-          component={TopMyBooks}
+          name={routes.feedBook}
+          component={FeedBook}
         />
         <BottomTab.Screen
           options={{

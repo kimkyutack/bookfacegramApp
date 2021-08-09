@@ -50,14 +50,16 @@ export default function Topbar({title, onGoBack, options, back, navigation}) {
         </TouchableWithoutFeedback>
       ) : (
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
-          <View style={styles.back} onLayout={handleOptionLayout}>
+          <View style={styles.hambergerBack} onLayout={handleOptionLayout}>
             <Image style={styles.hambergerIcon} source={images.hamberger} />
           </View>
         </TouchableWithoutFeedback>
       )}
 
       <TouchableWithoutFeedback>
-        <View style={styles.center} onLayout={handleOptionLayout}>
+        <View
+          style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
+          onLayout={handleOptionLayout}>
           <TextWrap
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -98,29 +100,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'space-between',
   },
-  back: {width: widthPercentage(24)},
-  center: {},
-  right: {width: widthPercentage(24)},
+  back: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    marginBottom: 2,
+  },
+  hambergerBack: {
+    width: widthPercentage(20),
+    height: heightPercentage(20),
+    marginBottom: 4,
+  },
+  toapingCenter: {
+    paddingLeft: widthPercentage(4),
+  },
+  center: {
+    position: 'absolute',
+    left: widthPercentage(60),
+  },
+  right: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    marginBottom: 5,
+  },
   title: {
     fontSize: fontPercentage(19),
     letterSpacing: -0.5,
     color: '#000000',
   },
   backIcon: {
-    width: widthPercentage(20),
-    height: heightPercentage(20),
+    width: widthPercentage(24),
+    height: heightPercentage(24),
     resizeMode: 'cover',
-    marginBottom: 5,
   },
   hambergerIcon: {
-    width: widthPercentage(18),
-    height: heightPercentage(18),
-    resizeMode: 'cover',
-    marginBottom: 5,
-  },
-  noneIcon: {
     width: widthPercentage(20),
     height: heightPercentage(20),
-    marginBottom: 3,
+    resizeMode: 'cover',
+  },
+  noneIcon: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
   },
 });

@@ -13,19 +13,15 @@ import {userSignOut} from './redux/user/UserActions';
 import Splash from './screens/splash/Splash';
 import Login from './screens/login/Login';
 import Tabs from './screens/tabs/Tabs';
-import Home from './screens/home/homeMain';
-import HomeList from './screens/home/homeList';
-import HomeDetail from './screens/home/homeDetail';
+import Home from './screens/home/home-main';
+import HomeList from './screens/home/home-list';
+import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
-import TopNewBooks from './screens/home/TopNewBooks';
-import TopNewBooksMain from './screens/home/homeMain/TopNewBooksMain';
-import TopNewBooksList from './screens/home/homeList/TopNewBooksList';
-import TopNewBooksDetail from './screens/home/homeDetail/TopNewBooksDetail';
 
-import TopMyBooks from './screens/home/TopMyBooks';
-import TopActivity from './screens/home/TopActivity';
+import FeedBook from './screens/feed-book/FeedBook';
+
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
 import RegisterFormInfo from './screens/register-form/RegisterFormInfo';
@@ -74,12 +70,7 @@ export default function Router() {
       dispatch(userSignOut(user.memberId));
       return true;
     };
-    if (
-      currentRouteName === 'splash' ||
-      currentRouteName === 'login'
-      //  ||
-      // currentRouteName === 'topNewBooks'
-    ) {
+    if (currentRouteName === 'splash' || currentRouteName === 'login') {
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
         backAction,
@@ -254,72 +245,17 @@ export default function Router() {
               }}
             />
             <Drawer.Screen
-              name={routes.cameraRollPicker}
-              component={CameraRollPicker}
+              name={routes.feedBook}
+              component={FeedBook}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,
                 };
               }}
             />
-
             <Drawer.Screen
               name={routes.tab}
               component={Tabs}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topNewBooks}
-              component={TopNewBooks}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topNewBooksMain}
-              component={TopNewBooksMain}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topNewBooksList}
-              component={TopNewBooksList}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topNewBooksDetail}
-              component={TopNewBooksDetail}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topActivity}
-              component={TopActivity}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.topMyBooks}
-              component={TopMyBooks}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,
@@ -347,6 +283,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.eventDetail}
               component={EventDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.cameraRollPicker}
+              component={CameraRollPicker}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

@@ -33,23 +33,6 @@ export default function CameraRollPicker({navigation}) {
   const [selectedArr, setSelectedArr] = useState([]);
   const [convertFileArr, setConvertFileArr] = useState([]);
 
-  // const handleMomentScrollEnd = e => {
-  //   const {contentOffset, contentSize, layoutMeasurement} = e.nativeEvent;
-
-  //   let invertY =
-  //     contentSize.height - contentOffset.y - layoutMeasurement.height;
-
-  //   if (invertY <= 0) {
-  //     if (images.length < totalCount && !loading) {
-  //       setLoading(true);
-  //       let tm = setTimeout(() => {
-  //         clearTimeout(tm);
-  //         setPage(p => p + 1);
-  //       }, 1000);
-  //     }
-  //   }
-  // };
-
   useEffect(() => {
     setAssetType('Photos');
   }, []);
@@ -118,6 +101,7 @@ export default function CameraRollPicker({navigation}) {
           name: 'complete',
           component: (
             <TextWrap
+              font={fonts.kopubWorldDotumProBold}
               style={
                 selectedArr.length > 0
                   ? styles.completeTextIcon
@@ -135,31 +119,6 @@ export default function CameraRollPicker({navigation}) {
             }),
         },
       }}>
-      {/* <View style={styles.root}>
-        <Radio
-          onChange={e => {
-            setAssetType('Photos');
-            listRef.current?.scrollToOffset({y: 0});
-            setPage(1);
-            setImages([]);
-          }}
-          disabled
-          value={assetType === 'Photos'}
-          label="Photos"
-        />
-        <Radio
-          style={{marginLeft: 16}}
-          onChange={e => {
-            setAssetType('Videos');
-            setImages([]);
-            listRef.current?.scrollToOffset({y: 0});
-            setPage(1);
-          }}
-          value={assetType === 'Videos'}
-          label="Videos"
-          disabled
-        />
-      </View> */}
       <FlatList
         ref={listRef}
         numColumns={3}
@@ -331,16 +290,14 @@ const styles = StyleSheet.create({
   textIcon: {
     // width: 24,
     // height: 24,
+    bottom: -3,
     color: colors.white,
-    fontWeight: '700',
-    marginBottom: 1,
   },
   completeTextIcon: {
     // width: 24,
     // height: 24,
-    marginBottom: 1,
-
-    fontWeight: '700',
+    textAlign: 'right',
+    bottom: -3,
     color: colors.blue,
   },
 });

@@ -12,9 +12,9 @@ import {requestGet, requestPost} from '../../services/network';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
-import TopNewBooksMain from './homeMain/TopNewBooksMain';
-import TopNewBooksList from './homeList/TopNewBooksList';
-import TopNewBooksDetail from './homeDetail/TopNewBooksDetail';
+import TopNewBooksMain from './home-main/TopNewBooksMain';
+import TopNewBooksList from './home-list/TopNewBooksList';
+import TopNewBooksDetail from './home-detail/TopNewBooksDetail';
 import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 
 export default function TopNewBooks({route}) {

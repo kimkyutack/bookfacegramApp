@@ -51,7 +51,7 @@ export default function BookMainCarousel({
         const bannerRenderItem = ({item, index}) => {
           if (item) {
             return (
-              <TouchableWithoutFeedback>
+              <TouchableWithoutFeedback key={index}>
                 <View style={styles.bannerContainer} key={index}>
                   <FastImage
                     style={styles.banner}

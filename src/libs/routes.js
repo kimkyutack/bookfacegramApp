@@ -1,6 +1,9 @@
 export default {
   splash: 'splash',
   tab: 'tab',
+  tabMenu: 'tabMenu',
+  tabBack: 'tabBack',
+  tabHome: 'tabHome',
   home: 'home',
   homeList: 'homeList',
   homeDetail: 'homeDetail',
@@ -13,6 +16,7 @@ export default {
   topNewBooksDetail: 'topNewBooksDetail',
   topMyBooks: 'topMyBooks',
   topActivity: 'topActivity',
+  feedBook: 'feedBook',
   notice: 'notice',
   event: 'event',
   eventDetail: 'eventDetail',
@@ -25,5 +29,4 @@ export default {
   toapingLogin: 'toapingLogin',
   cameraRollPicker: 'cameraRollPicker',
   photoEditor: 'photoEditor',
-  feed: 'feed',
 };

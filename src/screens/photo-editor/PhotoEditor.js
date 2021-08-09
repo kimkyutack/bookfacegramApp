@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import TagInput from 'react-native-tags-input';
+import Avatar from '../../components/avatar/Avatar';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import Topbar from '../../components/topbar/Topbar';
 import InputWrap from '../../components/input-wrap/InputWrap';
@@ -19,7 +21,13 @@ import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
-import {isIos, screenWidth} from '../../services/util';
+import {
+  fontPercentage,
+  heightPercentage,
+  isIos,
+  screenWidth,
+  widthPercentage,
+} from '../../services/util';
 import {goBack, navigate} from '../../services/navigation';
 import {requestFile, requestPost} from '../../services/network';
 import {
@@ -28,22 +36,26 @@ import {
   check,
   request,
 } from 'react-native-permissions';
-import {dialogOpenAction} from '../../redux/dialog/DialogActions';
+import {
+  dialogOpenAction,
+  dialogOpenMessage,
+} from '../../redux/dialog/DialogActions';
 import {
   getImageFromCamera,
   checkMultiplePermissions,
 } from '../../services/picker';
 
-export default function PhotoEditor({}) {
+export default function PhotoEditor({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const [contents, setContents] = useState('');
+  const [tags, setTags] = useState({tag: '', tagsArray: []});
   const {params} = useRoute();
   const dispatch = useDispatch();
-  const isCarouselRef = useRef(null); //banner
-  const [activeSlide, setActiveSlide] = useState(0);
+  const listRef = useRef();
 
   useEffect(() => {
     setContents('');
+    setTags({tag: '', tagsArray: []});
   }, [params.key]);
 
   const save = async () => {
@@ -69,7 +81,7 @@ export default function PhotoEditor({}) {
         }
       } else {
         // android file write on phone
-        if (params.image.length) {
+        if (params.image.length > 1) {
           // 여러장
           const formData = new FormData();
           const file = [];
@@ -83,6 +95,7 @@ export default function PhotoEditor({}) {
           }
           formData.append('member_idx', user.member_idx);
           formData.append('contents', contents);
+          formData.append('hashtags', tags.tagsArray);
 
           const serverResponse = await requestFile(
             {
@@ -93,19 +106,21 @@ export default function PhotoEditor({}) {
           );
         } else {
           // 한장
-          const saveResult = await CameraRoll.save(params.image.uri, {
+          const saveResult = await CameraRoll.save(params.image[0].uri, {
             type: 'photo',
             album: 'toaping',
           });
           const formData = new FormData();
           const file = {
-            uri: params.image.uri,
-            type: params.image.type,
-            name: params.image.name,
+            uri: params.image[0].uri,
+            type: params.image[0].type,
+            name: params.image[0].name,
           };
           formData.append('file', file);
           formData.append('member_idx', user.member_idx);
           formData.append('contents', contents);
+          formData.append('hashtags', tags.tagsArray);
+
           const serverResponse = await requestFile(
             {
               url: consts.apiUrl + '/feedbookInsert',
@@ -126,132 +141,260 @@ export default function PhotoEditor({}) {
     }
   };
 
-  const onSnapToItem = useCallback(index => {
-    setActiveSlide(index);
-  }, []);
-
-  const memoRenderItem = useMemo(
-    () =>
-      ({item, index}) => {
-        if (item) {
-          return (
-            <Image
-              source={{uri: item.uri}}
-              style={{width: '100%', height: '80%', resizeMode: 'contain'}}
-            />
-          );
-        } else {
-          return;
-        }
-      },
-    [],
-  );
-
-  const memoRenderData = useMemo(() => params.image, [params.image]);
-
+  const setTagHandle = e => {
+    if (tags.tagsArray.length > 9) {
+      dispatch(
+        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
+      );
+    } else {
+      setTags(e);
+    }
+  };
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: '#000'}}>
-        <View
-          style={{
-            height: 50,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            onPress={goBack}
-            style={{paddingHorizontal: 16, paddingVertical: 16}}>
-            <Image
-              source={images.back}
-              style={{width: 24, height: 24, tintColor: '#fff'}}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => save()}
-            style={{
-              paddingHorizontal: 16,
-              alignSelf: 'stretch',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+    <RootLayout
+      style={{paddingHorizontal: 16}}
+      topbar={{
+        title: 'my ID',
+        back: true,
+        navigation: navigation,
+        options: {
+          name: 'complete',
+          component: (
             <TextWrap
-              font={fonts.kopubWorldDotumProMedium}
-              style={{fontSize: 15, color: '#fff', lineHeight: 19}}>
+              font={fonts.kopubWorldDotumProBold}
+              style={styles.completeTextIcon}>
               등록
             </TextWrap>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 1, marginVertical: 16}}>
-          {params.image?.length > 0 ? (
-            <>
-              <Carousel
-                ref={isCarouselRef}
-                layout={'default'}
-                data={memoRenderData}
-                renderItem={memoRenderItem}
-                sliderWidth={screenWidth}
-                itemWidth={screenWidth}
-                activeSlideAlignment={'start'}
-                inactiveSlideScale={1}
-                inactiveSlideOpacity={1}
-                onSnapToItem={onSnapToItem}
-                removeClippedSubviews={false}
-              />
-              <Pagination
-                dotsLength={memoRenderData.length ? memoRenderData.length : 0}
-                carouselRef={isCarouselRef}
-                activeDotIndex={activeSlide}
+          ),
+          onPress: () => save(),
+        },
+      }}>
+      <FlatList
+        ref={listRef}
+        numColumns={4}
+        extraData={params.image}
+        data={params.image}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={
+          <>
+            <View style={styles.userInfoContainer}>
+              <View>
+                <Avatar
+                  size={widthPercentage(17)}
+                  style={styles.avator}
+                  path={
+                    user?.profile_path
+                      ? user?.profile_path
+                      : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                  }
+                />
+              </View>
+              <View style={styles.avatorTextContainer}>
+                <InputWrap
+                  style={styles.input}
+                  selectionColor="#acacac"
+                  inputFlex={{borderColor: colors.white}}
+                  inputStyle={styles.textInput}
+                  maxLength={200}
+                  value={contents}
+                  onChange={setContents}
+                  placeholder="내용 입력..."
+                  placeholderTextColor="#acacac"
+                  placeholderSize={fontPercentage(11)}
+                  multiline
+                  optionComponent={
+                    <TextWrap style={styles.contentCount}>
+                      ({contents.length} / 200)
+                    </TextWrap>
+                  }
+                />
+              </View>
+            </View>
+            <View style={styles.hashtagContianer}>
+              <TextWrap
+                style={styles.hashtagTitle}
+                font={fonts.kopubWorldDotumProBold}>
+                #나만의 해시태그 입력
+              </TextWrap>
+
+              <TagInput
+                updateState={setTagHandle}
+                tags={tags}
+                placeholder="#책제목"
                 containerStyle={{
-                  backgroundColor: 'transparent',
-                  paddingVertical: 0,
+                  width: screenWidth,
+                  paddingHorizontal: 10,
                 }}
-                dotStyle={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  marginHorizontal: 1,
-                  backgroundColor: '#919392',
-                  position: 'relative',
-                  top: -25,
+                inputContainerStyle={styles.hashtagInput}
+                inputStyle={{
+                  fontSize: fontPercentage(12),
+                  lineHeight: fontPercentage(19),
+                  marginLeft: 3,
+                  color: '#858585',
+                  fontFamily: fonts.kopubWorldDotumProBold,
                 }}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-                tappableDots={true}
+                autoCorrect={false}
+                tagStyle={styles.tag}
+                tagTextStyle={styles.tagText}
+                tagsViewStyle={{paddingHorizontal: 5}}
+                keysForTagsArray={[' ', '#', ',']}
+                customElement={
+                  <TextWrap
+                    font={fonts.kopubWorldDotumProLight}
+                    style={styles.customElement}>
+                    *스페이스바, 엔터, 콤마를 눌러 해시태그를 등록해주세요.
+                  </TextWrap>
+                }
               />
-            </>
-          ) : (
-            <Image
-              source={{uri: params.image.uri}}
+            </View>
+          </>
+        }
+        renderItem={({item, index}) => {
+          let ext = item.name.split('.').pop().toLowerCase();
+          if (ext === 'jpg') {
+            ext = 'jpeg';
+          }
+          const file = {
+            uri: item.uri,
+            type: `image/${ext}`,
+            name: item.name,
+          };
+          return (
+            <View
               style={{
-                width: '100%',
-                height: '80%',
-                resizeMode: 'contain',
-              }}
-            />
-          )}
-        </View>
-        <View style={{felx: 1}}>
-          <InputWrap
-            style={styles.input}
-            value={contents}
-            onChange={setContents}
-            inputFlex={{flex: 1}}
-            placeholder={'내용을 입력하세요'}
-            multiline
-          />
-        </View>
-      </View>
-    </SafeAreaView>
+                width: widthPercentage(82),
+                height: heightPercentage(82),
+                backgroundColor: colors.black,
+                marginRight: (index + 1) % 4 === 0 ? 0 : 2,
+                marginTop: 5,
+              }}>
+              <View>
+                <Image
+                  source={{uri: item.uri}}
+                  style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+                />
+              </View>
+            </View>
+          );
+        }}
+      />
+    </RootLayout>
   );
 }
 
 const styles = StyleSheet.create({
   input: {
-    marginTop: 24,
+    width: widthPercentage(291),
+    maxHeight: heightPercentage(220),
+    marginLeft: 6,
+    fontSize: fontPercentage(11),
+    color: '#333333',
+  },
+  root: {
+    flexDirection: 'row',
+    alignItems: 'center',
     height: 50,
-    fontSize: 14,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+  },
+  selectedImage: {
+    borderWidth: 3,
+    borderColor: 'yellow',
+  },
+  selectedCount: {
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    color: colors.black,
+    fontWeight: '700',
+    zIndex: 1,
+    borderRadius: 10,
+    borderWidth: 1,
+    textAlign: 'center',
+    backgroundColor: 'yellow',
+    borderColor: 'yellow',
+    width: 20,
+    height: 20,
+  },
+  thumbnail: {
+    position: 'absolute',
+    left: 8,
+    top: 5,
+    color: colors.red,
+    fontWeight: '700',
+    zIndex: 1,
+  },
+
+  textIcon: {
+    // width: 24,
+    // height: 24,
+    bottom: -3,
     color: colors.white,
-    backgroundColor: colors.white,
+  },
+  completeTextIcon: {
+    // width: 24,
+    // height: 24,
+    textAlign: 'right',
+    bottom: -3,
+    color: colors.blue,
+  },
+  userInfoContainer: {
+    flexDirection: 'row',
+    paddingBottom: 16,
+    marginTop: heightPercentage(12),
+  },
+  avatorTextContainer: {},
+  textInput: {
+    padding: 0,
+    color: colors.black,
+    fontSize: fontPercentage(11),
+    fontFamily: fonts.kopubWorldDotumProLight,
+  },
+  avator: {
+    marginTop: 3,
+  },
+  contentCount: {
+    position: 'absolute',
+    top: 5,
+    right: -widthPercentage(18),
+    fontSize: fontPercentage(11),
+  },
+  hashtagContianer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: heightPercentage(42),
+  },
+  hashtagTitle: {
+    alignSelf: 'flex-start',
+    fontSize: fontPercentage(12),
+    lineHeight: fontPercentage(19),
+    color: '#333333',
+  },
+  tagText: {
+    fontSize: fontPercentage(11),
+    color: '#858585',
+    fontFamily: fonts.kopubWorldDotumProBold,
+  },
+  tag: {
+    backgroundColor: '#f1f1f1',
+    borderColor: '#f1f1f1',
+    borderRadius: widthPercentage(13),
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(19),
+    fontFamily: fonts.kopubWorldDotumProLight,
+  },
+  hashtagInput: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#333333',
+    height: 35,
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  customElement: {
+    color: colors.red,
+    paddingLeft: widthPercentage(6),
+    fontSize: fontPercentage(10),
   },
 });

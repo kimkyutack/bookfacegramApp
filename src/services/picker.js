@@ -41,14 +41,16 @@ export const getImageFromCamera = async () => {
     const item = await ImageCropPicker.openCamera({
       mediaType: 'photo',
     });
-    return {
-      name: item.path.split('/')[item.path.split('/').length - 1],
-      type: item.mime,
-      size: item.size,
-      width: item.width,
-      height: item.height,
-      uri: item.path,
-    };
+    return [
+      {
+        name: item.path.split('/')[item.path.split('/').length - 1],
+        type: item.mime,
+        size: item.size,
+        width: item.width,
+        height: item.height,
+        uri: item.path,
+      },
+    ];
   } catch (error) {
     if (error.code !== 'E_PICKER_CANCELLED') {
       throw 'getImageFromCamera';
@@ -130,14 +132,16 @@ export const getImageFromGallery = async canVideo => {
     ) {
       throw "Doesn't support that video format";
     }
-    return {
-      name: item.path.split('/')[item.path.split('/').length - 1],
-      type: item.mime,
-      size: item.size,
-      width: item.width,
-      height: item.height,
-      uri: item.path,
-    };
+    return [
+      {
+        name: item.path.split('/')[item.path.split('/').length - 1],
+        type: item.mime,
+        size: item.size,
+        width: item.width,
+        height: item.height,
+        uri: item.path,
+      },
+    ];
   } catch (error) {
     if (error.code === 'E_PERMISSION_MISSING') {
       throw '설정에서 카메라 권한을 허용해주세요.';
