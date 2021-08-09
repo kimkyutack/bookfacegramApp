@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "build": "(cd android/ && ./gradlew assembleDebug)",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "android-apk": "adb reverse tcp:8080 tcp:8080 && react-native run-android"
+    "android-apk": "adb reverse tcp:8081 tcp:8081 && react-native run-android"
   },
   "dependencies": {
     "@react-native-community/cameraroll": "^4.0.4",

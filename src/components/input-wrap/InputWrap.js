@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     color: '#ababab',
   },
   inputWrap: {
+    fontFamily: fonts.kopubWorldDotumProMedium,
     borderBottomWidth: 1,
     borderColor: colors.border,
   },
@@ -135,6 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   input: {
+    fontFamily: fonts.kopubWorldDotumProMedium,
     padding: 0,
     fontSize: fontPercentage(13),
     lineHeight: fontPercentage(20),
