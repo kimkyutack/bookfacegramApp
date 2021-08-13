@@ -13,6 +13,7 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
+import {dialogError} from '../../redux/dialog/DialogActions';
 
 export default function DrawerCustom(props) {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ export default function DrawerCustom(props) {
               label="ㆍ공지사항"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('notice');
+                props.navigation.navigate(routes.notice);
               }}
             />
           </View>
@@ -60,7 +61,7 @@ export default function DrawerCustom(props) {
               label="ㆍ이벤트"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('event');
+                props.navigation.navigate(routes.event);
               }}
             />
           </View>
@@ -80,7 +81,9 @@ export default function DrawerCustom(props) {
               label="ㆍ피드북"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('feedBook');
+                props.navigation.navigate(routes.feedBook, {
+                  timeKey: Date.now(),
+                });
               }}
             />
           </View>
@@ -110,7 +113,7 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate('tab');
+                props.navigation.navigate(routes.tab);
               }}
             />
           </View>
@@ -130,7 +133,11 @@ export default function DrawerCustom(props) {
               label="ㆍ로그아웃"
               labelStyle={styles.label}
               onPress={() => {
-                dispatch(userSignOut(user.memberId));
+                try {
+                  dispatch(userSignOut(user.memberId));
+                } catch (e) {
+                  dispatch(dialogError(e));
+                }
               }}
             />
           </View>

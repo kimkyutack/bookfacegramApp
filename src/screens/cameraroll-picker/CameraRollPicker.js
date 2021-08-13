@@ -38,19 +38,11 @@ export default function CameraRollPicker({navigation}) {
   }, []);
 
   useEffect(() => {
-    if (page === 1) {
-      setAssetType('');
-      setPage(1);
-      setLimit(18);
-      setSelectedArr([]);
-      setConvertFileArr([]);
-    } else {
-      setSelectedArr([]);
-      setConvertFileArr([]);
-      setAssetType('');
-      setPage(1);
-      setLimit(18);
-    }
+    setSelectedArr([]);
+    setConvertFileArr([]);
+    setAssetType('');
+    setPage(1);
+    setLimit(18);
   }, [params.key]);
 
   useEffect(() => {
@@ -112,10 +104,11 @@ export default function CameraRollPicker({navigation}) {
           ),
           onPress: () =>
             navigation.navigate(routes.photoEditor, {
-              route: routes.home,
+              route: routes.feedBook,
               image: convertFileArr,
               dataKey: 'image',
               key: Date.now(),
+              name: 'gallery',
             }),
         },
       }}>

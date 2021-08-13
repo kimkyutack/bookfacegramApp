@@ -1,17 +1,24 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, ViewPropTypes} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewPropTypes,
+  Image,
+} from 'react-native';
 import propTypes from 'prop-types';
 // import Ripple from 'react-native-material-ripple';
 import TextWrap from '../text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
+import images from '../../libs/images';
 import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
 
-export default function Tabs(props) {
+export default function TabsIcon(props) {
   if (!props.data || !props.data.length) {
     return null;
   }
@@ -25,7 +32,6 @@ export default function Tabs(props) {
       onIndexChange={undefined}>
       {props.data.map((tab, index) => {
         const sel = index === props.index;
-        const pin = props.dataPin && props.dataPin[index];
         return (
           <TouchableOpacity
             onPress={() => {
@@ -35,16 +41,17 @@ export default function Tabs(props) {
             style={[styles.tab]}>
             {/* {sel && !props.hideBall && <View style={styles.ball} />} */}
             <View style={[styles.labelItem, sel && styles.labelItemSel]}>
-              <TextWrap
-                style={[styles.label, sel && styles.labelSel]}
-                font={fonts.kopubWorldDotumProMedium}>
-                {tab}{' '}
-              </TextWrap>
-              <TextWrap
-                style={[styles.label, sel && styles.labelSel]}
-                font={fonts.kopubWorldDotumProMedium}>
-                {pin}명
-              </TextWrap>
+              {tab === 'my' ? (
+                sel ? (
+                  <Image source={images.myActive} style={styles.tabIcon} />
+                ) : (
+                  <Image source={images.myInactive} style={styles.tabIcon} />
+                )
+              ) : sel ? (
+                <Image source={images.otherActive} style={styles.tabIcon} />
+              ) : (
+                <Image source={images.otherInactive} style={styles.tabIcon} />
+              )}
             </View>
           </TouchableOpacity>
         );
@@ -80,12 +87,17 @@ const styles = StyleSheet.create({
   },
   tab: {
     alignItems: 'center',
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
     borderTopColor: '#e6e6e6',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#e6e6e6',
     flex: 1,
     justifyContent: 'center',
+  },
+  tabIcon: {
+    width: widthPercentage(21),
+    height: heightPercentage(22),
+    resizeMode: 'cover',
   },
   root: {
     flexDirection: 'row',
@@ -93,7 +105,7 @@ const styles = StyleSheet.create({
   },
 });
 
-Tabs.propTypes = {
+TabsIcon.propTypes = {
   ...ViewPropTypes,
   data: propTypes.array,
   index: propTypes.number,

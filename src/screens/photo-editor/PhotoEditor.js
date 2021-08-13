@@ -37,6 +37,7 @@ import {
   request,
 } from 'react-native-permissions';
 import {
+  dialogError,
   dialogOpenAction,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
@@ -80,61 +81,69 @@ export default function PhotoEditor({route, navigation}) {
           );
         }
       } else {
-        // android file write on phone
-        if (params.image.length > 1) {
-          // 여러장
-          const formData = new FormData();
-          const file = [];
-          for (let i = 0; i < params.image.length; i++) {
-            file.push({
-              uri: params.image[i].uri,
-              type: params.image[i].type,
-              name: params.image[i].name,
-            });
-            formData.append('file', file[i]);
+        try {
+          // android file write on phone
+          if (params.image.length > 1) {
+            // 여러장
+            const formData = new FormData();
+            const file = [];
+            for (let i = 0; i < params.image.length; i++) {
+              file.push({
+                uri: params.image[i].uri,
+                type: params.image[i].type,
+                name: params.image[i].name,
+              });
+              formData.append('file', file[i]);
+            }
+            formData.append('member_idx', user.member_idx);
+            formData.append('contents', contents);
+            formData.append('hashTags', tags.tagsArray);
+
+            const serverResponse = await requestFile(
+              {
+                url: consts.apiUrl + '/feedbookInsert',
+                method: 'post',
+              },
+              formData,
+            );
+          } else {
+            // 한장
+            if (params.name === 'camera') {
+              const saveResult = await CameraRoll.save(params.image[0].uri, {
+                type: 'photo',
+                album: 'toaping',
+              });
+            }
+
+            const formData = new FormData();
+            const file = {
+              uri: params.image[0].uri,
+              type: params.image[0].type,
+              name: params.image[0].name,
+            };
+            formData.append('file', file);
+            formData.append('member_idx', user.member_idx);
+            formData.append('contents', contents);
+            formData.append('hashTags', tags.tagsArray);
+
+            const serverResponse = await requestFile(
+              {
+                url: consts.apiUrl + '/feedbookInsert',
+                method: 'post',
+              },
+              formData,
+            );
           }
-          formData.append('member_idx', user.member_idx);
-          formData.append('contents', contents);
-          formData.append('hashtags', tags.tagsArray);
 
-          const serverResponse = await requestFile(
-            {
-              url: consts.apiUrl + '/feedbookInsert',
-              method: 'post',
-            },
-            formData,
-          );
-        } else {
-          // 한장
-          const saveResult = await CameraRoll.save(params.image[0].uri, {
-            type: 'photo',
-            album: 'toaping',
+          // saveResult, serverResponse throw 검사해야함
+          navigate(params.route, {
+            [params.dataKey]: params.image,
+            key: params.key,
+            isImage: true,
           });
-          const formData = new FormData();
-          const file = {
-            uri: params.image[0].uri,
-            type: params.image[0].type,
-            name: params.image[0].name,
-          };
-          formData.append('file', file);
-          formData.append('member_idx', user.member_idx);
-          formData.append('contents', contents);
-          formData.append('hashtags', tags.tagsArray);
-
-          const serverResponse = await requestFile(
-            {
-              url: consts.apiUrl + '/feedbookInsert',
-              method: 'post',
-            },
-            formData,
-          );
+        } catch (e) {
+          dispatch(dialogError(e));
         }
-        // saveResult, serverResponse throw 검사해야함
-        navigate(params.route, {
-          [params.dataKey]: params.image,
-          key: params.key,
-          isImage: true,
-        });
       }
     } else {
       // ios ~
@@ -148,13 +157,17 @@ export default function PhotoEditor({route, navigation}) {
       );
     } else {
       setTags(e);
+      listRef.current?.scrollToEnd({animated: true});
     }
   };
   return (
     <RootLayout
       style={{paddingHorizontal: 16}}
       topbar={{
-        title: 'my ID',
+        title:
+          user.member_id?.split('@')[0]?.length > 12
+            ? user.member_id?.split('@')[0]?.substring(0, 12) + '...'
+            : user.member_id?.split('@')[0],
         back: true,
         navigation: navigation,
         options: {
@@ -211,9 +224,9 @@ export default function PhotoEditor({route, navigation}) {
                 />
               </View>
             </View>
-            <View style={styles.hashtagContianer}>
+            <View style={styles.hashTagContianer}>
               <TextWrap
-                style={styles.hashtagTitle}
+                style={styles.hashTagTitle}
                 font={fonts.kopubWorldDotumProBold}>
                 #나만의 해시태그 입력
               </TextWrap>
@@ -226,7 +239,7 @@ export default function PhotoEditor({route, navigation}) {
                   width: screenWidth,
                   paddingHorizontal: 10,
                 }}
-                inputContainerStyle={styles.hashtagInput}
+                inputContainerStyle={styles.hashTagInput}
                 inputStyle={{
                   fontSize: fontPercentage(12),
                   lineHeight: fontPercentage(19),
@@ -286,7 +299,7 @@ export default function PhotoEditor({route, navigation}) {
 const styles = StyleSheet.create({
   input: {
     width: widthPercentage(291),
-    maxHeight: heightPercentage(220),
+    maxHeight: heightPercentage(180),
     marginLeft: 6,
     fontSize: fontPercentage(11),
     color: '#333333',
@@ -360,13 +373,13 @@ const styles = StyleSheet.create({
     right: -widthPercentage(18),
     fontSize: fontPercentage(11),
   },
-  hashtagContianer: {
+  hashTagContianer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: heightPercentage(42),
   },
-  hashtagTitle: {
+  hashTagTitle: {
     alignSelf: 'flex-start',
     fontSize: fontPercentage(12),
     lineHeight: fontPercentage(19),
@@ -385,7 +398,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(19),
     fontFamily: fonts.kopubWorldDotumProLight,
   },
-  hashtagInput: {
+  hashTagInput: {
     borderBottomWidth: 0.5,
     borderBottomColor: '#333333',
     height: 35,

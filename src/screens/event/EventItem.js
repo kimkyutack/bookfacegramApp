@@ -5,6 +5,7 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
+import routes from '../../libs/routes';
 import {formatTime, screenWidth} from '../../services/util';
 
 export default function EventItem({item, navigation}) {
@@ -13,7 +14,7 @@ export default function EventItem({item, navigation}) {
       <TouchableOpacity
         style={styles.main}
         onPress={() => {
-          navigation.navigate('eventDetail', {item});
+          navigation.navigate(routes.eventDetail, {item});
         }}>
         <View style={styles.mainContent}>
           <Image

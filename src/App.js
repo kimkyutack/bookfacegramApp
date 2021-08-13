@@ -24,7 +24,6 @@ function App({}) {
     Keyboard.addListener('keyboardDidShow', showListenr);
 
     return () => {
-      // PushNotification.deleteChannel(consts.androidPushChannel);
       Keyboard.removeListener('keyboardWillHide', hideListenr);
       Keyboard.removeListener('keyboardWillShow', showListenr);
     };

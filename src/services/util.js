@@ -9,6 +9,22 @@ import moment from 'moment-timezone';
 import {phoneExts} from './bulk';
 // import SimpleToast from 'react-native-simple-toast';
 
+import images from '../libs/images';
+import routes from '../libs/routes';
+import colors from '../libs/colors';
+import {
+  getImageFromCamera,
+  checkMultiplePermissions,
+  getImageFromGallery,
+} from '../services/picker';
+import {
+  dialogError,
+  dialogOpenAction,
+  dialogOpenSelect,
+} from '../redux/dialog/DialogActions';
+import {navigate} from '../services/navigation';
+import {openSettings, PERMISSIONS} from 'react-native-permissions';
+
 let ZEPLIN_UI_WIDTH = 360;
 let ZEPLIN_UI_HEIGHT = 740;
 
@@ -27,6 +43,139 @@ export const heightPercentage = height => {
 export const fontPercentage = size => {
   const percentage = size * 0.125;
   return responsiveFontSize(percentage)?.toFixed(1) * 1;
+};
+
+export const cameraItem = () => {
+  return [
+    {
+      name: '카메라',
+      source: images.cameraBtn,
+      onPress: () =>
+        getImageFromCamera()
+          .then(async file => {
+            if (!file) {
+              return;
+            }
+            navigate(routes.photoEditor, {
+              route: routes.feedBook,
+              image: file,
+              dataKey: 'image',
+              key: Date.now(),
+              name: 'camera',
+            });
+          })
+          .catch(error => {
+            if (
+              error === 'getImageFromCamera' ||
+              error === 'checkMultiplePermissions' ||
+              error === 'getImageFromGallery'
+            ) {
+              useDispatch(
+                dialogOpenAction({
+                  title: '설정',
+                  titleColor: colors.blue,
+                  cancelTitle: '닫기',
+                  message:
+                    '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.',
+                  onPress: a => {
+                    if (a) {
+                      openSettings();
+                    }
+                  },
+                }),
+              );
+            } else {
+              useDispatch(dialogError(error));
+            }
+          }),
+    },
+    {
+      name: '파일',
+      source: images.fileBtn,
+      onPress: async () =>
+        await getImageFromGallery()
+          .then(async file => {
+            if (!file) {
+              return;
+            }
+            navigate(routes.photoEditor, {
+              route: routes.feedBook,
+              image: file,
+              dataKey: 'image',
+              key: Date.now(),
+              name: 'file',
+            });
+          })
+          .catch(error => {
+            if (
+              error === 'getImageFromCamera' ||
+              error === 'checkMultiplePermissions' ||
+              error === 'getImageFromGallery'
+            ) {
+              useDispatch(
+                dialogOpenAction({
+                  title: '설정',
+                  titleColor: colors.blue,
+                  cancelTitle: '닫기',
+                  message:
+                    '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.',
+                  onPress: a => {
+                    if (a) {
+                      openSettings();
+                    }
+                  },
+                }),
+              );
+            } else {
+              useDispatch(dialogError(error));
+            }
+          }),
+    },
+    {
+      name: '갤러리',
+      source: images.albumBtn,
+      onPress: async () =>
+        await checkMultiplePermissions([
+          PERMISSIONS.ANDROID.CAMERA,
+          PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
+          PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+        ])
+          .then(result => {
+            if (result) {
+              navigate(routes.cameraRollPicker, {
+                route: routes.feedBook,
+                dataKey: 'image',
+                key: Date.now(),
+                name: 'gallery',
+              });
+            }
+          })
+          .catch(error => {
+            if (
+              error === 'getImageFromCamera' ||
+              error === 'checkMultiplePermissions' ||
+              error === 'getImageFromGallery'
+            ) {
+              useDispatch(
+                dialogOpenAction({
+                  title: '설정',
+                  titleColor: colors.blue,
+                  cancelTitle: '닫기',
+                  message:
+                    '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.',
+                  onPress: a => {
+                    if (a) {
+                      openSettings();
+                    }
+                  },
+                }),
+              );
+            } else {
+              useDispatch(dialogError(error));
+            }
+          }),
+    },
+  ];
 };
 
 export const validationEmail = email => {

@@ -29,13 +29,11 @@ export const userUpdate =
 
 export const userSignOut = userId => async dispatch => {
   const platformType = await getItem('platformType');
-  await clearItem('token').then(() => {
-    dispatch({type: 'clear'});
-  });
-  await clearItem('platformType').then(() => {
-    dispatch({type: 'clear'});
-  });
-
+  await clearItem('token');
+  await clearItem('platformType');
+  await clearItem('accountLocal');
+  await clearItem('hashTagLocal');
+  dispatch({type: 'clear'});
   if (platformType === 'kakao') {
     // await logout();
     await logout();

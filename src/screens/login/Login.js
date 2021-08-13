@@ -179,6 +179,8 @@ export default function Login({route}) {
       } else if (type === 'change') {
         token = await loginWithKakaoAccount('change');
       }
+      // 아마 카카오 토큰 유효가 지난 거라 profile 못가져오는듯하다
+      console.log(token);
       const profile = await getKakaoProfile();
       await setItem('token', JSON.stringify(token.accessToken));
       await setItem('platformType', 'kakao');
@@ -214,8 +216,8 @@ export default function Login({route}) {
         dispatch(userCheckToken);
       }
     } catch (e) {
-      console.log(e);
-      // dispatch(dialogError(e));
+      // console.log(e);
+      dispatch(dialogError(e));
     }
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TextPropTypes, StyleSheetProperties} from 'react-native';
+import {Text, TextPropTypes} from 'react-native';
 import fonts from '../../libs/fonts';
 import propType from 'prop-types';
 export default function TextWrap(props) {

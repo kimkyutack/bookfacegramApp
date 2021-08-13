@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'stretch',
     backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 0.2,
+    borderColor: '#888888',
     borderRadius: 30,
   },
   button: {
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(23),
   },
   buttonOutline: {
-    fontSize: 16,
-    color: colors.border,
-    lineHeight: 19,
+    fontSize: fontPercentage(10),
+    lineHeight: fontPercentage(19),
+    color: '#333333',
   },
   rootEnabled: {
     backgroundColor: colors.white,

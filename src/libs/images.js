@@ -31,4 +31,10 @@ export default {
   fileBtn: require('../assets/images/file_btn.png'),
   tabChatOff: require('../assets/images/tab_chat_off.png'),
   tabChatOn: require('../assets/images/tab_chat_on.png'),
+  nodata: require('../assets/images/nodata.png'),
+  delete: require('../assets/images/delete.png'),
+  myActive: require('../assets/images/my_active.png'),
+  myInactive: require('../assets/images/my_inactive.png'),
+  otherActive: require('../assets/images/other_active.png'),
+  otherInactive: require('../assets/images/other_inactive.png'),
 };

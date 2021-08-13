@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   labelButton: {
-    color: colors.primary,
+    color: colors.blue,
     fontSize: 14,
     lineHeight: 24,
   },

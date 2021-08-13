@@ -21,6 +21,10 @@ import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
 
 import FeedBook from './screens/feed-book/FeedBook';
+import FeedBookUser from './screens/feed-book-user/FeedBookUser';
+import Search from './screens/search/Search';
+import Follow from './screens/follow/Follow';
+import Comment from './screens/comment/Comment';
 
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
@@ -247,6 +251,42 @@ export default function Router() {
             <Drawer.Screen
               name={routes.feedBook}
               component={FeedBook}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.feedBookUser}
+              component={FeedBookUser}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.search}
+              component={Search}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.follow}
+              component={Follow}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.comment}
+              component={Comment}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

@@ -15,7 +15,7 @@ export default function ButtonImage({
   return (
     <TouchableOpacity
       disabled={disabled}
-      onPress={(e) => {
+      onPress={e => {
         if (onPress) {
           e.stopPropagation();
           onPress();
