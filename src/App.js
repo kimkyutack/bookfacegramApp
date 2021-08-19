@@ -8,7 +8,6 @@ import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
 console.reportErrorsAsExceptions = false;
-
 function App({}) {
   const dispatch = useDispatch();
 
@@ -39,7 +38,7 @@ function App({}) {
     </>
   );
 }
-
+console.reportErrorsAsExceptions = false;
 export default function ProviderApp() {
   return (
     <Provider store={store}>

@@ -3,7 +3,6 @@ import {
   Image,
   StyleSheet,
   View,
-  ScrollView,
   FlatList,
   ActivityIndicator,
 } from 'react-native';

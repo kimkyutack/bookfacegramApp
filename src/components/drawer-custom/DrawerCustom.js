@@ -83,6 +83,8 @@ export default function DrawerCustom(props) {
               onPress={() => {
                 props.navigation.navigate(routes.feedBook, {
                   timeKey: Date.now(),
+                  member_id: null,
+                  id: null,
                 });
               }}
             />

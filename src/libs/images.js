@@ -20,6 +20,8 @@ export default {
   event2: require('../assets/images/event2.png'),
   event1Body: require('../assets/images/event1_body.png'),
   event2Body: require('../assets/images/event2_body.png'),
+  comment: require('../assets/images/comment.png'),
+  share: require('../assets/images/share.png'),
   like: require('../assets/images/like2.png'),
   talk: require('../assets/images/talk2.png'),
   checkboxOn: require('../assets/images/checkbox_on.png'),

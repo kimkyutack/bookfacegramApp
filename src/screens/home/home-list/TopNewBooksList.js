@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {
   FlatList,
-  ScrollView,
   Image,
   StyleSheet,
   TouchableOpacity,

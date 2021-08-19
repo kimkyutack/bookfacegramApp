@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   View,
   Text,
-  ScrollView,
   BackHandler,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';

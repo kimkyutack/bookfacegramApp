@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, memo} from 'react';
+import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import {
   FlatList,
   View,
@@ -36,7 +36,7 @@ export default function FeedBookUser({route, navigation}) {
 
   const listRef = useRef();
   const [myInfo, setMyInfo] = useState(true);
-  const [limit, setLimit] = useState(32);
+  const [limit, setLimit] = useState(36);
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -45,45 +45,51 @@ export default function FeedBookUser({route, navigation}) {
 
   // mock data
   const k = [
-    {id: 1, uri: '1'},
-    {id: 2, uri: '2'},
-    {id: 3, uri: '3'},
-    {id: 4, uri: '4'},
-    {id: 5, uri: '5'},
-    {id: 6, uri: '6'},
-    {id: 7, uri: '7'},
-    {id: 8, uri: '8'},
-    {id: 9, uri: '9'},
-    {id: 10, uri: '10'},
-    {id: 11, uri: '11'},
-    {id: 12, uri: '12'},
-    {id: 13, uri: '13'},
-    {id: 14, uri: '14'},
-    {id: 15, uri: '15'},
-    {id: 16, uri: '16'},
-    {id: 17, uri: '17'},
-    {id: 18, uri: '18'},
-    {id: 19, uri: '19'},
-    {id: 20, uri: '20'},
-    {id: 21, uri: '21'},
-    {id: 22, uri: '22'},
-    {id: 23, uri: '23'},
-    {id: 24, uri: '24'},
-    {id: 25, uri: '25'},
-    {id: 26, uri: '26'},
-    {id: 27, uri: '27'},
-    {id: 28, uri: '28'},
-    {id: 29, uri: '29'},
-    {id: 30, uri: '30'},
-    {id: 31, uri: '31'},
-    {id: 32, uri: '32'},
+    {member_id: '123a', id: 1, uri: '1'},
+    {member_id: '123b', id: 2, uri: '2'},
+    {member_id: '123c', id: 3, uri: '3'},
+    {member_id: '123d', id: 4, uri: '4'},
+    {member_id: '123e', id: 5, uri: '5'},
+    {member_id: '123f', id: 6, uri: '6'},
+    {member_id: '123g', id: 7, uri: '7'},
+    {member_id: '123h', id: 8, uri: '8'},
+    {member_id: '123k', id: 9, uri: '9'},
+    {member_id: '123l', id: 10, uri: '10'},
+    {member_id: '123m', id: 11, uri: '11'},
+    {member_id: '123n', id: 12, uri: '12'},
+    {member_id: '123o', id: 13, uri: '13'},
+    {member_id: '123p', id: 14, uri: '14'},
+    {member_id: '123q', id: 15, uri: '15'},
+    {member_id: '123r', id: 16, uri: '16'},
+    {member_id: '123s', id: 17, uri: '17'},
+    {member_id: '123t', id: 18, uri: '18'},
+    {member_id: '123u', id: 19, uri: '19'},
+    {member_id: '123v', id: 20, uri: '20'},
+    {member_id: '123w', id: 21, uri: '21'},
+    {member_id: '123x', id: 22, uri: '22'},
+    {member_id: '123y', id: 23, uri: '23'},
+    {member_id: '123z', id: 24, uri: '24'},
+    {member_id: '123zz', id: 25, uri: '25'},
+    {member_id: '123zzz', id: 26, uri: '26'},
+    {member_id: '123zzzz', id: 27, uri: '27'},
+    {member_id: '123zzzzz', id: 28, uri: '28'},
+    {member_id: '123zzzzzz', id: 29, uri: '29'},
+    {member_id: '123zzzzzzz', id: 30, uri: '30'},
+    {member_id: '123zz1', id: 31, uri: '31'},
+    {member_id: '123zzz2', id: 32, uri: '32'},
+    {member_id: '123zzzz3', id: 33, uri: '33'},
+    {member_id: '123zzzzz4', id: 34, uri: '34'},
+    {member_id: '123zzzzzz5', id: 35, uri: '35'},
+    {member_id: '123zzzzzzz6', id: 36, uri: '36'},
   ];
   const fetchUserData = () => {
     setLoading(true);
     requestGet({
       url: consts.apiUrl + '/users/' + user.member_id + '/friends',
       query: {
-        member_id: route.params?.member_id,
+        member_id: route.params?.member_id
+          ? route.params?.member_id
+          : user.member_id,
         page,
         limit: limit,
       },
@@ -137,7 +143,6 @@ export default function FeedBookUser({route, navigation}) {
 
   useEffect(() => {
     setPage(1);
-    setLimit(32);
     if (tabIndex === 0) {
       fetchUserData();
     } else {
@@ -146,10 +151,12 @@ export default function FeedBookUser({route, navigation}) {
   }, [tabIndex]);
 
   useEffect(() => {
-    if (tabIndex === 0) {
-      fetchUserData();
-    } else {
-      fetchWholeData();
+    if (page !== 1) {
+      if (tabIndex === 0) {
+        fetchUserData();
+      } else {
+        fetchWholeData();
+      }
     }
   }, [page]);
 
@@ -161,8 +168,8 @@ export default function FeedBookUser({route, navigation}) {
     }
     listRef.current?.scrollToOffset({y: 0, animated: false});
     setPage(1);
-    setLimit(32);
     setTabIndex(0);
+    fetchUserData();
   }, [route.params?.member_id]);
 
   const handleGesture = e => {
@@ -181,18 +188,21 @@ export default function FeedBookUser({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!loading) {
-      let tm = setTimeout(() => {
-        clearTimeout(tm);
-        setPage(p => p + 1);
-      }, 1000);
+    if (!loading && e.distanceFromEnd > 0) {
+      setPage(p => p + 1);
     }
   };
 
-  const renderItem = ({item, index, onPress}) => {
+  const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={onPress}
+        onPress={() => {
+          navigation.navigate(routes.feedBook, {
+            timeKey: Date.now(),
+            member_id: item.member_id,
+            id: item.id,
+          });
+        }}
         style={{
           width: (screenWidth - 3 * (numColumns - 1)) / numColumns,
           height: (screenWidth - 3 * (numColumns - 1)) / numColumns,
@@ -214,17 +224,17 @@ export default function FeedBookUser({route, navigation}) {
     );
   };
 
-  const PureItem = memo(renderItem, () => {
-    return true;
-  });
+  const memoizedRenderItem = useMemo(() => renderItem, [handleGesture]);
+  const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   return (
     <RootLayout
       topbar={{
-        title:
-          route.params?.member_id?.split('@')[0]?.length > 12
+        title: route.params?.member_id
+          ? route.params?.member_id?.split('@')[0]?.length > 12
             ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
-            : route.params?.member_id?.split('@')[0],
+            : route.params?.member_id?.split('@')[0]
+          : user.member_id,
         navigation: navigation,
         back: true,
         options: {
@@ -337,46 +347,36 @@ export default function FeedBookUser({route, navigation}) {
           />
         </View>
 
-        <View>
-          <PinchGestureHandler onGestureEvent={handleGesture}>
-            <FlatList
-              key={String(numColumns)}
-              ref={listRef}
-              numColumns={numColumns}
-              extraData={data}
-              data={data}
-              showsVerticalScrollIndicator={false}
-              onEndReached={onEndReached}
-              onEndReachedThreshold={0.6}
-              ListFooterComponent={
-                loading && (
-                  <ActivityIndicator
-                    size="large"
-                    style={{
-                      alignSelf: 'center',
-                      marginTop: 20,
-                      marginBottom: 150,
-                    }}
-                    color={colors.primary}
-                  />
-                )
-              }
-              keyExtractor={(item, index) => index.toString()}
-              // renderItem={renderItem}
-              renderItem={({item, index}) => {
-                return (
-                  <PureItem
-                    item={item}
-                    index={index}
-                    onPress={() => {
-                      // console.log(item);
-                    }}
-                  />
-                );
-              }}
-            />
-          </PinchGestureHandler>
-        </View>
+        <PinchGestureHandler onGestureEvent={handleGesture}>
+          <FlatList
+            key={String(numColumns)}
+            numColumns={numColumns}
+            initialNumToRender={24}
+            ref={listRef}
+            data={data}
+            extraData={data}
+            removeClippedSubviews={true}
+            disableVirtualization={false}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={keyExtractor} // arrow 함수 자제
+            renderItem={memoizedRenderItem} // arrow 함수 자제
+            onEndReached={onEndReached}
+            onEndReachedThreshold={1}
+            ListFooterComponent={
+              loading && (
+                <ActivityIndicator
+                  size="large"
+                  style={{
+                    alignSelf: 'center',
+                    marginTop: 50,
+                    marginBottom: 50,
+                  }}
+                  color={colors.primary}
+                />
+              )
+            }
+          />
+        </PinchGestureHandler>
       </View>
     </RootLayout>
   );
