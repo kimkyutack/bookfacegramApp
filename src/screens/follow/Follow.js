@@ -234,7 +234,7 @@ export default function Follow({route, navigation}) {
                   marginTop: 20,
                   marginBottom: 150,
                 }}
-                color={colors.primary}
+                color={colors.blue}
               />
             )
           }

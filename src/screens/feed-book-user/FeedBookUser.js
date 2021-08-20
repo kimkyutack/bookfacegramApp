@@ -224,6 +224,23 @@ export default function FeedBookUser({route, navigation}) {
     );
   };
 
+  const renderFooter = () => {
+    if (!loading) {
+      return <></>;
+    } else {
+      return (
+        <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: -70,
+          }}
+          color={colors.blue}
+        />
+      );
+    }
+  };
+
   const memoizedRenderItem = useMemo(() => renderItem, [handleGesture]);
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
@@ -362,19 +379,7 @@ export default function FeedBookUser({route, navigation}) {
             renderItem={memoizedRenderItem} // arrow 함수 자제
             onEndReached={onEndReached}
             onEndReachedThreshold={1}
-            ListFooterComponent={
-              loading && (
-                <ActivityIndicator
-                  size="large"
-                  style={{
-                    alignSelf: 'center',
-                    marginTop: 50,
-                    marginBottom: 50,
-                  }}
-                  color={colors.primary}
-                />
-              )
-            }
+            ListFooterComponent={renderFooter}
           />
         </PinchGestureHandler>
       </View>

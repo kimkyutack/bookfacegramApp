@@ -172,7 +172,7 @@ export default function TopNewBooksMain({route, bookList}) {
         <ActivityIndicator
           size="large"
           style={{alignSelf: 'center', marginBottom: 60}}
-          color={colors.primary}
+          color={colors.blue}
         />
       ) : (
         <FlatList

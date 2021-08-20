@@ -50,7 +50,7 @@ export default function TopNewBooks({route}) {
         <ActivityIndicator
           size="large"
           style={{alignSelf: 'center', marginBottom: 60}}
-          color={colors.primary}
+          color={colors.blue}
         />
       ) : route.params.type === 'main' ? (
         <TopNewBooksMain route={route} key={Date.now()} bookList={bookList} />

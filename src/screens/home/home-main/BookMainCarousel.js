@@ -5,8 +5,6 @@ import {
   View,
   Text,
   TouchableWithoutFeedback,
-  ActivityIndicator,
-  Platform,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';

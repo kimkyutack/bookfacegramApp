@@ -123,7 +123,7 @@ export default function CameraRollPicker({navigation}) {
             <ActivityIndicator
               size="small"
               style={{alignSelf: 'center', marginTop: 16}}
-              color={colors.primary}
+              color={colors.blue}
             />
           ) : (
             <View style={{paddingBottom: 16}}>

@@ -318,7 +318,7 @@ export default function Comment({route, navigation}) {
                     marginTop: 20,
                     marginBottom: 150,
                   }}
-                  color={colors.primary}
+                  color={colors.blue}
                 />
               )
             }

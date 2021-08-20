@@ -10,7 +10,6 @@ import {
   Easing,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -29,7 +28,6 @@ import {FeedItem} from './FeedItem';
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const listRef = useRef();
 
   const [page, setPage] = useState(1);
@@ -585,10 +583,9 @@ export default function FeedBook({route, navigation}) {
           size="large"
           style={{
             alignSelf: 'center',
-            marginTop: 50,
-            marginBottom: 50,
+            top: -50,
           }}
-          color={colors.primary}
+          color={colors.blue}
         />
       );
     }
