@@ -34,7 +34,6 @@ import {PERMISSIONS} from 'react-native-permissions';
 export default function Splash({navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (user.signed) {
       if (user.intro_setting) {
@@ -69,7 +68,6 @@ export default function Splash({navigation}) {
         // console.log(e2);
       }
     }, 1000);
-
     return () => {
       AppState.removeEventListener('change', listener);
       clearTimeout(tm);

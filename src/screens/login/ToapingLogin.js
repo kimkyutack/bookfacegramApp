@@ -38,16 +38,17 @@ export default function ToapingLogin({}) {
     setLoading(false);
     try {
       Keyboard.dismiss();
-      const token = await requestPost({
-        url: consts.apiUrl + '/makeJwt',
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/auth/login',
         body: {
-          member_id: username,
+          memberId: username,
           password: password,
-          platform_type: 'toaping',
+          platformType: 'toaping',
         },
       });
-      if (token.valid) {
-        await setItem('token', token.token);
+      if (status === 'SUCCESS') {
+        await setItem('accessToken', data.accessToken);
+        await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', 'toaping');
         await setItem('toapingId', username);
         await setItem('toapingPw', password);

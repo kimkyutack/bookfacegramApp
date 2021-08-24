@@ -39,7 +39,7 @@ export default function Follow({route, navigation}) {
     } else {
       setTabIndex(1);
     }
-  }, [route.params.timeKey]);
+  }, [route.params?.timeKey]);
 
   useEffect(() => {
     if (tabIndex === 0) {
@@ -48,6 +48,7 @@ export default function Follow({route, navigation}) {
         {
           id: 1,
           member_id: '팔로워1',
+          member_idx: 1,
           platform_type: 'kakao',
           status: false,
           uri: '',
@@ -55,6 +56,7 @@ export default function Follow({route, navigation}) {
         {
           id: 2,
           member_id: '팔로워2',
+          member_idx: 2,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -62,6 +64,7 @@ export default function Follow({route, navigation}) {
         {
           id: 3,
           member_id: '팔로워3',
+          member_idx: 3,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -69,6 +72,7 @@ export default function Follow({route, navigation}) {
         {
           id: 4,
           member_id: '팔로워4',
+          member_idx: 4,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -76,6 +80,7 @@ export default function Follow({route, navigation}) {
         {
           id: 5,
           member_id: '팔로워5',
+          member_idx: 5,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -83,6 +88,7 @@ export default function Follow({route, navigation}) {
         {
           id: 6,
           member_id: '팔로워6',
+          member_idx: 6,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -90,6 +96,7 @@ export default function Follow({route, navigation}) {
         {
           id: 7,
           member_id: '팔로워7',
+          member_idx: 7,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -97,6 +104,7 @@ export default function Follow({route, navigation}) {
         {
           id: 8,
           member_id: '팔로워8',
+          member_idx: 8,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -104,6 +112,7 @@ export default function Follow({route, navigation}) {
         {
           id: 9,
           member_id: '팔로워9',
+          member_idx: 9,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -111,6 +120,7 @@ export default function Follow({route, navigation}) {
         {
           id: 10,
           member_id: '팔로워10',
+          member_idx: 10,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -118,6 +128,7 @@ export default function Follow({route, navigation}) {
         {
           id: 11,
           member_id: '팔로워11',
+          member_idx: 11,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -125,6 +136,7 @@ export default function Follow({route, navigation}) {
         {
           id: 12,
           member_id: '팔로워12',
+          member_idx: 12,
           platform_type: 'toaping',
           status: false,
           uri: '',
@@ -136,6 +148,7 @@ export default function Follow({route, navigation}) {
         {
           id: 1,
           member_id: '팔로우1',
+          member_idx: 1,
           platform_type: 'app',
           status: true,
           uri: '',
@@ -143,6 +156,7 @@ export default function Follow({route, navigation}) {
         {
           id: 2,
           member_id: '팔로우2',
+          member_idx: 2,
           platform_type: 'facegram',
           status: false,
           uri: '',
@@ -150,6 +164,7 @@ export default function Follow({route, navigation}) {
       ]);
     }
   }, [tabIndex]);
+
   return (
     <RootLayout
       topbar={{
@@ -194,6 +209,7 @@ export default function Follow({route, navigation}) {
             navigation.navigate(routes.feedBookUser, {
               timeKey: Date.now(),
               member_id: user.member_id,
+              member_idx: user.member_idx,
               platform_type: user.platform_type,
             }),
         },
@@ -246,6 +262,7 @@ export default function Follow({route, navigation}) {
                   navigation.navigate(routes.feedBookUser, {
                     timeKey: Date.now(),
                     member_id: item.member_id,
+                    member_idx: item.member_idx,
                     platform_type: item.platform_type,
                     uri: item.uri,
                     status: item.status,

@@ -131,6 +131,7 @@ const renderItem = ({
                 timeKey: Date.now(),
                 id: id,
                 member_id: member_id,
+                member_idx: member_idx,
               })
             }
             style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
@@ -181,6 +182,7 @@ const renderItem = ({
               timeKey: Date.now(),
               id: id,
               member_id: member_id,
+              member_idx: member_idx,
             })
           }>
           <Avatar

@@ -70,9 +70,9 @@ export default function CameraRollPicker({navigation}) {
         if (page === 1) {
           setImages([...d.edges]);
         } else {
-          setImages(images => [
-            ...images,
-            ...d.edges.filter((x, i) => i >= images.length),
+          setImages(images2 => [
+            ...images2,
+            ...d.edges.filter((x, i) => i >= images2.length),
           ]);
         }
       })
@@ -163,7 +163,9 @@ export default function CameraRollPicker({navigation}) {
           const file = {
             uri: item.node.image.uri,
             type: `image/${ext}`,
-            name: item.node.image.filename,
+            name: `${item.node.image.filename.split('.')[0]}_${Date.now()}.${
+              item.node.image.filename.split('.')[1]
+            }`,
           };
           return (
             <TouchableOpacity

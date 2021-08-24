@@ -19,45 +19,43 @@ import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 export default function TopNewBooks({route}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [bookList, setBookList] = useState();
+  const [newBook, setNewBook] = useState(null);
+  const [kbsBook, setKbsBook] = useState(null);
 
   const fetchRequested = async () => {
     try {
       setLoading(true);
-      const books = await requestGet({
-        url: consts.apiUrl + '/bookList',
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/book/bookList',
       });
-      setBookList(books);
+      if (status === 'SUCCESS') {
+        setNewBook([...data.newBook]);
+        setKbsBook([...data.kbsBook]);
+      }
+      return status;
     } catch (error) {
-      setLoading(false);
       dispatch(dialogError(error));
     }
   };
 
   useEffect(() => {
-    fetchRequested();
+    fetchRequested().then(res => {
+      if (res === 'SUCCESS') {
+        setLoading(false);
+      }
+    });
   }, []);
-
-  useEffect(() => {
-    if (bookList) {
-      setLoading(false);
-    }
-  }, [bookList]);
 
   return (
     <View style={styles.root}>
       {loading ? (
-        <ActivityIndicator
-          size="large"
-          style={{alignSelf: 'center', marginBottom: 60}}
-          color={colors.blue}
-        />
-      ) : route.params.type === 'main' ? (
-        <TopNewBooksMain route={route} key={Date.now()} bookList={bookList} />
-      ) : route.params.type === 'list' ? (
-        <TopNewBooksList route={route} key={Date.now()} bookList={bookList} />
-      ) : route.params.type === 'detail' ? (
-        <TopNewBooksDetail route={route} key={Date.now()} />
+        <></>
+      ) : !loading && route.params.type === 'main' ? (
+        <TopNewBooksMain route={route} kbsBook={kbsBook} newBook={newBook} />
+      ) : !loading && route.params.type === 'list' ? (
+        <TopNewBooksList route={route} kbsBook={kbsBook} newBook={newBook} />
+      ) : !loading && route.params.type === 'detail' ? (
+        <TopNewBooksDetail route={route} />
       ) : (
         <></>
       )}

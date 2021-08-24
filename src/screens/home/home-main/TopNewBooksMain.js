@@ -11,17 +11,17 @@ import images from '../../../libs/images';
 import {screenWidth, widthPercentage} from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
 
-export default function TopNewBooksMain({route, bookList}) {
-  const [th, setTh] = useState('');
+export default function TopNewBooksMain({route, kbsBook, newBook}) {
+  const [th, setTh] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [newBookList, setNewBookList] = useState([]);
-  const [bannerList, setBannerList] = useState([]);
-  const [kbsBookList1, setKbsBookList1] = useState([]); //1급
-  const [kbsBookList2, setKbsBookList2] = useState([]); //2급
-  const [kbsBookList3, setKbsBookList3] = useState([]); //3급
-  const [kbsBookList4, setKbsBookList4] = useState([]); //4급
-  const [kbsBookList5, setKbsBookList5] = useState([]); //5급
-  const [kbsBookList6, setKbsBookList6] = useState([]); //6급
+  const [newBookList, setNewBookList] = useState(null);
+  const [bannerList, setBannerList] = useState(null);
+  const [kbsBookList1, setKbsBookList1] = useState(null); //1급
+  const [kbsBookList2, setKbsBookList2] = useState(null); //2급
+  const [kbsBookList3, setKbsBookList3] = useState(null); //3급
+  const [kbsBookList4, setKbsBookList4] = useState(null); //4급
+  const [kbsBookList5, setKbsBookList5] = useState(null); //5급
+  const [kbsBookList6, setKbsBookList6] = useState(null); //6급
   const listData = [
     {
       name: 'banner',
@@ -103,39 +103,37 @@ export default function TopNewBooksMain({route, bookList}) {
 
   useEffect(() => {
     setTh(
-      [...bookList.kbsBook].filter(
+      kbsBook?.filter(
         x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
       )[0].recomm_order,
     );
-    setNewBookList([...bookList.newBook]);
-    setKbsBookList1(
-      [...bookList.kbsBook].filter(
+    setNewBookList([...newBook]);
+    setKbsBookList1([
+      ...kbsBook?.filter(
         x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
       ),
-    );
-    setKbsBookList2(
-      [...bookList.kbsBook].filter(
+    ]);
+    setKbsBookList2([
+      ...kbsBook?.filter(
         x => x.recomm_grade === '2급' || x.recomm_grade === '준2급',
       ),
-    );
-    setKbsBookList3(
-      [...bookList.kbsBook].filter(
+    ]);
+    setKbsBookList3([
+      ...kbsBook?.filter(
         x => x.recomm_grade === '3급' || x.recomm_grade === '준3급',
       ),
-    );
-    setKbsBookList4(
-      [...bookList.kbsBook].filter(
+    ]);
+    setKbsBookList4([
+      ...kbsBook?.filter(
         x => x.recomm_grade === '4급' || x.recomm_grade === '준4급',
       ),
-    );
-    setKbsBookList5(
-      [...bookList.kbsBook].filter(
+    ]);
+    setKbsBookList5([
+      ...kbsBook?.filter(
         x => x.recomm_grade === '5급' || x.recomm_grade === '준5급',
       ),
-    );
-    setKbsBookList6(
-      [...bookList.kbsBook].filter(x => x.recomm_grade === '누리급'),
-    );
+    ]);
+    setKbsBookList6([...kbsBook?.filter(x => x.recomm_grade === '누리급')]);
     setBannerList([
       {index: 0, id: 1, title: images.bannerOne},
       {index: 1, id: 2, title: images.bannerTwo},
@@ -144,18 +142,20 @@ export default function TopNewBooksMain({route, bookList}) {
 
   useEffect(() => {
     if (
-      newBookList.length > 0 &&
-      bannerList.length > 0 &&
-      kbsBookList1.length > 0 &&
-      kbsBookList2.length > 0 &&
-      kbsBookList3.length > 0 &&
-      kbsBookList4.length > 0 &&
-      kbsBookList5.length > 0 &&
-      kbsBookList6.length > 0
+      th &&
+      newBookList &&
+      bannerList &&
+      kbsBookList1 &&
+      kbsBookList2 &&
+      kbsBookList3 &&
+      kbsBookList4 &&
+      kbsBookList5 &&
+      kbsBookList6
     ) {
       setLoading(false);
     }
   }, [
+    th,
     newBookList,
     bannerList,
     kbsBookList1,
@@ -167,7 +167,7 @@ export default function TopNewBooksMain({route, bookList}) {
   ]);
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>
       {loading ? (
         <ActivityIndicator
           size="large"

@@ -6,7 +6,12 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {BackHandler} from 'react-native';
 import {dialogOpenAction, dialogClose} from './redux/dialog/DialogActions';
 import routes from './libs/routes';
-import {navigationRef, reset, routeNameRef} from './services/navigation';
+import {
+  navigationRef,
+  reset,
+  routeNameRef,
+  navigate,
+} from './services/navigation';
 import DrawerCustom from './components/drawer-custom/DrawerCustom';
 import {userSignOut} from './redux/user/UserActions';
 
@@ -231,6 +236,15 @@ export default function Router() {
               }}
             />
             <Drawer.Screen
+              name={routes.splash}
+              component={Splash}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
               name={routes.homeList}
               component={HomeList}
               options={({route, navigation}) => {
@@ -341,6 +355,33 @@ export default function Router() {
             <Drawer.Screen
               name={routes.photoEditor}
               component={PhotoEditor}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro1}
+              component={Intro1}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro2}
+              component={Intro2}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.intro3}
+              component={Intro3}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

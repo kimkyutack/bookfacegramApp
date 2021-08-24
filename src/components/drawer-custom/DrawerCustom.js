@@ -84,6 +84,7 @@ export default function DrawerCustom(props) {
                 props.navigation.navigate(routes.feedBook, {
                   timeKey: Date.now(),
                   member_id: null,
+                  member_idx: user.member_idx,
                   id: null,
                 });
               }}

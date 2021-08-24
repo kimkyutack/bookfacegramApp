@@ -263,6 +263,7 @@ export default function Comment({route, navigation}) {
             navigation.navigate(routes.feedBookUser, {
               timeKey: Date.now(),
               member_id: user.member_id,
+              member_idx: user.member_idx,
               platform_type: user.platform_type,
             }),
         },

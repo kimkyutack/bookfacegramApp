@@ -86,28 +86,35 @@ export default function Login({route}) {
           throw 'toapingError';
         }
       }
-      const token = await requestPost({
-        url: consts.apiUrl + '/makeJwt',
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/auth/login',
         body: {
-          member_id: userId,
+          memberId: userId,
           password: userPw,
-          platform_type: type,
+          platformType: type,
         },
       });
-      if (token.valid) {
-        await setItem('token', token.token);
+      if (status === 'SUCCESS') {
+        await setItem('accessToken', data.accessToken);
+        await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', type);
         dispatch(userCheckToken);
-      } else {
+      } else if (status === 'FAIL') {
         setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
     } catch (error) {
-      if (error.message === 'Network Error') {
-        dispatch(dialogError(error));
-      } else if (error === 'toapingError') {
+      if (error === 'toapingError') {
+        setLoading(false);
         navigate(routes.toapingLogin);
       } else {
-        dispatch(dialogError(error));
+        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+        // dispatch(
+        //   dialogOpenMessage({
+        //     message:
+        //       error?.data?.msg ||
+        //       (typeof error === 'object' ? JSON.stringify(error) : error),
+        //   }),
+        // );
       }
     }
     setLoading(false);
@@ -179,44 +186,23 @@ export default function Login({route}) {
       } else if (type === 'change') {
         token = await loginWithKakaoAccount('change');
       }
-      // 아마 카카오 토큰 유효가 지난 거라 profile 못가져오는듯하다
-      console.log(token);
-      const profile = await getKakaoProfile();
-      await setItem('token', JSON.stringify(token.accessToken));
-      await setItem('platformType', 'kakao');
-      const platformType = await getItem('platformType');
-      const result = await requestPost({
-        url: consts.apiUrl + '/memberSnsJoin',
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/auth/snsLogin',
         body: {
-          member_id: profile.email,
-          platform_type: platformType,
-          sex: profile.gender === 'MALE' ? '남' : '여',
-          handphone:
-            profile.phoneNumber === 'null'
-              ? ''
-              : convertKorPhoneFormat(profile.phoneNumber),
-          birth_day:
-            profile?.birthday.length === 4
-              ? profile.birthday
-              : '0' + profile.birthday,
-          birth_year: profile.birthyear,
-          age: getAgeFromMoment(
-            profile.birthyear + profile.birthDay,
-            'YYYYMMDD',
-          ),
-          kor_nm: profile.nickname,
-          email: profile.email,
+          platformType: 'kakao',
+          snsToken: token.accessToken,
         },
       });
-      if (result.valid) {
+      if (status === 'SUCCESS') {
+        await setItem('accessToken', data.accessToken);
+        await setItem('refreshToken', data.refreshToken);
+        await setItem('platformType', 'kakao');
         dispatch(userCheckToken);
       } else {
-        // 타입 이 중복일때는 로그인시키고 찐 에러일때는 에러메시지 보내야함 백에서의 리턴이필요
-        // dispatch(dialogError({message: result.msg}));
-        dispatch(userCheckToken);
+        // fail
+        setPasswordError('카카오 로그인 에러');
       }
     } catch (e) {
-      // console.log(e);
       dispatch(dialogError(e));
     }
   };

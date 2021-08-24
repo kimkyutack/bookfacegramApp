@@ -43,7 +43,11 @@ export const getImageFromCamera = async () => {
     });
     return [
       {
-        name: item.path.split('/')[item.path.split('/').length - 1],
+        name: `${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[0]
+        }_${Date.now()}.${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[1]
+        }`,
         type: item.mime,
         size: item.size,
         width: item.width,
@@ -69,7 +73,11 @@ export const getMultiplePhoto = async () => {
     });
     return data.map(item => {
       return {
-        name: item.path.split('/')[item.path.split('/').length - 1],
+        name: `${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[0]
+        }_${Date.now()}.${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[1]
+        }`,
         type: item.mime,
         size: item.size,
         width: item.width,
@@ -92,7 +100,11 @@ export const getMUltipleVideo = async () => {
     });
     return data.map(item => {
       return {
-        name: item.path.split('/')[item.path.split('/').length - 1],
+        name: `${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[0]
+        }_${Date.now()}.${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[1]
+        }`,
         type: item.mime,
         size: item.size,
         width: item.width,
@@ -134,7 +146,11 @@ export const getImageFromGallery = async canVideo => {
     }
     return [
       {
-        name: item.path.split('/')[item.path.split('/').length - 1],
+        name: `${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[0]
+        }_${Date.now()}.${
+          item.path.split('/')[item.path.split('/').length - 1].split('.')[1]
+        }`,
         type: item.mime,
         size: item.size,
         width: item.width,

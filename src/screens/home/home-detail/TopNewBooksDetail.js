@@ -62,13 +62,14 @@ export default function TopNewBooksDetail({route}) {
   const fetchRequested = async () => {
     try {
       setLoading(true);
-      const book = await requestGet({
-        url: consts.apiUrl + '/bookDetail',
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/book/bookDetail',
         query: {book_cd: selectedBook},
       });
-      if (book.bookDetail.length > 0) {
-        setBookThumbnail(book.bookDetail[0].img_nm);
-        setBookDetail(book.bookDetail[0]);
+      console.log(data);
+      if (status === 'SUCCESS') {
+        setBookThumbnail(data.bookDetail[0]?.img_nm);
+        setBookDetail(data.bookDetail[0]);
         setLoading(false);
       }
     } catch (error) {
@@ -108,7 +109,10 @@ export default function TopNewBooksDetail({route}) {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.root}
+      contentContainerStyle={[
+        styles.root,
+        loading && {flex: 1, justifyContent: 'center'},
+      ]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled">
       {loading ? (

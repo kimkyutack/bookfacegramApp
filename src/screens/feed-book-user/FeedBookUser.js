@@ -45,18 +45,18 @@ export default function FeedBookUser({route, navigation}) {
 
   // mock data
   const k = [
-    {member_id: '123a', id: 1, uri: '1'},
-    {member_id: '123b', id: 2, uri: '2'},
-    {member_id: '123c', id: 3, uri: '3'},
-    {member_id: '123d', id: 4, uri: '4'},
-    {member_id: '123e', id: 5, uri: '5'},
-    {member_id: '123f', id: 6, uri: '6'},
-    {member_id: '123g', id: 7, uri: '7'},
-    {member_id: '123h', id: 8, uri: '8'},
-    {member_id: '123k', id: 9, uri: '9'},
-    {member_id: '123l', id: 10, uri: '10'},
-    {member_id: '123m', id: 11, uri: '11'},
-    {member_id: '123n', id: 12, uri: '12'},
+    {member_id: '123a', member_idx: 1, id: 1, uri: '1'},
+    {member_id: '123b', member_idx: 2, id: 2, uri: '2'},
+    {member_id: '123c', member_idx: 3, id: 3, uri: '3'},
+    {member_id: '123d', member_idx: 4, id: 4, uri: '4'},
+    {member_id: '123e', member_idx: 5, id: 5, uri: '5'},
+    {member_id: '123f', member_idx: 6, id: 6, uri: '6'},
+    {member_id: '123g', member_idx: 7, id: 7, uri: '7'},
+    {member_id: '123h', member_idx: 8, id: 8, uri: '8'},
+    {member_id: '123k', member_idx: 9, id: 9, uri: '9'},
+    {member_id: '123l', member_idx: 10, id: 10, uri: '10'},
+    {member_id: '123m', member_idx: 11, id: 11, uri: '11'},
+    {member_id: '123n', member_idx: 12, id: 12, uri: '12'},
     {member_id: '123o', id: 13, uri: '13'},
     {member_id: '123p', id: 14, uri: '14'},
     {member_id: '123q', id: 15, uri: '15'},
@@ -87,9 +87,9 @@ export default function FeedBookUser({route, navigation}) {
     requestGet({
       url: consts.apiUrl + '/users/' + user.member_id + '/friends',
       query: {
-        member_id: route.params?.member_id
-          ? route.params?.member_id
-          : user.member_id,
+        member_idx: route.params?.member_idx
+          ? route.params?.member_idx
+          : user.member_idx,
         page,
         limit: limit,
       },
@@ -161,7 +161,7 @@ export default function FeedBookUser({route, navigation}) {
   }, [page]);
 
   useEffect(() => {
-    if (route.params?.member_id === user.member_id) {
+    if (route.params?.member_idx === user.member_idx) {
       setMyInfo(true);
     } else {
       setMyInfo(false);
@@ -170,7 +170,7 @@ export default function FeedBookUser({route, navigation}) {
     setPage(1);
     setTabIndex(0);
     fetchUserData();
-  }, [route.params?.member_id]);
+  }, [route.params?.member_idx]);
 
   const handleGesture = e => {
     const oldScale = e.nativeEvent.scale;
@@ -200,6 +200,7 @@ export default function FeedBookUser({route, navigation}) {
           navigation.navigate(routes.feedBook, {
             timeKey: Date.now(),
             member_id: item.member_id,
+            member_idx: item.member_idx,
             id: item.id,
           });
         }}
@@ -289,6 +290,7 @@ export default function FeedBookUser({route, navigation}) {
             navigation.navigate(routes.feedBookUser, {
               timeKey: Date.now(),
               member_id: user.member_id,
+              member_idx: user.member_idx,
               platform_type: user.platform_type,
             }),
         },

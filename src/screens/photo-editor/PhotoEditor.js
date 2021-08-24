@@ -9,6 +9,7 @@ import {
   View,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import TagInput from 'react-native-tags-input';
@@ -53,6 +54,7 @@ export default function PhotoEditor({route, navigation}) {
   const {params} = useRoute();
   const dispatch = useDispatch();
   const listRef = useRef();
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
   useEffect(() => {
     setContents('');
@@ -60,6 +62,8 @@ export default function PhotoEditor({route, navigation}) {
   }, [params.key]);
 
   const save = async () => {
+    // ios도 button dsiabled 해주라
+    setSaveButtonDisabled(true);
     if (!isIos) {
       let ps = await check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
       if (ps !== 'granted') {
@@ -95,17 +99,25 @@ export default function PhotoEditor({route, navigation}) {
               });
               formData.append('file', file[i]);
             }
-            formData.append('member_idx', user.member_idx);
             formData.append('contents', contents);
-            formData.append('hashTags', tags.tagsArray);
+            formData.append('hashTags', tags.tagsArray?.toString());
 
-            const serverResponse = await requestFile(
+            const {data, status} = await requestFile(
               {
-                url: consts.apiUrl + '/feedbookInsert',
+                url: consts.apiUrl + '/mypage/feedBook/my/upload',
                 method: 'post',
               },
               formData,
             );
+            if (status === 'SUCCESS') {
+              setSaveButtonDisabled(false);
+
+              navigate(params.route, {
+                [params.dataKey]: params.image,
+                key: params.key,
+                isImage: true,
+              });
+            }
           } else {
             // 한장
             if (params.name === 'camera') {
@@ -114,34 +126,37 @@ export default function PhotoEditor({route, navigation}) {
                 album: 'toaping',
               });
             }
-
-            const formData = new FormData();
-            const file = {
+            var formData = new FormData();
+            var file = [];
+            file.push({
               uri: params.image[0].uri,
               type: params.image[0].type,
               name: params.image[0].name,
-            };
-            formData.append('file', file);
-            formData.append('member_idx', user.member_idx);
-            formData.append('contents', contents);
-            formData.append('hashTags', tags.tagsArray);
+            });
 
-            const serverResponse = await requestFile(
+            formData.append('file', file[0]);
+            formData.append('contents', contents);
+            formData.append('hashTags', tags.tagsArray?.toString());
+
+            const {data, status} = await requestFile(
               {
-                url: consts.apiUrl + '/feedbookInsert',
+                url: consts.apiUrl + '/mypage/feedBook/my/upload',
                 method: 'post',
               },
               formData,
             );
-          }
+            if (status === 'SUCCESS') {
+              setSaveButtonDisabled(false);
 
-          // saveResult, serverResponse throw 검사해야함
-          navigate(params.route, {
-            [params.dataKey]: params.image,
-            key: params.key,
-            isImage: true,
-          });
+              navigate(params.route, {
+                [params.dataKey]: params.image,
+                key: params.key,
+                isImage: true,
+              });
+            }
+          }
         } catch (e) {
+          setSaveButtonDisabled(false);
           dispatch(dialogError(e));
         }
       }
@@ -175,123 +190,139 @@ export default function PhotoEditor({route, navigation}) {
           component: (
             <TextWrap
               font={fonts.kopubWorldDotumProBold}
-              style={styles.completeTextIcon}>
+              style={
+                saveButtonDisabled
+                  ? styles.disabledTextIcon
+                  : styles.completeTextIcon
+              }>
               등록
             </TextWrap>
           ),
-          onPress: () => save(),
+          onPress: () => (saveButtonDisabled ? null : save()),
         },
       }}>
-      <FlatList
-        ref={listRef}
-        numColumns={4}
-        extraData={params.image}
-        data={params.image}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        ListFooterComponent={
-          <>
-            <View style={styles.userInfoContainer}>
-              <View>
-                <Avatar
-                  size={widthPercentage(17)}
-                  style={styles.avator}
-                  path={
-                    user?.profile_path
-                      ? user?.profile_path
-                      : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-                  }
-                />
+      {saveButtonDisabled ? (
+        <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            justifyContent: 'center',
+            top: heightPercentage(250),
+          }}
+          color={colors.blue}
+        />
+      ) : (
+        <FlatList
+          ref={listRef}
+          numColumns={4}
+          extraData={params.image}
+          data={params.image}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          ListFooterComponent={
+            <>
+              <View style={styles.userInfoContainer}>
+                <View>
+                  <Avatar
+                    size={widthPercentage(17)}
+                    style={styles.avator}
+                    path={
+                      user?.profile_path
+                        ? user?.profile_path
+                        : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                    }
+                  />
+                </View>
+                <View style={styles.avatorTextContainer}>
+                  <InputWrap
+                    style={styles.input}
+                    selectionColor="#acacac"
+                    inputFlex={{borderColor: colors.white}}
+                    inputStyle={styles.textInput}
+                    maxLength={200}
+                    value={contents}
+                    onChange={setContents}
+                    placeholder="내용 입력..."
+                    placeholderTextColor="#acacac"
+                    placeholderSize={fontPercentage(11)}
+                    multiline
+                    optionComponent={
+                      <TextWrap style={styles.contentCount}>
+                        ({contents.length} / 200)
+                      </TextWrap>
+                    }
+                  />
+                </View>
               </View>
-              <View style={styles.avatorTextContainer}>
-                <InputWrap
-                  style={styles.input}
-                  selectionColor="#acacac"
-                  inputFlex={{borderColor: colors.white}}
-                  inputStyle={styles.textInput}
-                  maxLength={200}
-                  value={contents}
-                  onChange={setContents}
-                  placeholder="내용 입력..."
-                  placeholderTextColor="#acacac"
-                  placeholderSize={fontPercentage(11)}
-                  multiline
-                  optionComponent={
-                    <TextWrap style={styles.contentCount}>
-                      ({contents.length} / 200)
+              <View style={styles.hashTagContianer}>
+                <TextWrap
+                  style={styles.hashTagTitle}
+                  font={fonts.kopubWorldDotumProBold}>
+                  #나만의 해시태그 입력
+                </TextWrap>
+
+                <TagInput
+                  updateState={setTagHandle}
+                  tags={tags}
+                  placeholder="#책제목"
+                  containerStyle={{
+                    width: screenWidth,
+                    paddingHorizontal: 10,
+                  }}
+                  inputContainerStyle={styles.hashTagInput}
+                  inputStyle={{
+                    fontSize: fontPercentage(12),
+                    lineHeight: fontPercentage(19),
+                    marginLeft: 3,
+                    color: '#858585',
+                    fontFamily: fonts.kopubWorldDotumProBold,
+                  }}
+                  autoCorrect={false}
+                  tagStyle={styles.tag}
+                  tagTextStyle={styles.tagText}
+                  tagsViewStyle={{paddingHorizontal: 5}}
+                  keysForTagsArray={[' ', '#', ',']}
+                  customElement={
+                    <TextWrap
+                      font={fonts.kopubWorldDotumProLight}
+                      style={styles.customElement}>
+                      *스페이스바, 엔터, 콤마를 눌러 해시태그를 등록해주세요.
                     </TextWrap>
                   }
                 />
               </View>
-            </View>
-            <View style={styles.hashTagContianer}>
-              <TextWrap
-                style={styles.hashTagTitle}
-                font={fonts.kopubWorldDotumProBold}>
-                #나만의 해시태그 입력
-              </TextWrap>
-
-              <TagInput
-                updateState={setTagHandle}
-                tags={tags}
-                placeholder="#책제목"
-                containerStyle={{
-                  width: screenWidth,
-                  paddingHorizontal: 10,
-                }}
-                inputContainerStyle={styles.hashTagInput}
-                inputStyle={{
-                  fontSize: fontPercentage(12),
-                  lineHeight: fontPercentage(19),
-                  marginLeft: 3,
-                  color: '#858585',
-                  fontFamily: fonts.kopubWorldDotumProBold,
-                }}
-                autoCorrect={false}
-                tagStyle={styles.tag}
-                tagTextStyle={styles.tagText}
-                tagsViewStyle={{paddingHorizontal: 5}}
-                keysForTagsArray={[' ', '#', ',']}
-                customElement={
-                  <TextWrap
-                    font={fonts.kopubWorldDotumProLight}
-                    style={styles.customElement}>
-                    *스페이스바, 엔터, 콤마를 눌러 해시태그를 등록해주세요.
-                  </TextWrap>
-                }
-              />
-            </View>
-          </>
-        }
-        renderItem={({item, index}) => {
-          let ext = item.name.split('.').pop().toLowerCase();
-          if (ext === 'jpg') {
-            ext = 'jpeg';
+            </>
           }
-          const file = {
-            uri: item.uri,
-            type: `image/${ext}`,
-            name: item.name,
-          };
-          return (
-            <View
-              style={{
-                width: widthPercentage(82),
-                height: heightPercentage(82),
-                backgroundColor: colors.black,
-                marginRight: (index + 1) % 4 === 0 ? 0 : 2,
-                marginTop: 5,
-              }}>
-              <View>
-                <Image
-                  source={{uri: item.uri}}
-                  style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-                />
+          renderItem={({item, index}) => {
+            let ext = item.name.split('.').pop().toLowerCase();
+            if (ext === 'jpg') {
+              ext = 'jpeg';
+            }
+            const file = {
+              uri: item.uri,
+              type: `image/${ext}`,
+              name: item.name,
+            };
+            return (
+              <View
+                style={{
+                  width: widthPercentage(82),
+                  height: heightPercentage(82),
+                  backgroundColor: colors.black,
+                  marginRight: (index + 1) % 4 === 0 ? 0 : 2,
+                  marginTop: 5,
+                }}>
+                <View>
+                  <Image
+                    source={{uri: item.uri}}
+                    style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+                  />
+                </View>
               </View>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      )}
     </RootLayout>
   );
 }
@@ -351,6 +382,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     bottom: -3,
     color: colors.blue,
+  },
+  disabledTextIcon: {
+    // width: 24,
+    // height: 24,
+    textAlign: 'right',
+    bottom: -3,
+    color: colors.border,
   },
   userInfoContainer: {
     flexDirection: 'row',

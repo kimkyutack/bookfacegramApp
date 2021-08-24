@@ -53,17 +53,15 @@ export default function Intro3({route, navigation}) {
     } else {
       try {
         setLoading(true);
-        const update = await requestGet({
-          url: consts.apiUrl + '/memberIntro',
-          query: {
-            member_id: user.member_id,
-            platform_type: await getItem('platformType'),
+        const {data, status} = await requestPost({
+          url: consts.apiUrl + '/auth/memberIntro',
+          body: {
             grade: route.params.grade * 1,
-            interest_field: pressButtonArr.toString(),
-            avg_reading_month: route.params.reading * 1,
+            interestField: pressButtonArr.toString(),
+            avgReadingMonth: route.params?.reading * 1,
           },
         });
-        if (update.valid) {
+        if (status === 'SUCCESS') {
           setLoading(false);
           reset(routes.home);
         } else {

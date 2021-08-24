@@ -23,420 +23,43 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
+import {getFeeds, booksUpdate} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
+  const {isLoading, books, errorMessage} = useSelector(
+    s => s.book,
+    shallowEqual,
+  );
+
   const dispatch = useDispatch();
   const listRef = useRef();
 
+  const limit = 12;
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const [refreshing, setRefreshing] = useState(false);
 
   const opacity = useRef(new Animated.Value(0)).current;
   // mock data
-  const k = [
-    {
-      id: 1,
-      member_id: 'l879465213@naver.com',
-      member_idx: 29,
-      uri: '1',
-      likes: 121,
-      replys: 10,
-      contents: '본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      likeMemberList: [45, 29],
-      hashTag: [
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-        '심판',
-        '베르나르베르베르',
-        '독서',
-        '기록',
-      ],
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 2,
-      member_id: '아이디2',
-      member_idx: 45,
-      uri: '2',
-      likes: 122,
-      likeMemberList: [45, 29],
-      replys: 12,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      hashTag: ['심판', '베르나르베르베르', '독서'],
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 3,
-      member_id: '아이디3',
-      member_idx: 31,
-      uri: '3',
-      likeMemberList: [30],
-      likes: 123,
-      replys: 13,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.다.본문 내용입.',
-      hashTag: ['심판', '독서'],
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 4,
-      member_id: '아이디4',
-      member_idx: 32,
-      uri: '4',
-      likeMemberList: [],
-      likes: 124,
-      replys: 14,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 5,
-      member_id: '아이디5',
-      member_idx: 33,
-      uri: '5',
-      likeMemberList: [31],
-      likes: 125,
-      replys: 15,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 6,
-      member_id: '아이디6',
-      member_idx: 34,
-      uri: '6',
-      likes: 126,
-      likeMemberList: [32],
-      replys: 16,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 7,
-      member_id: '아이디7',
-      member_idx: 35,
-      uri: '7',
-      likes: 127,
-      likeMemberList: [33],
-      replys: 17,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 8,
-      member_id: '아이디8',
-      member_idx: 36,
-      uri: '8',
-      likes: 128,
-      likeMemberList: [34],
-      replys: 18,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 9,
-      member_id: '아이디9',
-      member_idx: 37,
-      uri: '9',
-      likes: 129,
-      likeMemberList: [35],
-      replys: 19,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 10,
-      member_id: '아이디10',
-      member_idx: 38,
-      uri: '10',
-      likeMemberList: [36],
-      likes: 121,
-      replys: 10,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 11,
-      member_id: '아이디11',
-      member_idx: 39,
-      uri: '11',
-      likeMemberList: [37],
-      likes: 121,
-      replys: 11,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    {
-      id: 12,
-      member_id: '아이디12',
-      member_idx: 40,
-      uri: '12',
-      likes: 122,
-      likeMemberList: [38],
-      replys: 12,
-      contents:
-        '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-      joinDate: '2021.07.31',
-    },
-    // {
-    //   id: 13,
-    //   member_id: '아이디13',
-    //   uri: '13',
-    //   likes: 123,
-    //   replys: 13,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 14,
-    //   member_id: '아이디14',
-    //   uri: '14',
-    //   likes: 124,
-    //   replys: 14,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 15,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 16,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 17,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 18,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 19,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 20,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 21,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 22,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 23,
-    //   member_id: '아이디23',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 24,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 25,
-    //   member_id: '아이디25',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 26,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 27,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 28,
-    //   member_id: '아이디28',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 29,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 30,
-    //   member_id: '아이디15',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-    // {
-    //   id: 31,
-    //   member_id: '아이디31',
-    //   uri: '1',
-    //   likes: 125,
-    //   replys: 15,
-    //   contents:
-    //     '본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.본문 내용입니다.',
-    //   joinDate: '2021.07.31',
-    // },
-  ];
 
   const fetchFeedData = () => {
-    setLoading(true);
-    requestGet({
-      url: consts.apiUrl + '/users/' + user.member_id + '/friends',
-      query: {
-        member_id: route.params?.member_id
-          ? route.params?.member_id
-          : user.member_id,
+    dispatch(
+      getFeeds(
+        route.params?.member_idx ? route.params?.member_idx : user.member_idx,
         page,
-        limit: limit,
-      },
-    })
-      .then(feedData => {
-        setData([...feedData]);
-        setRefreshing(false);
-        setLoading(false);
-      })
-      .catch(e => {
-        // dispatch(dialogError(e));
-        if (page > 1) {
-          setData(d => [...d, ...k]);
-        } else {
-          setData([...k]);
-        }
-        setRefreshing(false);
-        setLoading(false);
-      });
+        limit,
+      ),
+    );
+    setRefreshing(false);
   };
 
   useEffect(() => {
     if (navigation.isFocused()) {
       listRef.current?.scrollToOffset({y: 0, animated: false});
-      if (route.params.member_id) {
+      if (route.params?.member_idx) {
         setPage(1);
         fetchFeedData();
       } else {
@@ -444,18 +67,13 @@ export default function FeedBook({route, navigation}) {
         fetchFeedData();
       }
     }
-    setData([]);
-  }, [route.params?.member_id]);
+  }, [route.params?.member_idx]);
 
   useEffect(() => {
     if (page !== 1) {
       fetchFeedData();
     }
   }, [page]);
-
-  useEffect(() => {
-    fetchFeedData();
-  }, []);
 
   const editOnPress = () => {
     dispatch(
@@ -497,7 +115,7 @@ export default function FeedBook({route, navigation}) {
 
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
-    const modifiedList = data.map(element => {
+    const modifiedList = books.map((element, index) => {
       if (element.id === feed_idx) {
         const idx = element.likeMemberList.indexOf(user.member_idx);
         if (idx === -1) {
@@ -506,9 +124,11 @@ export default function FeedBook({route, navigation}) {
           element.likeMemberList.splice(idx, 1);
         }
       }
+
       return element;
     });
-    setData(modifiedList);
+
+    dispatch(booksUpdate(modifiedList));
     fillHeart();
   };
 
@@ -541,13 +161,12 @@ export default function FeedBook({route, navigation}) {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setData([]);
     setPage(1);
     fetchFeedData();
   };
 
   const onEndReached = e => {
-    if (!loading && e.distanceFromEnd > 0) {
+    if (!isLoading && e.distanceFromEnd > 0) {
       setPage(p => p + 1);
     }
   };
@@ -568,14 +187,13 @@ export default function FeedBook({route, navigation}) {
   );
 
   const memoizedRenderItem = useMemo(() => renderItem, [toggleHeart]);
-
   const keyExtractor = useCallback(
     (item, index) => item.id.toString() + index.toString(),
     [],
   );
 
   const renderFooter = () => {
-    if (data.length === 0 || !loading) {
+    if (books.length === 0 || !isLoading) {
       return <></>;
     } else {
       return (
@@ -636,6 +254,7 @@ export default function FeedBook({route, navigation}) {
             navigation.navigate(routes.feedBookUser, {
               timeKey: Date.now(),
               member_id: user.member_id,
+              member_idx: user.member_idx,
               platform_type: user.platform_type,
             }),
         },
@@ -643,8 +262,8 @@ export default function FeedBook({route, navigation}) {
       <FlatList
         initialNumToRender={12}
         ref={listRef}
-        data={data}
-        extraData={data}
+        data={books}
+        extraData={books}
         removeClippedSubviews={true}
         disableVirtualization={false}
         showsVerticalScrollIndicator={false}

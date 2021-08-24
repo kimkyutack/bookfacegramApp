@@ -116,25 +116,30 @@ export default function RegisterFormInfo({}) {
     Keyboard.dismiss();
     // 최종 로그인 버튼 클릭시 다시한번 이메일 아이디 중복체크 세마포어방지
     const memberIdDuplicatedCheck = await requestGet({
-      url: consts.apiUrl + '/memberIdChk',
+      url: consts.apiUrl + '/auth/validMemberId',
       query: {
-        member_id: memberId,
-        platform_type: 'app',
+        memberId: memberId,
       },
     });
     const emailDuplicatedCheck = await requestGet({
-      url: consts.apiUrl + '/memberEmailChk',
+      url: consts.apiUrl + '/auth/validEmail',
       query: {
         email: email,
       },
     });
-    if (memberIdDuplicatedCheck.valid && emailDuplicatedCheck.valid) {
+    if (
+      memberIdDuplicatedCheck.status === 'SUCCESS' &&
+      emailDuplicatedCheck.status === 'SUCCESS'
+    ) {
       signUpProcess();
-    } else if (!memberIdDuplicatedCheck.valid) {
+    } else if (memberIdDuplicatedCheck.status === 'FAIL') {
       setMemberIdError('중복된 아이디로 사용이 불가능합니다.');
-    } else if (!emailDuplicatedCheck.valid) {
+    } else if (emailDuplicatedCheck.status === 'FAIL') {
       setEmailError('중복된 이메일로 사용이 불가능합니다.');
-    } else if (!memberIdDuplicatedCheck.valid && !emailDuplicatedCheck.valid) {
+    } else if (
+      memberIdDuplicatedCheck.status === 'FAIL' &&
+      emailDuplicatedCheck.status === 'FAIL'
+    ) {
       setMemberIdError('중복된 아이디로 사용이 불가능합니다.');
       setEmailError('중복된 이메일로 사용이 불가능합니다.');
     }
@@ -142,30 +147,35 @@ export default function RegisterFormInfo({}) {
 
   const signUpProcess = async () => {
     try {
-      await requestPost({
-        url: consts.apiUrl + '/memberJoin',
+      const memberJoinResult = await requestPost({
+        url: consts.apiUrl + '/auth/memberJoin',
         body: {
-          member_id: memberId,
+          memberId: memberId,
           password: password,
-          platform_type: 'app',
-          kor_nm: name,
+          platformType: 'app',
+          korNm: name,
           handphone: phone,
           email: email,
-          agree_email: params.allowEmail === true ? 1 : 0,
-          agree_sms: params.sms === true ? 1 : 0,
-          agree_app_push: params.appPush === true ? 1 : 0,
+          agreeEmail: params.allowEmail === true ? 1 : 0,
+          agreeSms: params.sms === true ? 1 : 0,
+          agreeAppPush: params.appPush === true ? 1 : 0,
         },
       });
-      const token = await requestPost({
-        url: consts.apiUrl + '/makeJwt',
+      if (memberJoinResult.status === 'FAIL') {
+        throw 'memberJoin error';
+      }
+
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/auth/login',
         body: {
-          member_id: memberId,
+          memberId: memberId,
           password: password,
-          platform_type: 'app',
+          platformType: 'app',
         },
       });
-      if (token.valid) {
-        await setItem('token', token.token);
+      if (status === 'SUCCESS') {
+        await setItem('accessToken', data.accessToken);
+        await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', 'app');
         dispatch(
           dialogOpenMessage({message: '회원가입이 정상적으로 완료되었습니다.'}),
@@ -175,7 +185,13 @@ export default function RegisterFormInfo({}) {
         dispatch(dialogError({message: '토큰 생성 에러'}));
       }
     } catch (error) {
-      dispatch(dialogOpenMessage({message: error.message || error}));
+      dispatch(
+        dialogOpenMessage({
+          message:
+            error?.data?.msg ||
+            (typeof error === 'object' ? JSON.stringify(error) : error),
+        }),
+      );
     }
   };
 
@@ -191,13 +207,12 @@ export default function RegisterFormInfo({}) {
     try {
       setLoading(true);
       const duplicatedCheck = await requestGet({
-        url: consts.apiUrl + '/memberIdChk',
+        url: consts.apiUrl + '/auth/validMemberId',
         query: {
-          member_id: e,
-          platform_type: 'app',
+          memberId: e,
         },
       });
-      if (!duplicatedCheck.valid) {
+      if (duplicatedCheck.status === 'FAIL') {
         // 중복 아님
         setMemberIdError('중복된 아이디로 사용이 불가능합니다.');
       }
@@ -227,12 +242,12 @@ export default function RegisterFormInfo({}) {
       if (!emailError) {
         setEmailLoading(true);
         const duplicatedCheck = await requestGet({
-          url: consts.apiUrl + '/memberEmailChk',
+          url: consts.apiUrl + '/auth/validEmail',
           query: {
             email: e,
           },
         });
-        if (!duplicatedCheck.valid) {
+        if (duplicatedCheck.status === 'FAIL') {
           setEmailError('중복된 이메일로 사용이 불가능합니다.');
         }
         setEmailLoading(false);

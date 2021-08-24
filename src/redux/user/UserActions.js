@@ -14,6 +14,7 @@ import {clearItem, getItem} from '../../services/preference';
 import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
 // import messging from '@react-native-firebase/messaging';
+
 export const userActionType = {
   token: 'user/token',
   update: 'user/update',
@@ -29,25 +30,15 @@ export const userUpdate =
 
 export const userSignOut = userId => async dispatch => {
   const platformType = await getItem('platformType');
-  await clearItem('token');
+  await clearItem('accessToken');
+  await clearItem('refreshToken');
   await clearItem('platformType');
   await clearItem('accountLocal');
   await clearItem('hashTagLocal');
   dispatch({type: 'clear'});
   if (platformType === 'kakao') {
-    // await logout();
     await logout();
   }
-  // requestPost({url: consts.apiUrl + '/users/' + userId + '/signout'})
-  //   .then(() => {
-  //     clearItem('token').then(() => {
-  //       dispatch({type: 'clear'});
-  //     });
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //     dispatch(dialogError('Please check internet'));
-  //   });
 };
 
 export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
@@ -81,47 +72,27 @@ export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
 
 export const userCheckToken = async dispatch => {
   try {
-    const token = await getItem('token');
+    const token = await getItem('accessToken');
+    const refreshToken = await getItem('refreshToken');
     const platformType = await getItem('platformType');
 
     if (!token) {
-      throw 'token is null';
+      throw 'accessToken is null';
+    }
+    if (!refreshToken) {
+      throw 'refreshToken is null';
     }
     if (!platformType) {
       throw 'platformType is null';
     }
-    // let fcm = '';
-    // const ftoken = await messging().getToken();
 
-    // if (ftoken) {
-    //   fcm = ftoken;
-    // }
-    // console.log('ftoken');
-    // console.log(ftoken);
-
-    if (platformType === 'app' || platformType === 'toaping') {
-      const {member} = await requestPost({
-        url: consts.apiUrl + '/checkJwt',
-        body: {
-          token,
-        },
-      });
-      if (!member) {
-        throw 'member is null';
-      }
-      dispatch({type: userActionType.token, user: member[0]});
-    } else if (platformType === 'kakao') {
-      const {member} = await requestPost({
-        url: consts.apiUrl + '/checkSnsId',
-        body: {
-          token: token,
-          platform_type: platformType,
-        },
-      });
-      if (!member) {
-        throw 'member is null';
-      }
-      dispatch({type: userActionType.token, user: member[0]});
+    const {data, status} = await requestGet({
+      url: consts.apiUrl + '/auth/checkJwt',
+    });
+    if (status === 'FAIL') {
+      throw 'member is null';
+    } else if (status === 'SUCCESS') {
+      dispatch({type: userActionType.token, user: data});
     }
   } catch (error) {
     dispatch({type: userActionType.init});

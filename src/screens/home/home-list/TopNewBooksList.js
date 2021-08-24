@@ -8,7 +8,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {openSettings, PERMISSIONS} from 'react-native-permissions';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import consts from '../../../libs/consts';
 import colors from '../../../libs/colors';
@@ -21,18 +20,7 @@ import {
   heightPercentage,
 } from '../../../services/util';
 
-import {
-  getImageFromCamera,
-  checkMultiplePermissions,
-  getImageFromGallery,
-} from '../../../services/picker';
-import {
-  dialogError,
-  dialogOpenSelect,
-  dialogOpenAction,
-} from '../../../redux/dialog/DialogActions';
-
-export default function TopNewBooksList({route, bookList}) {
+export default function TopNewBooksList({route, newBook, kbsBook}) {
   const dispatch = useDispatch();
   const scrollRef = useRef();
   const listTab = useSelector(s => s.tab, shallowEqual);
@@ -41,46 +29,48 @@ export default function TopNewBooksList({route, bookList}) {
   useEffect(() => {
     scrollRef.current?.scrollToOffset({y: 0, animated: false});
     if (listTab.listTab.grade === null) {
-      setRenderData([...bookList.newBook]);
+      setRenderData(newBook);
     } else if (listTab.listTab.grade === '1급') {
       setRenderData(
-        [...bookList.kbsBook].filter(
+        kbsBook?.filter(
           x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
         ),
       );
     } else if (listTab.listTab.grade === '2급') {
       setRenderData(
-        [...bookList.kbsBook].filter(
+        kbsBook?.filter(
           x => x.recomm_grade === '2급' || x.recomm_grade === '준2급',
         ),
       );
     } else if (listTab.listTab.grade === '(준)3급') {
       setRenderData(
-        [...bookList.kbsBook].filter(
+        kbsBook?.filter(
           x => x.recomm_grade === '3급' || x.recomm_grade === '준3급',
         ),
       );
     } else if (listTab.listTab.grade === '(준)4급') {
       setRenderData(
-        [...bookList.kbsBook].filter(
+        kbsBook?.filter(
           x => x.recomm_grade === '4급' || x.recomm_grade === '준4급',
         ),
       );
     } else if (listTab.listTab.grade === '(준)5급') {
       setRenderData(
-        [...bookList.kbsBook].filter(
+        kbsBook?.filter(
           x => x.recomm_grade === '5급' || x.recomm_grade === '준5급',
         ),
       );
     } else if (listTab.listTab.grade === '누리급') {
-      setRenderData(
-        [...bookList.kbsBook].filter(x => x.recomm_grade === '누리급'),
-      );
+      setRenderData(kbsBook?.filter(x => x.recomm_grade === '누리급'));
     }
   }, [listTab.listTab.grade]);
 
   return (
-    <View style={styles.root}>
+    <View
+      style={[
+        styles.root,
+        rednerData.length === 0 && {flex: 1, justifyContent: 'center'},
+      ]}>
       {rednerData.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>BookList가 없습니다.</TextWrap>
