@@ -154,7 +154,9 @@ export default function CameraRollPicker({navigation}) {
             </View>
           )
         }
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
         renderItem={({item, index}) => {
           let ext = item.node.image.filename.split('.').pop().toLowerCase();
           if (ext === 'jpg') {

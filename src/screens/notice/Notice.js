@@ -56,7 +56,9 @@ export default function Notice({route, navigation}) {
       />
       <FlatList
         data={data}
-        keyExtractor={(item, index) => item.title + index.toString()}
+        keyExtractor={(item, index) => {
+          return item.title + index.toString();
+        }}
         renderItem={({item, index}) => {
           return <NoticeItem {...item} isFocused={isFocused} />;
         }}

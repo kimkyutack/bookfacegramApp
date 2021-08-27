@@ -1,5 +1,5 @@
 import React, {useEffect, useCallback, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {
   FlatList,
   Image,
@@ -8,13 +8,14 @@ import {
   StatusBar,
 } from 'react-native';
 import {dialogOpenSelect} from '../../../redux/dialog/DialogActions';
-
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import Topbar from '../../../components/topbar/Topbar';
 import SearchBar from '../../../components/search-bar/SearchBar';
 import TopTabs from './TopTabs';
 import images from '../../../libs/images';
 import colors from '../../../libs/colors';
+import {navigate} from '../../../services/navigation';
+import routes from '../../../libs/routes';
 import {
   widthPercentage,
   heightPercentage,
@@ -23,6 +24,7 @@ import {
 } from '../../../services/util';
 
 export default function HomeMain({route, navigation}) {
+  const user = useSelector(s => s.user);
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
 

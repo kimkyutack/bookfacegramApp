@@ -53,7 +53,9 @@ export default function Event({navigation}) {
       <FlatList
         data={data}
         disableVirtualization={false}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
         renderItem={({item, index}) => {
           return <EventItem item={item} navigation={navigation} />;
         }}

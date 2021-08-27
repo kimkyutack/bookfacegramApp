@@ -218,7 +218,9 @@ export default function PhotoEditor({route, navigation}) {
           extraData={params.image}
           data={params.image}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           ListFooterComponent={
             <>
               <View style={styles.userInfoContainer}>

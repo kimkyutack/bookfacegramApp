@@ -66,7 +66,6 @@ export default function TopNewBooksDetail({route}) {
         url: consts.apiUrl + '/book/bookDetail',
         query: {book_cd: selectedBook},
       });
-      console.log(data);
       if (status === 'SUCCESS') {
         setBookThumbnail(data.bookDetail[0]?.img_nm);
         setBookDetail(data.bookDetail[0]);
@@ -128,8 +127,8 @@ export default function TopNewBooksDetail({route}) {
               source={{
                 uri:
                   bookThumbnail !== ''
-                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
+                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -164,8 +163,8 @@ export default function TopNewBooksDetail({route}) {
               source={{
                 uri:
                   bookThumbnail !== ''
-                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
+                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -200,8 +199,8 @@ export default function TopNewBooksDetail({route}) {
               source={{
                 uri:
                   bookThumbnail !== ''
-                    ? consts.imgUrl + '/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/bookDefault.gif',
+                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}

@@ -245,7 +245,7 @@ export default function Search({route, navigation}) {
           ),
           name: 'avator',
           onPress: () =>
-            navigation.navigate(routes.feedBookUser, {
+            navigation.navigate(routes.feedBookImage, {
               timeKey: Date.now(),
               member_id: user.member_id,
               member_idx: user.member_idx,
@@ -311,9 +311,9 @@ export default function Search({route, navigation}) {
           <FlatList
             data={data}
             extraData={data}
-            keyExtractor={(item, index) =>
-              item.memberId + '' + item.userId + index
-            }
+            keyExtractor={(item, index) => {
+              return item.memberId + '' + item.userId + index;
+            }}
             showsVerticalScrollIndicator={false}
             renderItem={({item, index}) => {
               if (searched) {

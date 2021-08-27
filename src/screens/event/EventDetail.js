@@ -120,7 +120,7 @@ export default function EventDetail({route, navigation}) {
                 {/* <FlatList
                   data={data}
                   nestedScrollEnabled
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={(item, index) => return {index.toString()}}
                   renderItem={({item, index}) => {
                     return <EventReplyItem {...item} />;
                   }}

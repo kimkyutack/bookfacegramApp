@@ -26,7 +26,7 @@ import {
   fontPercentage,
 } from '../../services/util';
 
-export default function RegisterFormInfo({}) {
+export default function RegisterFormToapingInfo({}) {
   const scrollRef = useRef();
   const {params} = useRoute();
   const dispatch = useDispatch();
@@ -34,73 +34,25 @@ export default function RegisterFormInfo({}) {
 
   const [loading, setLoading] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [memberId, setMemberId] = useState('');
-  const [memberIdError, setMemberIdError] = useState('');
-
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordConfirmError, setPasswordConfirmError] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(
+    params?.data?.name ? params?.data?.name : '',
+  );
+  const [memberId, setMemberId] = useState(
+    params?.userId ? params?.userId : '',
+  );
+  const [password, setPassword] = useState(
+    params?.password ? params?.password : '',
+  );
+  const [passwordConfirm, setPasswordConfirm] = useState(
+    params?.password ? params?.password : '',
+  );
+  const [phone, setPhone] = useState(
+    params?.data?.handphone ? params?.data?.handphone : '',
+  );
+  const [email, setEmail] = useState(
+    params?.data?.email ? params?.data?.email : '',
+  );
   const [emailError, setEmailError] = useState('');
-
-  useEffect(() => {
-    // sns 로그인 일때 필요함
-    // setEmail(params.email);
-    // setName(
-    //   params.firstName && params.lastName
-    //     ? `${params.firstName} ${params.lastName}`
-    //     : '',
-    // );
-    // setStudentId(params.studentId);
-    // if (params.phone) {
-    //   setPhoneExt(params.phone.split(' ')[0].replace('+', ''));
-    //   setPhone(params.phone.split(' ')[1]);
-    // }
-  }, [params]);
-
-  useEffect(() => {
-    if (password && passwordConfirm && password === passwordConfirm) {
-      setPasswordConfirmError('');
-    } else if (password && passwordConfirm && password !== passwordConfirm) {
-      setPasswordConfirmError('비밀번호가 일치하지 않습니다.');
-    }
-  }, [password, passwordConfirm]);
-
-  useEffect(() => {
-    if (
-      password &&
-      (password.length < 8 || password.length > 20) &&
-      !containPasswordCheck(password)
-    ) {
-      setPasswordError('8~20자리 영문소문자+숫자 조합');
-    } else if (
-      password &&
-      password.length >= 8 &&
-      password.length < 20 &&
-      containPasswordCheck(password)
-    ) {
-      setPasswordError('');
-    }
-  }, [password]);
-
-  useEffect(() => {
-    if (
-      passwordConfirm &&
-      (passwordConfirm.length < 8 || passwordConfirm.length > 20)
-    ) {
-      setPasswordConfirmError('8~20자리 영문소문자+숫자 조합');
-    } else if (
-      passwordConfirm &&
-      passwordConfirm.length >= 8 &&
-      passwordConfirm.length < 20 &&
-      password === passwordConfirm
-    ) {
-      setPasswordConfirmError('');
-    }
-  }, [passwordConfirm]);
 
   useEffect(() => {
     if (user.signed) {
@@ -115,23 +67,16 @@ export default function RegisterFormInfo({}) {
   const signUp = async () => {
     Keyboard.dismiss();
     // 최종 로그인 버튼 클릭시 다시한번 이메일 아이디 중복체크 세마포어방지
+
     try {
-      const memberIdDuplicatedCheck = await requestGet({
-        url: consts.apiUrl + '/auth/validMemberId',
-        query: {
-          memberId: memberId,
-        },
-      });
-      const emailDuplicatedCheck = await requestGet({
+      const {data, status} = await requestGet({
         url: consts.apiUrl + '/auth/validEmail',
         query: {
           email: email,
         },
       });
-      if (
-        memberIdDuplicatedCheck.status === 'SUCCESS' &&
-        emailDuplicatedCheck.status === 'SUCCESS'
-      ) {
+      if (status === 'SUCCESS') {
+        setEmailError('');
         signUpProcess();
       }
     } catch (e) {
@@ -149,10 +94,9 @@ export default function RegisterFormInfo({}) {
   const signUpProcess = async () => {
     try {
       const {data, status} = await requestPost({
-        url: consts.apiUrl + '/auth/memberJoin',
+        url: consts.apiUrl + '/auth/toapingMemberJoin',
         body: {
           memberId: memberId,
-          password: password,
           korNm: name,
           handphone: phone,
           email: email,
@@ -165,7 +109,7 @@ export default function RegisterFormInfo({}) {
       if (status === 'SUCCESS') {
         await setItem('accessToken', data.accessToken);
         await setItem('refreshToken', data.refreshToken);
-        await setItem('platformType', 'app');
+        await setItem('platformType', 'toaping');
         dispatch(
           dialogOpenMessage({message: '회원가입이 정상적으로 완료되었습니다.'}),
         );
@@ -182,38 +126,6 @@ export default function RegisterFormInfo({}) {
             (typeof error === 'object' ? JSON.stringify(error) : error),
         }),
       );
-    }
-  };
-
-  const memberIdDuplicatedCheck = async e => {
-    let preventKorReg = /[^A-Za-z0-9]/gi;
-    setMemberId(e.replace(preventKorReg, ''));
-    if (e && e.length < 6) {
-      setMemberIdError('6자리 이상 입력해주세요.');
-      return;
-    } else if (e && e.length >= 6) {
-      setMemberIdError('');
-    }
-    try {
-      setLoading(true);
-      const {data, status} = await requestGet({
-        url: consts.apiUrl + '/auth/validMemberId',
-        query: {
-          memberId: e,
-        },
-      });
-      if (status === 'FAIL') {
-        // 중복 아님
-        setMemberIdError('중복된 아이디로 사용이 불가능합니다.');
-      }
-      setLoading(false);
-    } catch (error) {
-      setMemberIdError(
-        error?.data?.msg ||
-          error?.message ||
-          (typeof error === 'object' ? JSON.stringify(error) : error),
-      );
-      setLoading(false);
     }
   };
 
@@ -261,9 +173,7 @@ export default function RegisterFormInfo({}) {
     !passwordConfirm ||
     !phone ||
     !email ||
-    Boolean(emailError) ||
-    Boolean(memberIdError) ||
-    Boolean(passwordConfirmError);
+    Boolean(emailError);
 
   return (
     <RootLayout
@@ -297,29 +207,11 @@ export default function RegisterFormInfo({}) {
           <InputWrap
             style={[styles.input, {marginTop: 30}]}
             inputStyle={styles.inputValue}
-            onChange={memberIdDuplicatedCheck}
             value={memberId}
             placeholder="아이디(필수)"
             placeholderTextColor="#acacac"
             maxLength={20}
-            message={
-              memberId
-                ? loading
-                  ? '중복체크 중입니다.'
-                  : memberIdError
-                  ? memberIdError
-                  : '사용 가능한 아이디입니다.'
-                : '사용할 아이디(또는 이메일)을 입력해주세요.'
-            }
-            messageColor={
-              memberId
-                ? loading
-                  ? colors.black
-                  : memberIdError
-                  ? colors.red
-                  : colors.blue
-                : colors.black
-            }
+            disabled
           />
           <InputWrap
             style={styles.input}
@@ -330,20 +222,7 @@ export default function RegisterFormInfo({}) {
             maxLength={20}
             placeholder="비밀번호(필수)"
             placeholderTextColor="#acacac"
-            message={
-              passwordError
-                ? passwordError
-                : !password
-                ? '8~20자리 영문소문자+숫자 조합'
-                : '정상입니다.'
-            }
-            messageColor={
-              password
-                ? passwordError
-                  ? colors.red
-                  : colors.blue
-                : colors.black
-            }
+            disabled
           />
           <InputWrap
             style={styles.input}
@@ -354,20 +233,7 @@ export default function RegisterFormInfo({}) {
             maxLength={20}
             placeholderTextColor="#acacac"
             placeholder="비밀번호 확인(필수)"
-            message={
-              passwordConfirmError
-                ? passwordConfirmError
-                : !passwordConfirm
-                ? '8~20자리 영문소문자+숫자 조합'
-                : '비밀번호가 일치합니다.'
-            }
-            messageColor={
-              passwordConfirm
-                ? passwordConfirmError
-                  ? colors.red
-                  : colors.blue
-                : colors.black
-            }
+            disabled
           />
 
           <InputWrap

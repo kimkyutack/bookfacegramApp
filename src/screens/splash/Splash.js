@@ -27,24 +27,13 @@ import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
+  isIos,
 } from '../../services/util';
 import {getItem, setItem} from '../../services/preference';
 import {splashCheckMultiplePermissions} from '../../services/picker';
 import {PERMISSIONS} from 'react-native-permissions';
 export default function Splash({navigation}) {
-  const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (user.signed) {
-      if (user.intro_setting) {
-        reset(routes.home);
-      } else {
-        navigate(routes.intro1, {age: user.age});
-      }
-    } else if (user.inited) {
-      reset(routes.login);
-    }
-  }, [user.inited, user.signed]);
 
   useEffect(() => {
     const listener = (e, a) => {
@@ -71,6 +60,10 @@ export default function Splash({navigation}) {
     return () => {
       AppState.removeEventListener('change', listener);
       clearTimeout(tm);
+      if (!isIos) {
+        StatusBar.setBackgroundColor(colors.white);
+      }
+      StatusBar.setBarStyle('dark-content');
     };
   }, []);
 

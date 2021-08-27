@@ -12,7 +12,16 @@ import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import Avatar from '../../components/avatar/Avatar';
 
-const renderItem = ({id, member_id, uri, status, onPress, tabIndex, index}) => {
+const renderItem = ({
+  followerIdx,
+  memberId,
+  memberIdx,
+  profilePath,
+  status,
+  onPress,
+  tabIndex,
+  index,
+}) => {
   return (
     <View
       style={index === 0 ? styles.itemContainerFirst : styles.itemContainer}>
@@ -21,12 +30,12 @@ const renderItem = ({id, member_id, uri, status, onPress, tabIndex, index}) => {
           size={widthPercentage(38)}
           style={styles.avator}
           path={
-            uri
-              ? uri
+            profilePath
+              ? profilePath
               : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
           }
         />
-        <TextWrap style={styles.info}>{member_id}</TextWrap>
+        <TextWrap style={styles.info}>{memberId}</TextWrap>
       </TouchableOpacity>
       <ButtonWrap
         // onPress={() => console.log('삭제')}

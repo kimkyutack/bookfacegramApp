@@ -27,6 +27,7 @@ import EventDetail from './screens/event/EventDetail';
 
 import FeedBook from './screens/feed-book/FeedBook';
 import FeedBookUser from './screens/feed-book-user/FeedBookUser';
+import FeedBookImage from './screens/feed-book-image/FeedBookImage';
 import Search from './screens/search/Search';
 import Follow from './screens/follow/Follow';
 import Comment from './screens/comment/Comment';
@@ -34,6 +35,7 @@ import Comment from './screens/comment/Comment';
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
 import RegisterFormInfo from './screens/register-form/RegisterFormInfo';
+import RegisterFormToapingInfo from './screens/register-form/RegisterFormToapingInfo';
 import Intro1 from './screens/register-form/Intro1';
 import Intro2 from './screens/register-form/Intro2';
 import Intro3 from './screens/register-form/Intro3';
@@ -54,10 +56,14 @@ export default function Router() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!user.signed) {
-      reset(routes.splash);
+    if (user.inited && !user.signed) {
+      reset(routes.login);
+    } else if (user.inited && user.signed) {
+      if (!user.intro_setting) {
+        navigate(routes.intro1, {age: user.age});
+      }
     }
-  }, [user.signed]);
+  }, [user.signed, user.inited]);
 
   useEffect(() => {
     const backAction = () => {
@@ -79,7 +85,13 @@ export default function Router() {
       dispatch(userSignOut(user.memberId));
       return true;
     };
-    if (currentRouteName === 'splash' || currentRouteName === 'login') {
+    if (currentRouteName === 'splash') {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        true,
+      );
+      return () => backHandler.remove();
+    } else if (currentRouteName === 'login') {
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
         backAction,
@@ -175,6 +187,16 @@ export default function Router() {
               }}
             />
             <Drawer.Screen
+              initialParams={{}}
+              name={routes.registerFormToapingInfo}
+              component={RegisterFormToapingInfo}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
               name={routes.intro1}
               component={Intro1}
               options={({route, navigation}) => {
@@ -236,15 +258,6 @@ export default function Router() {
               }}
             />
             <Drawer.Screen
-              name={routes.splash}
-              component={Splash}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
               name={routes.homeList}
               component={HomeList}
               options={({route, navigation}) => {
@@ -274,6 +287,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.feedBookUser}
               component={FeedBookUser}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.feedBookImage}
+              component={FeedBookImage}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

@@ -17,7 +17,7 @@ import {
   fontPercentage,
 } from '../../services/util';
 
-export default function RegisterForm({}) {
+export default function RegisterForm({route}) {
   const scrollRef = useRef();
   const [agree, setAgree] = useState(false);
   const [term, setTerm] = useState(false);
@@ -27,14 +27,28 @@ export default function RegisterForm({}) {
   const [appPush, setAppPush] = useState(false);
 
   const buttonDisabled = !agree;
+
   const handleGoRegister = () => {
-    navigate(routes.registerFormInfo, {
-      term: term,
-      privacy: privacy,
-      allowEmail: allowEmail,
-      sms: sms,
-      appPush: appPush,
-    });
+    if (route.params?.platformType === 'toaping') {
+      navigate(routes.registerFormToapingInfo, {
+        term: term,
+        privacy: privacy,
+        allowEmail: allowEmail,
+        sms: sms,
+        appPush: appPush,
+        data: route.params?.data,
+        userId: route.params?.userId,
+        password: route.params?.password,
+      });
+    } else {
+      navigate(routes.registerFormInfo, {
+        term: term,
+        privacy: privacy,
+        allowEmail: allowEmail,
+        sms: sms,
+        appPush: appPush,
+      });
+    }
   };
 
   return (

@@ -9,7 +9,8 @@ export const dialogError = (error, onPress) => dispatch => {
   dispatch({
     type: dialogActionType.openMessage,
     message:
-      error.message ||
+      error?.data?.msg ||
+      error?.message ||
       (typeof error === 'object' ? JSON.stringify(error) : error),
     close: true,
     title: '확인',

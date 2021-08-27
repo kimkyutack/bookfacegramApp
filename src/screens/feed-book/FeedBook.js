@@ -10,6 +10,8 @@ import {
   Easing,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import moment from 'moment';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -23,57 +25,47 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {getFeeds, booksUpdate} from '../../redux/book/BookActions';
+import {
+  getFeedHome,
+  booksUpdate,
+  initErrorMessage,
+} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
-  const {isLoading, books, errorMessage} = useSelector(
-    s => s.book,
-    shallowEqual,
-  );
+  const {isLoading, followBooks, errorMessage} = useSelector(s => s.book);
 
   const dispatch = useDispatch();
   const listRef = useRef();
+  const isFocused = useIsFocused();
 
   const limit = 12;
   const [page, setPage] = useState(1);
+  const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const [refreshing, setRefreshing] = useState(false);
-
   const opacity = useRef(new Animated.Value(0)).current;
-  // mock data
 
-  const fetchFeedData = () => {
-    dispatch(
-      getFeeds(
-        route.params?.member_idx ? route.params?.member_idx : user.member_idx,
-        page,
-        limit,
-      ),
-    );
+  const fetchFeedData = reset => {
     setRefreshing(false);
-  };
-
-  useEffect(() => {
-    if (navigation.isFocused()) {
-      listRef.current?.scrollToOffset({y: 0, animated: false});
-      if (route.params?.member_idx) {
-        setPage(1);
-        fetchFeedData();
-      } else {
-        setPage(1);
-        fetchFeedData();
-      }
+    if (reset) {
+      dispatch(getFeedHome(1, limit, time));
+    } else {
+      dispatch(getFeedHome(page, limit, time));
     }
-  }, [route.params?.member_idx]);
+  };
 
   useEffect(() => {
     if (page !== 1) {
       fetchFeedData();
     }
   }, [page]);
+
+  useEffect(() => {
+    fetchFeedData();
+  }, []);
 
   const editOnPress = () => {
     dispatch(
@@ -115,21 +107,23 @@ export default function FeedBook({route, navigation}) {
 
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
-    const modifiedList = books.map((element, index) => {
-      if (element.id === feed_idx) {
-        const idx = element.likeMemberList.indexOf(user.member_idx);
-        if (idx === -1) {
-          element.likeMemberList.push(user.member_idx);
-        } else {
-          element.likeMemberList.splice(idx, 1);
+    if (followBooks.length > 0) {
+      const modifiedList = followBooks?.map((element, index) => {
+        if (element.feedIdx === feed_idx) {
+          const idx = element.likeMemberList.indexOf(user.member_idx);
+          if (idx === -1) {
+            element.likeMemberList.push(user.member_idx);
+            element.likeCnt += 1;
+          } else {
+            element.likeMemberList.splice(idx, 1);
+            element.likeCnt -= 1;
+          }
         }
-      }
-
-      return element;
-    });
-
-    dispatch(booksUpdate(modifiedList));
-    fillHeart();
+        return element;
+      });
+      dispatch(booksUpdate(modifiedList, 'follow'));
+      fillHeart();
+    }
   };
 
   const fillHeart = () => {
@@ -159,14 +153,15 @@ export default function FeedBook({route, navigation}) {
     }
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setRefreshing(true);
     setPage(1);
-    fetchFeedData();
+    setTime(moment().format('YYYY-MM-DD HH:mm:ss'));
+    fetchFeedData(true);
   };
 
   const onEndReached = e => {
-    if (!isLoading && e.distanceFromEnd > 0) {
+    if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
       setPage(p => p + 1);
     }
   };
@@ -187,13 +182,12 @@ export default function FeedBook({route, navigation}) {
   );
 
   const memoizedRenderItem = useMemo(() => renderItem, [toggleHeart]);
-  const keyExtractor = useCallback(
-    (item, index) => item.id.toString() + index.toString(),
-    [],
-  );
+  const keyExtractor = useCallback((item, index) => {
+    return item?.feedIdx.toString() + index.toString();
+  }, []);
 
   const renderFooter = () => {
-    if (books.length === 0 || !isLoading) {
+    if (followBooks?.length === 0 || !isLoading) {
       return <></>;
     } else {
       return (
@@ -250,20 +244,20 @@ export default function FeedBook({route, navigation}) {
             />
           ),
           name: 'avator',
-          onPress: () =>
-            navigation.navigate(routes.feedBookUser, {
-              timeKey: Date.now(),
+          onPress: () => {
+            navigation.navigate(routes.feedBookImage, {
               member_id: user.member_id,
               member_idx: user.member_idx,
               platform_type: user.platform_type,
-            }),
+            });
+          },
         },
       }}>
       <FlatList
         initialNumToRender={12}
         ref={listRef}
-        data={books}
-        extraData={books}
+        data={followBooks}
+        extraData={followBooks}
         removeClippedSubviews={true}
         disableVirtualization={false}
         showsVerticalScrollIndicator={false}

@@ -260,7 +260,7 @@ export default function Comment({route, navigation}) {
           ),
           name: 'avator',
           onPress: () =>
-            navigation.navigate(routes.feedBookUser, {
+            navigation.navigate(routes.feedBookImage, {
               timeKey: Date.now(),
               member_id: user.member_id,
               member_idx: user.member_idx,
@@ -309,7 +309,9 @@ export default function Comment({route, navigation}) {
             data={data}
             extraData={data}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
             ListFooterComponent={
               loading && (
                 <ActivityIndicator

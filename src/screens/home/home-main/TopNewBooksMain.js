@@ -180,7 +180,9 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
           extraData={listData}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           renderItem={({item, index}) => {
             return <BookMainCarousel {...item} />;
           }}

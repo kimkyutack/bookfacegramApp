@@ -10,14 +10,15 @@ export function navigate(name, params) {
 export function goBack() {
   if (navigationRef.current?.canGoBack()) {
     navigationRef.current?.goBack();
-  } else {
-    navigationRef.current?.dispatch(
-      CommonActions?.reset({
-        index: 0,
-        routes: [{name: routes.home}],
-      }),
-    );
   }
+  // else {
+  //   navigationRef.current?.dispatch(
+  //     CommonActions?.reset({
+  //       index: 0,
+  //       routes: [{name: routes.home}],
+  //     }),
+  //   );
+  // }
 }
 
 export function replace(name, params) {

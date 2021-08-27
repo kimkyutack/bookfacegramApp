@@ -22,8 +22,8 @@ export default function BookMainCarouselImage({
       source={{
         uri:
           bookThumbnail !== '' && bookThumbnail !== undefined
-            ? consts.imgUrl + '/' + bookThumbnail + '.gif'
-            : consts.imgUrl + '/bookDefault.gif',
+            ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+            : consts.imgUrl + '/thumbnail/bookDefault.gif',
         priority: FastImage.priority.normal,
       }}
       resizeMode={FastImage.resizeMode.cover}

@@ -44,6 +44,11 @@ export default function TopNewBooks({route}) {
         setLoading(false);
       }
     });
+    return () => {
+      setLoading(true);
+      setNewBook([]);
+      setKbsBook([]);
+    };
   }, []);
 
   return (

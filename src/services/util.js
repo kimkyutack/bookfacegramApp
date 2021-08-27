@@ -422,11 +422,11 @@ export const formatLastMessageTime = time => {
   }
 
   if (moment().format('YYYYMMDD') === moment(time).format('YYYYMMDD')) {
-    return formatTime(time, 'hh:mm A');
+    return formatTime(time, 'HH:mm A');
   } else if (moment().format('YYYYMM') === moment(time).format('YYYYMM')) {
-    return formatTime(time, 'MM-DD hh:mm A');
+    return formatTime(time, 'MM-DD HH:mm A');
   } else {
-    return formatTime(time, 'YYYY-MM-DD hh:mm A');
+    return formatTime(time, 'YYYY-MM-DD HH:mm A');
   }
 };
 

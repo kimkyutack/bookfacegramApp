@@ -219,7 +219,7 @@ const renderItem = ({
   );
 };
 
-export const FeedItem = React.memo(renderItem);
+export const FeedUserItem = React.memo(renderItem);
 
 const styles = StyleSheet.create({
   itemContainer: {

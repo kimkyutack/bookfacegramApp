@@ -80,7 +80,9 @@ export default function TopNewBooksList({route, newBook, kbsBook}) {
           ref={scrollRef}
           data={rednerData}
           extraData={rednerData}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           renderItem={({item, index}) => {
             return (
               <BookListItem

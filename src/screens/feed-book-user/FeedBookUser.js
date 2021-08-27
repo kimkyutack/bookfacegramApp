@@ -1,232 +1,204 @@
-import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
+import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import {
   FlatList,
   View,
   Image,
   StyleSheet,
+  Share,
   ActivityIndicator,
-  TouchableOpacity,
+  Animated,
+  Easing,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {PinchGestureHandler} from 'react-native-gesture-handler';
-import RootLayout from '../../layouts/root-layout/RootLayout';
+import {useIsFocused} from '@react-navigation/native';
+import moment from 'moment';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
-import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import Avatar from '../../components/avatar/Avatar';
+import {requestGet} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
   cameraItem,
-  screenWidth,
-  fontPercentage,
 } from '../../services/util';
-import TextWrap from '../../components/text-wrap/TextWrap';
-import TabsIcon from '../../components/tabs-icon/TabsIcon';
-import {requestGet} from '../../services/network';
+import RootLayout from '../../layouts/root-layout/RootLayout';
+import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import FastImage from 'react-native-fast-image';
-import ButtonWrap from '../../components/button-wrap/ButtonWrap';
+import {getFeedUser, booksUpdate} from '../../redux/book/BookActions';
+import {FeedUserItem} from './FeedUserItem';
 
 export default function FeedBookUser({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
+  const {
+    isLoading,
+    userBooks,
+    errorMessage,
+    profilePath,
+    followerCnt,
+    followingCnt,
+  } = useSelector(s => s.book, shallowEqual);
+
   const dispatch = useDispatch();
-
   const listRef = useRef();
-  const [myInfo, setMyInfo] = useState(true);
-  const [limit, setLimit] = useState(36);
+  const isFocused = useIsFocused();
+
+  const limit = 12;
   const [page, setPage] = useState(1);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0); // 0 my 1 other
-  const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
+  const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
+  const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
+  const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
+  const [refreshing, setRefreshing] = useState(false);
+  const opacity = useRef(new Animated.Value(0)).current;
 
-  // mock data
-  const k = [
-    {member_id: '123a', member_idx: 1, id: 1, uri: '1'},
-    {member_id: '123b', member_idx: 2, id: 2, uri: '2'},
-    {member_id: '123c', member_idx: 3, id: 3, uri: '3'},
-    {member_id: '123d', member_idx: 4, id: 4, uri: '4'},
-    {member_id: '123e', member_idx: 5, id: 5, uri: '5'},
-    {member_id: '123f', member_idx: 6, id: 6, uri: '6'},
-    {member_id: '123g', member_idx: 7, id: 7, uri: '7'},
-    {member_id: '123h', member_idx: 8, id: 8, uri: '8'},
-    {member_id: '123k', member_idx: 9, id: 9, uri: '9'},
-    {member_id: '123l', member_idx: 10, id: 10, uri: '10'},
-    {member_id: '123m', member_idx: 11, id: 11, uri: '11'},
-    {member_id: '123n', member_idx: 12, id: 12, uri: '12'},
-    {member_id: '123o', id: 13, uri: '13'},
-    {member_id: '123p', id: 14, uri: '14'},
-    {member_id: '123q', id: 15, uri: '15'},
-    {member_id: '123r', id: 16, uri: '16'},
-    {member_id: '123s', id: 17, uri: '17'},
-    {member_id: '123t', id: 18, uri: '18'},
-    {member_id: '123u', id: 19, uri: '19'},
-    {member_id: '123v', id: 20, uri: '20'},
-    {member_id: '123w', id: 21, uri: '21'},
-    {member_id: '123x', id: 22, uri: '22'},
-    {member_id: '123y', id: 23, uri: '23'},
-    {member_id: '123z', id: 24, uri: '24'},
-    {member_id: '123zz', id: 25, uri: '25'},
-    {member_id: '123zzz', id: 26, uri: '26'},
-    {member_id: '123zzzz', id: 27, uri: '27'},
-    {member_id: '123zzzzz', id: 28, uri: '28'},
-    {member_id: '123zzzzzz', id: 29, uri: '29'},
-    {member_id: '123zzzzzzz', id: 30, uri: '30'},
-    {member_id: '123zz1', id: 31, uri: '31'},
-    {member_id: '123zzz2', id: 32, uri: '32'},
-    {member_id: '123zzzz3', id: 33, uri: '33'},
-    {member_id: '123zzzzz4', id: 34, uri: '34'},
-    {member_id: '123zzzzzz5', id: 35, uri: '35'},
-    {member_id: '123zzzzzzz6', id: 36, uri: '36'},
-  ];
-  const fetchUserData = () => {
-    setLoading(true);
-    requestGet({
-      url: consts.apiUrl + '/users/' + user.member_id + '/friends',
-      query: {
-        member_idx: route.params?.member_idx
-          ? route.params?.member_idx
-          : user.member_idx,
-        page,
-        limit: limit,
-      },
-    })
-      .then(userData => {
-        if (page > 1) {
-          setData(d => [...d, ...userData]);
-        } else {
-          setData([...userData]);
-        }
-        setLoading(false);
-      })
-      .catch(e => {
-        setLoading(false);
-        // dispatch(dialogError(e));
-        if (page > 1) {
-          setData(d => [...d, ...k]);
-        } else {
-          setData([...k]);
-        }
-      });
-  };
-
-  const fetchWholeData = () => {
-    setLoading(true);
-    requestGet({
-      url: consts.apiUrl + '/users/' + user.member_id + '/friends',
-      query: {
-        page,
-        limit: limit,
-      },
-    })
-      .then(userData => {
-        if (page > 1) {
-          setData(d => [...d, ...userData]);
-        } else {
-          setData([...userData]);
-        }
-        setLoading(false);
-      })
-      .catch(e => {
-        setLoading(false);
-        // dispatch(dialogError(e));
-        if (page > 1) {
-          setData(d => [...d, ...k]);
-        } else {
-          setData([...k]);
-        }
-      });
-  };
-
-  useEffect(() => {
-    setPage(1);
-    if (tabIndex === 0) {
-      fetchUserData();
+  const fetchFeedData = reset => {
+    setRefreshing(false);
+    if (reset) {
+      dispatch(getFeedUser(route.params?.member_idx, 1, 12, time));
     } else {
-      fetchWholeData();
+      dispatch(getFeedUser(route.params?.member_idx, page, limit, time));
     }
-  }, [tabIndex]);
+  };
 
   useEffect(() => {
     if (page !== 1) {
-      if (tabIndex === 0) {
-        fetchUserData();
-      } else {
-        fetchWholeData();
-      }
+      fetchFeedData();
     }
   }, [page]);
 
   useEffect(() => {
-    if (route.params?.member_idx === user.member_idx) {
-      setMyInfo(true);
-    } else {
-      setMyInfo(false);
-    }
-    listRef.current?.scrollToOffset({y: 0, animated: false});
-    setPage(1);
-    setTabIndex(0);
-    fetchUserData();
-  }, [route.params?.member_idx]);
+    listRef.current?.scrollToIndex({
+      animated: false,
+      index: userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx)
+        ? userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx)
+        : 0,
+    });
+  }, [isFocused]);
 
-  const handleGesture = e => {
-    const oldScale = e.nativeEvent.scale;
-    if (oldScale >= 1) {
-      if (numColumns === 2) {
-        return;
+  // page 다시 계산해줘서넣어줘야함 userBook 바뀌면
+  // 아니면 page, time foodbookimage랑 feedbookuser에서는 redux로 맞춰야함
+
+  const editOnPress = () => {
+    dispatch(
+      dialogOpenSelect({
+        item: [
+          {
+            name: '수정',
+            onPress: () => console.log('수정해'),
+          },
+          {
+            name: '삭제',
+            onPress: () => console.log('삭제해'),
+          },
+        ],
+      }),
+    );
+  };
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: '공유에 보이는 메세지 link',
+        url: 'http://bam.tech',
+        title: 'Wow, did you see that?',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
       }
-      setNumColumns(numColumns - 1);
-    } else {
-      if (numColumns >= 4) {
-        return;
-      }
-      setNumColumns(numColumns + 1);
+    } catch (error) {
+      dispatch(dialogError(error));
     }
   };
 
+  const toggleHeart = feed_idx => {
+    setToggleIndex(feed_idx);
+    if (userBooks.length > 0) {
+      const modifiedList = userBooks?.map((element, index) => {
+        if (element.feedIdx === feed_idx) {
+          const idx = element.likeMemberList.indexOf(user.member_idx);
+          if (idx === -1) {
+            element.likeMemberList.push(user.member_idx);
+            element.likeCnt += 1;
+          } else {
+            element.likeMemberList.splice(idx, 1);
+            element.likeCnt -= 1;
+          }
+        }
+        return element;
+      });
+      dispatch(booksUpdate(modifiedList, 'user'));
+      fillHeart();
+    }
+  };
+
+  const fillHeart = () => {
+    Animated.sequence([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.quad,
+        useNativeDriver: true,
+      }),
+      Animated.delay(600),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const handleDoubleTap = feed_idx => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+    if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
+      toggleHeart(feed_idx);
+    } else {
+      setLastTap(now);
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(1);
+    setTime(moment().format('YYYY-MM-DD HH:mm:ss'));
+    fetchFeedData(true);
+  };
+
   const onEndReached = e => {
-    if (!loading && e.distanceFromEnd > 0) {
+    if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
       setPage(p => p + 1);
     }
   };
 
-  const renderItem = ({item, index}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(routes.feedBook, {
-            timeKey: Date.now(),
-            member_id: item.member_id,
-            member_idx: item.member_idx,
-            id: item.id,
-          });
-        }}
-        style={{
-          width: (screenWidth - 3 * (numColumns - 1)) / numColumns,
-          height: (screenWidth - 3 * (numColumns - 1)) / numColumns,
-          backgroundColor: '#000',
-          marginRight: (index + 1) % numColumns === 0 ? 0 : 3,
-          marginTop: 3,
-        }}>
-        <FastImage
-          source={{
-            // uri: item.uri,
-            uri: 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
-            priority: FastImage.priority.normal,
-          }}
-          resizeMode={FastImage.resizeMode.cover}
-          style={styles.image}
-          // onError={() => setBookThumbnail('bookDefault')}
-        />
-      </TouchableOpacity>
-    );
-  };
+  const renderItem = ({item, index}) => (
+    <FeedUserItem
+      {...item}
+      index={index}
+      login_id={user.member_id}
+      login_idx={user.member_idx}
+      editOnPress={editOnPress}
+      onShare={onShare}
+      toggleHeart={toggleHeart}
+      handleDoubleTap={handleDoubleTap}
+      opacity={opacity}
+      toggleIndex={toggleIndex}
+    />
+  );
+
+  const memoizedRenderItem = useMemo(() => renderItem, [toggleHeart]);
+  const keyExtractor = useCallback((item, index) => {
+    return item?.feedIdx.toString() + index.toString();
+  }, []);
 
   const renderFooter = () => {
-    if (!loading) {
+    if (userBooks?.length === 0 || !isLoading) {
       return <></>;
     } else {
       return (
@@ -234,16 +206,13 @@ export default function FeedBookUser({route, navigation}) {
           size="large"
           style={{
             alignSelf: 'center',
-            top: -70,
+            top: -50,
           }}
           color={colors.blue}
         />
       );
     }
   };
-
-  const memoizedRenderItem = useMemo(() => renderItem, [handleGesture]);
-  const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   return (
     <RootLayout
@@ -252,7 +221,7 @@ export default function FeedBookUser({route, navigation}) {
           ? route.params?.member_id?.split('@')[0]?.length > 12
             ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
             : route.params?.member_id?.split('@')[0]
-          : user.member_id,
+          : '유저 피드북',
         navigation: navigation,
         back: true,
         options: {
@@ -286,160 +255,50 @@ export default function FeedBookUser({route, navigation}) {
             />
           ),
           name: 'avator',
-          onPress: () =>
-            navigation.navigate(routes.feedBookUser, {
-              timeKey: Date.now(),
+          onPress: () => {
+            navigation.navigate(routes.feedBookImage, {
               member_id: user.member_id,
               member_idx: user.member_idx,
               platform_type: user.platform_type,
-            }),
+            });
+          },
         },
       }}>
-      <View style={styles.root}>
-        <View style={styles.infoContainer}>
-          <Avatar
-            size={widthPercentage(65)}
-            style={styles.avator}
-            path={
-              myInfo === true
-                ? user?.profile_path
-                  ? user?.profile_path
-                  : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-                : route.params?.uri
-                ? route.params?.uri
-                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-            }
-          />
-          {!myInfo && (
-            <ButtonWrap
-              style={
-                route.params?.status ? styles.status : styles.statusOutline
-              }
-              styleTitle={route.params?.status && styles.statusTitle}
-              outline={!route.params?.status && true}>
-              {route.params?.status ? '팔로잉' : '팔로우'}
-            </ButtonWrap>
-          )}
-          <View style={[styles.info, {marginLeft: widthPercentage(60)}]}>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>10</TextWrap>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>게시물</TextWrap>
-          </View>
-          <TouchableOpacity
-            style={styles.info}
-            onPress={() =>
-              navigation.navigate(routes.follow, {
-                timeKey: Date.now(),
-                member_id: route.params.member_id,
-                platform_type: user.platform_type,
-                type: 'follower',
-              })
-            }>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>7</TextWrap>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로워</TextWrap>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.info, {marginRight: widthPercentage(43.6)}]}
-            onPress={() =>
-              navigation.navigate(routes.follow, {
-                timeKey: Date.now(),
-                member_id: route.params.member_id,
-                platform_type: user.platform_type,
-                type: 'follow',
-              })
-            }>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>11</TextWrap>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로잉</TextWrap>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TabsIcon
-            style={styles.tabs}
-            index={tabIndex}
-            onIndexChange={t => {
-              if (tabIndex !== t) {
-                setData([]);
-              }
-              setNumColumns(3);
-              setTabIndex(t);
-            }}
-            data={['my', 'other']}
-          />
-        </View>
-
-        <PinchGestureHandler onGestureEvent={handleGesture}>
-          <FlatList
-            key={String(numColumns)}
-            numColumns={numColumns}
-            initialNumToRender={24}
-            ref={listRef}
-            data={data}
-            extraData={data}
-            removeClippedSubviews={true}
-            disableVirtualization={false}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={keyExtractor} // arrow 함수 자제
-            renderItem={memoizedRenderItem} // arrow 함수 자제
-            onEndReached={onEndReached}
-            onEndReachedThreshold={1}
-            ListFooterComponent={renderFooter}
-          />
-        </PinchGestureHandler>
-      </View>
+      <FlatList
+        initialNumToRender={12}
+        ref={listRef}
+        data={userBooks}
+        extraData={userBooks}
+        removeClippedSubviews={true}
+        disableVirtualization={false}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={keyExtractor} // arrow 함수 자제
+        renderItem={memoizedRenderItem} // arrow 함수 자제
+        onEndReached={onEndReached}
+        onEndReachedThreshold={1}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
+        windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
+        ListFooterComponent={renderFooter}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            listRef.current?.scrollToIndex({
+              index: info.index,
+              animated: false,
+            });
+          });
+        }}
+      />
     </RootLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  infoContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-  },
-  info: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabs: {
-    marginTop: 10,
-  },
-
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  status: {
-    position: 'absolute',
-    bottom: 0,
-    left: widthPercentage(60),
-    width: widthPercentage(42),
-    height: heightPercentage(16),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#006fff',
-  },
-  statusOutline: {
-    position: 'absolute',
-    bottom: 0,
-    left: widthPercentage(60),
-    width: widthPercentage(42),
-    height: heightPercentage(16),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statusTitle: {
-    color: colors.white,
-
-    fontSize: fontPercentage(10),
-    lineHeight: fontPercentage(19),
   },
 });

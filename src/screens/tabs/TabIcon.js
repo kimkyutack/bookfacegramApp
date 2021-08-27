@@ -4,7 +4,7 @@ import {useSelector, shallowEqual} from 'react-redux';
 import Length from '../../components/length/Length';
 import routes from '../../libs/routes';
 export default function TabIcon({focused, icon, focusedIcon, name}) {
-  const {length} = useSelector(s => s.chat, shallowEqual);
+  // const {length} = useSelector(s => s.chat, shallowEqual);
 
   return (
     <View>
@@ -16,11 +16,11 @@ export default function TabIcon({focused, icon, focusedIcon, name}) {
           resizeMode: 'contain',
         }}
       />
-      {name === routes.tabChat && parseInt(length) > 0 && (
+      {/* {name === routes.tabChat && parseInt(length) > 0 && (
         <Length top={-4} right={length < 10 ? -5 : length < 100 ? -12 : -18}>
           {length}
         </Length>
-      )}
+      )} */}
     </View>
   );
 }

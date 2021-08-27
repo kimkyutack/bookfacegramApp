@@ -38,6 +38,7 @@ export const userSignOut = userId => async dispatch => {
   dispatch({type: 'clear'});
   if (platformType === 'kakao') {
     await logout();
+    // await unlink();
   }
 };
 
@@ -65,7 +66,6 @@ export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
       dispatch({type: userActionType.update, user});
     }
   } catch (error) {
-    // console.log(error);
     dispatch(dialogError(error));
   }
 };
@@ -89,6 +89,7 @@ export const userCheckToken = async dispatch => {
     const {data, status} = await requestGet({
       url: consts.apiUrl + '/auth/checkJwt',
     });
+
     if (status === 'FAIL') {
       throw 'member is null';
     } else if (status === 'SUCCESS') {

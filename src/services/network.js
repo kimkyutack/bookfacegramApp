@@ -60,7 +60,7 @@ export const requestFile = async ({url, method, headers = {}}, form) => {
           throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh request Error';
+        throw 'token expire request Error';
       }
     }
     let errorObj;
@@ -121,7 +121,7 @@ export const requestPost = async ({url, body = {}, headers = {}, file}) => {
           throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh request Error';
+        throw 'token expire request Error';
       }
     }
     let errorObj;
@@ -192,7 +192,7 @@ export const requestDelete = async ({url, headers, query = {}}) => {
           throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh request Error';
+        throw 'token expire request Error';
       }
     }
     let errorObj;
@@ -253,7 +253,7 @@ export const requestPut = async ({url, body = {}, headers = {}, file}) => {
           throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh request Error';
+        throw 'token expire request Error';
       }
     }
     let errorObj;
@@ -323,10 +323,10 @@ export const requestGet = async ({url, headers, query = {}}) => {
             throw 'origin request Error';
           }
         } else if (response2.data.status === 'FAIL') {
-          throw 'refresh request Error';
+          throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh token Error';
+        throw 'token expire request Error';
       }
     }
     // other error
@@ -388,7 +388,7 @@ export const requestPatch = async ({url, body = {}, headers}) => {
           throw 'refresh request FAIL';
         }
       } catch (e) {
-        throw 'refresh request Error';
+        throw 'token expire request Error';
       }
     }
     let errorObj;

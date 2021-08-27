@@ -47,11 +47,21 @@ export default function ToapingLogin({}) {
         },
       });
       if (status === 'SUCCESS') {
-        await setItem('accessToken', data.accessToken);
-        await setItem('refreshToken', data.refreshToken);
-        await setItem('platformType', 'toaping');
-        await setItem('toapingId', username);
-        await setItem('toapingPw', password);
+        if (data?.lnupMember) {
+          navigate(routes.registerForm, {
+            data: data?.lnupMember,
+            userId: username,
+            password: password,
+            platformType: 'toaping',
+          });
+        } else {
+          await setItem('accessToken', data.accessToken);
+          await setItem('refreshToken', data.refreshToken);
+          await setItem('platformType', 'toaping');
+          await setItem('toapingId', username);
+          await setItem('toapingPw', password);
+          dispatch(userCheckToken);
+        }
         dispatch(
           dialogOpenMessage({
             label: '확인',

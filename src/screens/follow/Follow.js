@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
@@ -20,18 +22,64 @@ import {
 } from '../../services/util';
 import routes from '../../libs/routes';
 import Tabs from '../../components/tabs/Tabs';
-
+import consts from '../../libs/consts';
 import {FollowItem} from './FollowItem';
 
 export default function Follow({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
   const [loading, setLoading] = useState(false);
 
-  const [data, setData] = useState([
-    {id: 1, member_id: 'sdf', platform_type: 'kakao', status: true, uri: ''},
-  ]);
+  const [data, setData] = useState([]);
   const [tabIndex, setTabIndex] = useState(0); // 0 계정 1 해시태그
+
+  const fetchFeedData = type => {
+    setLoading(true);
+    if (type === 'follower') {
+      requestGet({
+        url: consts.apiUrl + '/mypage/feedBook/follow/follower',
+        query: {
+          memberIdx: route.params?.member_idx,
+        },
+      })
+        .then(res => {
+          if (res.status === 'SUCCESS') {
+            setData(res.data?.feedFollower);
+          } else if (data.status === 'FAIL') {
+            // error 일때 해야함
+          } else {
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          // error 일때 해야함
+
+          setLoading(false);
+        });
+    } else {
+      requestGet({
+        url: consts.apiUrl + '/mypage/feedBook/follow/following',
+        query: {
+          memberIdx: route.params?.member_idx,
+        },
+      })
+        .then(res => {
+          if (res.status === 'SUCCESS') {
+            setData(res.data?.feedFollowing);
+          } else if (data.status === 'FAIL') {
+            // error 일때 해야함
+          } else {
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          // error 일때 해야함
+          setLoading(false);
+        });
+    }
+  };
 
   useEffect(() => {
     if (route.params.type === 'follower') {
@@ -39,129 +87,13 @@ export default function Follow({route, navigation}) {
     } else {
       setTabIndex(1);
     }
-  }, [route.params?.timeKey]);
+  }, [isFocused]);
 
   useEffect(() => {
     if (tabIndex === 0) {
-      // fetchUserData();
-      setData([
-        {
-          id: 1,
-          member_id: '팔로워1',
-          member_idx: 1,
-          platform_type: 'kakao',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 2,
-          member_id: '팔로워2',
-          member_idx: 2,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 3,
-          member_id: '팔로워3',
-          member_idx: 3,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 4,
-          member_id: '팔로워4',
-          member_idx: 4,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 5,
-          member_id: '팔로워5',
-          member_idx: 5,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 6,
-          member_id: '팔로워6',
-          member_idx: 6,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 7,
-          member_id: '팔로워7',
-          member_idx: 7,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 8,
-          member_id: '팔로워8',
-          member_idx: 8,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 9,
-          member_id: '팔로워9',
-          member_idx: 9,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 10,
-          member_id: '팔로워10',
-          member_idx: 10,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 11,
-          member_id: '팔로워11',
-          member_idx: 11,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-        {
-          id: 12,
-          member_id: '팔로워12',
-          member_idx: 12,
-          platform_type: 'toaping',
-          status: false,
-          uri: '',
-        },
-      ]);
+      fetchFeedData('follower');
     } else {
-      // fetchWholeData();
-      setData([
-        {
-          id: 1,
-          member_id: '팔로우1',
-          member_idx: 1,
-          platform_type: 'app',
-          status: true,
-          uri: '',
-        },
-        {
-          id: 2,
-          member_id: '팔로우2',
-          member_idx: 2,
-          platform_type: 'facegram',
-          status: false,
-          uri: '',
-        },
-      ]);
+      fetchFeedData('follow');
     }
   }, [tabIndex]);
 
@@ -169,9 +101,9 @@ export default function Follow({route, navigation}) {
     <RootLayout
       topbar={{
         title:
-          user.member_id?.split('@')[0]?.length > 12
-            ? user.member_id?.split('@')[0]?.substring(0, 12) + '...'
-            : user.member_id?.split('@')[0],
+          route.params?.member_id?.split('@')[0]?.length > 12
+            ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
+            : route.params?.member_id?.split('@')[0],
         navigation: navigation,
         back: true,
         options: {
@@ -206,7 +138,7 @@ export default function Follow({route, navigation}) {
           ),
           name: 'avator',
           onPress: () =>
-            navigation.navigate(routes.feedBookUser, {
+            navigation.navigate(routes.feedBookImage, {
               timeKey: Date.now(),
               member_id: user.member_id,
               member_idx: user.member_idx,
@@ -237,9 +169,9 @@ export default function Follow({route, navigation}) {
         <FlatList
           data={data}
           extraData={data}
-          keyExtractor={(item, index) =>
-            item.memberId + '' + item.userId + index
-          }
+          keyExtractor={(item, index) => {
+            return item.memberId + '' + item.userId + index;
+          }}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
             loading && (
@@ -259,13 +191,11 @@ export default function Follow({route, navigation}) {
               <FollowItem
                 {...item}
                 onPress={() =>
-                  navigation.navigate(routes.feedBookUser, {
-                    timeKey: Date.now(),
-                    member_id: item.member_id,
-                    member_idx: item.member_idx,
-                    platform_type: item.platform_type,
-                    uri: item.uri,
-                    status: item.status,
+                  navigation.navigate(routes.feedBookImage, {
+                    member_id: item.memberId,
+                    member_idx: item.memberIdx,
+                    platform_type: item.platformType,
+                    uri: item.profile_path,
                   })
                 }
                 tabIndex={tabIndex}

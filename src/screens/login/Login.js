@@ -36,13 +36,14 @@ import {
 } from '../../redux/dialog/DialogActions';
 import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
 import {navigationRef, reset, navigate} from '../../services/navigation';
-import {requestPost} from '../../services/network';
+import {requestGet, requestPost} from '../../services/network';
 import {getItem, setItem} from '../../services/preference';
 import {screenWidth, validationEmail} from '../../services/util';
 import Avatar from '../../components/avatar/Avatar';
 import {
   getProfile as getKakaoProfile,
   login,
+  unlink,
   loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
 
@@ -61,14 +62,13 @@ export default function Login({route}) {
   }, [username, password]);
 
   useEffect(() => {
-    if (user.signed) {
-      if (user.intro_setting) {
-        reset(routes.home);
-      } else {
-        navigate(routes.intro1, {age: user.age});
-      }
-    }
-  }, [user.signed]);
+    return () => {
+      setLoading(false);
+      setPasswordError('');
+      setUsername('');
+      setPassword('');
+    };
+  }, []);
 
   const handleLogin = async type => {
     setLoading(true);
@@ -94,11 +94,21 @@ export default function Login({route}) {
           platformType: type,
         },
       });
+
       if (status === 'SUCCESS') {
-        await setItem('accessToken', data.accessToken);
-        await setItem('refreshToken', data.refreshToken);
-        await setItem('platformType', type);
-        dispatch(userCheckToken);
+        if (data?.lnupMember) {
+          navigate(routes.registerForm, {
+            data: data?.lnupMember,
+            userId: userId,
+            password: userPw,
+            platformType: type,
+          });
+        } else {
+          await setItem('accessToken', data.accessToken);
+          await setItem('refreshToken', data.refreshToken);
+          await setItem('platformType', type);
+          dispatch(userCheckToken);
+        }
       } else if (status === 'FAIL') {
         setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
@@ -107,14 +117,22 @@ export default function Login({route}) {
         setLoading(false);
         navigate(routes.toapingLogin);
       } else {
-        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
-        // dispatch(
-        //   dialogOpenMessage({
-        //     message:
-        //       error?.data?.msg ||
-        //       (typeof error === 'object' ? JSON.stringify(error) : error),
-        //   }),
-        // );
+        if (type === 'app') {
+          setPasswordError(
+            '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.',
+          );
+        } else {
+          dispatch(
+            dialogOpenMessage({
+              message:
+                error?.data?.msg ||
+                error?.message ||
+                (typeof error === 'object' ? JSON.stringify(error) : error),
+            }),
+          );
+          setLoading(false);
+          navigate(routes.toapingLogin);
+        }
       }
     }
     setLoading(false);
@@ -158,6 +176,7 @@ export default function Login({route}) {
   };
 
   const signInWithKakao = async () => {
+    // await unlink();
     dispatch(
       dialogOpenSelect({
         item: [
@@ -171,7 +190,9 @@ export default function Login({route}) {
             name: '다른 카카오계정으로 로그인',
             source: images.kakaoIcon,
             type: 'login',
-            onPress: () => signInWithKakaoType('change'),
+            onPress: async () => {
+              await signInWithKakaoType('change');
+            },
           },
         ],
       }),
@@ -186,11 +207,75 @@ export default function Login({route}) {
       } else if (type === 'change') {
         token = await loginWithKakaoAccount('change');
       }
+
+      const profile = await getKakaoProfile();
+
+      let serviceTerms = {};
+      try {
+        serviceTerms = await requestGet({
+          url: 'https://kapi.kakao.com/v1/user/service/terms',
+          // query: {extra: 'app_service_terms'},
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+          },
+        });
+      } catch (e) {
+        throw 'get kakao serviceTerms error';
+      }
+
       const {data, status} = await requestPost({
-        url: consts.apiUrl + '/auth/snsLogin',
+        url: consts.apiUrl + '/auth/kakaoLogin',
         body: {
           platformType: 'kakao',
-          snsToken: token.accessToken,
+          memberId: profile.email ? profile.email : '',
+          sex:
+            profile.gender === 'null'
+              ? ''
+              : profile.gender === 'MALE'
+              ? '남'
+              : '여',
+          handphone:
+            profile.phoneNumber === 'null'
+              ? ''
+              : convertKorPhoneFormat(profile.phoneNumber),
+          birth_day:
+            profile?.birthday === 'null'
+              ? ''
+              : profile?.birthday.length === 4
+              ? profile.birthday
+              : '0' + profile.birthday,
+          birth_year: profile.birthyear === 'null' ? '' : profile.birthyear,
+          age:
+            profile.birthyear === 'null'
+              ? ''
+              : getAgeFromMoment(
+                  profile.birthyear + profile.birthDay,
+                  'YYYYMMDD',
+                ),
+          kor_nm: profile.nickname,
+          email: profile.email,
+          profile_path: profile.thumbnailImageUrl,
+          agree_sms: serviceTerms?.allowed_service_terms
+            ? serviceTerms?.allowed_service_terms
+                ?.map(x => x.tag)
+                .indexOf('agree_sms') !== -1
+              ? 1
+              : 0
+            : 0,
+          agree_email: serviceTerms?.allowed_service_terms
+            ? serviceTerms?.allowed_service_terms
+                ?.map(x => x.tag)
+                .indexOf('agree_email') !== -1
+              ? 1
+              : 0
+            : 0,
+          agree_app_push: serviceTerms?.allowed_service_terms
+            ? serviceTerms?.allowed_service_terms
+                ?.map(x => x.tag)
+                .indexOf('agree_app_push') !== -1
+              ? 1
+              : 0
+            : 0,
         },
       });
       if (status === 'SUCCESS') {

@@ -67,7 +67,9 @@ const renderItem = ({
           data={replys}
           extraData={replys}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index1) => index1.toString()}
+          keyExtractor={(item, index1) => {
+            return index1.toString();
+          }}
           renderItem={({item, index1}) => {
             return <ReplyItem {...item} index={index1} />;
           }}
