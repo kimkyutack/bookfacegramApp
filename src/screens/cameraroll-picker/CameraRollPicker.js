@@ -104,7 +104,7 @@ export default function CameraRollPicker({navigation}) {
           ),
           onPress: () =>
             navigation.navigate(routes.photoEditor, {
-              route: routes.feedBook,
+              route: routes.feedBookUser,
               image: convertFileArr,
               dataKey: 'image',
               key: Date.now(),

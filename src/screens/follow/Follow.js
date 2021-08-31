@@ -54,6 +54,8 @@ export default function Follow({route, navigation}) {
           setLoading(false);
         })
         .catch(error => {
+          console.log('error');
+          console.log(error);
           // error 일때 해야함
 
           setLoading(false);
@@ -75,7 +77,9 @@ export default function Follow({route, navigation}) {
           setLoading(false);
         })
         .catch(error => {
-          // error 일때 해야함
+          // error 일때 해야함')
+          console.log('error');
+          console.log(error);
           setLoading(false);
         });
     }
@@ -95,7 +99,7 @@ export default function Follow({route, navigation}) {
     } else {
       fetchFeedData('follow');
     }
-  }, [tabIndex]);
+  }, [tabIndex, isFocused]);
 
   return (
     <RootLayout
@@ -163,7 +167,10 @@ export default function Follow({route, navigation}) {
         }}
         data={['팔로워', '팔로우']}
         // user 의 팔로워, 팔로우 숫자
-        dataPin={[10, 25]}
+        dataPin={[
+          route.params.followerCnt || 0,
+          route.params.followingCnt || 0,
+        ]}
       />
       <View style={styles.itemContainer}>
         <FlatList

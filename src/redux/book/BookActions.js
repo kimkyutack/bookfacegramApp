@@ -1,5 +1,4 @@
 import React, {useCallback} from 'react';
-import moment from 'moment';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import {reset} from '../../services/navigation';
@@ -14,6 +13,7 @@ import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 
 export const bookActionType = {
   loading: 'book/loading',
+  refreshing: 'book/refreshing',
   followSuccess: 'book/follow/success',
   followSuccessPaging: 'book/follow/successPaging',
   userSuccess: 'book/user/success',
@@ -22,13 +22,15 @@ export const bookActionType = {
   allSuccessPaging: 'book/all/successPaging',
   followUpdate: 'book/follow/update',
   userUpdate: 'book/user/update',
+  userPageUpdate: 'book/user/page/update',
   allUpdate: 'book/all/update',
   failure: 'book/failure',
+  allFailure: 'book/all/failure',
   init: 'book/init',
 };
 
 export const getFeedHome =
-  (page = 1, limit = 12, time = moment().format('YYYY-MM-DD HH:mm:ss')) =>
+  (page = 1, limit = 12, time) =>
   async dispatch => {
     dispatch({type: bookActionType.loading});
     requestGet({
@@ -42,7 +44,7 @@ export const getFeedHome =
       .then(data => {
         if (data.status === 'SUCCESS') {
           if (data.data?.feedBookMainList.length === 0) {
-            throw 'data end';
+            throw 'page end';
           }
           dispatch({
             type:
@@ -72,12 +74,7 @@ export const getFeedHome =
   };
 
 export const getFeedUser =
-  (
-    memberIdx,
-    page = 1,
-    limit = 36,
-    time = moment().format('YYYY-MM-DD HH:mm:ss'),
-  ) =>
+  (memberIdx, page = 1, limit = 36, time) =>
   async dispatch => {
     dispatch({type: bookActionType.loading});
     requestGet({
@@ -92,7 +89,7 @@ export const getFeedUser =
       .then(data => {
         if (data.status === 'SUCCESS') {
           if (data.data?.myFeedBook.length === 0) {
-            throw 'data end';
+            throw 'page end';
           }
           dispatch({
             type:
@@ -100,6 +97,8 @@ export const getFeedUser =
                 ? bookActionType.userSuccessPaging
                 : bookActionType.userSuccess,
             data: data.data?.myFeedBook,
+            page: page,
+            limit: limit,
             profilePath: data.data?.profile,
             followerCnt: data.data?.followerCnt,
             followingCnt: data.data?.followingCnt,
@@ -125,7 +124,7 @@ export const getFeedUser =
   };
 
 export const getFeedAll =
-  (page = 1, limit = 12, time = moment().format('YYYY-MM-DD HH:mm:ss')) =>
+  (page, limit = 36, time) =>
   async dispatch => {
     dispatch({type: bookActionType.loading});
     requestGet({
@@ -139,7 +138,7 @@ export const getFeedAll =
       .then(data => {
         if (data.status === 'SUCCESS') {
           if (data.data?.feedBookAllList.length === 0) {
-            throw 'data end';
+            throw 'page end';
           }
           dispatch({
             type:
@@ -152,14 +151,14 @@ export const getFeedAll =
           dispatch({type: bookActionType.failure, data: data?.msg});
         } else {
           dispatch({
-            type: bookActionType.failure,
+            type: bookActionType.allFailure,
             data: `error code : ${data?.code}`,
           });
         }
       })
       .catch(error => {
         dispatch({
-          type: bookActionType.failure,
+          type: bookActionType.allFailure,
           data:
             error?.data?.msg ||
             error?.message ||
@@ -170,12 +169,20 @@ export const getFeedAll =
 
 export const booksUpdate = (books, viewType) => dispatch => {
   if (viewType === 'follow') {
-    dispatch({type: bookActionType.followUpdate, followData: books});
+    dispatch({type: bookActionType.followUpdate, data: books});
   } else if (viewType === 'user') {
-    dispatch({type: bookActionType.userUpdate, userData: books});
+    dispatch({type: bookActionType.userUpdate, data: books});
   } else {
-    dispatch({type: bookActionType.allUpdate, allData: books});
+    dispatch({type: bookActionType.allUpdate, data: books});
   }
+};
+
+export const userPageUpdate = page => dispatch => {
+  dispatch({type: bookActionType.userPageUpdate, data: page});
+};
+
+export const setRefreshing = () => dispatch => {
+  dispatch({type: bookActionType.refreshing});
 };
 
 export const initErrorMessage = () => dispatch => {

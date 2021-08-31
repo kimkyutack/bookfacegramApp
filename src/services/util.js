@@ -57,7 +57,7 @@ export const cameraItem = () => {
               return;
             }
             navigate(routes.photoEditor, {
-              route: routes.feedBook,
+              route: routes.feedBookUser,
               image: file,
               dataKey: 'image',
               key: Date.now(),
@@ -99,9 +99,10 @@ export const cameraItem = () => {
               return;
             }
             navigate(routes.photoEditor, {
-              route: routes.feedBook,
+              route: routes.feedBookUser,
               image: file,
               dataKey: 'image',
+              isNew: true,
               key: Date.now(),
               name: 'file',
             });

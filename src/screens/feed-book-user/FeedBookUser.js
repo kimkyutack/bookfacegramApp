@@ -25,36 +25,41 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {getFeedUser, booksUpdate} from '../../redux/book/BookActions';
+import {
+  getFeedUser,
+  booksUpdate,
+  userPageUpdate,
+  setRefreshing,
+} from '../../redux/book/BookActions';
 import {FeedUserItem} from './FeedUserItem';
 
 export default function FeedBookUser({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const {
     isLoading,
+    isRefreshing,
     userBooks,
     errorMessage,
     profilePath,
     followerCnt,
     followingCnt,
+    page,
   } = useSelector(s => s.book, shallowEqual);
 
   const dispatch = useDispatch();
   const listRef = useRef();
   const isFocused = useIsFocused();
 
-  const limit = 12;
-  const [page, setPage] = useState(1);
+  const limit = 36;
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
+
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
-  const [refreshing, setRefreshing] = useState(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
-  const fetchFeedData = reset => {
-    setRefreshing(false);
+  const fetchFeedData = (reset, newTime) => {
     if (reset) {
-      dispatch(getFeedUser(route.params?.member_idx, 1, 12, time));
+      dispatch(getFeedUser(route.params?.member_idx, 1, limit, newTime));
     } else {
       dispatch(getFeedUser(route.params?.member_idx, page, limit, time));
     }
@@ -67,16 +72,52 @@ export default function FeedBookUser({route, navigation}) {
   }, [page]);
 
   useEffect(() => {
-    listRef.current?.scrollToIndex({
-      animated: false,
-      index: userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx)
-        ? userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx)
-        : 0,
-    });
-  }, [isFocused]);
+    if (route.params.isNew) {
+      const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      setTime(newTime);
+      fetchFeedData(true, newTime);
+      listRef.current?.scrollToOffset({y: 0, animated: false});
+    } else {
+      const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      setTime(newTime);
+      fetchFeedData(true, newTime);
+      // if (
+      //   userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx) !== -1
+      // ) {
+      //   listRef.current?.scrollToIndex({
+      //     animated: false,
+      //     index: userBooks?.findIndex(
+      //       x => x?.feedIdx === route.params?.feedIdx,
+      //     ),
+      //   });
+      // }
+    }
+  }, [route.params.key]);
 
-  // page 다시 계산해줘서넣어줘야함 userBook 바뀌면
-  // 아니면 page, time foodbookimage랑 feedbookuser에서는 redux로 맞춰야함
+  useEffect(() => {
+    const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    setTime(newTime);
+    fetchFeedData(true, newTime);
+    // if (
+    //   userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx) !== -1
+    // ) {
+    //   listRef.current?.scrollToIndex({
+    //     animated: false,
+    //     index: userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx),
+    //   });
+    // }
+  }, [route.params.member_idx]);
+
+  useEffect(() => {
+    if (
+      userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx) !== -1
+    ) {
+      listRef.current?.scrollToIndex({
+        animated: false,
+        index: userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx),
+      });
+    }
+  }, [userBooks]);
 
   const editOnPress = () => {
     dispatch(
@@ -132,6 +173,7 @@ export default function FeedBookUser({route, navigation}) {
         }
         return element;
       });
+
       dispatch(booksUpdate(modifiedList, 'user'));
       fillHeart();
     }
@@ -165,15 +207,15 @@ export default function FeedBookUser({route, navigation}) {
   };
 
   const handleRefresh = () => {
-    setRefreshing(true);
-    setPage(1);
-    setTime(moment().format('YYYY-MM-DD HH:mm:ss'));
-    fetchFeedData(true);
+    dispatch(userPageUpdate(1));
+    const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    setTime(newTime);
+    fetchFeedData(true, newTime);
   };
 
   const onEndReached = e => {
-    if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
-      setPage(p => p + 1);
+    if (!isLoading && !isRefreshing && e.distanceFromEnd > 0 && !errorMessage) {
+      dispatch(userPageUpdate(page + 1));
     }
   };
 
@@ -265,7 +307,7 @@ export default function FeedBookUser({route, navigation}) {
         },
       }}>
       <FlatList
-        initialNumToRender={12}
+        initialNumToRender={userBooks.length}
         ref={listRef}
         data={userBooks}
         extraData={userBooks}
@@ -276,19 +318,24 @@ export default function FeedBookUser({route, navigation}) {
         renderItem={memoizedRenderItem} // arrow 함수 자제
         onEndReached={onEndReached}
         onEndReachedThreshold={1}
-        refreshing={refreshing}
+        refreshing={isRefreshing}
         onRefresh={handleRefresh}
         maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}
         onScrollToIndexFailed={info => {
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
-          wait.then(() => {
-            listRef.current?.scrollToIndex({
-              index: info.index,
-              animated: false,
+          if (
+            userBooks?.findIndex(x => x?.feedIdx === route.params?.feedIdx) !==
+            -1
+          ) {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              listRef.current?.scrollToIndex({
+                index: info.index,
+                animated: false,
+              });
             });
-          });
+          }
         }}
       />
     </RootLayout>

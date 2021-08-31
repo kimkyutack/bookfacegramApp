@@ -87,7 +87,7 @@ export default function PhotoEditor({route, navigation}) {
       } else {
         try {
           // android file write on phone
-          if (params.image.length > 1) {
+          if (params?.image?.length > 1) {
             // 여러장
             const formData = new FormData();
             const file = [];
@@ -115,17 +115,15 @@ export default function PhotoEditor({route, navigation}) {
               navigate(params.route, {
                 [params.dataKey]: params.image,
                 key: params.key,
-                isImage: true,
+                isNew: true,
+                member_id: user.member_id,
+                member_idx: user.member_idx,
+                // feedIdx: item.feedIdx,
               });
             }
           } else {
             // 한장
-            if (params.name === 'camera') {
-              const saveResult = await CameraRoll.save(params.image[0].uri, {
-                type: 'photo',
-                album: 'toaping',
-              });
-            }
+
             var formData = new FormData();
             var file = [];
             file.push({
@@ -147,11 +145,19 @@ export default function PhotoEditor({route, navigation}) {
             );
             if (status === 'SUCCESS') {
               setSaveButtonDisabled(false);
-
+              if (params?.name === 'camera') {
+                const saveResult = await CameraRoll.save(params.image[0].uri, {
+                  type: 'photo',
+                  album: 'toaping',
+                });
+              }
               navigate(params.route, {
                 [params.dataKey]: params.image,
                 key: params.key,
-                isImage: true,
+                isNew: true,
+                member_id: user.member_id,
+                member_idx: user.member_idx,
+                // feedIdx: item.feedIdx,
               });
             }
           }

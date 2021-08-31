@@ -32,6 +32,8 @@ import {
   getFeedHome,
   getFeedUser,
   booksUpdate,
+  userPageUpdate,
+  getFeedAll,
 } from '../../redux/book/BookActions';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import FastImage from 'react-native-fast-image';
@@ -44,64 +46,72 @@ export default function FeedBookImage({route, navigation}) {
     userBooks,
     allBooks,
     errorMessage,
+    allErrorMessage,
     profilePath,
     followerCnt,
     followingCnt,
+    page,
   } = useSelector(s => s.book, shallowEqual);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const listRef = useRef();
   const [myInfo, setMyInfo] = useState(true);
 
-  // console.log('user route.params?.member_idx', route.params?.member_idx);
   const limit = 36;
-  const [page, setPage] = useState(1);
+  const [allPage, setAllPage] = useState(1);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   const [tabIndex, setTabIndex] = useState(0); // 0 my 1 other
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 
-  const fetchUserData = reset => {
+  const fetchUserData = (reset, newTime) => {
     if (reset) {
-      dispatch(getFeedUser(route.params?.member_idx, 1, limit, time));
+      dispatch(getFeedUser(route.params?.member_idx, 1, limit, newTime));
     } else {
       dispatch(getFeedUser(route.params?.member_idx, page, limit, time));
     }
   };
 
-  const fetchWholeData = () => {};
+  const fetchWholeData = (reset, newTime) => {
+    if (reset) {
+      dispatch(getFeedAll(1, limit, newTime));
+    } else {
+      dispatch(getFeedAll(allPage, limit, time));
+    }
+  };
 
   useEffect(() => {
-    setPage(1);
-    if (tabIndex === 0) {
-      fetchUserData();
-    } else {
-      fetchWholeData();
+    if (isFocused) {
+      listRef.current?.scrollToOffset({y: 0, animated: false});
+      if (tabIndex === 1) {
+        const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        setTime(newTime);
+        fetchWholeData();
+      }
     }
   }, [tabIndex]);
 
   useEffect(() => {
-    if (page !== 1) {
-      if (tabIndex === 0) {
-        fetchUserData();
-      } else {
-        fetchWholeData();
-      }
+    if (allPage !== 1) {
+      fetchWholeData();
     }
-  }, [page]);
+  }, [allPage]);
 
   useEffect(() => {
-    if (route.params?.member_idx === user.member_idx) {
-      setMyInfo(true);
-    } else {
-      setMyInfo(false);
+    if (isFocused) {
+      if (route.params?.member_idx === user.member_idx) {
+        setMyInfo(true);
+      } else {
+        setMyInfo(false);
+      }
+      listRef.current?.scrollToOffset({y: 0, animated: false});
+      dispatch(userPageUpdate(1));
+      setTabIndex(0);
+      const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      setTime(newTime);
+      fetchUserData(true, newTime);
     }
-    listRef.current?.scrollToOffset({y: 0, animated: false});
-    setPage(1);
-    setTabIndex(0);
-    setTime(moment().format('YYYY-MM-DD HH:mm:ss'));
-    fetchUserData(true);
-  }, [route.params?.member_idx, isFocused]);
+  }, [route.params?.member_idx]);
 
   const handleGesture = e => {
     const oldScale = e.nativeEvent.scale;
@@ -119,8 +129,16 @@ export default function FeedBookImage({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
-      setPage(p => p + 1);
+    if (tabIndex === 0) {
+      if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
+        console.log('user end reach');
+        dispatch(userPageUpdate(page + 1));
+      }
+    } else {
+      if (!isLoading && e.distanceFromEnd > 0 && !allErrorMessage) {
+        console.log('all end reach');
+        setAllPage(p => p + 1);
+      }
     }
   };
 
@@ -132,6 +150,8 @@ export default function FeedBookImage({route, navigation}) {
             member_id: item.memberId,
             member_idx: item.memberIdx,
             feedIdx: item.feedIdx,
+            isNew: false,
+            key: Date.now(),
           });
         }}
         style={{
@@ -259,10 +279,14 @@ export default function FeedBookImage({route, navigation}) {
                 member_id: route.params.member_id,
                 member_idx: route.params.member_idx,
                 platform_type: user.platform_type,
+                followerCnt: followerCnt,
+                followingCnt: followingCnt,
                 type: 'follower',
               })
             }>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>7</TextWrap>
+            <TextWrap font={fonts.kopubWorldDotumProMedium}>
+              {followerCnt ? followerCnt : 0}
+            </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로워</TextWrap>
           </TouchableOpacity>
           <TouchableOpacity
@@ -272,10 +296,14 @@ export default function FeedBookImage({route, navigation}) {
                 member_id: route.params.member_id,
                 member_idx: route.params.member_idx,
                 platform_type: user.platform_type,
+                followerCnt: followerCnt,
+                followingCnt: followingCnt,
                 type: 'follow',
               })
             }>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>11</TextWrap>
+            <TextWrap font={fonts.kopubWorldDotumProMedium}>
+              {followingCnt ? followingCnt : 0}
+            </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로잉</TextWrap>
           </TouchableOpacity>
         </View>
@@ -297,10 +325,10 @@ export default function FeedBookImage({route, navigation}) {
           <FlatList
             key={String(numColumns)}
             numColumns={numColumns}
-            initialNumToRender={24}
+            initialNumToRender={36}
             ref={listRef}
-            data={userBooks}
-            extraData={userBooks}
+            data={tabIndex === 0 ? userBooks : allBooks}
+            extraData={tabIndex === 0 ? userBooks : allBooks}
             removeClippedSubviews={true}
             disableVirtualization={false}
             showsVerticalScrollIndicator={false}

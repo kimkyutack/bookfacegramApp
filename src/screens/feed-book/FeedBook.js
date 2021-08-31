@@ -48,10 +48,10 @@ export default function FeedBook({route, navigation}) {
   const [refreshing, setRefreshing] = useState(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
-  const fetchFeedData = reset => {
+  const fetchFeedData = (reset, newTime) => {
     setRefreshing(false);
     if (reset) {
-      dispatch(getFeedHome(1, limit, time));
+      dispatch(getFeedHome(1, limit, newTime));
     } else {
       dispatch(getFeedHome(page, limit, time));
     }
@@ -156,8 +156,9 @@ export default function FeedBook({route, navigation}) {
   const handleRefresh = async () => {
     setRefreshing(true);
     setPage(1);
-    setTime(moment().format('YYYY-MM-DD HH:mm:ss'));
-    fetchFeedData(true);
+    const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    setTime(newTime);
+    fetchFeedData(true, newTime);
   };
 
   const onEndReached = e => {
