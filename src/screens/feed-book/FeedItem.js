@@ -33,6 +33,8 @@ const renderItem = ({
   feedIdx,
   memberId,
   memberIdx,
+  profile,
+  userProfile,
   feedImgName,
   likeCnt,
   likeMemberList,
@@ -61,10 +63,9 @@ const renderItem = ({
             size={widthPercentage(25)}
             style={styles.avator}
             path={
-              'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-              // feedImgName
-              //   ? consts.imgUrl + '/feedBook/' + feedImgName[0]
-              //   : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+              profile
+                ? profile
+                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.info}>
@@ -135,8 +136,8 @@ const renderItem = ({
               navigate(routes.comment, {
                 timeKey: Date.now(),
                 id: feedIdx,
-                member_id: memberId,
-                member_idx: memberIdx,
+                memberId: memberId,
+                memberIdx: memberIdx,
               })
             }
             style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
@@ -188,19 +189,18 @@ const renderItem = ({
           onPress={() =>
             navigate(routes.comment, {
               timeKey: Date.now(),
-              id: feedIdx,
-              member_id: memberId,
-              member_idx: memberIdx,
+              feedIdx: feedIdx,
+              memberId: memberId,
+              memberIdx: memberIdx,
             })
           }>
           <Avatar
             size={widthPercentage(17)}
             style={styles.avator}
             path={
-              'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-              // uri
-              //   ? uri
-              //   : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+              userProfile
+                ? userProfile
+                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.reply}>

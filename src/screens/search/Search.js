@@ -246,10 +246,10 @@ export default function Search({route, navigation}) {
           name: 'avator',
           onPress: () =>
             navigation.navigate(routes.feedBookImage, {
-              timeKey: Date.now(),
-              member_id: user.member_id,
-              member_idx: user.member_idx,
-              platform_type: user.platform_type,
+              memberId: user.member_id,
+              memberIdx: user.member_idx,
+              platformType: user.platform_type,
+              key: Date.now(),
             }),
         },
       }}>

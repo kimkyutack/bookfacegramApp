@@ -83,8 +83,8 @@ export default function DrawerCustom(props) {
               onPress={() => {
                 props.navigation.navigate(routes.feedBook, {
                   timeKey: Date.now(),
-                  member_id: null,
-                  member_idx: null,
+                  memberId: null,
+                  memberIdx: null,
                   id: null,
                 });
               }}
@@ -138,7 +138,7 @@ export default function DrawerCustom(props) {
               onPress={() => {
                 try {
                   props.navigation.closeDrawer();
-                  dispatch(userSignOut(user.memberId));
+                  dispatch(userSignOut(user.member_id));
                 } catch (e) {
                   dispatch(dialogError(e));
                 }

@@ -162,7 +162,11 @@ export default function FeedBook({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
+    if (
+      !isLoading &&
+      e.distanceFromEnd > 0 &&
+      followBooks.length >= page * limit
+    ) {
       setPage(p => p + 1);
     }
   };
@@ -173,6 +177,7 @@ export default function FeedBook({route, navigation}) {
       index={index}
       login_id={user.member_id}
       login_idx={user.member_idx}
+      userProfile={user.profile_path}
       editOnPress={editOnPress}
       onShare={onShare}
       toggleHeart={toggleHeart}
@@ -207,10 +212,10 @@ export default function FeedBook({route, navigation}) {
   return (
     <RootLayout
       topbar={{
-        title: route.params?.member_id
-          ? route.params?.member_id?.split('@')[0]?.length > 12
-            ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
-            : route.params?.member_id?.split('@')[0]
+        title: route.params?.memberId
+          ? route.params?.memberId?.split('@')[0]?.length > 12
+            ? route.params?.memberId?.split('@')[0]?.substring(0, 12) + '...'
+            : route.params?.memberId?.split('@')[0]
           : '피드북',
         navigation: navigation,
         back: true,
@@ -247,9 +252,10 @@ export default function FeedBook({route, navigation}) {
           name: 'avator',
           onPress: () => {
             navigation.navigate(routes.feedBookImage, {
-              member_id: user.member_id,
-              member_idx: user.member_idx,
-              platform_type: user.platform_type,
+              memberId: user.member_id,
+              memberIdx: user.member_idx,
+              platformType: user.platform_type,
+              key: Date.now(),
             });
           },
         },

@@ -116,8 +116,8 @@ export default function PhotoEditor({route, navigation}) {
                 [params.dataKey]: params.image,
                 key: params.key,
                 isNew: true,
-                member_id: user.member_id,
-                member_idx: user.member_idx,
+                memberId: user.member_id,
+                memberIdx: user.member_idx,
                 // feedIdx: item.feedIdx,
               });
             }
@@ -155,8 +155,8 @@ export default function PhotoEditor({route, navigation}) {
                 [params.dataKey]: params.image,
                 key: params.key,
                 isNew: true,
-                member_id: user.member_id,
-                member_idx: user.member_idx,
+                memberId: user.member_id,
+                memberIdx: user.member_idx,
                 // feedIdx: item.feedIdx,
               });
             }

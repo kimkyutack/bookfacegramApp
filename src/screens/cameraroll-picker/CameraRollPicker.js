@@ -107,6 +107,8 @@ export default function CameraRollPicker({navigation}) {
               route: routes.feedBookUser,
               image: convertFileArr,
               dataKey: 'image',
+              isNew: true,
+              allFeedDetail: true,
               key: Date.now(),
               name: 'gallery',
             }),

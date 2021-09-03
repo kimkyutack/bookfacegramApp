@@ -60,6 +60,8 @@ export const cameraItem = () => {
               route: routes.feedBookUser,
               image: file,
               dataKey: 'image',
+              isNew: true,
+              allFeedDetail: true,
               key: Date.now(),
               name: 'camera',
             });
@@ -103,6 +105,7 @@ export const cameraItem = () => {
               image: file,
               dataKey: 'image',
               isNew: true,
+              allFeedDetail: true,
               key: Date.now(),
               name: 'file',
             });

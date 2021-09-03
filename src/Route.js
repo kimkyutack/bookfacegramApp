@@ -82,7 +82,7 @@ export default function Router() {
       return true;
     };
     const backLogoutAction = () => {
-      dispatch(userSignOut(user.memberId));
+      dispatch(userSignOut(user.member_id));
       return true;
     };
     if (currentRouteName === 'splash') {

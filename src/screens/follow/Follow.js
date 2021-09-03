@@ -26,10 +26,10 @@ import consts from '../../libs/consts';
 import {FollowItem} from './FollowItem';
 
 export default function Follow({route, navigation}) {
-  const user = useSelector(s => s.user, shallowEqual);
+  const user = useSelector(s => s.user);
+
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
@@ -41,7 +41,7 @@ export default function Follow({route, navigation}) {
       requestGet({
         url: consts.apiUrl + '/mypage/feedBook/follow/follower',
         query: {
-          memberIdx: route.params?.member_idx,
+          memberIdx: route.params?.memberIdx,
         },
       })
         .then(res => {
@@ -54,17 +54,14 @@ export default function Follow({route, navigation}) {
           setLoading(false);
         })
         .catch(error => {
-          console.log('error');
-          console.log(error);
           // error 일때 해야함
-
           setLoading(false);
         });
     } else {
       requestGet({
         url: consts.apiUrl + '/mypage/feedBook/follow/following',
         query: {
-          memberIdx: route.params?.member_idx,
+          memberIdx: route.params?.memberIdx,
         },
       })
         .then(res => {
@@ -78,8 +75,6 @@ export default function Follow({route, navigation}) {
         })
         .catch(error => {
           // error 일때 해야함')
-          console.log('error');
-          console.log(error);
           setLoading(false);
         });
     }
@@ -105,9 +100,9 @@ export default function Follow({route, navigation}) {
     <RootLayout
       topbar={{
         title:
-          route.params?.member_id?.split('@')[0]?.length > 12
-            ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
-            : route.params?.member_id?.split('@')[0],
+          route.params?.memberId?.split('@')[0]?.length > 12
+            ? route.params?.memberId?.split('@')[0]?.substring(0, 12) + '...'
+            : route.params?.memberId?.split('@')[0],
         navigation: navigation,
         back: true,
         options: {
@@ -143,10 +138,10 @@ export default function Follow({route, navigation}) {
           name: 'avator',
           onPress: () =>
             navigation.navigate(routes.feedBookImage, {
-              timeKey: Date.now(),
-              member_id: user.member_id,
-              member_idx: user.member_idx,
-              platform_type: user.platform_type,
+              memberId: user.member_id,
+              memberIdx: user.member_idx,
+              platformType: user.platform_type,
+              key: Date.now(),
             }),
         },
       }}>
@@ -199,10 +194,10 @@ export default function Follow({route, navigation}) {
                 {...item}
                 onPress={() =>
                   navigation.navigate(routes.feedBookImage, {
-                    member_id: item.memberId,
-                    member_idx: item.memberIdx,
-                    platform_type: item.platformType,
-                    uri: item.profile_path,
+                    memberId: item.memberId,
+                    memberIdx: item.memberIdx,
+                    platformType: item.platformType,
+                    key: Date.now(),
                   })
                 }
                 tabIndex={tabIndex}

@@ -7,7 +7,7 @@ const initBook = {
   isRefreshing: false,
   errorMessage: '',
   allErrorMessage: '',
-  page: 1,
+  profilePath: '',
 };
 
 const book = (state = initBook, action) => {
@@ -16,12 +16,6 @@ const book = (state = initBook, action) => {
       return {
         ...state,
         isLoading: true,
-        errorMessage: '',
-      };
-    case bookActionType.refreshing:
-      return {
-        ...state,
-        isRefreshing: true,
         errorMessage: '',
       };
     case bookActionType.followSuccess:
@@ -50,6 +44,7 @@ const book = (state = initBook, action) => {
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
         followingCnt: action.followingCnt,
+        totalCnt: action.totalCnt,
       };
     case bookActionType.userSuccessPaging:
       return {
@@ -61,8 +56,7 @@ const book = (state = initBook, action) => {
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
         followingCnt: action.followingCnt,
-        page: action.page,
-        limit: action.limit,
+        totalCnt: action.totalCnt,
       };
     case bookActionType.allSuccess:
       return {
@@ -94,13 +88,6 @@ const book = (state = initBook, action) => {
         isRefreshing: false,
         userBooks: action.data,
       };
-    case bookActionType.userPageUpdate:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        page: action.data,
-      };
     case bookActionType.allUpdate:
       return {
         ...state,
@@ -114,6 +101,17 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         errorMessage: action.data,
+      };
+    case bookActionType.userFailure:
+      return {
+        ...state,
+        isLoading: false,
+        isRefreshing: false,
+        errorMessage: action.data,
+        profilePath: action.profilePath,
+        followerCnt: action.followerCnt,
+        followingCnt: action.followingCnt,
+        totalCnt: action.totalCnt,
       };
     case bookActionType.allFailure:
       return {

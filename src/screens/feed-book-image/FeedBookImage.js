@@ -50,8 +50,8 @@ export default function FeedBookImage({route, navigation}) {
     profilePath,
     followerCnt,
     followingCnt,
-    page,
-  } = useSelector(s => s.book, shallowEqual);
+    totalCnt,
+  } = useSelector(s => s.book);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const listRef = useRef();
@@ -59,21 +59,22 @@ export default function FeedBookImage({route, navigation}) {
 
   const limit = 36;
   const [allPage, setAllPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   const [tabIndex, setTabIndex] = useState(0); // 0 my 1 other
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 
-  const fetchUserData = (reset, newTime) => {
-    if (reset) {
-      dispatch(getFeedUser(route.params?.member_idx, 1, limit, newTime));
+  const fetchUserData = (type, newTime) => {
+    if (type === 'reset') {
+      dispatch(getFeedUser(route.params?.memberIdx, 1, limit, newTime));
     } else {
-      dispatch(getFeedUser(route.params?.member_idx, page, limit, time));
+      dispatch(getFeedUser(route.params?.memberIdx, page, limit, time));
     }
   };
 
-  const fetchWholeData = (reset, newTime) => {
-    if (reset) {
+  const fetchWholeData = (type, newTime) => {
+    if (type === 'reset') {
       dispatch(getFeedAll(1, limit, newTime));
     } else {
       dispatch(getFeedAll(allPage, limit, time));
@@ -81,37 +82,56 @@ export default function FeedBookImage({route, navigation}) {
   };
 
   useEffect(() => {
-    if (isFocused) {
-      listRef.current?.scrollToOffset({y: 0, animated: false});
-      if (tabIndex === 1) {
-        const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        setTime(newTime);
-        fetchWholeData();
-      }
-    }
-  }, [tabIndex]);
-
-  useEffect(() => {
-    if (allPage !== 1) {
+    if (isFocused && allPage !== 1) {
       fetchWholeData();
     }
   }, [allPage]);
 
   useEffect(() => {
+    if (isFocused && page !== 1) {
+      fetchUserData();
+    }
+  }, [page]);
+
+  useEffect(() => {
     if (isFocused) {
-      if (route.params?.member_idx === user.member_idx) {
-        setMyInfo(true);
+      listRef.current?.scrollToOffset({y: 0, animated: true});
+      const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      if (tabIndex === 1) {
+        setAllPage(1);
+        setTime(newTime);
+        fetchWholeData('reset', newTime);
       } else {
-        setMyInfo(false);
+        setPage(1);
+        fetchUserData('reset', newTime);
       }
-      listRef.current?.scrollToOffset({y: 0, animated: false});
-      dispatch(userPageUpdate(1));
-      setTabIndex(0);
+    }
+  }, [tabIndex]);
+
+  useEffect(() => {
+    if (isFocused) {
       const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
-      fetchUserData(true, newTime);
+      fetchUserData('reset', newTime);
     }
-  }, [route.params?.member_idx]);
+  }, [route.params?.memberIdx]);
+
+  useEffect(() => {
+    if (tabIndex === 1 && isFocused) {
+      setTabIndex(0);
+    }
+    if (route.params?.memberIdx === user.member_idx && isFocused) {
+      setMyInfo(true);
+    } else {
+      setMyInfo(false);
+    }
+  }, [route.params.key]);
+
+  useEffect(() => {
+    if (errorMessage === 'nodata') {
+      dispatch(booksUpdate([], 'user'));
+    }
+  }, [errorMessage]);
 
   const handleGesture = e => {
     const oldScale = e.nativeEvent.scale;
@@ -129,31 +149,52 @@ export default function FeedBookImage({route, navigation}) {
   };
 
   const onEndReached = e => {
+    if (isFocused) {
+      if (tabIndex === 0) {
+        if (
+          !isLoading &&
+          e.distanceFromEnd > 0 &&
+          userBooks.length >= limit * page
+        ) {
+          setPage(p => p + 1);
+        }
+      } else {
+        if (
+          !isLoading &&
+          e.distanceFromEnd > 0 &&
+          allBooks.length >= limit * allPage
+        ) {
+          setAllPage(p => p + 1);
+        }
+      }
+    }
+  };
+
+  const onPress = item => {
     if (tabIndex === 0) {
-      if (!isLoading && e.distanceFromEnd > 0 && !errorMessage) {
-        console.log('user end reach');
-        dispatch(userPageUpdate(page + 1));
-      }
+      navigation.navigate(routes.feedBookUser, {
+        memberId: item.memberId,
+        memberIdx: item.memberIdx,
+        feedIdx: item.feedIdx,
+        page: page,
+        isNew: false,
+        allFeedDetail: false,
+      });
     } else {
-      if (!isLoading && e.distanceFromEnd > 0 && !allErrorMessage) {
-        console.log('all end reach');
-        setAllPage(p => p + 1);
-      }
+      navigation.navigate(routes.feedBookUser, {
+        memberId: item.memberId,
+        memberIdx: item.memberIdx,
+        feedIdx: item.feedIdx,
+        isNew: false,
+        allFeedDetail: true,
+      });
     }
   };
 
   const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(routes.feedBookUser, {
-            member_id: item.memberId,
-            member_idx: item.memberIdx,
-            feedIdx: item.feedIdx,
-            isNew: false,
-            key: Date.now(),
-          });
-        }}
+        onPress={() => onPress(item)}
         style={{
           width: (screenWidth - 3 * (numColumns - 1)) / numColumns,
           height: (screenWidth - 3 * (numColumns - 1)) / numColumns,
@@ -200,11 +241,11 @@ export default function FeedBookImage({route, navigation}) {
   return (
     <RootLayout
       topbar={{
-        title: route.params?.member_id
-          ? route.params?.member_id?.split('@')[0]?.length > 12
-            ? route.params?.member_id?.split('@')[0]?.substring(0, 12) + '...'
-            : route.params?.member_id?.split('@')[0]
-          : '유저피드북',
+        title: route.params?.memberId
+          ? route.params?.memberId?.split('@')[0]?.length > 12
+            ? route.params?.memberId?.split('@')[0]?.substring(0, 12) + '...'
+            : route.params?.memberId?.split('@')[0]
+          : '전체피드북',
         navigation: navigation,
         back: true,
         options: {
@@ -240,9 +281,10 @@ export default function FeedBookImage({route, navigation}) {
           name: 'avator',
           onPress: () => {
             navigation.navigate(routes.feedBookImage, {
-              member_id: user.member_id,
-              member_idx: user.member_idx,
-              platform_type: user.platform_type,
+              memberId: user.member_id,
+              memberIdx: user.member_idx,
+              platformType: user.platform_type,
+              key: Date.now(),
             });
           },
         },
@@ -269,16 +311,18 @@ export default function FeedBookImage({route, navigation}) {
             </ButtonWrap>
           )}
           <View style={[styles.info, {marginLeft: widthPercentage(60)}]}>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>10</TextWrap>
+            <TextWrap font={fonts.kopubWorldDotumProMedium}>
+              {totalCnt ? totalCnt : 0}
+            </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>게시물</TextWrap>
           </View>
           <TouchableOpacity
             style={styles.info}
             onPress={() =>
               navigation.navigate(routes.follow, {
-                member_id: route.params.member_id,
-                member_idx: route.params.member_idx,
-                platform_type: user.platform_type,
+                memberId: route.params.memberId,
+                memberIdx: route.params.memberIdx,
+                platformType: user.platform_type,
                 followerCnt: followerCnt,
                 followingCnt: followingCnt,
                 type: 'follower',
@@ -293,9 +337,9 @@ export default function FeedBookImage({route, navigation}) {
             style={[styles.info, {marginRight: widthPercentage(43.6)}]}
             onPress={() =>
               navigation.navigate(routes.follow, {
-                member_id: route.params.member_id,
-                member_idx: route.params.member_idx,
-                platform_type: user.platform_type,
+                memberId: route.params.memberId,
+                memberIdx: route.params.memberIdx,
+                platformType: user.platform_type,
                 followerCnt: followerCnt,
                 followingCnt: followingCnt,
                 type: 'follow',
@@ -312,9 +356,10 @@ export default function FeedBookImage({route, navigation}) {
             style={styles.tabs}
             index={tabIndex}
             onIndexChange={t => {
-              if (tabIndex !== t) {
-                // setData([]);
-              }
+              // if (tabIndex !== t) {
+              //   setData([]);
+              // }
+              listRef.current?.scrollToOffset({y: 0, animated: true});
               setNumColumns(3);
               setTabIndex(t);
             }}

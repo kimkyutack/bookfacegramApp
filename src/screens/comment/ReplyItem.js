@@ -12,7 +12,7 @@ import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import Avatar from '../../components/avatar/Avatar';
 
-const renderItem = ({id, member_id, uri, contents, joinDate}) => {
+const renderItem = ({id, memberId, uri, contents, joinDate}) => {
   return (
     <View style={styles.replyContainer}>
       <View style={styles.infoContainer}>
@@ -33,7 +33,7 @@ const renderItem = ({id, member_id, uri, contents, joinDate}) => {
               ellipsizeMode="tail"
               style={styles.info}
               font={fonts.kopubWorldDotumProBold}>
-              {member_id}
+              {memberId}
             </TextWrap>
             <TextWrap style={styles.infoRight} onPress={() => console.log(2)}>
               {contents}

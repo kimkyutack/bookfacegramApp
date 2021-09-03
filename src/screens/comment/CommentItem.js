@@ -15,7 +15,7 @@ import {ReplyItem} from './ReplyItem';
 
 const renderItem = ({
   id,
-  member_id,
+  memberId,
   uri,
   contents,
   joinDate,
@@ -44,7 +44,7 @@ const renderItem = ({
                 numberOfLines={1}
                 style={styles.info}
                 font={fonts.kopubWorldDotumProBold}>
-                {member_id?.split('@')[0]}
+                {memberId?.split('@')[0]}
               </TextWrap>
               <TextWrap style={styles.infoRight} onPress={() => console.log(2)}>
                 {contents}

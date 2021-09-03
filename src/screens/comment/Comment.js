@@ -48,7 +48,7 @@ export default function Comment({route, navigation}) {
   const k = [
     {
       id: 1,
-      member_id: '아이디1아이디1아이디1dd@asd.com',
+      memberId: '아이디1아이디1아이디1dd@asd.com',
       uri: '',
       contents:
         '댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1',
@@ -57,7 +57,7 @@ export default function Comment({route, navigation}) {
         {
           id: 100,
           uri: '',
-          member_id: '아이디3',
+          memberId: '아이디3',
           contents: '답글 내용1',
           joinDate: '2021.05.08',
         },
@@ -65,33 +65,33 @@ export default function Comment({route, navigation}) {
     },
     {
       id: 2,
-      member_id: '아이디아이디아',
+      memberId: '아이디아이디아',
       contents: '댓글 내용2',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 3,
-      member_id: '아이디3',
+      memberId: '아이디3',
       contents: '댓글 내용3',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 4,
-      member_id: '아이디4',
+      memberId: '아이디4',
       contents: '댓글 내용1',
       joinDate: '2021.05.08',
       replys: [
         {
           id: 101,
-          member_id: '아이디3',
+          memberId: '아이디3',
           contents: '답글 내용1',
           joinDate: '2021.05.08',
         },
         {
           id: 102,
-          member_id: '아이디3',
+          memberId: '아이디3',
           contents: '답글 내용2',
           joinDate: '2021.05.08',
         },
@@ -99,77 +99,77 @@ export default function Comment({route, navigation}) {
     },
     {
       id: 5,
-      member_id: '아이디5',
+      memberId: '아이디5',
       contents: '댓글 내용5',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 6,
-      member_id: '아이디6',
+      memberId: '아이디6',
       contents: '댓글 내용6',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 7,
-      member_id: '아이디7',
+      memberId: '아이디7',
       contents: '댓글 내용7',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 8,
-      member_id: '아이디8',
+      memberId: '아이디8',
       contents: '댓글 내용8',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 9,
-      member_id: '아이디9',
+      memberId: '아이디9',
       contents: '댓글 내용9',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 10,
-      member_id: '아이디10',
+      memberId: '아이디10',
       contents: '댓글 내용10',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 11,
-      member_id: '아이디11',
+      memberId: '아이디11',
       contents: '댓글 내용11',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 12,
-      member_id: '아이디12',
+      memberId: '아이디12',
       contents: '댓글 내용12',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 13,
-      member_id: '아이디13',
+      memberId: '아이디13',
       contents: '댓글 내용13',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 14,
-      member_id: '아이디14',
+      memberId: '아이디14',
       contents: '댓글 내용14',
       joinDate: '2021.05.08',
       replys: null,
     },
     {
       id: 15,
-      member_id: '아이디15',
+      memberId: '아이디15',
       contents: '댓글 내용15',
       joinDate: '2021.05.08',
       replys: null,
@@ -180,7 +180,7 @@ export default function Comment({route, navigation}) {
     requestGet({
       url: consts.apiUrl + '/users/' + user.member_id + '/friends',
       query: {
-        member_id: route.params?.member_id,
+        memberId: route.params?.memberId,
       },
     })
       .then(replyData => {
@@ -261,10 +261,10 @@ export default function Comment({route, navigation}) {
           name: 'avator',
           onPress: () =>
             navigation.navigate(routes.feedBookImage, {
-              timeKey: Date.now(),
-              member_id: user.member_id,
-              member_idx: user.member_idx,
-              platform_type: user.platform_type,
+              memberId: user.member_id,
+              memberIdx: user.member_idx,
+              platformType: user.platform_type,
+              key: Date.now(),
             }),
         },
       }}>
