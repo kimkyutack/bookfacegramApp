@@ -103,37 +103,25 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
 
   useEffect(() => {
     setTh(
-      kbsBook?.filter(
-        x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
-      )[0].recomm_order,
+      kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급')[0].grade,
     );
     setNewBookList([...newBook]);
     setKbsBookList1([
-      ...kbsBook?.filter(
-        x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
-      ),
+      ...kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급'),
     ]);
     setKbsBookList2([
-      ...kbsBook?.filter(
-        x => x.recomm_grade === '2급' || x.recomm_grade === '준2급',
-      ),
+      ...kbsBook?.filter(x => x.grade === '2급' || x.grade === '준2급'),
     ]);
     setKbsBookList3([
-      ...kbsBook?.filter(
-        x => x.recomm_grade === '3급' || x.recomm_grade === '준3급',
-      ),
+      ...kbsBook?.filter(x => x.grade === '3급' || x.grade === '준3급'),
     ]);
     setKbsBookList4([
-      ...kbsBook?.filter(
-        x => x.recomm_grade === '4급' || x.recomm_grade === '준4급',
-      ),
+      ...kbsBook?.filter(x => x.grade === '4급' || x.grade === '준4급'),
     ]);
     setKbsBookList5([
-      ...kbsBook?.filter(
-        x => x.recomm_grade === '5급' || x.recomm_grade === '준5급',
-      ),
+      ...kbsBook?.filter(x => x.grade === '5급' || x.grade === '준5급'),
     ]);
-    setKbsBookList6([...kbsBook?.filter(x => x.recomm_grade === '누리급')]);
+    setKbsBookList6([...kbsBook?.filter(x => x.grade === '누리급')]);
     setBannerList([
       {index: 0, id: 1, title: images.bannerOne},
       {index: 1, id: 2, title: images.bannerTwo},

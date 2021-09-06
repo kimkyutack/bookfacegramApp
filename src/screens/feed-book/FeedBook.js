@@ -16,7 +16,7 @@ import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestGet} from '../../services/network';
+import {requestGet, requestPost} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -35,6 +35,7 @@ import {FeedItem} from './FeedItem';
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const {isLoading, followBooks, errorMessage} = useSelector(s => s.book);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   const dispatch = useDispatch();
   const listRef = useRef();
@@ -107,21 +108,50 @@ export default function FeedBook({route, navigation}) {
 
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
+    setLikeLoading(true);
     if (followBooks.length > 0) {
       const modifiedList = followBooks?.map((element, index) => {
         if (element.feedIdx === feed_idx) {
           const idx = element.likeMemberList.indexOf(user.member_idx);
           if (idx === -1) {
-            element.likeMemberList.push(user.member_idx);
-            element.likeCnt += 1;
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 0,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.push(user.member_idx);
+                element.likeCnt += 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                setLikeLoading(false);
+                dispatch(dialogError(e));
+              });
           } else {
-            element.likeMemberList.splice(idx, 1);
-            element.likeCnt -= 1;
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 1,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.splice(idx, 1);
+                element.likeCnt -= 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                dispatch(dialogError(e));
+                setLikeLoading(false);
+              });
           }
         }
         return element;
       });
-      dispatch(booksUpdate(modifiedList, 'follow'));
+      // dispatch(booksUpdate(modifiedList, 'follow'));
       fillHeart();
     }
   };
@@ -146,10 +176,12 @@ export default function FeedBook({route, navigation}) {
   const handleDoubleTap = feed_idx => {
     const now = Date.now();
     const DOUBLE_PRESS_DELAY = 300;
-    if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
-      toggleHeart(feed_idx);
-    } else {
-      setLastTap(now);
+    if (!likeLoading) {
+      if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
+        toggleHeart(feed_idx);
+      } else {
+        setLastTap(now);
+      }
     }
   };
 

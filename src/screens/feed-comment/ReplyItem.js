@@ -12,7 +12,15 @@ import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import Avatar from '../../components/avatar/Avatar';
 
-const renderItem = ({id, memberId, uri, contents, joinDate}) => {
+const renderItem = ({
+  reReplyIdx,
+  memberId,
+  memberIdx,
+  profile,
+  contents,
+  regDate,
+  updateDate,
+}) => {
   return (
     <View style={styles.replyContainer}>
       <View style={styles.infoContainer}>
@@ -20,8 +28,8 @@ const renderItem = ({id, memberId, uri, contents, joinDate}) => {
           size={widthPercentage(25)}
           style={styles.avator}
           path={
-            uri
-              ? uri
+            profile
+              ? profile
               : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
           }
         />
@@ -40,7 +48,9 @@ const renderItem = ({id, memberId, uri, contents, joinDate}) => {
             </TextWrap>
           </View>
           <View style={{flexDirection: 'row', marginTop: heightPercentage(6)}}>
-            <TextWrap style={styles.infoDate}>{joinDate}</TextWrap>
+            <TextWrap style={styles.infoDate}>
+              {updateDate ? updateDate : regDate}
+            </TextWrap>
           </View>
         </View>
       </View>

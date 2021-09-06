@@ -30,7 +30,7 @@ export default function TopNewBooks({route}) {
       });
       if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
-        setKbsBook([...data.kbsBook]);
+        setKbsBook([...data.kbsBook.kbsBookList]);
       }
       return status;
     } catch (error) {

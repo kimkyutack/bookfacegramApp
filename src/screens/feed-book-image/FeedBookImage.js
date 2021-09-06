@@ -62,6 +62,11 @@ export default function FeedBookImage({route, navigation}) {
   const [page, setPage] = useState(1);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
+  const [followerCount, setFollowerCount] = useState(followerCnt);
+  const [followingCount, setFollowingCount] = useState(followingCnt);
+  const [totalCount, setTotalCount] = useState(totalCnt);
+  const [userProfilePath, setUserProfilePath] = useState(profilePath);
+
   const [tabIndex, setTabIndex] = useState(0); // 0 my 1 other
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 
@@ -126,6 +131,19 @@ export default function FeedBookImage({route, navigation}) {
       setMyInfo(false);
     }
   }, [route.params.key]);
+
+  useEffect(() => {
+    let mount = true;
+    if (isFocused && mount) {
+      setFollowerCount(followerCnt);
+      setFollowingCount(followingCnt);
+      setTotalCount(totalCnt);
+      setUserProfilePath(profilePath);
+    }
+    return () => {
+      mount = false;
+    };
+  }, [followerCnt, followingCnt, totalCnt, profilePath, userBooks]);
 
   useEffect(() => {
     if (errorMessage === 'nodata') {
@@ -283,7 +301,6 @@ export default function FeedBookImage({route, navigation}) {
             navigation.navigate(routes.feedBookImage, {
               memberId: user.member_id,
               memberIdx: user.member_idx,
-              platformType: user.platform_type,
               key: Date.now(),
             });
           },
@@ -295,8 +312,8 @@ export default function FeedBookImage({route, navigation}) {
             size={widthPercentage(65)}
             style={styles.avator}
             path={
-              profilePath
-                ? profilePath
+              userProfilePath
+                ? userProfilePath
                 : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }
           />
@@ -312,7 +329,7 @@ export default function FeedBookImage({route, navigation}) {
           )}
           <View style={[styles.info, {marginLeft: widthPercentage(60)}]}>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>
-              {totalCnt ? totalCnt : 0}
+              {totalCount ? totalCount : 0}
             </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>게시물</TextWrap>
           </View>
@@ -322,14 +339,13 @@ export default function FeedBookImage({route, navigation}) {
               navigation.navigate(routes.follow, {
                 memberId: route.params.memberId,
                 memberIdx: route.params.memberIdx,
-                platformType: user.platform_type,
-                followerCnt: followerCnt,
-                followingCnt: followingCnt,
+                followerCnt: followerCount,
+                followingCnt: followingCount,
                 type: 'follower',
               })
             }>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>
-              {followerCnt ? followerCnt : 0}
+              {followerCount ? followerCount : 0}
             </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로워</TextWrap>
           </TouchableOpacity>
@@ -339,14 +355,13 @@ export default function FeedBookImage({route, navigation}) {
               navigation.navigate(routes.follow, {
                 memberId: route.params.memberId,
                 memberIdx: route.params.memberIdx,
-                platformType: user.platform_type,
-                followerCnt: followerCnt,
-                followingCnt: followingCnt,
+                followerCnt: followerCount,
+                followingCnt: followingCount,
                 type: 'follow',
               })
             }>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>
-              {followingCnt ? followingCnt : 0}
+              {followingCount ? followingCount : 0}
             </TextWrap>
             <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로잉</TextWrap>
           </TouchableOpacity>

@@ -16,7 +16,7 @@ import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestGet} from '../../services/network';
+import {requestGet, requestPost} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -32,15 +32,8 @@ import {FeedUserItem} from './FeedUserItem';
 
 export default function FeedBookUser({route, navigation}) {
   const user = useSelector(s => s.user);
-  const {
-    isLoading,
-    isRefreshing,
-    userBooks,
-    errorMessage,
-    profilePath,
-    followerCnt,
-    followingCnt,
-  } = useSelector(s => s.book);
+  const {isLoading, isRefreshing, userBooks} = useSelector(s => s.book);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   const dispatch = useDispatch();
   const listRef = useRef();
@@ -79,14 +72,15 @@ export default function FeedBookUser({route, navigation}) {
         startPaging: 0, // limit start
         endPaging: limit, // limit end
         feedIdx: route.params.feedIdx,
+        time: newTime,
       },
     })
       .then(data => {
-        // setPage(data.data?.page);
+        setPage(data.data?.page);
+        // dispatch(booksUpdate(data.data.myFeedBook, 'user'));
         // new page로 바꿔야 할듯싶다
         // page scrolling 이 괜히 한번더돌아서
         // new page 있으면 그걸로 패이징 하고 아니면 기존 page로 스크롤링
-
         fetchFeedData('reset', newTime, data.data?.page);
       })
       .catch(e => {});
@@ -94,28 +88,34 @@ export default function FeedBookUser({route, navigation}) {
 
   useEffect(() => {
     let mount = true;
-    if (isFocused && page !== 1) {
-      if (mount) {
+    if (mount && isFocused && page !== 1) {
+      if (route.params?.page) {
+        const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        fetchFeedData('reset', newTime, route.params?.page);
+      } else {
         fetchFeedData();
       }
     }
-    return () => (mount = false);
+    return () => {
+      mount = false;
+    };
   }, [page]);
 
   useEffect(() => {
     let mount = true;
     setPageLoading(true);
 
-    if (isFocused) {
+    if (mount && isFocused) {
       const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
       if (route.params.allFeedDetail) {
-        mount && getPage(newTime);
+        getPage(newTime);
       } else {
         if (route.params?.page) {
-          mount && setPage(route.params?.page);
+          setPage(route.params?.page);
+        } else {
+          fetchFeedData('reset', newTime, route.params?.page);
         }
-        mount && fetchFeedData('reset', newTime, route.params?.page);
       }
     }
     return () => (mount = false);
@@ -123,8 +123,6 @@ export default function FeedBookUser({route, navigation}) {
 
   useEffect(() => {
     let mount = true;
-    setScrollToIdx(null);
-
     if (route.params.isNew) {
       listRef.current?.scrollToOffset({y: 0, animated: true});
     } else {
@@ -139,13 +137,11 @@ export default function FeedBookUser({route, navigation}) {
   useEffect(() => {
     let mount = true;
     setPageLoading(false);
-    setScrollToIdx(null);
-
-    if (isFocused && route.params?.allFeedDetail) {
+    if (mount && isFocused && route.params?.allFeedDetail) {
       const scrollIndex = userBooks?.findIndex(
         x => x?.feedIdx === route.params?.feedIdx,
       );
-      mount && setScrollToIdx(scrollIndex);
+      setScrollToIdx(scrollIndex);
     }
     return () => {
       mount = false;
@@ -153,38 +149,39 @@ export default function FeedBookUser({route, navigation}) {
   }, [userBooks]);
 
   useEffect(() => {
-    if (pageLoading === false && scrollToIdx !== -1) {
+    let mount = true;
+    if (
+      mount &&
+      pageLoading === false &&
+      scrollToIdx !== -1 &&
+      scrollToIdx !== null
+    ) {
       listRef.current?.scrollToIndex({
         animated: false,
         index: scrollToIdx,
       });
     }
+    return () => {
+      mount = false;
+    };
   }, [scrollToIdx]);
 
   useEffect(() => {
     let mount = true;
-    if (route.params.isNew && isFocused) {
+    if (mount && route.params.isNew && isFocused) {
       const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
-      if (mount) {
-        setTime(newTime);
-        fetchFeedData('reset', newTime);
-      }
+      setTime(newTime);
+      fetchFeedData('reset', newTime);
     }
     return () => (mount = false);
   }, [route.params.key]);
 
   useEffect(() => {
     let mount = true;
-
-    if (route.params.isNew) {
-      listRef.current?.scrollToOffset({y: 0, animated: true});
-    } else {
-      const scrollIndex = userBooks?.findIndex(
-        x => x?.feedIdx === route.params?.feedIdx,
-      );
-      mount && setScrollToIdx(scrollIndex);
-    }
-    return () => (mount = false);
+    mount && setPageLoading(true);
+    return () => {
+      mount = false;
+    };
   }, []);
 
   const editOnPress = () => {
@@ -227,22 +224,50 @@ export default function FeedBookUser({route, navigation}) {
 
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
+    setLikeLoading(true);
     if (userBooks.length > 0) {
       const modifiedList = userBooks?.map((element, index) => {
         if (element.feedIdx === feed_idx) {
           const idx = element.likeMemberList.indexOf(user.member_idx);
           if (idx === -1) {
-            element.likeMemberList.push(user.member_idx);
-            element.likeCnt += 1;
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 0,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.push(user.member_idx);
+                element.likeCnt += 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                dispatch(dialogError(e));
+                setLikeLoading(false);
+              });
           } else {
-            element.likeMemberList.splice(idx, 1);
-            element.likeCnt -= 1;
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 1,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.splice(idx, 1);
+                element.likeCnt -= 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                dispatch(dialogError(e));
+                setLikeLoading(false);
+              });
           }
         }
         return element;
       });
-
-      dispatch(booksUpdate(modifiedList, 'user'));
+      // dispatch(booksUpdate(modifiedList, 'user'));
       fillHeart();
     }
   };
@@ -266,11 +291,13 @@ export default function FeedBookUser({route, navigation}) {
 
   const handleDoubleTap = feed_idx => {
     const now = Date.now();
-    const DOUBLE_PRESS_DELAY = 300;
-    if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
-      toggleHeart(feed_idx);
-    } else {
-      setLastTap(now);
+    const DOUBLE_PRESS_DELAY = 1000;
+    if (!likeLoading) {
+      if (lastTap && now - lastTap < DOUBLE_PRESS_DELAY) {
+        toggleHeart(feed_idx);
+      } else {
+        setLastTap(now);
+      }
     }
   };
 
@@ -310,11 +337,6 @@ export default function FeedBookUser({route, navigation}) {
     />
   );
 
-  const memoizedRenderItem = useMemo(() => renderItem, [toggleHeart]);
-  const keyExtractor = useCallback((item, index) => {
-    return item?.feedIdx.toString() + index.toString();
-  }, []);
-
   const renderFooter = () => {
     if (userBooks?.length === 0 || !isLoading) {
       return <></>;
@@ -331,6 +353,11 @@ export default function FeedBookUser({route, navigation}) {
       );
     }
   };
+
+  const keyExtractor = useCallback((item, index) => {
+    return item?.feedIdx.toString() + index.toString();
+  }, []);
+  const memoizedRenderItem = useMemo(() => renderItem, [toggleHeart]);
 
   return (
     <RootLayout
@@ -396,10 +423,7 @@ export default function FeedBookUser({route, navigation}) {
         </View>
       ) : (
         <FlatList
-          initialNumToRender={userBooks.length}
-          // initialScrollIndex={
-          //   scrollToIdx !== null && scrollToIdx !== -1 ? scrollToIdx : undefined
-          // }
+          initialNumToRender={userBooks?.length}
           ref={listRef}
           data={userBooks}
           extraData={userBooks}

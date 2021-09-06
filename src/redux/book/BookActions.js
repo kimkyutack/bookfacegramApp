@@ -73,8 +73,6 @@ export const getFeedHome = (page, limit, time) => async dispatch => {
 };
 
 export const getFeedUser = (memberIdx, page, limit, time) => async dispatch => {
-  let start = new Date().getTime(); // 시작
-
   dispatch({type: bookActionType.loading});
   requestGet({
     url: consts.apiUrl + '/mypage/feedBook/other',
@@ -86,9 +84,6 @@ export const getFeedUser = (memberIdx, page, limit, time) => async dispatch => {
     },
   })
     .then(data => {
-      let end = new Date().getTime(); // 종료
-      console.log('end - start', end - start + 'ms');
-
       if (data.status === 'SUCCESS') {
         if (data.data?.myFeedBook.length === 0) {
           if (page === 1) {

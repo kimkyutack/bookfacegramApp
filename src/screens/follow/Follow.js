@@ -140,7 +140,6 @@ export default function Follow({route, navigation}) {
             navigation.navigate(routes.feedBookImage, {
               memberId: user.member_id,
               memberIdx: user.member_idx,
-              platformType: user.platform_type,
               key: Date.now(),
             }),
         },
@@ -196,7 +195,6 @@ export default function Follow({route, navigation}) {
                   navigation.navigate(routes.feedBookImage, {
                     memberId: item.memberId,
                     memberIdx: item.memberIdx,
-                    platformType: item.platformType,
                     key: Date.now(),
                   })
                 }

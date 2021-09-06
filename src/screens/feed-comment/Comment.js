@@ -17,7 +17,7 @@ import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
-import {requestGet} from '../../services/network';
+import {requestGet, requestPost} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -28,8 +28,9 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
+import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {CommentItem} from './CommentItem';
+import TextWrap from '../../components/text-wrap/TextWrap';
 
 export default function Comment({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
@@ -40,186 +41,90 @@ export default function Comment({route, navigation}) {
   const listRef = useRef();
 
   const [tabIndex, setTabIndex] = useState(0); // 0 댓글 1 답글
+  const [reReplyIdx, setReReplyIdx] = useState(null);
   const [text, setText] = useState('');
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  //uri 추가해야함
-  const k = [
-    {
-      id: 1,
-      memberId: '아이디1아이디1아이디1dd@asd.com',
-      uri: '',
-      contents:
-        '댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1댓글 내용1',
-      joinDate: '2021.05.08',
-      replys: [
-        {
-          id: 100,
-          uri: '',
-          memberId: '아이디3',
-          contents: '답글 내용1',
-          joinDate: '2021.05.08',
-        },
-      ],
-    },
-    {
-      id: 2,
-      memberId: '아이디아이디아',
-      contents: '댓글 내용2',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 3,
-      memberId: '아이디3',
-      contents: '댓글 내용3',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 4,
-      memberId: '아이디4',
-      contents: '댓글 내용1',
-      joinDate: '2021.05.08',
-      replys: [
-        {
-          id: 101,
-          memberId: '아이디3',
-          contents: '답글 내용1',
-          joinDate: '2021.05.08',
-        },
-        {
-          id: 102,
-          memberId: '아이디3',
-          contents: '답글 내용2',
-          joinDate: '2021.05.08',
-        },
-      ],
-    },
-    {
-      id: 5,
-      memberId: '아이디5',
-      contents: '댓글 내용5',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 6,
-      memberId: '아이디6',
-      contents: '댓글 내용6',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 7,
-      memberId: '아이디7',
-      contents: '댓글 내용7',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 8,
-      memberId: '아이디8',
-      contents: '댓글 내용8',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 9,
-      memberId: '아이디9',
-      contents: '댓글 내용9',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 10,
-      memberId: '아이디10',
-      contents: '댓글 내용10',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 11,
-      memberId: '아이디11',
-      contents: '댓글 내용11',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 12,
-      memberId: '아이디12',
-      contents: '댓글 내용12',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 13,
-      memberId: '아이디13',
-      contents: '댓글 내용13',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 14,
-      memberId: '아이디14',
-      contents: '댓글 내용14',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-    {
-      id: 15,
-      memberId: '아이디15',
-      contents: '댓글 내용15',
-      joinDate: '2021.05.08',
-      replys: null,
-    },
-  ];
-  const fetchSearch = () => {
+  const fetchCommentList = () => {
     setLoading(true);
     requestGet({
-      url: consts.apiUrl + '/users/' + user.member_id + '/friends',
-      query: {
-        memberId: route.params?.memberId,
-      },
+      url: consts.apiUrl + `/mypage/feedBook/reply/${route.params.feedIdx}`,
     })
       .then(replyData => {
-        setData([...replyData]);
+        setData([...replyData.data?.feedReplyList]);
         setLoading(false);
+        listRef.current?.scrollToOffset({y: 0, animated: false});
       })
       .catch(e => {
         setLoading(false);
-        // dispatch(dialogError(e));
-
-        setData([...k]);
+        dispatch(dialogError(e));
       });
   };
 
+  const fetchAddComment = feed_idx => {
+    setLoading(true);
+    // 댓글달기
+    if (tabIndex === 0) {
+      requestPost({
+        url: consts.apiUrl + '/mypage/feedBook/reply',
+        body: {
+          contents: text,
+          feedIdx: feed_idx,
+        },
+      })
+        .then(commentData => {
+          setLoading(false);
+          fetchCommentList();
+        })
+        .catch(e => {
+          dispatch(dialogError(e));
+          setLoading(false);
+        });
+    } else {
+      // 답글달기
+      requestPost({
+        url: consts.apiUrl + '/mypage/feedBook/reReply',
+        body: {
+          contents: text,
+          replyIdx: reReplyIdx,
+        },
+      })
+        .then(commentData => {
+          setLoading(false);
+          fetchCommentList();
+        })
+        .catch(e => {
+          dispatch(dialogError(e));
+          setLoading(false);
+        });
+    }
+  };
+
   useEffect(() => {
-    if (navigation.isFocused()) {
+    if (isFocused) {
       inputRef.current?.focus();
       setTabIndex(0);
       listRef.current?.scrollToOffset({y: 0, animated: false});
-      fetchSearch();
+      fetchCommentList();
     }
     setData([]);
     setText('');
   }, [isFocused]);
 
-  const onSearch = () => {
+  const onAddPress = () => {
     Keyboard.dismiss();
-    fetchSearch();
-    // fetch add  만들어야함
+    fetchAddComment(route.params?.feedIdx);
     setText('');
     if (tabIndex === 1) {
       setTabIndex(0);
     }
   };
 
-  const onChangeReply = commnetId => {
+  const onChangeReply = replyIdx => {
     inputRef.current?.focus();
     setTabIndex(1);
-    // comment id 받아와서 set해준뒤 onsearch 할때 아이디로 보내야함
+    setReReplyIdx(replyIdx);
   };
 
   return (
@@ -274,10 +179,9 @@ export default function Comment({route, navigation}) {
             size={widthPercentage(31)}
             style={styles.avator}
             path={
-              'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-              // uri
-              //   ? uri
-              //   : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+              user
+                ? user.profile_path
+                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }
           />
           <TextInput
@@ -291,7 +195,7 @@ export default function Comment({route, navigation}) {
               setText(t);
             }}
             value={text}
-            // onSubmitEditing={onSearch}
+            // onSubmitEditing={onAddPress}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -299,42 +203,48 @@ export default function Comment({route, navigation}) {
             style={styles.button}
             disabled={text ? false : true}
             styleTitle={text ? styles.buttonTitle : styles.buttonTitleDisabled}
-            onPress={onSearch}>
+            onPress={onAddPress}>
             게시
           </ButtonWrap>
         </View>
         <View style={styles.dataContainer}>
-          <FlatList
-            ref={listRef}
-            data={data}
-            extraData={data}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => {
-              return index.toString();
-            }}
-            ListFooterComponent={
-              loading && (
-                <ActivityIndicator
-                  size="large"
-                  style={{
-                    alignSelf: 'center',
-                    marginTop: 20,
-                    marginBottom: 150,
-                  }}
-                  color={colors.blue}
-                />
-              )
-            }
-            renderItem={({item, index}) => {
-              return (
-                <CommentItem
-                  {...item}
-                  index={index}
-                  onChangeReply={onChangeReply}
-                />
-              );
-            }}
-          />
+          {data.length > 0 ? (
+            <FlatList
+              ref={listRef}
+              data={data}
+              extraData={data}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => {
+                return index.toString();
+              }}
+              ListFooterComponent={
+                loading && (
+                  <ActivityIndicator
+                    size="large"
+                    style={{
+                      alignSelf: 'center',
+                      marginTop: 20,
+                      marginBottom: 150,
+                    }}
+                    color={colors.blue}
+                  />
+                )
+              }
+              renderItem={({item, index}) => {
+                return (
+                  <CommentItem
+                    {...item}
+                    index={index}
+                    onChangeReply={onChangeReply}
+                  />
+                );
+              }}
+            />
+          ) : (
+            <View>
+              <TextWrap>댓글이 없습니다.</TextWrap>
+            </View>
+          )}
         </View>
       </View>
     </RootLayout>

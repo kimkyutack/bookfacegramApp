@@ -58,7 +58,13 @@ const renderItem = ({
       <View style={styles.infoContainer}>
         <TouchableOpacity
           style={styles.infoContainerEdit}
-          onPress={() => console.log(memberId)}>
+          onPress={() => {
+            navigate(routes.feedBookImage, {
+              memberId: memberId,
+              memberIdx: memberIdx,
+              key: Date.now(),
+            });
+          }}>
           <Avatar
             size={widthPercentage(25)}
             style={styles.avator}
@@ -134,8 +140,7 @@ const renderItem = ({
           <TouchableOpacity
             onPress={() =>
               navigate(routes.comment, {
-                timeKey: Date.now(),
-                id: feedIdx,
+                feedIdx: feedIdx,
                 memberId: memberId,
                 memberIdx: memberIdx,
               })
@@ -188,7 +193,6 @@ const renderItem = ({
           style={styles.replyContainer}
           onPress={() =>
             navigate(routes.comment, {
-              timeKey: Date.now(),
               feedIdx: feedIdx,
               memberId: memberId,
               memberIdx: memberIdx,

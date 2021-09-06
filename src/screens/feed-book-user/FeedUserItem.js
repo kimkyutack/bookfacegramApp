@@ -58,7 +58,13 @@ const renderItem = ({
       <View style={styles.infoContainer}>
         <TouchableOpacity
           style={styles.infoContainerEdit}
-          onPress={() => console.log(memberId)}>
+          onPress={() => {
+            navigate(routes.feedBookImage, {
+              memberId: memberId,
+              memberIdx: memberIdx,
+              key: Date.now(),
+            });
+          }}>
           <Avatar
             size={widthPercentage(25)}
             style={styles.avator}
@@ -90,7 +96,10 @@ const renderItem = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableWithoutFeedback onPress={() => handleDoubleTap(feedIdx)}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            handleDoubleTap(feedIdx);
+          }}>
           <FastImage
             source={{
               uri: feedImgName?.length

@@ -30,7 +30,7 @@ import FeedBookUser from './screens/feed-book-user/FeedBookUser';
 import FeedBookImage from './screens/feed-book-image/FeedBookImage';
 import Search from './screens/search/Search';
 import Follow from './screens/follow/Follow';
-import Comment from './screens/comment/Comment';
+import Comment from './screens/feed-comment/Comment';
 
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';

@@ -14,11 +14,14 @@ import Avatar from '../../components/avatar/Avatar';
 import {ReplyItem} from './ReplyItem';
 
 const renderItem = ({
-  id,
+  replyIdx,
   memberId,
-  uri,
+  memberIdx,
+  profile,
+  reReplyList,
   contents,
-  joinDate,
+  regDate,
+  updateDate,
   index,
   replys,
   onChangeReply,
@@ -32,8 +35,8 @@ const renderItem = ({
             size={widthPercentage(25)}
             style={styles.avator}
             path={
-              uri
-                ? uri
+              profile
+                ? profile
                 : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }
           />
@@ -52,20 +55,22 @@ const renderItem = ({
             </View>
             <View
               style={{flexDirection: 'row', marginTop: heightPercentage(6)}}>
-              <TextWrap style={styles.infoDate}>{joinDate}</TextWrap>
+              <TextWrap style={styles.infoDate}>
+                {updateDate ? updateDate : regDate}
+              </TextWrap>
               <TextWrap
                 style={styles.infoDateRight}
-                onPress={() => onChangeReply(id)}>
+                onPress={() => onChangeReply(replyIdx)}>
                 답글달기
               </TextWrap>
             </View>
           </View>
         </View>
       </View>
-      {replys && (
+      {reReplyList && (
         <FlatList
-          data={replys}
-          extraData={replys}
+          data={reReplyList}
+          extraData={reReplyList}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index1) => {
             return index1.toString();
