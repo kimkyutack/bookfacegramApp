@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
@@ -6,7 +6,7 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
-import {formatTime, screenWidth} from '../../services/util';
+import {fontPercentage, formatTime, screenWidth} from '../../services/util';
 
 export default function EventItem({item, navigation}) {
   return (
@@ -51,16 +51,14 @@ const styles = StyleSheet.create({
   },
   mainContent: {flex: 1},
   date: {
-    fontSize: 12,
-    lineHeight: 14,
+    fontSize: fontPercentage(12),
     color: colors.black,
     marginTop: 4,
   },
   title: {
     color: colors.black,
+    fontSize: fontPercentage(14),
     marginTop: 14,
-    fontSize: 14,
-    lineHeight: 16,
   },
   thumbnail: {
     width: '100%',

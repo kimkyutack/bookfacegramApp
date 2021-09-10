@@ -138,9 +138,12 @@ export default function Follow({route, navigation}) {
           name: 'avator',
           onPress: () =>
             navigation.navigate(routes.feedBookImage, {
-              memberId: user.member_id,
-              memberIdx: user.member_idx,
-              key: Date.now(),
+              screen: routes.feedBookUserImage,
+              params: {
+                memberId: user.member_id,
+                memberIdx: user.member_idx,
+                key: Date.now(),
+              },
             }),
         },
       }}>
@@ -193,9 +196,12 @@ export default function Follow({route, navigation}) {
                 {...item}
                 onPress={() =>
                   navigation.navigate(routes.feedBookImage, {
-                    memberId: item.memberId,
-                    memberIdx: item.memberIdx,
-                    key: Date.now(),
+                    screen: routes.feedBookUserImage,
+                    params: {
+                      memberId: item.memberId,
+                      memberIdx: item.memberIdx,
+                      key: Date.now(),
+                    },
                   })
                 }
                 tabIndex={tabIndex}

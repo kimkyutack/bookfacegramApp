@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {FlatList, View, Image, StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
@@ -15,14 +15,13 @@ import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
 export default function Event({navigation}) {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/eventList'})
+    requestGet({url: consts.apiUrl + '/mypage/eventList'})
       .then(x => {
-        // console.log(x);
-        setData([...x.event]);
+        setData([...x.data?.event]);
       })
       .catch(e => {
-        // console.log(e);
         // dispatch(dialogError(e));
       });
   }, []);

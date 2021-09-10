@@ -5,13 +5,13 @@ export const tabActionType = {
 };
 
 export const setTab =
-  ({tab, grade, selectedBook, th, gradeStyle}) =>
+  ({tab, grade, selectedBook, gradeStyle, viewType}) =>
   dispatch => {
     if (tab === 'main') {
       dispatch({type: tabActionType.main, tab, grade});
     } else if (tab === 'list') {
-      dispatch({type: tabActionType.list, tab, grade, gradeStyle, th});
+      dispatch({type: tabActionType.list, tab, grade, gradeStyle});
     } else {
-      dispatch({type: tabActionType.detail, tab, selectedBook});
+      dispatch({type: tabActionType.detail, tab, selectedBook, viewType});
     }
   };

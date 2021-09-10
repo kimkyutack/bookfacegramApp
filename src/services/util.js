@@ -33,16 +33,25 @@ export const screenHeight = Dimensions.get('window').height;
 export const isIos = Platform.OS === 'ios';
 
 export const widthPercentage = width => {
-  const percentage = ((width / ZEPLIN_UI_WIDTH) * 100)?.toFixed(1) * 1;
+  const percentage = ((width / ZEPLIN_UI_WIDTH) * 100)?.toFixed(2) * 1;
   return responsiveWidth(percentage);
 };
 export const heightPercentage = height => {
   const percentage = (height / ZEPLIN_UI_HEIGHT) * 100;
-  return responsiveHeight(percentage)?.toFixed(1) * 1;
+  return responsiveHeight(percentage)?.toFixed(2) * 1;
 };
 export const fontPercentage = size => {
-  const percentage = size * 0.125;
-  return responsiveFontSize(percentage)?.toFixed(1) * 1;
+  let percentage = size * 0.125;
+  if (screenWidth >= 411) {
+    percentage = size * 0.125;
+  } else if (screenWidth >= 375 < 411) {
+    percentage = size * 0.117;
+  } else {
+    percentage = size * 0.112;
+  }
+  return (
+    (responsiveFontSize(percentage)?.toFixed(2) * 1) / PixelRatio.getFontScale()
+  );
 };
 
 export const cameraItem = () => {
@@ -57,11 +66,8 @@ export const cameraItem = () => {
               return;
             }
             navigate(routes.photoEditor, {
-              route: routes.feedBookUser,
               image: file,
-              dataKey: 'image',
-              isNew: true,
-              allFeedDetail: true,
+              isNewFeed: true,
               key: Date.now(),
               name: 'camera',
             });
@@ -101,11 +107,8 @@ export const cameraItem = () => {
               return;
             }
             navigate(routes.photoEditor, {
-              route: routes.feedBookUser,
               image: file,
-              dataKey: 'image',
-              isNew: true,
-              allFeedDetail: true,
+              isNewFeed: true,
               key: Date.now(),
               name: 'file',
             });
@@ -148,7 +151,6 @@ export const cameraItem = () => {
             if (result) {
               navigate(routes.cameraRollPicker, {
                 route: routes.feedBook,
-                dataKey: 'image',
                 key: Date.now(),
                 name: 'gallery',
               });

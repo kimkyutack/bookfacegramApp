@@ -20,48 +20,54 @@ import {
   heightPercentage,
 } from '../../../services/util';
 
-export default function TopNewBooksList({route, newBook, kbsBook}) {
-  const dispatch = useDispatch();
+export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   const scrollRef = useRef();
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [rednerData, setRenderData] = useState([]);
+  const [type, setType] = useState('new');
 
   useEffect(() => {
     scrollRef.current?.scrollToOffset({y: 0, animated: false});
     if (listTab.listTab.grade === null) {
+      setType('new');
       setRenderData(newBook);
     } else if (listTab.listTab.grade === '1급') {
+      setType('kbs');
       setRenderData(
-        kbsBook?.filter(
-          x => x.recomm_grade === '1급' || x.recomm_grade === '준1급',
-        ),
+        kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급'),
       );
     } else if (listTab.listTab.grade === '2급') {
+      setType('kbs');
       setRenderData(
-        kbsBook?.filter(
-          x => x.recomm_grade === '2급' || x.recomm_grade === '준2급',
-        ),
+        kbsBook?.filter(x => x.grade === '2급' || x.grade === '준2급'),
       );
-    } else if (listTab.listTab.grade === '(준)3급') {
+    } else if (
+      listTab.listTab.grade === '3급' ||
+      listTab.listTab.grade === '준3급'
+    ) {
+      setType('kbs');
       setRenderData(
-        kbsBook?.filter(
-          x => x.recomm_grade === '3급' || x.recomm_grade === '준3급',
-        ),
+        kbsBook?.filter(x => x.grade === '3급' || x.grade === '준3급'),
       );
-    } else if (listTab.listTab.grade === '(준)4급') {
+    } else if (
+      listTab.listTab.grade === '4급' ||
+      listTab.listTab.grade === '준4급'
+    ) {
+      setType('kbs');
       setRenderData(
-        kbsBook?.filter(
-          x => x.recomm_grade === '4급' || x.recomm_grade === '준4급',
-        ),
+        kbsBook?.filter(x => x.grade === '4급' || x.grade === '준4급'),
       );
-    } else if (listTab.listTab.grade === '(준)5급') {
+    } else if (
+      listTab.listTab.grade === '5급' ||
+      listTab.listTab.grade === '준5급'
+    ) {
+      setType('kbs');
       setRenderData(
-        kbsBook?.filter(
-          x => x.recomm_grade === '5급' || x.recomm_grade === '준5급',
-        ),
+        kbsBook?.filter(x => x.grade === '5급' || x.grade === '준5급'),
       );
     } else if (listTab.listTab.grade === '누리급') {
-      setRenderData(kbsBook?.filter(x => x.recomm_grade === '누리급'));
+      setType('kbs');
+      setRenderData(kbsBook?.filter(x => x.grade === '누리급'));
     }
   }, [listTab.listTab.grade]);
 
@@ -84,12 +90,14 @@ export default function TopNewBooksList({route, newBook, kbsBook}) {
             return index.toString();
           }}
           renderItem={({item, index}) => {
+            item.type = type;
             return (
               <BookListItem
                 item={item}
+                type={type}
                 index={index}
                 grade={listTab.listTab.grade}
-                th={listTab.listTab.th}
+                th={th}
                 gradeStyle={listTab.listTab.gradeStyle}
               />
             );

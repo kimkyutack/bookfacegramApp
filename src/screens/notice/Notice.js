@@ -20,10 +20,9 @@ export default function Notice({route, navigation}) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/noticeList'})
+    requestGet({url: consts.apiUrl + '/mypage/noticeList'})
       .then(x => {
-        // console.log(x);
-        setData([...x.noticeList]);
+        setData([...x.data?.noticeList]);
       })
       .catch(e => {
         // console.log(e);

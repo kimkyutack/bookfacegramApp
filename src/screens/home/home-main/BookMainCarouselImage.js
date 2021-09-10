@@ -12,29 +12,58 @@ export default function BookMainCarouselImage({
   style,
   marginHorizontal,
 }) {
-  const [bookThumbnail, setBookThumbnail] = useState(item.img_nm);
-  // console.log(bookThumbnail);
-  useEffect(() => {
-    setBookThumbnail(item.img_nm);
-  }, [item.img_nm]);
-  return (
-    <FastImage
-      source={{
-        uri:
-          bookThumbnail !== '' && bookThumbnail !== undefined
-            ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
-            : consts.imgUrl + '/thumbnail/bookDefault.gif',
-        priority: FastImage.priority.normal,
-      }}
-      resizeMode={FastImage.resizeMode.cover}
-      style={[
-        styles.image,
-        {marginHorizontal: marginHorizontal},
-        style && style,
-      ]}
-      onError={() => setBookThumbnail('bookDefault')}
-    />
+  const [bookThumbnail, setBookThumbnail] = useState(
+    item.type === 'new' ? item?.img_nm : item?.imgNm,
   );
+  useEffect(() => {
+    if (item.type === 'kbs') {
+      setBookThumbnail(item?.imgNm);
+    } else if (item.type === 'new') {
+      setBookThumbnail(item?.img_nm);
+    }
+  }, [item?.img_nm, item?.imgNm]);
+
+  if (item.type === 'new') {
+    return (
+      <FastImage
+        source={{
+          uri:
+            bookThumbnail !== '' && bookThumbnail !== undefined
+              ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+              : consts.imgUrl + '/thumbnail/bookDefault.gif',
+          priority: FastImage.priority.normal,
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+        style={[
+          styles.image,
+          {marginHorizontal: marginHorizontal},
+          style && style,
+        ]}
+        onError={() => setBookThumbnail('bookDefault')}
+      />
+    );
+  } else {
+    return (
+      <FastImage
+        source={{
+          uri:
+            bookThumbnail !== '' && bookThumbnail !== undefined
+              ? consts.toapingUrl + '/book/book_img/' + bookThumbnail + '.gif'
+              : consts.imgUrl + '/thumbnail/bookDefault.gif',
+          priority: FastImage.priority.normal,
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+        style={[
+          styles.image,
+          {marginHorizontal: marginHorizontal},
+          style && style,
+        ]}
+        onError={() => {
+          setBookThumbnail('');
+        }}
+      />
+    );
+  }
 }
 
 const styles = StyleSheet.create({

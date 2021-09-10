@@ -20,6 +20,7 @@ import InputWrap from '../../components/input-wrap/InputWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
+import routes from '../../libs/routes';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import {
@@ -111,14 +112,14 @@ export default function PhotoEditor({route, navigation}) {
             );
             if (status === 'SUCCESS') {
               setSaveButtonDisabled(false);
-
-              navigate(params.route, {
-                [params.dataKey]: params.image,
-                key: params.key,
-                isNew: true,
-                memberId: user.member_id,
-                memberIdx: user.member_idx,
-                // feedIdx: item.feedIdx,
+              navigate(routes.feedBookImage, {
+                screen: routes.feedBookFeed,
+                params: {
+                  memberId: user.member_id,
+                  memberIdx: user.member_idx,
+                  isNewFeed: true,
+                  key: Date.now(),
+                },
               });
             }
           } else {
@@ -151,13 +152,14 @@ export default function PhotoEditor({route, navigation}) {
                   album: 'toaping',
                 });
               }
-              navigate(params.route, {
-                [params.dataKey]: params.image,
-                key: params.key,
-                isNew: true,
-                memberId: user.member_id,
-                memberIdx: user.member_idx,
-                // feedIdx: item.feedIdx,
+              navigate(routes.feedBookImage, {
+                screen: routes.feedBookFeed,
+                params: {
+                  memberId: user.member_id,
+                  memberIdx: user.member_idx,
+                  isNewFeed: true,
+                  key: Date.now(),
+                },
               });
             }
           }
@@ -289,7 +291,7 @@ export default function PhotoEditor({route, navigation}) {
                   tagStyle={styles.tag}
                   tagTextStyle={styles.tagText}
                   tagsViewStyle={{paddingHorizontal: 5}}
-                  keysForTagsArray={[' ', '#', ',']}
+                  keysForTagsArray={['#', ',']}
                   customElement={
                     <TextWrap
                       font={fonts.kopubWorldDotumProLight}

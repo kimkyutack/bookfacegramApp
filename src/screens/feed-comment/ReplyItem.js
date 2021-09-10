@@ -43,7 +43,11 @@ const renderItem = ({
               font={fonts.kopubWorldDotumProBold}>
               {memberId}
             </TextWrap>
-            <TextWrap style={styles.infoRight} onPress={() => console.log(2)}>
+            <TextWrap
+              style={styles.infoRight}
+              onPress={() => {
+                // console.log(2);
+              }}>
               {contents}
             </TextWrap>
           </View>

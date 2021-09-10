@@ -209,7 +209,6 @@ export default function Login({route}) {
       }
 
       const profile = await getKakaoProfile();
-
       let serviceTerms = {};
       try {
         serviceTerms = await requestGet({

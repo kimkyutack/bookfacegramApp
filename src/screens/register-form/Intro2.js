@@ -52,7 +52,11 @@ export default function Intro2({route, navigation}) {
                 grade={0}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 0
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(0)}>
                 0권
               </ButtonBox>
@@ -64,7 +68,11 @@ export default function Intro2({route, navigation}) {
                 grade={1}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 1
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(1)}>
                 1권 ~ 2권
               </ButtonBox>
@@ -76,7 +84,11 @@ export default function Intro2({route, navigation}) {
                 grade={3}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 3
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(3)}>
                 3권 ~ 5권
               </ButtonBox>
@@ -88,7 +100,11 @@ export default function Intro2({route, navigation}) {
                 grade={6}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 6
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(6)}>
                 6권 ~ 9권
               </ButtonBox>
@@ -100,7 +116,11 @@ export default function Intro2({route, navigation}) {
                 grade={10}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 10
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(10)}>
                 10권 이상
               </ButtonBox>
@@ -115,11 +135,12 @@ export default function Intro2({route, navigation}) {
               style={styles.buttonBox2}
               onPress={() => goBack()}
               disabled={route.name === 'intro1' ? true : false}
-              disabledStyle={
-                route.name === 'intro1'
-                  ? styles.disabledStyle2
-                  : styles.disabledStyle
-              }
+              // disabledStyle={
+              //   route.name === 'intro1'
+              //     ? styles.disabledStyle2
+              //     : styles.disabledStyle
+              // }
+              disabledStyle={styles.disabledStyle2}
               fontStyle={styles.buttonBox}>
               이전
             </ButtonBox>
@@ -238,6 +259,10 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontPercentage(11),
   },
+  buttonBoxSelected: {
+    color: colors.white,
+    fontSize: fontPercentage(11),
+  },
   buttonBox2: {
     color: colors.black,
     backgroundColor: 'transparent',
@@ -254,8 +279,8 @@ const styles = StyleSheet.create({
   paginationCircleActive: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 12,
-    height: 12,
+    width: 8,
+    height: 8,
     backgroundColor: '#60b8f7',
     justifyContent: 'center',
     alignItems: 'center',
@@ -263,8 +288,8 @@ const styles = StyleSheet.create({
   paginationCircle: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 12,
-    height: 12,
+    width: 8,
+    height: 8,
     backgroundColor: '#d8d8d8',
     justifyContent: 'center',
     alignItems: 'center',

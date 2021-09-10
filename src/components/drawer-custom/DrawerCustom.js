@@ -93,7 +93,7 @@ export default function DrawerCustom(props) {
           <View style={styles.itemList}>
             <DrawerItem
               style={styles.drawerItem}
-              label="ㆍ북핑스토어"
+              label="ㆍ토핑스토어"
               labelStyle={styles.label}
               onPress={() => {
                 // props.navigation.navigate('topMyBooks');

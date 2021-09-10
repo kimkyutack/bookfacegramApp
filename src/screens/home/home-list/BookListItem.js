@@ -30,7 +30,6 @@ import {setTab} from '../../../redux/tab/TabAction';
 
 export default function BookListItem({item, index, grade, th, gradeStyle}) {
   const dispatch = useDispatch();
-
   return (
     <>
       {index === 0 ? (
@@ -70,7 +69,13 @@ export default function BookListItem({item, index, grade, th, gradeStyle}) {
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
-            dispatch(setTab({tab: 'detail', selectedBook: item.book_cd}));
+            dispatch(
+              setTab({
+                tab: 'detail',
+                selectedBook: item.type === 'kbs' ? item.bookCd : item.book_cd,
+                viewType: item.type,
+              }),
+            );
             navigate(routes.homeDetail, {
               type: 'detail',
             });
@@ -87,7 +92,7 @@ export default function BookListItem({item, index, grade, th, gradeStyle}) {
                 numberOfLines={1}
                 font={fonts.kopubWorldDotumProMedium}
                 style={styles.title}>
-                {item.book_nm}
+                {item.type === 'kbs' ? item.bookNm : item.book_nm}
               </TextWrap>
               <TextWrap
                 style={styles.title}
@@ -107,7 +112,7 @@ export default function BookListItem({item, index, grade, th, gradeStyle}) {
               <TextWrap
                 style={[styles.title, styles.date]}
                 font={fonts.kopubWorldDotumProMedium}>
-                {numFormat(item.buy_price)}원
+                {numFormat(item?.buy_price)}원
               </TextWrap>
             </View>
           </View>

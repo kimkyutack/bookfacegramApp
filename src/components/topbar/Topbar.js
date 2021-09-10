@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
@@ -57,7 +58,11 @@ export default function Topbar({
           </View>
         </TouchableWithoutFeedback>
       ) : (
-        <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.openDrawer();
+            Keyboard.dismiss();
+          }}>
           <View style={styles.hambergerBack} onLayout={handleOptionLayout}>
             <Image style={styles.hambergerIcon} source={images.hamberger} />
           </View>

@@ -60,9 +60,12 @@ const renderItem = ({
           style={styles.infoContainerEdit}
           onPress={() => {
             navigate(routes.feedBookImage, {
-              memberId: memberId,
-              memberIdx: memberIdx,
-              key: Date.now(),
+              screen: routes.feedBookUserImage,
+              params: {
+                memberId: memberId,
+                memberIdx: memberIdx,
+                key: Date.now(),
+              },
             });
           }}>
           <Avatar
@@ -236,6 +239,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderTopColor: colors.borderLine,
     borderTopWidth: 1,
+    // height: 'heightPercentage(543.4)',
   },
   infoContainer: {
     height: heightPercentage(35),

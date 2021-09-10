@@ -24,7 +24,6 @@ import {
 } from '../../../services/util';
 
 export default function HomeMain({route, navigation}) {
-  const user = useSelector(s => s.user);
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
 

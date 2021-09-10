@@ -18,12 +18,6 @@ import routes from '../../libs/routes';
 import {dialogError, dialogOpenMessage} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
 import {
-  reset,
-  isReadyRef,
-  navigationRef,
-  navigate,
-} from '../../services/navigation';
-import {
   widthPercentage,
   heightPercentage,
   fontPercentage,

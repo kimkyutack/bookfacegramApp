@@ -13,7 +13,6 @@ import routes from '../../libs/routes';
 
 export default function TabsHome({route, navigation}) {
   useEffect(() => {
-    console.log('dd');
     const unsubscribe = navigation.addListener('tabPress', e => {
       e.preventDefault();
       navigate(routes.home);

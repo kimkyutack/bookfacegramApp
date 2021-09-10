@@ -4,7 +4,7 @@ const initTab = {
   tab: 'main',
   mainTab: {},
   listTab: {},
-  detailTab: {},
+  detailTab: {viewType: ''},
 };
 
 export default function loading(state = initTab, action) {
@@ -31,6 +31,7 @@ export default function loading(state = initTab, action) {
         tab: action.tab,
         detailTab: {
           selectedBook: action.selectedBook,
+          viewType: action.viewType,
         },
       };
     default:

@@ -39,4 +39,6 @@ export default {
   myInactive: require('../assets/images/my_inactive.png'),
   otherActive: require('../assets/images/other_active.png'),
   otherInactive: require('../assets/images/other_inactive.png'),
+  userFeed: require('../assets/images/user_feed.png'),
+  allFeed: require('../assets/images/all_feed.png'),
 };

@@ -43,6 +43,7 @@ import {
   dialogOpenAction,
 } from '../../../redux/dialog/DialogActions';
 import fonts from '../../../libs/fonts';
+import {useIsFocused} from '@react-navigation/core';
 
 FastImage.preload([
   {
@@ -50,7 +51,7 @@ FastImage.preload([
   },
 ]);
 
-export default function TopNewBooksDetail({route}) {
+export default function TopNewBooksDetail({route, navigation}) {
   const [loading, setLoading] = useState(false);
   const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
@@ -58,6 +59,7 @@ export default function TopNewBooksDetail({route}) {
   const [selectedBook, setSelectedBook] = useState('');
   const dispatch = useDispatch();
   const detailTab = useSelector(s => s.tab, shallowEqual);
+  const isFocused = useIsFocused();
 
   const fetchRequested = async () => {
     try {
@@ -78,12 +80,20 @@ export default function TopNewBooksDetail({route}) {
   };
 
   useEffect(() => {
+    if (selectedBook) {
+      fetchRequested();
+    }
+  }, [selectedBook]);
+
+  useEffect(() => {
     setSelectedBook(detailTab.detailTab.selectedBook);
   }, [detailTab.detailTab.selectedBook]);
 
   useEffect(() => {
-    fetchRequested();
-  }, [selectedBook]);
+    if (isFocused) {
+      setTabs(0);
+    }
+  }, [isFocused]);
 
   const Tab = props => {
     let style = (props.isSelected && styles.selectedTab) || styles.normalTab;
@@ -123,18 +133,36 @@ export default function TopNewBooksDetail({route}) {
       ) : tabs === 0 ? (
         <>
           <View style={styles.imageContainer}>
-            <FastImage
-              source={{
-                uri:
-                  bookThumbnail !== ''
-                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.image}
-              onError={() => setBookThumbnail('bookDefault')}
-            />
+            {detailTab.detailTab.viewType === 'kbs' ? (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.toapingUrl +
+                        '/book/book_img/' +
+                        bookThumbnail +
+                        '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            ) : (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            )}
           </View>
           <TextWrap
             style={styles.imageTitle}
@@ -152,25 +180,43 @@ export default function TopNewBooksDetail({route}) {
               id={1}
               isSelected={tabs === 1 ? true : false}
             />
-            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+            <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
           </View>
           <BookDetailInfo {...bookDetail} />
         </>
       ) : tabs === 1 ? (
         <>
           <View style={styles.imageContainer}>
-            <FastImage
-              source={{
-                uri:
-                  bookThumbnail !== ''
-                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.image}
-              onError={() => setBookThumbnail('bookDefault')}
-            />
+            {detailTab.detailTab.viewType === 'kbs' ? (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.toapingUrl +
+                        '/book/book_img/' +
+                        bookThumbnail +
+                        '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            ) : (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            )}
           </View>
           <TextWrap
             style={styles.imageTitle}
@@ -188,25 +234,43 @@ export default function TopNewBooksDetail({route}) {
               id={1}
               isSelected={tabs === 1 ? true : false}
             />
-            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+            <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
           </View>
           <BookDetailQuiz />
         </>
       ) : (
         <>
           <View style={styles.imageContainer}>
-            <FastImage
-              source={{
-                uri:
-                  bookThumbnail !== ''
-                    ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
-                    : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-              style={styles.image}
-              onError={() => setBookThumbnail('bookDefault')}
-            />
+            {detailTab.detailTab.viewType === 'kbs' ? (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.toapingUrl +
+                        '/book/book_img/' +
+                        bookThumbnail +
+                        '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            ) : (
+              <FastImage
+                source={{
+                  uri:
+                    bookThumbnail !== ''
+                      ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+                      : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                style={styles.image}
+                onError={() => setBookThumbnail('bookDefault')}
+              />
+            )}
           </View>
           <TextWrap
             style={styles.imageTitle}
@@ -224,7 +288,7 @@ export default function TopNewBooksDetail({route}) {
               id={1}
               isSelected={tabs === 1 ? true : false}
             />
-            <Tab title="북핑톡" id={2} isSelected={tabs === 2 ? true : false} />
+            <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
           </View>
           <BookDetailTalk />
         </>

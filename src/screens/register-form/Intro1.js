@@ -82,7 +82,11 @@ export default function Intro1({route, navigation}) {
                 grade={2}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 2
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(2)}>
                 유치원
               </ButtonBox>
@@ -92,7 +96,11 @@ export default function Intro1({route, navigation}) {
                 grade={3}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 3
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(3)}>
                 초등학교 1학년
               </ButtonBox>
@@ -104,7 +112,11 @@ export default function Intro1({route, navigation}) {
                 grade={4}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 4
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(4)}>
                 초등학교 2학년
               </ButtonBox>
@@ -114,7 +126,11 @@ export default function Intro1({route, navigation}) {
                 grade={5}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 5
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(5)}>
                 초등학교 3학년
               </ButtonBox>
@@ -126,7 +142,11 @@ export default function Intro1({route, navigation}) {
                 grade={6}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 6
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(6)}>
                 초등학교 4학년
               </ButtonBox>
@@ -136,7 +156,11 @@ export default function Intro1({route, navigation}) {
                 grade={7}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 7
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(7)}>
                 초등학교 5학년
               </ButtonBox>
@@ -148,7 +172,11 @@ export default function Intro1({route, navigation}) {
                 grade={8}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 8
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(8)}>
                 초등학교 6학년
               </ButtonBox>
@@ -158,7 +186,11 @@ export default function Intro1({route, navigation}) {
                 grade={9}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 9
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(9)}>
                 중학교 1학년
               </ButtonBox>
@@ -170,7 +202,11 @@ export default function Intro1({route, navigation}) {
                 grade={10}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 10
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(10)}>
                 중학교 2학년
               </ButtonBox>
@@ -180,7 +216,11 @@ export default function Intro1({route, navigation}) {
                 grade={11}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                fontStyle={styles.buttonBox}
+                fontStyle={
+                  pressButtonIdx !== 11
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
                 onPress={() => setPressButtonIdx(11)}>
                 중학교 3학년
               </ButtonBox>
@@ -192,8 +232,12 @@ export default function Intro1({route, navigation}) {
                 grade={12}
                 pressButtonIdx={pressButtonIdx}
                 style={styles.buttonBox}
-                onPress={() => setPressButtonIdx(12)}
-                fontStyle={styles.buttonBox}>
+                fontStyle={
+                  pressButtonIdx !== 12
+                    ? styles.buttonBox
+                    : styles.buttonBoxSelected
+                }
+                onPress={() => setPressButtonIdx(12)}>
                 고등학교 1학년
               </ButtonBox>
             </View>
@@ -324,6 +368,10 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontSize: fontPercentage(11),
   },
+  buttonBoxSelected: {
+    color: colors.white,
+    fontSize: fontPercentage(11),
+  },
   buttonBox2: {
     color: colors.black,
     backgroundColor: 'transparent',
@@ -340,8 +388,8 @@ const styles = StyleSheet.create({
   paginationCircleActive: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 12,
-    height: 12,
+    width: 8,
+    height: 8,
     backgroundColor: '#60b8f7',
     justifyContent: 'center',
     alignItems: 'center',
@@ -349,8 +397,8 @@ const styles = StyleSheet.create({
   paginationCircle: {
     marginHorizontal: 2,
     borderRadius: 10,
-    width: 12,
-    height: 12,
+    width: 8,
+    height: 8,
     backgroundColor: '#d8d8d8',
     justifyContent: 'center',
     alignItems: 'center',

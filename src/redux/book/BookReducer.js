@@ -1,13 +1,17 @@
 import {bookActionType} from './BookActions';
+
 const initBook = {
+  isLoading: false,
+  isRefreshing: false,
   followBooks: [],
   userBooks: [],
   allBooks: [],
-  isLoading: false,
-  isRefreshing: false,
+  allPage: 1,
+  userPage: 1,
+  currentUserId: '',
+  profilePath: '',
   errorMessage: '',
   allErrorMessage: '',
-  profilePath: '',
 };
 
 const book = (state = initBook, action) => {
@@ -40,6 +44,8 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         userBooks: action.data,
+        currentUserId: action.currentUserId,
+        userPage: action.userPage,
         errorMessage: '',
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
@@ -52,6 +58,8 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         userBooks: [...state.userBooks, ...action.data],
+        currentUserId: action.currentUserId,
+        userPage: action.userPage,
         errorMessage: '',
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
@@ -64,6 +72,7 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         allBooks: action.data,
+        allPage: action.allPage,
         allErrorMessage: '',
       };
     case bookActionType.allSuccessPaging:
@@ -72,28 +81,8 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         allBooks: [...state.allBooks, ...action.data],
+        allPage: action.allPage,
         allErrorMessage: '',
-      };
-    case bookActionType.followUpdatete:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        followBooks: action.data,
-      };
-    case bookActionType.userUpdate:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        userBooks: action.data,
-      };
-    case bookActionType.allUpdate:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        allBooks: action.data,
       };
     case bookActionType.failure:
       return {
@@ -108,6 +97,8 @@ const book = (state = initBook, action) => {
         isLoading: false,
         isRefreshing: false,
         errorMessage: action.data,
+        currentUserId: action.currentUserId,
+        userPage: action.userPage,
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
         followingCnt: action.followingCnt,
@@ -118,6 +109,7 @@ const book = (state = initBook, action) => {
         ...state,
         isLoading: false,
         isRefreshing: false,
+        allPage: action.allPage,
         allErrorMessage: action.data,
       };
     case bookActionType.init:

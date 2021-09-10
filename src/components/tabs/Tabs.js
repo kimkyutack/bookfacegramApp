@@ -43,7 +43,7 @@ export default function Tabs(props) {
               <TextWrap
                 style={[styles.label, sel && styles.labelSel]}
                 font={fonts.kopubWorldDotumProMedium}>
-                {pin}명
+                {pin}
               </TextWrap>
             </View>
           </TouchableOpacity>

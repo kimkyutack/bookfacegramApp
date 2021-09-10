@@ -335,7 +335,7 @@ export default function RegisterFormInfo({}) {
                 ? passwordError
                 : !password
                 ? '8~20자리 영문소문자+숫자 조합'
-                : '정상입니다.'
+                : '정상입력입니다.'
             }
             messageColor={
               password

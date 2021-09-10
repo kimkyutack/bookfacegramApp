@@ -11,17 +11,16 @@ import images from '../../../libs/images';
 import {screenWidth, widthPercentage} from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
 
-export default function TopNewBooksMain({route, kbsBook, newBook}) {
-  const [th, setTh] = useState(null);
+export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
+  const [arrayGrade, setArrayGrade] = useState([
+    ...new Set(kbsBook.map(x => x.grade)),
+  ]);
   const [loading, setLoading] = useState(true);
   const [newBookList, setNewBookList] = useState(null);
   const [bannerList, setBannerList] = useState(null);
   const [kbsBookList1, setKbsBookList1] = useState(null); //1급
   const [kbsBookList2, setKbsBookList2] = useState(null); //2급
-  const [kbsBookList3, setKbsBookList3] = useState(null); //3급
-  const [kbsBookList4, setKbsBookList4] = useState(null); //4급
-  const [kbsBookList5, setKbsBookList5] = useState(null); //5급
-  const [kbsBookList6, setKbsBookList6] = useState(null); //6급
+
   const listData = [
     {
       name: 'banner',
@@ -41,7 +40,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
     },
     {
       name: 'kbs',
-      grade: '1급',
+      grade: arrayGrade[0],
       gradeStyle: {color: colors.st1},
       renderData: kbsBookList1,
       sliderWidth: screenWidth - 22,
@@ -51,49 +50,9 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
     },
     {
       name: 'kbs',
-      grade: '2급',
+      grade: arrayGrade[1],
       gradeStyle: {color: colors.st2},
       renderData: kbsBookList2,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
-      header: true,
-      th: th,
-    },
-    {
-      name: 'kbs',
-      grade: '(준)3급',
-      gradeStyle: {color: colors.st3},
-      renderData: kbsBookList3,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
-      header: true,
-      th: th,
-    },
-    {
-      name: 'kbs',
-      grade: '(준)4급',
-      gradeStyle: {color: colors.st4},
-      renderData: kbsBookList4,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
-      header: true,
-      th: th,
-    },
-    {
-      name: 'kbs',
-      grade: '(준)5급',
-      gradeStyle: {color: colors.st5},
-      renderData: kbsBookList5,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
-      header: true,
-      th: th,
-    },
-    {
-      name: 'kbs',
-      grade: '누리급',
-      gradeStyle: {color: colors.st6},
-      renderData: kbsBookList6,
       sliderWidth: screenWidth - 22,
       itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
       header: true,
@@ -102,26 +61,9 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
   ];
 
   useEffect(() => {
-    setTh(
-      kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급')[0].grade,
-    );
     setNewBookList([...newBook]);
-    setKbsBookList1([
-      ...kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급'),
-    ]);
-    setKbsBookList2([
-      ...kbsBook?.filter(x => x.grade === '2급' || x.grade === '준2급'),
-    ]);
-    setKbsBookList3([
-      ...kbsBook?.filter(x => x.grade === '3급' || x.grade === '준3급'),
-    ]);
-    setKbsBookList4([
-      ...kbsBook?.filter(x => x.grade === '4급' || x.grade === '준4급'),
-    ]);
-    setKbsBookList5([
-      ...kbsBook?.filter(x => x.grade === '5급' || x.grade === '준5급'),
-    ]);
-    setKbsBookList6([...kbsBook?.filter(x => x.grade === '누리급')]);
+    setKbsBookList1([...kbsBook?.filter(x => x.grade === arrayGrade[0])]);
+    setKbsBookList2([...kbsBook?.filter(x => x.grade === arrayGrade[1])]);
     setBannerList([
       {index: 0, id: 1, title: images.bannerOne},
       {index: 1, id: 2, title: images.bannerTwo},
@@ -129,30 +71,10 @@ export default function TopNewBooksMain({route, kbsBook, newBook}) {
   }, []);
 
   useEffect(() => {
-    if (
-      th &&
-      newBookList &&
-      bannerList &&
-      kbsBookList1 &&
-      kbsBookList2 &&
-      kbsBookList3 &&
-      kbsBookList4 &&
-      kbsBookList5 &&
-      kbsBookList6
-    ) {
+    if (th && newBookList && bannerList && kbsBookList1 && kbsBookList2) {
       setLoading(false);
     }
-  }, [
-    th,
-    newBookList,
-    bannerList,
-    kbsBookList1,
-    kbsBookList2,
-    kbsBookList3,
-    kbsBookList4,
-    kbsBookList5,
-    kbsBookList6,
-  ]);
+  }, [th, newBookList, bannerList, kbsBookList1, kbsBookList2]);
 
   return (
     <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>

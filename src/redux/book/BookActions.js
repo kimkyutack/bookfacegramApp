@@ -72,87 +72,100 @@ export const getFeedHome = (page, limit, time) => async dispatch => {
     });
 };
 
-export const getFeedUser = (memberIdx, page, limit, time) => async dispatch => {
-  dispatch({type: bookActionType.loading});
-  requestGet({
-    url: consts.apiUrl + '/mypage/feedBook/other',
-    query: {
-      memberIdx: memberIdx,
-      startPaging: (page === 1 ? 0 : page - 1) * limit, // limit start
-      endPaging: limit, // limit end
-      time: time,
-    },
-  })
-    .then(data => {
-      if (data.status === 'SUCCESS') {
-        if (data.data?.myFeedBook.length === 0) {
-          if (page === 1) {
-            throw {
-              data: {
-                msg: 'nodata',
-                profilePath: data.data?.profile,
-                followerCnt: data.data?.followerCnt,
-                followingCnt: data.data?.followingCnt,
-                totalCnt: data.data?.totalCnt,
-              },
-            };
-          } else {
-            throw {
-              data: {
-                msg: 'nomoredata',
-                profilePath: data.data?.profile,
-                followerCnt: data.data?.followerCnt,
-                followingCnt: data.data?.followingCnt,
-                totalCnt: data.data?.totalCnt,
-              },
-            };
-          }
-        }
-        dispatch({
-          type:
-            page > 1
-              ? bookActionType.userSuccessPaging
-              : bookActionType.userSuccess,
-          data: data.data?.myFeedBook,
-          profilePath: data.data?.profile,
-          followerCnt: data.data?.followerCnt,
-          followingCnt: data.data?.followingCnt,
-          totalCnt: data.data?.totalCnt,
-        });
-      } else if (data.status === 'FAIL') {
-        dispatch({
-          type: bookActionType.userFailure,
-          data: data?.msg,
-          profilePath: data.data?.profile,
-          followerCnt: data.data?.followerCnt,
-          followingCnt: data.data?.followingCnt,
-          totalCnt: data.data?.totalCnt,
-        });
-      } else {
-        dispatch({
-          type: bookActionType.userFailure,
-          data: `error code : ${data?.code}`,
-          profilePath: data.data?.profile,
-          followerCnt: data.data?.followerCnt,
-          followingCnt: data.data?.followingCnt,
-          totalCnt: data.data?.totalCnt,
-        });
-      }
+export const getFeedUser =
+  (memberId, memberIdx, page, limit, time) => async dispatch => {
+    dispatch({type: bookActionType.loading});
+    requestGet({
+      url: consts.apiUrl + '/mypage/feedBook/other',
+      query: {
+        memberIdx: memberIdx,
+        startPaging: (page === 1 ? 0 : page - 1) * limit, // limit start
+        endPaging: limit, // limit end
+        time: time,
+      },
     })
-    .catch(error => {
-      dispatch({
-        type: bookActionType.userFailure,
-        data:
-          error?.data?.msg ||
-          error?.message ||
-          (typeof error === 'object' ? JSON.stringify(error) : error),
-        profilePath: error?.data?.profile,
-        followerCnt: error?.data?.followerCnt,
-        followingCnt: error?.data?.followingCnt,
-        totalCnt: error.data?.totalCnt,
+      .then(data => {
+        if (data.status === 'SUCCESS') {
+          if (data.data?.myFeedBook.length === 0) {
+            if (page === 1) {
+              throw {
+                data: {
+                  msg: 'nodata',
+                  currentUserId: memberId,
+                  userPage: page,
+                  profilePath: data.data?.profile,
+                  followerCnt: data.data?.followerCnt,
+                  followingCnt: data.data?.followingCnt,
+                  totalCnt: data.data?.totalCnt,
+                },
+              };
+            } else {
+              throw {
+                data: {
+                  msg: 'nomoredata',
+                  currentUserId: memberId,
+                  userPage: page,
+                  profilePath: data.data?.profile,
+                  followerCnt: data.data?.followerCnt,
+                  followingCnt: data.data?.followingCnt,
+                  totalCnt: data.data?.totalCnt,
+                },
+              };
+            }
+          }
+          dispatch({
+            type:
+              page > 1
+                ? bookActionType.userSuccessPaging
+                : bookActionType.userSuccess,
+            data: data.data?.myFeedBook,
+            currentUserId: memberId,
+            userPage: page,
+            profilePath: data.data?.profile,
+            followerCnt: data.data?.followerCnt,
+            followingCnt: data.data?.followingCnt,
+            totalCnt: data.data?.totalCnt,
+          });
+        } else if (data.status === 'FAIL') {
+          dispatch({
+            type: bookActionType.userFailure,
+            data: data?.msg,
+            currentUserId: memberId,
+            userPage: page,
+            profilePath: data.data?.profile,
+            followerCnt: data.data?.followerCnt,
+            followingCnt: data.data?.followingCnt,
+            totalCnt: data.data?.totalCnt,
+          });
+        } else {
+          dispatch({
+            type: bookActionType.userFailure,
+            data: `error code : ${data?.code}`,
+            currentUserId: memberId,
+            userPage: page,
+            profilePath: data.data?.profile,
+            followerCnt: data.data?.followerCnt,
+            followingCnt: data.data?.followingCnt,
+            totalCnt: data.data?.totalCnt,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: bookActionType.userFailure,
+          data:
+            error?.data?.msg ||
+            error?.message ||
+            (typeof error === 'object' ? JSON.stringify(error) : error),
+          currentUserId: memberId,
+          userPage: page,
+          profilePath: error?.data?.profile,
+          followerCnt: error?.data?.followerCnt,
+          followingCnt: error?.data?.followingCnt,
+          totalCnt: error.data?.totalCnt,
+        });
       });
-    });
-};
+  };
 
 export const getFeedAll = (page, limit, time) => async dispatch => {
   dispatch({type: bookActionType.loading});
@@ -179,13 +192,19 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
               ? bookActionType.allSuccessPaging
               : bookActionType.allSuccess,
           data: data.data?.feedBookAllList,
+          allPage: page,
         });
       } else if (data.status === 'FAIL') {
-        dispatch({type: bookActionType.failure, data: data?.msg});
+        dispatch({
+          type: bookActionType.allFailure,
+          data: data?.msg,
+          allPage: page,
+        });
       } else {
         dispatch({
           type: bookActionType.allFailure,
           data: `error code : ${data?.code}`,
+          allPage: page,
         });
       }
     })
@@ -196,20 +215,7 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
           error?.data?.msg ||
           error?.message ||
           (typeof error === 'object' ? JSON.stringify(error) : error),
+        allPage: page,
       });
     });
-};
-
-export const booksUpdate = (books, viewType) => dispatch => {
-  if (viewType === 'follow') {
-    dispatch({type: bookActionType.followUpdate, data: books});
-  } else if (viewType === 'user') {
-    dispatch({type: bookActionType.userUpdate, data: books});
-  } else {
-    dispatch({type: bookActionType.allUpdate, data: books});
-  }
-};
-
-export const initErrorMessage = () => dispatch => {
-  dispatch({type: bookActionType.failure, data: ''});
 };

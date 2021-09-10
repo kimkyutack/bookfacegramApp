@@ -21,6 +21,7 @@ export default function TopNewBooks({route}) {
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState(null);
   const [kbsBook, setKbsBook] = useState(null);
+  const [th, setTh] = useState(18);
 
   const fetchRequested = async () => {
     try {
@@ -31,6 +32,7 @@ export default function TopNewBooks({route}) {
       if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
+        setTh(data.kbsBook?.seqKbs);
       }
       return status;
     } catch (error) {
@@ -48,6 +50,7 @@ export default function TopNewBooks({route}) {
       setLoading(true);
       setNewBook([]);
       setKbsBook([]);
+      setTh(18);
     };
   }, []);
 
@@ -56,9 +59,19 @@ export default function TopNewBooks({route}) {
       {loading ? (
         <></>
       ) : !loading && route.params.type === 'main' ? (
-        <TopNewBooksMain route={route} kbsBook={kbsBook} newBook={newBook} />
+        <TopNewBooksMain
+          route={route}
+          kbsBook={kbsBook}
+          newBook={newBook}
+          th={th}
+        />
       ) : !loading && route.params.type === 'list' ? (
-        <TopNewBooksList route={route} kbsBook={kbsBook} newBook={newBook} />
+        <TopNewBooksList
+          route={route}
+          kbsBook={kbsBook}
+          newBook={newBook}
+          th={th}
+        />
       ) : !loading && route.params.type === 'detail' ? (
         <TopNewBooksDetail route={route} />
       ) : (

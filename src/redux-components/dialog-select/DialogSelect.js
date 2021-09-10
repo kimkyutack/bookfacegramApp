@@ -41,7 +41,7 @@ export default function DialogSelect({}) {
         <View style={styles.dialog}>
           <TouchableHighlight style={styles.dialog2}>
             <View>
-              <TextWrap style={styles.message2}>선택하세요.</TextWrap>
+              <TextWrap style={styles.message2} />
             </View>
           </TouchableHighlight>
           <TouchableHighlight style={styles.dialog3}>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   message2: {
     lineHeight: 21,
     fontSize: 18,
-    marginTop: 30,
+    // marginTop: 10,
     color: '#222222',
     fontWeight: '700',
     textAlign: 'center',

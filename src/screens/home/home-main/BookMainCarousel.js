@@ -68,13 +68,20 @@ export default function BookMainCarousel({
         return bannerRenderItem;
       case 'new':
         const newRenderItem = ({item, index}) => {
+          item.type = 'new';
           if (item) {
             return (
               <CardWrap
                 style={styles.card}
                 key={index}
                 onPress={() => {
-                  dispatch(setTab({tab: 'detail', selectedBook: item.book_cd}));
+                  dispatch(
+                    setTab({
+                      tab: 'detail',
+                      selectedBook: item.book_cd,
+                      viewType: 'new',
+                    }),
+                  );
                   navigate(routes.homeDetail, {
                     type: 'detail',
                   });
@@ -101,13 +108,20 @@ export default function BookMainCarousel({
         return newRenderItem;
       case 'kbs':
         const kbsRenderItem = ({item, index}) => {
+          item.type = 'kbs';
           if (item) {
             return (
               <CardWrap
                 style={styles.card}
                 key={index}
                 onPress={() => {
-                  dispatch(setTab({tab: 'detail', selectedBook: item.book_cd}));
+                  dispatch(
+                    setTab({
+                      tab: 'detail',
+                      selectedBook: item.bookCd,
+                      viewType: 'kbs',
+                    }),
+                  );
                   navigate(routes.homeDetail, {
                     type: 'detail',
                   });
@@ -123,7 +137,7 @@ export default function BookMainCarousel({
                   font={fonts.kopubWorldDotumProBold}
                   numberOfLines={2}>
                   {item.writer}/{'\n'}
-                  {item.book_nm}
+                  {item.bookNm}
                 </TextWrap>
               </CardWrap>
             );
@@ -158,7 +172,6 @@ export default function BookMainCarousel({
                   dispatch(
                     setTab({
                       tab: 'list',
-                      th: th,
                       grade: null,
                       gradeStyle:
                         grade === null
@@ -167,11 +180,17 @@ export default function BookMainCarousel({
                           ? {color: colors.st1}
                           : grade === '2급'
                           ? {color: colors.st2}
-                          : grade === '(준)3급'
+                          : grade === '3급'
                           ? {color: colors.st3}
-                          : grade === '(준)4급'
+                          : grade === '4급'
                           ? {color: colors.st4}
-                          : grade === '(준)5급'
+                          : grade === '5급'
+                          ? {color: colors.st5}
+                          : grade === '준3급'
+                          ? {color: colors.st3}
+                          : grade === '준4급'
+                          ? {color: colors.st4}
+                          : grade === '준5급'
                           ? {color: colors.st5}
                           : grade === '누리급'
                           ? {color: colors.st6}
@@ -188,61 +207,68 @@ export default function BookMainCarousel({
             </View>
           </View>
         ) : (
-          <View style={styles.category}>
-            <View style={styles.cardHeader}>
-              <TextWrap
-                style={styles.cardHeaderTitle}
-                font={fonts.kopubWorldDotumProBold}>
-                {moment().format('YYYY')}년도 [제{th}회]{'\n'}
-                <Text
-                  style={styles.blueText}
+          grade && (
+            <View style={styles.category}>
+              <View style={styles.cardHeader}>
+                <TextWrap
+                  style={styles.cardHeaderTitle}
                   font={fonts.kopubWorldDotumProBold}>
-                  책과함께, KBS한국어능력시험
-                </Text>
-                <Text
-                  style={[colors.black, gradeStyle && gradeStyle]}
-                  font={fonts.kopubWorldDotumProBold}>
-                  {' '}
-                  {grade}{' '}
-                </Text>
-                도서
-              </TextWrap>
-              <TextWrap
-                style={styles.cardHeaderSpread}
-                font={fonts.kopubWorldDotumProMedium}
-                onPress={() => {
-                  dispatch(
-                    setTab({
-                      tab: 'list',
-                      th: th,
+                  {moment().format('YYYY')}년도 [제{th}회]{'\n'}
+                  <Text
+                    style={styles.blueText}
+                    font={fonts.kopubWorldDotumProBold}>
+                    책과함께, KBS한국어능력시험
+                  </Text>
+                  <Text
+                    style={[colors.black, gradeStyle && gradeStyle]}
+                    font={fonts.kopubWorldDotumProBold}>
+                    {' '}
+                    {grade}{' '}
+                  </Text>
+                  도서
+                </TextWrap>
+                <TextWrap
+                  style={styles.cardHeaderSpread}
+                  font={fonts.kopubWorldDotumProMedium}
+                  onPress={() => {
+                    dispatch(
+                      setTab({
+                        tab: 'list',
+                        grade: grade,
+                        gradeStyle:
+                          grade === null
+                            ? null
+                            : grade === '1급'
+                            ? {color: colors.st1}
+                            : grade === '2급'
+                            ? {color: colors.st2}
+                            : grade === '3급'
+                            ? {color: colors.st3}
+                            : grade === '4급'
+                            ? {color: colors.st4}
+                            : grade === '5급'
+                            ? {color: colors.st5}
+                            : grade === '준3급'
+                            ? {color: colors.st3}
+                            : grade === '준4급'
+                            ? {color: colors.st4}
+                            : grade === '준5급'
+                            ? {color: colors.st5}
+                            : grade === '누리급'
+                            ? {color: colors.st6}
+                            : null,
+                      }),
+                    );
+                    navigate(routes.homeList, {
                       grade: grade,
-                      gradeStyle:
-                        grade === null
-                          ? null
-                          : grade === '1급'
-                          ? {color: colors.st1}
-                          : grade === '2급'
-                          ? {color: colors.st2}
-                          : grade === '(준)3급'
-                          ? {color: colors.st3}
-                          : grade === '(준)4급'
-                          ? {color: colors.st4}
-                          : grade === '(준)5급'
-                          ? {color: colors.st5}
-                          : grade === '누리급'
-                          ? {color: colors.st6}
-                          : null,
-                    }),
-                  );
-                  navigate(routes.homeList, {
-                    grade: grade,
-                    type: 'list',
-                  });
-                }}>
-                &gt; 전체보기
-              </TextWrap>
+                      type: 'list',
+                    });
+                  }}>
+                  &gt; 전체보기
+                </TextWrap>
+              </View>
             </View>
-          </View>
+          )
         ))}
       <View>
         <Carousel
@@ -324,9 +350,11 @@ const styles = StyleSheet.create({
   },
   cardHeaderTitle: {
     lineHeight: fontPercentage(17),
+    fontSize: fontPercentage(13),
   },
   cardHeaderTitleSt1: {
     lineHeight: fontPercentage(24),
+    fontSize: fontPercentage(13),
   },
   cardHeaderSpread: {
     fontSize: fontPercentage(11),
@@ -343,7 +371,7 @@ const styles = StyleSheet.create({
   info: {
     width: '95%',
     height: '100%',
-    fontSize: fontPercentage(14),
+    fontSize: fontPercentage(12),
     paddingTop: 15,
     marginHorizontal: 5,
     lineHeight: 16,

@@ -26,8 +26,7 @@ import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
 
 import FeedBook from './screens/feed-book/FeedBook';
-import FeedBookUser from './screens/feed-book-user/FeedBookUser';
-import FeedBookImage from './screens/feed-book-image/FeedBookImage';
+import FeedBookImage from './screens/feed-book-image';
 import Search from './screens/search/Search';
 import Follow from './screens/follow/Follow';
 import Comment from './screens/feed-comment/Comment';
@@ -285,15 +284,6 @@ export default function Router() {
               }}
             />
             <Drawer.Screen
-              name={routes.feedBookUser}
-              component={FeedBookUser}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
               name={routes.feedBookImage}
               component={FeedBookImage}
               options={({route, navigation}) => {
@@ -302,6 +292,7 @@ export default function Router() {
                 };
               }}
             />
+
             <Drawer.Screen
               name={routes.search}
               component={Search}
