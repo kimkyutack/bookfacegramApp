@@ -21,6 +21,13 @@ const initDialog = {
     title: '',
     cancelTitle: '',
   },
+  selectKakaoLoginDialog: {
+    open: false,
+    onPress: null,
+    item: [],
+    title: '',
+    cancelTitle: '',
+  },
 };
 
 export default function dialog(state = initDialog, action) {
@@ -54,6 +61,18 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         selectDialog: {
+          open: true,
+          onPress: action.onPress,
+          item: action.item,
+          titleColor: action.titleColor,
+          title: action.title,
+          cancelTitle: action.cancelTitle,
+        },
+      };
+    case dialogActionType.openKakaoLogin:
+      return {
+        ...state,
+        selectKakaoLoginDialog: {
           open: true,
           onPress: action.onPress,
           item: action.item,

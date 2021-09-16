@@ -144,7 +144,9 @@ export default function Comment({route, navigation}) {
             ),
         },
         optionsSearch: {
-          component: <Image style={styles.cameraIcon} source={images.search} />,
+          component: (
+            <Image style={styles.cameraIcon} source={images.feedCamera} />
+          ),
           name: 'search',
           onPress: () =>
             navigation.navigate(routes.search, {
@@ -197,7 +199,6 @@ export default function Comment({route, navigation}) {
               setText(t);
             }}
             value={text}
-            // onSubmitEditing={onAddPress}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -283,6 +284,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   input: {
+    color: colors.text,
     width: widthPercentage(271),
     height: 50,
     paddingLeft: widthPercentage(9.5),

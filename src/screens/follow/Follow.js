@@ -7,14 +7,22 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
-
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
-import {requestGet} from '../../services/network';
+import {
+  requestGet,
+  requestPut,
+  requestPost,
+  requestDelete,
+} from '../../services/network';
 import Avatar from '../../components/avatar/Avatar';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
+import {
+  dialogActionType,
+  dialogOpenAction,
+  dialogOpenSelect,
+} from '../../redux/dialog/DialogActions';
+import {followUpdate} from '../../redux/book/BookActions';
 import {
   widthPercentage,
   heightPercentage,
@@ -27,9 +35,8 @@ import {FollowItem} from './FollowItem';
 
 export default function Follow({route, navigation}) {
   const user = useSelector(s => s.user);
-
+  const {followerCnt, followingCnt} = useSelector(s => s.book);
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
@@ -47,7 +54,7 @@ export default function Follow({route, navigation}) {
         .then(res => {
           if (res.status === 'SUCCESS') {
             setData(res.data?.feedFollower);
-          } else if (data.status === 'FAIL') {
+          } else if (res.status === 'FAIL') {
             // error 일때 해야함
           } else {
           }
@@ -67,7 +74,7 @@ export default function Follow({route, navigation}) {
         .then(res => {
           if (res.status === 'SUCCESS') {
             setData(res.data?.feedFollowing);
-          } else if (data.status === 'FAIL') {
+          } else if (res.status === 'FAIL') {
             // error 일때 해야함
           } else {
           }
@@ -81,20 +88,110 @@ export default function Follow({route, navigation}) {
   };
 
   useEffect(() => {
-    if (route.params.type === 'follower') {
-      setTabIndex(0);
-    } else {
-      setTabIndex(1);
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
     if (tabIndex === 0) {
       fetchFeedData('follower');
     } else {
       fetchFeedData('follow');
     }
-  }, [tabIndex, isFocused]);
+  }, [tabIndex]);
+
+  useEffect(() => {
+    let mount = true;
+    if (mount) {
+      if (route.params?.type === 'follower') {
+        setTabIndex(0);
+        fetchFeedData('follower');
+      } else {
+        setTabIndex(1);
+        fetchFeedData('follow');
+      }
+    }
+    return () => {
+      mount = false;
+    };
+  }, [route.params?.key, followerCnt, followingCnt]);
+
+  const deleteFollwer = (memberId, followerIdx) => {
+    dispatch(
+      dialogOpenAction({
+        titleColor: '#000',
+        cancelTitle: '취소',
+        message: `${memberId}님을 팔로워 삭제하시겠습니까?`,
+        onPress: a => {
+          if (a) {
+            requestPut({
+              url:
+                consts.apiUrl +
+                `/mypage/feedBook/follow/follower/${followerIdx}`,
+            })
+              .then(res => {
+                if (res.status === 'SUCCESS') {
+                  dispatch(
+                    followUpdate(
+                      res.data?.followerCnt,
+                      res.data?.followerList,
+                      res.data?.followingCnt,
+                      res.data?.followingList,
+                    ),
+                  );
+                } else if (res.status === 'FAIL') {
+                  // error 일때 해야함
+                  dispatch('fail');
+                } else {
+                }
+              })
+              .catch(error => {
+                dispatch(error);
+                // error 일때 해야함
+              });
+          }
+        },
+      }),
+    );
+  };
+
+  const deleteFollwing = (memberId, followingIdx, memberIdx) => {
+    dispatch(
+      dialogOpenAction({
+        titleColor: '#000',
+        cancelTitle: '취소',
+        message: `${memberId}님을 팔로잉 취소하시겠습니까?`,
+        onPress: a => {
+          if (a) {
+            requestDelete({
+              url:
+                consts.apiUrl +
+                `/mypage/feedBook/follow/following/${followingIdx}`,
+              query: {
+                following_member_idx: memberIdx,
+              },
+            })
+              .then(res => {
+                if (res.status === 'SUCCESS') {
+                  dispatch(
+                    followUpdate(
+                      res.data?.followerCnt,
+                      res.data?.followerList,
+                      res.data?.followingCnt,
+                      res.data?.followingList,
+                    ),
+                  );
+                } else if (res.status === 'FAIL') {
+                  // error 일때 해야함
+                  dispatch('fail');
+                } else {
+                }
+              })
+              .catch(error => {
+                dispatch(error);
+
+                // error 일때 해야함
+              });
+          }
+        },
+      }),
+    );
+  };
 
   return (
     <RootLayout
@@ -116,7 +213,9 @@ export default function Follow({route, navigation}) {
             ),
         },
         optionsSearch: {
-          component: <Image style={styles.cameraIcon} source={images.search} />,
+          component: (
+            <Image style={styles.cameraIcon} source={images.feedCamera} />
+          ),
           name: 'search',
           onPress: () =>
             navigation.navigate(routes.search, {
@@ -164,10 +263,7 @@ export default function Follow({route, navigation}) {
         }}
         data={['팔로워', '팔로우']}
         // user 의 팔로워, 팔로우 숫자
-        dataPin={[
-          route.params.followerCnt || 0,
-          route.params.followingCnt || 0,
-        ]}
+        dataPin={[followerCnt || 0, followingCnt || 0]}
       />
       <View style={styles.itemContainer}>
         <FlatList
@@ -206,6 +302,9 @@ export default function Follow({route, navigation}) {
                 }
                 tabIndex={tabIndex}
                 index={index}
+                deleteFollwer={deleteFollwer}
+                deleteFollwing={deleteFollwing}
+                myInfo={route.params?.myInfo}
               />
             );
           }}

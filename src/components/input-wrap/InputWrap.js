@@ -23,6 +23,7 @@ export default function InputWrap({
   onFocus,
   optionComponent,
   borderColor,
+  borderBottomColor,
   value,
   placeholder,
   placeholderTextColor,
@@ -32,6 +33,7 @@ export default function InputWrap({
   secure,
   icon,
   multiline,
+  numberOfLines,
   showSoftInputOnFocus,
   messageColor,
   selectionColor,
@@ -63,6 +65,7 @@ export default function InputWrap({
           styles.inputWrap,
           inputFlex,
           borderColor && {borderColor, borderWidth: 1.5},
+          borderBottomColor && borderBottomColor,
           disabled && {
             backgroundColor: '#f2f2f2',
             borderColor: '#e5e5e5',
@@ -84,6 +87,7 @@ export default function InputWrap({
           value={value}
           autoCorrect={false}
           multiline={multiline}
+          numberOfLines={numberOfLines}
           onChangeText={handleChange}
           underlineColorAndroid="transparent"
           style={[

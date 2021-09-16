@@ -2,6 +2,7 @@ export const dialogActionType = {
   openAction: 'dialog/openAction',
   openMessage: 'dialog/openMessage',
   openSelect: 'dialog/openSelect',
+  openKakaoLogin: 'dialog/openKakaoLogin',
   close: 'dialog/close',
 };
 
@@ -46,6 +47,16 @@ export const dialogOpenSelect =
   dispatch => {
     dispatch({
       type: dialogActionType.openSelect,
+      onPress,
+      item,
+    });
+  };
+
+export const dialogOpenKakaoLoginSelect =
+  ({onPress, item}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openKakaoLogin,
       onPress,
       item,
     });

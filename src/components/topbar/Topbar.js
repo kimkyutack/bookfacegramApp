@@ -77,6 +77,21 @@ export default function Topbar({
             numberOfLines={1}
             ellipsizeMode="tail"
             font={fonts.kopubWorldDotumProBold}
+            onPress={
+              title === 'TOAPING'
+                ? () =>
+                    // navigation.navigate(routes.home, {
+                    //   type: 'main',
+                    // })
+                    navigation.navigate(routes.home, {
+                      screen: routes.topNewBooks,
+                      params: {
+                        type: 'main',
+                        key: Date.now(),
+                      },
+                    })
+                : null
+            }
             style={styles.title}>
             {title}
           </TextWrap>
@@ -158,9 +173,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   right: {
-    width: widthPercentage(24),
-    height: heightPercentage(24),
+    // width: widthPercentage(24),
+    // height: heightPercentage(24),
     marginBottom: 5,
+    alignItems: 'flex-start',
   },
   right1: {
     width: widthPercentage(24),

@@ -14,6 +14,7 @@ import Avatar from '../../components/avatar/Avatar';
 
 const renderItem = ({
   followerIdx,
+  followingIdx,
   memberId,
   memberIdx,
   profilePath,
@@ -21,6 +22,9 @@ const renderItem = ({
   onPress,
   tabIndex,
   index,
+  deleteFollwer,
+  deleteFollwing,
+  myInfo,
 }) => {
   return (
     <View
@@ -37,13 +41,21 @@ const renderItem = ({
         />
         <TextWrap style={styles.info}>{memberId}</TextWrap>
       </TouchableOpacity>
-      <ButtonWrap
-        // onPress={() => console.log('삭제')}
-        style={styles.button}
-        font={fonts.kopubWorldDotumProMedium}
-        styleTitle={styles.buttonTitle}>
-        {tabIndex === 0 ? '삭제' : '팔로잉'}
-      </ButtonWrap>
+      {myInfo && (
+        <ButtonWrap
+          onPress={() =>
+            tabIndex === 0
+              ? deleteFollwer(memberId, followerIdx)
+              : deleteFollwing(memberId, followingIdx, memberIdx)
+          }
+          style={tabIndex === 0 ? styles.button : styles.followingButton}
+          font={fonts.kopubWorldDotumProMedium}
+          styleTitle={
+            tabIndex === 0 ? styles.buttonTitle : styles.followingButtonTitle
+          }>
+          {tabIndex === 0 ? '삭제' : '팔로잉'}
+        </ButtonWrap>
+      )}
     </View>
   );
 };
@@ -85,6 +97,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonTitle: {
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(16),
+  },
+  followingButton: {
+    borderWidth: 0.5,
+    borderColor: '#707070',
+    backgroundColor: '#006fff',
+    borderRadius: 0,
+    width: widthPercentage(50),
+    height: heightPercentage(20),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  followingButtonTitle: {
+    color: colors.white,
     fontSize: fontPercentage(11),
     lineHeight: fontPercentage(16),
   },

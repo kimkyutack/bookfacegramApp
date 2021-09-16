@@ -12,6 +12,7 @@ import {
   widthPercentage,
 } from '../../../services/util';
 import fonts from '../../../libs/fonts';
+import TabBar from './TabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -20,28 +21,8 @@ export default function TopTabs({type}) {
     <Tab.Navigator
       initialRouteName={routes.topNewBooks}
       swipeEnabled={false}
-      tabBarOptions={{
-        labelStyle: {
-          fontSize: fontPercentage(15),
-          fontFamily: fonts.kopubWorldDotumProMedium,
-        },
-        style: {
-          width: widthPercentage(332),
-          height: heightPercentage(60),
-          alignSelf: 'center',
-          justifyContent: 'center',
-          elevation: 0, // defualt border color
-        },
-        indicatorStyle: {
-          borderColor: '#FED500',
-          borderWidth: 1,
-          borderBottomWidth: 3,
-        },
-        indicatorContainerStyle: {},
-        tabStyle: {
-          borderWidth: 0,
-          borderBottomWidth: 0,
-        },
+      tabBar={props => {
+        return <TabBar {...props} />;
       }}>
       <Tab.Screen
         name={routes.topNewBooks}

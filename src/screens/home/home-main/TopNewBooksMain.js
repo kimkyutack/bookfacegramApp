@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import colors from '../../../libs/colors';
 import images from '../../../libs/images';
-import {screenWidth, widthPercentage} from '../../../services/util';
+import {screenWidth, widthPercentage, chunk} from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
 
 export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
@@ -25,26 +25,28 @@ export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
     {
       name: 'banner',
       renderData: bannerList,
-      sliderWidth: screenWidth - 22,
-      itemWidth: screenWidth - 22,
+      itemWidth: widthPercentage(332),
+      slideWidth: widthPercentage(332),
       pagination: true,
       header: false,
     },
     {
       name: 'new',
-      renderData: newBookList,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
+      renderData: newBookList ? chunk(newBookList, 3) : newBookList,
+      itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
+      slideWidth: widthPercentage(344),
       grade: null,
+      pagination: false,
       header: true,
     },
     {
       name: 'kbs',
       grade: arrayGrade[0],
       gradeStyle: {color: colors.st1},
-      renderData: kbsBookList1,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
+      renderData: kbsBookList1 ? chunk(kbsBookList1, 3) : kbsBookList1,
+      itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
+      slideWidth: widthPercentage(344),
+      pagination: false,
       header: true,
       th: th,
     },
@@ -52,9 +54,10 @@ export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
       name: 'kbs',
       grade: arrayGrade[1],
       gradeStyle: {color: colors.st2},
-      renderData: kbsBookList2,
-      sliderWidth: screenWidth - 22,
-      itemWidth: ((screenWidth - 22) / 3).toFixed(1) * 1,
+      renderData: kbsBookList2 ? chunk(kbsBookList2, 3) : kbsBookList2,
+      itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
+      slideWidth: widthPercentage(344),
+      pagination: false,
       header: true,
       th: th,
     },

@@ -17,7 +17,7 @@ import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestGet, requestPost} from '../../services/network';
+import {requestDelete, requestPost} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -29,7 +29,7 @@ import Topbar from '../../components/topbar/Topbar';
 import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {getFeedUser, getFeedAll} from '../../redux/book/BookActions';
-import {FeedUserItem} from './FeedBookFeedItem';
+import {FeedBookFeedItem} from './FeedBookFeedItem';
 import {useIsFocused} from '@react-navigation/core';
 
 export default function FeedBookFeed({route, navigation}) {
@@ -46,11 +46,14 @@ export default function FeedBookFeed({route, navigation}) {
   const [likeLoading, setLikeLoading] = useState(false);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const opacity = useRef(new Animated.Value(0)).current;
 
   const fetchUserFeed = (type, newTime) => {
+    setRefreshing(false);
     if (type === 'reset') {
       dispatch(
         getFeedUser(
@@ -74,8 +77,13 @@ export default function FeedBookFeed({route, navigation}) {
     }
   };
 
-  const fetchWholeData = newTime => {
-    dispatch(getFeedAll(allPage + 1, limit, time));
+  const fetchWholeData = (type, newTime) => {
+    setRefreshing(false);
+    if (type === 'reset') {
+      dispatch(getFeedAll(1, limit, newTime));
+    } else {
+      dispatch(getFeedAll(allPage + 1, limit, time));
+    }
   };
 
   useEffect(() => {
@@ -83,7 +91,9 @@ export default function FeedBookFeed({route, navigation}) {
     if (mount && isFocused) {
       if (route.params?.isNewFeed) {
         listRef.current?.scrollToOffset({y: 0, animated: false});
-        const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        const newTime = moment()
+          .add(20, 'second')
+          .format('YYYY-MM-DD HH:mm:ss');
         setTime(newTime);
         fetchUserFeed('reset', newTime);
       } else {
@@ -98,17 +108,43 @@ export default function FeedBookFeed({route, navigation}) {
     };
   }, [route.params?.key, route.params?.isNewFeed]);
 
-  const editOnPress = () => {
+  const feedEdit = feedIdx => {
+    dispatch(dialogError('수정 페이지 제작중...'));
+  };
+
+  const feedDelete = feedIdx => {
+    requestDelete({
+      url: consts.apiUrl + `/mypage/feedBook/my/${feedIdx}`,
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          const newTime = moment()
+            .add(20, 'second')
+            .format('YYYY-MM-DD HH:mm:ss');
+          setTime(newTime);
+          fetchUserFeed('reset', newTime);
+        } else if (res.status === 'FAIL') {
+          // error 일때 해야함
+        } else {
+        }
+      })
+      .catch(error => {
+        dispatch(error);
+        // error 일때 해야함
+      });
+  };
+
+  const editOnPress = feedIdx => {
     dispatch(
       dialogOpenSelect({
         item: [
           {
             name: '수정',
-            // onPress: () => ,
+            onPress: () => feedEdit(feedIdx),
           },
           {
             name: '삭제',
-            // onPress: () => ,
+            onPress: () => feedDelete(feedIdx),
           },
         ],
       }),
@@ -139,8 +175,51 @@ export default function FeedBookFeed({route, navigation}) {
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
     setLikeLoading(true);
-    if (userBooks?.length > 0) {
+    if (userBooks?.length > 0 && route.params.infoType === 'user') {
       const modifiedList = userBooks?.map((element, index) => {
+        if (element.feedIdx === feed_idx) {
+          const idx = element.likeMemberList.indexOf(user.member_idx);
+          if (idx === -1) {
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 0,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.push(user.member_idx);
+                element.likeCnt += 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                dispatch(dialogError(e));
+                setLikeLoading(false);
+              });
+          } else {
+            requestPost({
+              url: consts.apiUrl + '/mypage/feedBook/like',
+              body: {
+                feedIdx: feed_idx,
+                flagLike: 1,
+              },
+            })
+              .then(data => {
+                element.likeMemberList.splice(idx, 1);
+                element.likeCnt -= 1;
+                setLikeLoading(false);
+              })
+              .catch(e => {
+                dispatch(dialogError(e));
+                setLikeLoading(false);
+              });
+          }
+        }
+        return element;
+      });
+      fillHeart();
+    } else if (allBooks?.length > 0 && route.params.infoType === 'all') {
+      const modifiedList = allBooks?.map((element, index) => {
         if (element.feedIdx === feed_idx) {
           const idx = element.likeMemberList.indexOf(user.member_idx);
           if (idx === -1) {
@@ -232,13 +311,24 @@ export default function FeedBookFeed({route, navigation}) {
     }
   };
 
+  const handleRefresh = async () => {
+    const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    setRefreshing(true);
+    setTime(newTime);
+    if (route.params?.infoType === 'user') {
+      fetchUserFeed('reset', newTime);
+    } else {
+      fetchWholeData('reset', newTime);
+    }
+  };
+
   const renderItem = ({item, index}) => (
-    <FeedUserItem
+    <FeedBookFeedItem
       {...item}
       index={index}
-      login_id={user.member_id}
-      login_idx={user.member_idx}
-      userProfile={user.profile_path}
+      login_id={user?.member_id}
+      login_idx={user?.member_idx}
+      userProfile={user?.profile_path}
       editOnPress={editOnPress}
       onShare={onShare}
       toggleHeart={toggleHeart}
@@ -298,6 +388,8 @@ export default function FeedBookFeed({route, navigation}) {
         renderItem={memoizedRenderItem} // arrow 함수 자제
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}

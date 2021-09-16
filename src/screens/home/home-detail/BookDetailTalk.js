@@ -1,5 +1,14 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  FlatList,
+} from 'react-native';
+import StarRating from 'react-native-star-rating';
+import TagInput from 'react-native-tags-input';
+import {useDispatch} from 'react-redux';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import ButtonWrap from '../../../components/button-wrap/ButtonWrap';
 import InputWrap from '../../../components/input-wrap/InputWrap';
@@ -7,6 +16,7 @@ import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
 import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
+import routes from '../../../libs/routes';
 import {
   fontPercentage,
   formatTime,
@@ -14,57 +24,180 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../../services/util';
+import {requestGet, requestPost} from '../../../services/network';
 import BookDetailTalkItem from './BookDetailTalkItem';
-
-export default function BookDetailTalk({}) {
-  const [data, setData] = useState([
-    {
-      comment:
-        '토핑에서 제공하는 도서추천 서비스 덕분에 점점 독서에 더 흥미가 생겼어요. 책을 읽고 나서 다양한 독서활동까지 할 수 있으니깐 너무너무 재밌고, 친구들한테도 추천하고 있답니다. 토핑 짱!!',
-      register: '피치못할피치:D',
-      register_dt: '2021.09.05',
-      hash: '#존리#존리의부자되는습관#부자를꿈꾼다#부자되기_도전!#로또당첨',
-    },
-    {
-      comment:
-        '독서가 지루하다고만 생각했는데 독서퀴즈도 하고, 생각을 자유롭게 펼칠 수 있는 독후감대회도 있어서 재밌게 이용하고 있어요:) 토핑덕분에 재밌게 책을 읽고 있습니다.',
-      register: '자두자두',
-      register_dt: '2021.09.05',
-      hash: '#토핑#지루함#재밌다#그리스',
-    },
-  ]);
+import {
+  dialogOpenMessage,
+  dialogError,
+} from '../../../redux/dialog/DialogActions';
+export default function BookDetailTalk({selectedBook}) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [raplyContent, setReplyContent] = useState('');
+  const [starRate, setStarRate] = useState(5);
+  const [tags, setTags] = useState({tag: '', tagsArray: []});
+  const dispatch = useDispatch();
 
-  return (
-    <View style={styles.replyContainer}>
-      <InputWrap
-        style={styles.input}
-        value={raplyContent}
-        onChange={setReplyContent}
-        borderColor={colors.border}
-        maxLength={200}
-        inputStyle={styles.textInput}
-        optionComponent={
-          <TextWrap
-            style={styles.contentCount}
-            font={fonts.kopubWorldDotumProLight}>
-            ({raplyContent.length} / 200)
-          </TextWrap>
+  useEffect(() => {
+    talkReplyList();
+  }, []);
+
+  const talkReplyList = () => {
+    setLoading(true);
+    requestGet({
+      url: consts.apiUrl + '/book/bookPingTalk',
+      query: {
+        book_cd: selectedBook,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setData(res.data?.bookPingTalk);
+        } else if (res.status === 'FAIL') {
+          // error 일때 해야함
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
         }
-        multiline
-      />
-      <View style={styles.buttonContainer}>
-        <ButtonWrap styleTitle={styles.buttonAddTitle} style={styles.buttonAdd}>
-          등록
-        </ButtonWrap>
+        setLoading(false);
+      })
+      .catch(error => {
+        // error 일때 해야함
+        dispatch(dialogError(error));
+        setLoading(false);
+      });
+  };
+
+  const talkReplyInsert = () => {
+    setLoading(true);
+    requestPost({
+      url: consts.apiUrl + '/book/bookPingTalk',
+      body: {
+        bookHashtag: tags.tagsArray,
+        book_cd: selectedBook,
+        contents: raplyContent,
+        starRate: starRate,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setTags({tag: '', tagsArray: []});
+          setStarRate(5);
+          setReplyContent('');
+          talkReplyList();
+        } else if (res.status === 'FAIL') {
+          // error 일때 해야함
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        // error 일때 해야함
+        dispatch(dialogError(error));
+        setLoading(false);
+      });
+  };
+
+  const onStarRatingPress = rating => {
+    setStarRate(rating);
+  };
+
+  const setTagHandle = e => {
+    if (tags.tagsArray.length > 9) {
+      dispatch(
+        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
+      );
+    } else {
+      setTags(e);
+    }
+  };
+
+  if (loading) {
+    return <></>;
+  } else {
+    return (
+      <View style={styles.replyContainer}>
+        <View style={styles.starRateContainer}>
+          <StarRating
+            disabled={false}
+            halfStarEnabled={true}
+            emptyStar={images.recommend}
+            fullStar={images.recommendActive}
+            halfStar={images.recommendHalf}
+            maxStars={5}
+            animation={'tada'}
+            starSize={40}
+            starStyle={{marginHorizontal: 3}}
+            rating={starRate}
+            selectedStar={rating => onStarRatingPress(rating)}
+          />
+        </View>
+
+        <InputWrap
+          style={styles.input}
+          value={raplyContent}
+          onChange={setReplyContent}
+          borderColor={colors.border}
+          maxLength={300}
+          inputStyle={styles.textInput}
+          multiline
+          optionComponent={
+            <TextWrap
+              style={styles.contentCount}
+              font={fonts.kopubWorldDotumProLight}>
+              ({raplyContent.length} / 300)
+            </TextWrap>
+          }
+        />
+        <View style={styles.hashTagContianer}>
+          <TagInput
+            updateState={setTagHandle}
+            tags={tags}
+            placeholder="#책제목"
+            containerStyle={{
+              width: screenWidth,
+              paddingHorizontal: 16,
+            }}
+            inputContainerStyle={styles.hashTagInput}
+            inputStyle={{
+              fontSize: fontPercentage(12),
+              lineHeight: fontPercentage(19),
+              marginLeft: 3,
+              color: '#858585',
+              fontFamily: fonts.kopubWorldDotumProBold,
+            }}
+            autoCorrect={false}
+            tagStyle={styles.tag}
+            tagTextStyle={styles.tagText}
+            tagsViewStyle={{paddingHorizontal: 5}}
+            keysForTagsArray={['#', ',']}
+            customElement={
+              <TextWrap
+                font={fonts.kopubWorldDotumProLight}
+                style={styles.customElement}>
+                *엔터, 콤마, #를 눌러 해시태그를 등록해주세요.
+              </TextWrap>
+            }
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <ButtonWrap
+            styleTitle={styles.buttonAddTitle}
+            onPress={talkReplyInsert}
+            style={styles.buttonAdd}>
+            등록
+          </ButtonWrap>
+        </View>
+        <View style={{flex: 1}}>
+          {data.map((u, i) => {
+            return <BookDetailTalkItem {...u} key={i} />;
+          })}
+        </View>
       </View>
-      <View style={{flex: 1}}>
-        {data.map((u, i) => {
-          return <BookDetailTalkItem {...u} key={i} />;
-        })}
-      </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -72,6 +205,15 @@ const styles = StyleSheet.create({
     width: screenWidth,
     paddingHorizontal: 16,
     marginVertical: 20,
+  },
+  starRateContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  hashTagContianer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     marginVertical: 12,
@@ -104,7 +246,32 @@ const styles = StyleSheet.create({
   },
   buttonAddTitle: {
     color: colors.white,
-    // fontWeight: '700',
     fontSize: fontPercentage(13),
+  },
+
+  hashTagInput: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#333333',
+    height: 35,
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  customElement: {
+    color: colors.red,
+    paddingLeft: widthPercentage(6),
+    fontSize: fontPercentage(10),
+  },
+  tagText: {
+    fontSize: fontPercentage(11),
+    color: '#858585',
+    fontFamily: fonts.kopubWorldDotumProBold,
+  },
+  tag: {
+    backgroundColor: '#f1f1f1',
+    borderColor: '#f1f1f1',
+    borderRadius: widthPercentage(13),
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(19),
+    fontFamily: fonts.kopubWorldDotumProLight,
   },
 });

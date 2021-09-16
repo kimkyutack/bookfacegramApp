@@ -58,8 +58,8 @@ export default function HomeMain({route, navigation}) {
         }}
       />
       <TopTabs
-        grade={route.params?.grade}
-        type={route.params?.type ? route.params?.type : 'main'}
+        grade={route.params?.params?.grade}
+        type={route.params?.params?.type ? route.params?.params?.type : 'main'}
       />
     </SafeAreaView>
   );

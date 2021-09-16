@@ -48,6 +48,7 @@ import colors from './libs/colors';
 
 const Drawer = createDrawerNavigator();
 
+console.reportErrorsAsExceptions = false;
 export default function Router() {
   const [currentRouteName, setCurrentRoutName] = useState(null);
   const user = useSelector(s => s.user, shallowEqual);
@@ -59,7 +60,7 @@ export default function Router() {
       reset(routes.login);
     } else if (user.inited && user.signed) {
       if (!user.intro_setting) {
-        navigate(routes.intro1, {age: user.age});
+        navigate(routes.intro1, {age: user.age, initGrade: user.grade});
       }
     }
   }, [user.signed, user.inited]);
@@ -91,11 +92,20 @@ export default function Router() {
       );
       return () => backHandler.remove();
     } else if (currentRouteName === 'login') {
-      const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        backAction,
-      );
-      return () => backHandler.remove();
+      let backHandler = null;
+      if (!dialog.selectKakaoLoginDialog?.open) {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+        return () => backHandler.remove();
+      } else {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backLogoutAction,
+        );
+        return () => backHandler.remove();
+      }
     } else if (currentRouteName === 'intro1') {
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
@@ -103,7 +113,7 @@ export default function Router() {
       );
       return () => backHandler.remove();
     }
-  }, [currentRouteName]);
+  }, [currentRouteName, dialog.selectKakaoLoginDialog?.open]);
 
   return (
     <SafeAreaProvider>

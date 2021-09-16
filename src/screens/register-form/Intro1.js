@@ -17,7 +17,8 @@ export default function Intro1({route, navigation}) {
   const scrollRef = useRef();
   const [pressButtonIdx, setPressButtonIdx] = useState(null);
 
-  const age = route.params.age * 1;
+  const age = route.params?.age * 1;
+  const initGrade = route.params?.initGrade * 1;
   useEffect(() => {
     if (age) {
       if (age < 8) {
@@ -41,6 +42,30 @@ export default function Intro1({route, navigation}) {
       } else if (age === 16) {
         setPressButtonIdx(11);
       } else if (age === 17) {
+        setPressButtonIdx(12);
+      }
+    } else if (initGrade) {
+      if (initGrade === 2) {
+        setPressButtonIdx(2);
+      } else if (initGrade === 3) {
+        setPressButtonIdx(3);
+      } else if (initGrade === 4) {
+        setPressButtonIdx(4);
+      } else if (initGrade === 5) {
+        setPressButtonIdx(5);
+      } else if (initGrade === 6) {
+        setPressButtonIdx(6);
+      } else if (initGrade === 7) {
+        setPressButtonIdx(7);
+      } else if (initGrade === 8) {
+        setPressButtonIdx(8);
+      } else if (initGrade === 9) {
+        setPressButtonIdx(9);
+      } else if (initGrade === 10) {
+        setPressButtonIdx(10);
+      } else if (initGrade === 11) {
+        setPressButtonIdx(11);
+      } else if (initGrade === 12) {
         setPressButtonIdx(12);
       }
     }

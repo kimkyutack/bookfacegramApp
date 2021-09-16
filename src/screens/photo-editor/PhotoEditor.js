@@ -11,7 +11,6 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
 import TagInput from 'react-native-tags-input';
 import Avatar from '../../components/avatar/Avatar';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -43,10 +42,6 @@ import {
   dialogOpenAction,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
-import {
-  getImageFromCamera,
-  checkMultiplePermissions,
-} from '../../services/picker';
 
 export default function PhotoEditor({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
@@ -117,6 +112,7 @@ export default function PhotoEditor({route, navigation}) {
                 params: {
                   memberId: user.member_id,
                   memberIdx: user.member_idx,
+                  infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
                 },
@@ -157,6 +153,7 @@ export default function PhotoEditor({route, navigation}) {
                 params: {
                   memberId: user.member_id,
                   memberIdx: user.member_idx,
+                  infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
                 },
@@ -243,24 +240,25 @@ export default function PhotoEditor({route, navigation}) {
                     }
                   />
                 </View>
-                <View style={styles.avatorTextContainer}>
+                <View>
                   <InputWrap
                     style={styles.input}
                     selectionColor="#acacac"
                     inputFlex={{borderColor: colors.white}}
                     inputStyle={styles.textInput}
-                    maxLength={200}
+                    maxLength={2000}
                     value={contents}
                     onChange={setContents}
                     placeholder="내용 입력..."
                     placeholderTextColor="#acacac"
                     placeholderSize={fontPercentage(11)}
                     multiline
-                    optionComponent={
-                      <TextWrap style={styles.contentCount}>
-                        ({contents.length} / 200)
-                      </TextWrap>
-                    }
+                    numberOfLines={10}
+                    // optionComponent={
+                    //   <TextWrap style={styles.contentCount}>
+                    //     ({contents.length} / 2000)
+                    //   </TextWrap>
+                    // }
                   />
                 </View>
               </View>
@@ -296,7 +294,7 @@ export default function PhotoEditor({route, navigation}) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProLight}
                       style={styles.customElement}>
-                      *스페이스바, 엔터, 콤마를 눌러 해시태그를 등록해주세요.
+                      *엔터, 콤마, #를 눌러 해시태그를 등록해주세요.
                     </TextWrap>
                   }
                 />
@@ -340,10 +338,18 @@ export default function PhotoEditor({route, navigation}) {
 const styles = StyleSheet.create({
   input: {
     width: widthPercentage(291),
-    maxHeight: heightPercentage(180),
+    maxHeight: heightPercentage(190),
     marginLeft: 6,
-    fontSize: fontPercentage(11),
     color: '#333333',
+    paddingBottom: 0,
+  },
+  textInput: {
+    marginTop: 5,
+    textAlignVertical: 'top',
+    padding: 0,
+    color: colors.black,
+    fontSize: fontPercentage(11),
+    fontFamily: fonts.kopubWorldDotumProLight,
   },
   root: {
     flexDirection: 'row',
@@ -403,23 +409,17 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: 'row',
     paddingBottom: 16,
+    height: heightPercentage(160),
     marginTop: heightPercentage(12),
-  },
-  avatorTextContainer: {},
-  textInput: {
-    padding: 0,
-    color: colors.black,
-    fontSize: fontPercentage(11),
-    fontFamily: fonts.kopubWorldDotumProLight,
   },
   avator: {
     marginTop: 3,
   },
   contentCount: {
-    position: 'absolute',
-    top: 5,
-    right: -widthPercentage(18),
-    fontSize: fontPercentage(11),
+    // position: 'absolute',
+    // top: 5,
+    // right: -widthPercentage(18),
+    // fontSize: fontPercentage(11),
   },
   hashTagContianer: {
     flex: 1,

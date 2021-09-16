@@ -184,6 +184,17 @@ export const cameraItem = () => {
   ];
 };
 
+export const chunk = (arr, size) => {
+  let i,
+    j,
+    temparray = [],
+    chunkSize = size;
+  for (i = 0, j = arr?.length; i < j; i += chunkSize) {
+    temparray.push(arr?.slice(i, i + chunkSize));
+  }
+  return temparray;
+};
+
 export const validationEmail = email => {
   // eslint-disable-next-line no-useless-escape
   return email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);

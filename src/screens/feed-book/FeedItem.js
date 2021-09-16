@@ -128,13 +128,15 @@ const renderItem = ({
             onPress={() => toggleHeart(feedIdx)}
             style={styles.iconContainer}>
             {idx !== -1 ? (
-              <Icon name="heart" size={widthPercentage(19)} color={'#ea0000'} />
+              <Image style={styles.icon} source={images.heartActive} />
             ) : (
-              <Icon
-                name="hearto"
-                size={widthPercentage(19)}
-                color={'#595959'}
-              />
+              // <Icon name="heart" size={widthPercentage(18)} color={'#ea0000'} />
+              <Image style={styles.icon} source={images.heart} />
+              // <Icon
+              //   name="hearto"
+              //   size={widthPercentage(18)}
+              //   color={'#595959'}
+              // />
             )}
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
@@ -316,8 +318,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: widthPercentage(22),
     height: widthPercentage(22),
-    alignItems: 'center',
     justifyContent: 'flex-end',
+    alignItems: 'flex-start',
   },
   icon: {
     width: widthPercentage(19),

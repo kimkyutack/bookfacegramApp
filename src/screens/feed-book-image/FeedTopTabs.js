@@ -8,7 +8,6 @@ import FeedBookFeed from './FeedBookFeed';
 import TabBar from './TabBar';
 import routes from '../../libs/routes';
 import images from '../../libs/images';
-import {heightPercentage} from '../../services/util';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -50,8 +49,8 @@ export default function FeedTopTabs({route}) {
             <Image
               source={images.allFeed}
               style={{
-                width: 24,
-                height: 24,
+                width: 17,
+                height: 17,
                 resizeMode: 'contain',
               }}
             />

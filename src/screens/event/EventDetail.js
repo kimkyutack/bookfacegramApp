@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  Image,
-  View,
-  ScrollView,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {Image, View, ScrollView, StyleSheet, Linking} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import EventReplyItem from './EventReplyItem';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
@@ -15,35 +8,85 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
+import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
+import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
+import {requestGet, requestPost} from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
   cameraItem,
 } from '../../services/util';
+import {useIsFocused} from '@react-navigation/core';
 
 export default function EventDetail({route, navigation}) {
   const dispatch = useDispatch();
-  const [data, setData] = useState([
-    {
-      comment:
-        '토핑에서 제공하는 도서추천 서비스 덕분에 점점 독서에 더 흥미가 생겼어요. 책을 읽고 나서 다양한 독서활동까지 할 수 있으니깐 너무너무 재밌고, 친구들한테도 추천하고 있답니다. 토핑 짱!!',
-      register: '피치못할피치:D',
-      register_dt: '2021.09.05',
-    },
-    {
-      comment:
-        '독서가 지루하다고만 생각했는데 독서퀴즈도 하고, 생각을 자유롭게 펼칠 수 있는 독후감대회도 있어서 재밌게 이용하고 있어요:) 토핑덕분에 재밌게 책을 읽고 있습니다.',
-      register: '자두자두',
-      register_dt: '2021.09.05',
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
   const [raplyContent, setReplyContent] = useState('');
-  const dispathc = useDispatch();
   const routeParams = route.params.item;
-  // console.log(routeParams);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      getEventList();
+    }
+  }, [isFocused]);
+
+  const getEventList = () => {
+    setLoading(true);
+    requestGet({
+      url: consts.apiUrl + '/mypage/eventReply',
+      query: {
+        ev_idx: routeParams.ev_idx,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setData(res.data?.eventReply);
+        } else if (data.status === 'FAIL') {
+          // error 일때 해야함
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        // error 일때 해야함
+        dispatch(dialogError(error));
+        setLoading(false);
+      });
+  };
+  const eventInsert = () => {
+    setLoading(true);
+    requestPost({
+      url: consts.apiUrl + '/mypage/eventReply',
+      body: {
+        contents: raplyContent,
+        ev_idx: routeParams.ev_idx,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          getEventList();
+          setReplyContent('');
+        } else if (res.status === 'FAIL') {
+          // error 일때 해야함
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        // error 일때 해야함
+        dispatch(dialogError(error));
+        setLoading(false);
+      });
+  };
+
   return (
     <RootLayout
       topbar={{
@@ -75,7 +118,9 @@ export default function EventDetail({route, navigation}) {
           )}
           {routeParams.ev_btn_active === 1 && (
             <ButtonWrap
-              // onPress={}
+              onPress={() =>
+                Linking.openURL('http://' + routeParams?.ev_btn_url)
+              }
               styleTitle={styles.buttonTitle}
               style={styles.button}>
               이벤트 응모하기
@@ -108,13 +153,22 @@ export default function EventDetail({route, navigation}) {
               />
               <View style={styles.buttonContainer}>
                 <ButtonWrap
-                  styleTitle={styles.buttonAddTitle}
+                  styleTitle={
+                    loading
+                      ? styles.disabledButtonAddTitle
+                      : styles.buttonAddTitle
+                  }
+                  onPress={eventInsert}
+                  disabled={loading}
+                  disabledBackgroundColor={
+                    loading && {backgroundColor: colors.red}
+                  }
                   style={styles.buttonAdd}>
                   등록
                 </ButtonWrap>
               </View>
               <View style={{flex: 1}}>
-                {data.map((u, i) => {
+                {data?.map((u, i) => {
                   return <EventReplyItem {...u} key={i} />;
                 })}
                 {/* <FlatList
@@ -147,6 +201,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 0,
+    height: 40,
+    justifyContent: 'center',
     backgroundColor: colors.black,
   },
   buttonAdd: {
@@ -165,6 +221,11 @@ const styles = StyleSheet.create({
   buttonAddTitle: {
     color: colors.white,
     fontSize: fontPercentage(13),
+  },
+  disabledButtonAddTitle: {
+    color: colors.border,
+    fontSize: fontPercentage(13),
+    backgroundColor: colors.black,
   },
   replyContainer: {
     flex: 1,

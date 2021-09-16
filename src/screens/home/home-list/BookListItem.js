@@ -81,11 +81,7 @@ export default function BookListItem({item, index, grade, th, gradeStyle}) {
             });
           }}>
           <View style={styles.mainContent}>
-            <BookMainCarouselImage
-              item={item}
-              style={styles.thumbnail}
-              marginHorizontal={0}
-            />
+            <BookMainCarouselImage item={item} style={styles.thumbnail} />
             <View style={styles.info}>
               <TextWrap
                 ellipsizeMode="tail"

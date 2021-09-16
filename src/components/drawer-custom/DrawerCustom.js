@@ -22,7 +22,7 @@ export default function DrawerCustom(props) {
   return (
     <View style={styles.root}>
       <View style={styles.userInfoContainer}>
-        <View style={styles.avator}>
+        <View style={styles.avatorLeftMargin}>
           <Avatar
             size={84}
             style={styles.avator}
@@ -71,6 +71,7 @@ export default function DrawerCustom(props) {
               label="ㆍ책 서랍"
               labelStyle={styles.label}
               onPress={() => {
+                dispatch(dialogError('페이지 제작중...'));
                 // props.navigation.navigate('home');
               }}
             />
@@ -96,6 +97,7 @@ export default function DrawerCustom(props) {
               label="ㆍ토핑스토어"
               labelStyle={styles.label}
               onPress={() => {
+                dispatch(dialogError('페이지 제작중...'));
                 // props.navigation.navigate('topMyBooks');
               }}
             />
@@ -106,6 +108,7 @@ export default function DrawerCustom(props) {
               label="ㆍ개인정보수정"
               labelStyle={styles.label}
               onPress={() => {
+                dispatch(dialogError('페이지 제작중...'));
                 // props.navigation.navigate('topActivity');
               }}
             />
@@ -116,7 +119,8 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate(routes.tab);
+                dispatch(dialogError('페이지 제작중...'));
+                // props.navigation.navigate(routes.tab);
               }}
             />
           </View>
@@ -126,6 +130,7 @@ export default function DrawerCustom(props) {
               label="ㆍ앱설정"
               labelStyle={styles.label}
               onPress={() => {
+                dispatch(dialogError('페이지 제작중...'));
                 // props.navigation.navigate('tab');
               }}
             />
@@ -159,15 +164,19 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     backgroundColor: '#FED500',
     height: heightPercentage(170),
+    justifyContent: 'center',
   },
   itemList: {},
+  avatorLeftMargin: {
+    marginLeft: 10,
+  },
   avator: {
     marginTop: 15,
     marginLeft: 10,
   },
   avatorTextContainer: {marginLeft: 15, flexDirection: 'row'},
   avatorText: {
-    marginTop: 20,
+    marginTop: heightPercentage(20),
     marginLeft: 10,
     fontSize: fontPercentage(16),
     fontFamily: fonts.kopubWorldDotumProBold,

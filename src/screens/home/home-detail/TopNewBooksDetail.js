@@ -290,7 +290,7 @@ export default function TopNewBooksDetail({route, navigation}) {
             />
             <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
           </View>
-          <BookDetailTalk />
+          <BookDetailTalk selectedBook={selectedBook} />
         </>
       )}
     </ScrollView>

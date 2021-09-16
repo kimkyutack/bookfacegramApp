@@ -7,7 +7,7 @@ import {keyboardActionType} from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
-console.reportErrorsAsExceptions = false;
+import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/DialogKakaoLogin';
 function App({}) {
   const dispatch = useDispatch();
 
@@ -35,6 +35,7 @@ function App({}) {
       <DialogMessage />
       <DialogAction />
       <DialogSelect />
+      <DialogKakaoLogin />
     </>
   );
 }

@@ -5,10 +5,12 @@ import {
   View,
   Text,
   TouchableWithoutFeedback,
+  Platform,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Swiper from 'react-native-swiper';
+
 import images from '../../../libs/images';
 import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
@@ -32,7 +34,7 @@ export default function BookMainCarousel({
   name,
   grade,
   gradeStyle,
-  sliderWidth,
+  slideWidth,
   itemWidth,
   renderData,
   pagination,
@@ -40,45 +42,60 @@ export default function BookMainCarousel({
   th,
 }) {
   const dispatch = useDispatch();
-  const [activeSlide, setActiveSlide] = useState(0);
-  const isCarouselRef = useRef(null); //banner
+  const bannerRenderItem = (item, index) => {
+    if (item) {
+      return (
+        <TouchableWithoutFeedback key={index}>
+          <View style={styles.bannerContainer}>
+            <FastImage
+              style={styles.banner}
+              source={item.title}
+              resizeMode={FastImage.resizeMode.stretch}
+              onError={() => (item.title = 'bookDefault.gif')}
+              // 배너 이미지 가져오기 해야함
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      );
+    } else {
+      return;
+    }
+  };
 
-  const getRenderItem = renderName => {
-    switch (renderName) {
-      case 'banner':
-        const bannerRenderItem = ({item, index}) => {
-          if (item) {
-            return (
-              <TouchableWithoutFeedback key={index}>
-                <View style={styles.bannerContainer} key={index}>
-                  <FastImage
-                    style={styles.banner}
-                    source={item.title}
-                    resizeMode={FastImage.resizeMode.stretch}
-                    onError={() => (item.title = 'bookDefault.gif')}
-                    // 배너 이미지 가져오기 해야함
-                  />
-                </View>
-              </TouchableWithoutFeedback>
-            );
-          } else {
-            return;
-          }
-        };
-        return bannerRenderItem;
-      case 'new':
-        const newRenderItem = ({item, index}) => {
-          item.type = 'new';
-          if (item) {
+  const newRenderItem = (item, index) => {
+    if (item?.length === 1) {
+      item.push([], []);
+    } else if (item?.length === 2) {
+      item.push([]);
+    }
+    if (item) {
+      return (
+        <View
+          key={index.toString()}
+          style={{
+            width: slideWidth,
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}>
+          {item?.map((item1, index1) => {
+            item1.type = 'new';
             return (
               <CardWrap
-                style={styles.card}
-                key={index}
+                style={[
+                  styles.card,
+                  itemWidth && {width: itemWidth},
+                  // index1 === 2
+                  //   ? {alignItems: 'flex-end'}
+                  //   : index1 === 0
+                  //   ? {alignItems: 'flex-start'}
+                  //   : {alignItems: 'center'},
+                ]}
+                key={item1.book_cd + index1.toString()}
                 onPress={() => {
                   dispatch(
                     setTab({
                       tab: 'detail',
-                      selectedBook: item.book_cd,
+                      selectedBook: item1?.book_cd,
                       viewType: 'new',
                     }),
                   );
@@ -86,39 +103,67 @@ export default function BookMainCarousel({
                     type: 'detail',
                   });
                 }}>
-                <BookMainCarouselImage
-                  item={item}
-                  index={index}
-                  marginHorizontal={5}
-                />
-                <TextWrap
-                  style={styles.info}
-                  ellipsizeMode="tail"
-                  font={fonts.kopubWorldDotumProBold}
-                  numberOfLines={2}>
-                  {item.writer}/{'\n'}
-                  {item.book_nm}
-                </TextWrap>
+                {item1?.book_cd && (
+                  <View style={{width: itemWidth}}>
+                    <BookMainCarouselImage
+                      item={item1}
+                      index={index}
+                      style={[{width: itemWidth}, styles.bookShadow]}
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      font={fonts.kopubWorldDotumProBold}
+                      numberOfLines={2}>
+                      {item1?.writer}/{'\n'}
+                      {item1?.book_nm}
+                    </TextWrap>
+                  </View>
+                )}
               </CardWrap>
             );
-          } else {
-            return;
-          }
-        };
-        return newRenderItem;
-      case 'kbs':
-        const kbsRenderItem = ({item, index}) => {
-          item.type = 'kbs';
-          if (item) {
+          })}
+        </View>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const kbsRenderItem = (item, index) => {
+    if (item?.length === 1) {
+      item.push([], []);
+    } else if (item?.length === 2) {
+      item.push([]);
+    }
+    if (item) {
+      return (
+        <View
+          key={index.toString()}
+          style={{
+            width: slideWidth,
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}>
+          {item?.map((item1, index1) => {
+            item1.type = 'kbs';
             return (
               <CardWrap
-                style={styles.card}
-                key={index}
+                style={[
+                  styles.card,
+                  itemWidth && {width: itemWidth},
+                  // index1 === 2
+                  //   ? {alignItems: 'flex-end'}
+                  //   : index1 === 0
+                  //   ? {alignItems: 'flex-start'}
+                  //   : {alignItems: 'center'},
+                ]}
+                key={item1.bookCd + index1.toString()}
                 onPress={() => {
                   dispatch(
                     setTab({
                       tab: 'detail',
-                      selectedBook: item.bookCd,
+                      selectedBook: item1?.bookCd,
                       viewType: 'kbs',
                     }),
                   );
@@ -126,33 +171,32 @@ export default function BookMainCarousel({
                     type: 'detail',
                   });
                 }}>
-                <BookMainCarouselImage
-                  item={item}
-                  index={index}
-                  marginHorizontal={5}
-                />
-                <TextWrap
-                  style={styles.info}
-                  ellipsizeMode="tail"
-                  font={fonts.kopubWorldDotumProBold}
-                  numberOfLines={2}>
-                  {item.writer}/{'\n'}
-                  {item.bookNm}
-                </TextWrap>
+                {item1?.bookCd && (
+                  <View style={{width: itemWidth}}>
+                    <BookMainCarouselImage
+                      item={item1}
+                      index={index}
+                      style={[{width: itemWidth}, styles.bookShadow]}
+                    />
+                    <TextWrap
+                      style={styles.info}
+                      ellipsizeMode="tail"
+                      font={fonts.kopubWorldDotumProBold}
+                      numberOfLines={2}>
+                      {item1?.writer}/{'\n'}
+                      {item1?.bookNm}
+                    </TextWrap>
+                  </View>
+                )}
               </CardWrap>
             );
-          } else {
-            return;
-          }
-        };
-        return kbsRenderItem;
+          })}
+        </View>
+      );
+    } else {
+      return;
     }
   };
-  const memoRenderData = useMemo(() => renderData, []);
-  const memoRenderItem = useMemo(() => getRenderItem(name), []);
-  const onSnapToItem = useCallback(index => {
-    setActiveSlide(index);
-  }, []);
 
   return (
     <View style={styles.root}>
@@ -199,7 +243,7 @@ export default function BookMainCarousel({
                   );
                   navigate(routes.homeList, {
                     grade: null,
-                    type: 'list',
+                    type: 'detail',
                   });
                 }}>
                 &gt; 전체보기
@@ -261,8 +305,16 @@ export default function BookMainCarousel({
                     );
                     navigate(routes.homeList, {
                       grade: grade,
-                      type: 'list',
+                      type: 'detail',
                     });
+                    // navigate(routes.home, {
+                    //   screen: routes.topNewBooks,
+                    //   params: {
+                    //     grade: grade,
+                    //     type: 'list',
+                    //     key: Date.now(),
+                    //   },
+                    // });
                   }}>
                   &gt; 전체보기
                 </TextWrap>
@@ -270,51 +322,37 @@ export default function BookMainCarousel({
             </View>
           )
         ))}
-      <View>
-        <Carousel
-          ref={isCarouselRef}
-          enableSnap={true}
-          removeClippedSubviews={false}
-          layout={'default'}
-          data={memoRenderData}
-          extraData={memoRenderData}
-          renderItem={memoRenderItem}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-          activeSlideAlignment={'start'}
-          inactiveSlideScale={1}
-          inactiveSlideOpacity={1}
-          onSnapToItem={name === 'banner' ? onSnapToItem : null}
-          autoplay={name === 'banner' ? true : false}
-          loop={name === 'banner' ? true : false}
-          autoplayInterval={name === 'banner' ? 3000 : undefined}
-        />
-      </View>
-      {pagination && (
-        <View>
-          <Pagination
-            dotsLength={memoRenderData.length ? renderData.length : 0}
-            carouselRef={isCarouselRef}
-            activeDotIndex={activeSlide}
-            containerStyle={{
-              backgroundColor: 'transparent',
-              paddingVertical: 0,
-            }}
-            dotStyle={{
-              width: 10,
-              height: 10,
-              borderRadius: 5,
-              marginHorizontal: 1,
-              backgroundColor: '#666',
-              position: 'relative',
-              top: -25,
-            }}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={0.6}
-            tappableDots={true}
-          />
-        </View>
-      )}
+      <Swiper
+        style={styles.wrapper}
+        showsButtons={false}
+        width={slideWidth}
+        height={
+          name === 'banner' ? heightPercentage(165) : heightPercentage(190)
+        }
+        showsPagination={pagination}
+        removeClippedSubviews={false}
+        loop={name === 'banner' ? true : false}
+        autoplay={name === 'banner' ? true : false}
+        autoplayTimeout={3}
+        pagingEnabled={name === 'banner' ? true : false}
+        dotStyle={{top: 15}}
+        dotColor={colors.border}
+        activeDotStyle={{top: 15}}
+        activeDotColor={colors.blue}
+        nextButton={<Text />}
+        prevButton={<Text />}>
+        {renderData?.map((data, index) => {
+          if (name === 'banner') {
+            return bannerRenderItem(data, index);
+          } else if (name === 'new') {
+            return newRenderItem(data, index);
+          } else if (name === 'kbs') {
+            return kbsRenderItem(data, index);
+          } else {
+            return <></>;
+          }
+        })}
+      </Swiper>
     </View>
   );
 }
@@ -323,30 +361,30 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginBottom: 20,
+    alignSelf: 'center',
     backgroundColor: colors.white,
   },
+  wrapper: {},
   banner: {
-    // backgroundColor: colors.red,
+    width: widthPercentage(332),
     height: heightPercentage(150),
-    marginHorizontal: 5,
   },
   bannerContainer: {
-    marginTop: 20,
+    marginTop: heightPercentage(15),
   },
   category: {
     marginTop: 15,
   },
   card: {
-    // backgroundColor: 'red',
-    textAlign: 'center',
+    flex: 1,
+    alignItems: 'center',
     height: heightPercentage(190),
   },
-
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 6,
-    marginHorizontal: 5,
+    marginHorizontal: widthPercentage(6),
+    marginBottom: 12,
   },
   cardHeaderTitle: {
     lineHeight: fontPercentage(17),
@@ -370,13 +408,24 @@ const styles = StyleSheet.create({
   },
   info: {
     width: '95%',
-    height: '100%',
     fontSize: fontPercentage(12),
-    paddingTop: 15,
-    marginHorizontal: 5,
-    lineHeight: 16,
+    marginTop: heightPercentage(10),
+    lineHeight: fontPercentage(16),
   },
   blueText: {
     color: colors.blue,
+  },
+  bookShadow: {
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.2,
+      },
+      android: {
+        backgroundColor: 'white',
+        elevation: 1,
+      },
+    }),
   },
 });

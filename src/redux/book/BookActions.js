@@ -13,6 +13,7 @@ import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 
 export const bookActionType = {
   loading: 'book/loading',
+  allLoading: 'book/all/loading',
   followSuccess: 'book/follow/success',
   followSuccessPaging: 'book/follow/successPaging',
   userSuccess: 'book/user/success',
@@ -95,8 +96,11 @@ export const getFeedUser =
                   userPage: page,
                   profilePath: data.data?.profile,
                   followerCnt: data.data?.followerCnt,
+                  followerList: data.data?.followerList,
                   followingCnt: data.data?.followingCnt,
+                  followingList: data.data?.followingList,
                   totalCnt: data.data?.totalCnt,
+                  official: data.data?.official ? data.data?.official : 0,
                 },
               };
             } else {
@@ -107,8 +111,11 @@ export const getFeedUser =
                   userPage: page,
                   profilePath: data.data?.profile,
                   followerCnt: data.data?.followerCnt,
+                  followerList: data.data?.followerList,
                   followingCnt: data.data?.followingCnt,
+                  followingList: data.data?.followingList,
                   totalCnt: data.data?.totalCnt,
+                  official: data.data?.official ? data.data?.official : 0,
                 },
               };
             }
@@ -123,8 +130,11 @@ export const getFeedUser =
             userPage: page,
             profilePath: data.data?.profile,
             followerCnt: data.data?.followerCnt,
+            followerList: data.data?.followerList,
             followingCnt: data.data?.followingCnt,
+            followingList: data.data?.followingList,
             totalCnt: data.data?.totalCnt,
+            official: data.data?.official ? data.data?.official : 0,
           });
         } else if (data.status === 'FAIL') {
           dispatch({
@@ -134,8 +144,11 @@ export const getFeedUser =
             userPage: page,
             profilePath: data.data?.profile,
             followerCnt: data.data?.followerCnt,
+            followerList: data.data?.followerList,
             followingCnt: data.data?.followingCnt,
+            followingList: data.data?.followingList,
             totalCnt: data.data?.totalCnt,
+            official: data.data?.official ? data.data?.official : 0,
           });
         } else {
           dispatch({
@@ -145,8 +158,11 @@ export const getFeedUser =
             userPage: page,
             profilePath: data.data?.profile,
             followerCnt: data.data?.followerCnt,
+            followerList: data.data?.followerList,
             followingCnt: data.data?.followingCnt,
+            followingList: data.data?.followingList,
             totalCnt: data.data?.totalCnt,
+            official: data.data?.official ? data.data?.official : 0,
           });
         }
       })
@@ -160,15 +176,18 @@ export const getFeedUser =
           currentUserId: memberId,
           userPage: page,
           profilePath: error?.data?.profile,
-          followerCnt: error?.data?.followerCnt,
-          followingCnt: error?.data?.followingCnt,
+          followerCnt: error.data?.followerCnt,
+          followerList: error.data?.followerList,
+          followingCnt: error.data?.followingCnt,
+          followingList: error.data?.followingList,
           totalCnt: error.data?.totalCnt,
+          official: error.data?.official ? error.data?.official : 0,
         });
       });
   };
 
 export const getFeedAll = (page, limit, time) => async dispatch => {
-  dispatch({type: bookActionType.loading});
+  dispatch({type: bookActionType.allLoading});
   requestGet({
     url: consts.apiUrl + '/mypage/feedBook/all',
     query: {
@@ -219,3 +238,14 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
       });
     });
 };
+
+export const followUpdate =
+  (followerCount, followerList, followingCount, followingList) => dispatch => {
+    dispatch({
+      type: bookActionType.followUpdate,
+      followerCnt: followerCount,
+      followerList: followerList,
+      followingCnt: followingCount,
+      followingList: followingList,
+    });
+  };

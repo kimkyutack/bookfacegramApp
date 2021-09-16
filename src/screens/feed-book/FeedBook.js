@@ -257,7 +257,9 @@ export default function FeedBook({route, navigation}) {
             ),
         }}
         optionsSearch={{
-          component: <Image style={styles.cameraIcon} source={images.search} />,
+          component: (
+            <Image style={styles.cameraIcon} source={images.feedCamera} />
+          ),
           name: 'search',
           onPress: () =>
             navigation.navigate(routes.search, {

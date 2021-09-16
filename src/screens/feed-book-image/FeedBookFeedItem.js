@@ -28,6 +28,7 @@ import {navigate} from '../../services/navigation';
 import Avatar from '../../components/avatar/Avatar';
 import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
+import FeedBookFeedItemCarousel from './FeedBookFeedItemCarousel';
 
 const renderItem = ({
   feedIdx,
@@ -84,12 +85,11 @@ const renderItem = ({
         </TouchableOpacity>
         <View>
           {memberId === login_id && (
-            <TextWrap
-              font={fonts.kopubWorldDotumProMedium}
-              style={styles.infoRight}
-              onPress={editOnPress}>
-              수정
-            </TextWrap>
+            <TouchableOpacity
+              onPress={() => editOnPress(feedIdx)}
+              style={styles.infoRight}>
+              <Image source={images.editOpen} style={styles.editOpenIcon} />
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -99,21 +99,12 @@ const renderItem = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableWithoutFeedback
+        <FeedBookFeedItemCarousel
+          feedImgName={feedImgName}
           onPress={() => {
             handleDoubleTap(feedIdx);
-          }}>
-          <FastImage
-            source={{
-              uri: feedImgName?.length
-                ? consts.imgUrl + '/feedBook/' + feedImgName[0]
-                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
+          }}
+        />
         {feedIdx === toggleIndex &&
           (idx !== -1 ? (
             <Animated.View style={{position: 'absolute', opacity: opacity}}>
@@ -131,13 +122,9 @@ const renderItem = ({
             onPress={() => toggleHeart(feedIdx)}
             style={styles.iconContainer}>
             {idx !== -1 ? (
-              <Icon name="heart" size={widthPercentage(19)} color={'#ea0000'} />
+              <Image style={styles.icon} source={images.heartActive} />
             ) : (
-              <Icon
-                name="hearto"
-                size={widthPercentage(19)}
-                color={'#595959'}
-              />
+              <Image style={styles.icon} source={images.heart} />
             )}
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
@@ -231,7 +218,7 @@ const renderItem = ({
   );
 };
 
-export const FeedUserItem = React.memo(renderItem);
+export const FeedBookFeedItem = React.memo(renderItem);
 
 const styles = StyleSheet.create({
   itemContainer: {
@@ -322,7 +309,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: widthPercentage(22),
     height: widthPercentage(22),
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-end',
   },
   icon: {
@@ -333,6 +320,11 @@ const styles = StyleSheet.create({
   icon2: {
     width: widthPercentage(17),
     height: widthPercentage(17),
+    resizeMode: 'contain',
+  },
+  editOpenIcon: {
+    width: widthPercentage(12),
+    height: widthPercentage(12),
     resizeMode: 'contain',
   },
 });

@@ -59,7 +59,7 @@ export default function RegisterFormToapingInfo({}) {
       if (user.intro_setting) {
         reset(routes.home);
       } else {
-        navigate(routes.intro1, {age: user.age});
+        navigate(routes.intro1, {age: user.age, initGrade: user.grade});
       }
     }
   }, [user.signed]);

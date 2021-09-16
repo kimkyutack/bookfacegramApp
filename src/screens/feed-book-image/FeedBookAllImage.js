@@ -26,17 +26,23 @@ export default function FeedBookAllImage({route, navigation}) {
   const limit = 24;
   const dispatch = useDispatch();
   const listRef = useRef();
-  const {isLoading, allBooks, allPage, userBooks} = useSelector(s => s.book);
+  const {isAllLoading, allBooks, allPage, userBooks} = useSelector(s => s.book);
 
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 
   const fetchWholeData = (type, newTime) => {
-    if (type === 'reset') {
-      dispatch(getFeedAll(1, limit, newTime));
-    } else {
-      dispatch(getFeedAll(allPage + 1, limit, time));
+    let mount = true;
+    if (mount) {
+      if (type === 'reset') {
+        dispatch(getFeedAll(1, limit, newTime));
+      } else {
+        dispatch(getFeedAll(allPage + 1, limit, time));
+      }
     }
+    return () => {
+      mount = false;
+    };
   };
 
   useEffect(() => {
@@ -68,7 +74,7 @@ export default function FeedBookAllImage({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isLoading && allBooks.length >= limit * allPage) {
+    if (!isAllLoading && allBooks.length >= limit * allPage) {
       fetchWholeData();
     }
   };
@@ -115,7 +121,7 @@ export default function FeedBookAllImage({route, navigation}) {
   };
 
   const renderFooter = () => {
-    if (!isLoading) {
+    if (!isAllLoading) {
       return <></>;
     } else {
       return (

@@ -33,6 +33,8 @@ import {
   dialogOpenMessage,
   dialogOpenAction,
   dialogOpenSelect,
+  dialogOpenKakaoLoginSelect,
+  dialogClose,
 } from '../../redux/dialog/DialogActions';
 import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
 import {navigationRef, reset, navigate} from '../../services/navigation';
@@ -147,24 +149,30 @@ export default function Login({route}) {
   };
 
   const signInWithToaping = () => {
-    dispatch(
-      dialogOpenSelect({
-        item: [
-          {
-            name: '토핑계정으로 간편로그인',
-            source: images.toapingIcon,
-            type: 'login',
-            onPress: () => signInWithToapingType(),
-          },
-          {
-            name: '다른 토핑계정으로 로그인',
-            source: images.toapingIcon,
-            type: 'login',
-            onPress: () => navigate(routes.toapingLogin),
-          },
-        ],
-      }),
-    );
+    try {
+      handleLogin('toaping');
+    } catch (e) {
+      dispatch(dialogError(e));
+    }
+    // 다른 계정 로그인 팝업 선택
+    // dispatch(
+    //   dialogOpenSelect({
+    //     item: [
+    //       {
+    //         name: '토핑계정으로 간편로그인',
+    //         source: images.toapingIcon,
+    //         type: 'login',
+    //         onPress: () => signInWithToapingType(),
+    //       },
+    //       {
+    //         name: '다른 토핑계정으로 로그인',
+    //         source: images.toapingIcon,
+    //         type: 'login',
+    //         onPress: () => navigate(routes.toapingLogin),
+    //       },
+    //     ],
+    //   }),
+    // );
   };
 
   const signInWithToapingType = async () => {
@@ -178,21 +186,27 @@ export default function Login({route}) {
   const signInWithKakao = async () => {
     // await unlink();
     dispatch(
-      dialogOpenSelect({
+      dialogOpenKakaoLoginSelect({
         item: [
           {
-            name: '카카오톡으로 간편로그인',
-            source: images.kakaoIcon,
+            // name: '카카오톡으로 간편로그인',
+            source: images.kakaoLogin,
             type: 'login',
             onPress: () => signInWithKakaoType('exist'),
           },
           {
-            name: '다른 카카오계정으로 로그인',
-            source: images.kakaoIcon,
+            // name: '다른 카카오계정으로 로그인',
+            source: images.kakaoLoginAuth,
             type: 'login',
             onPress: async () => {
               await signInWithKakaoType('change');
             },
+          },
+          {
+            // name: 'close'
+            source: images.kakaoLoginClose,
+            type: 'close',
+            onPress: () => dispatch(dialogClose()),
           },
         ],
       }),
@@ -205,7 +219,7 @@ export default function Login({route}) {
       if (type === 'exist') {
         token = await login();
       } else if (type === 'change') {
-        token = await loginWithKakaoAccount('change');
+        token = await loginWithKakaoAccount();
       }
 
       const profile = await getKakaoProfile();
@@ -303,6 +317,7 @@ export default function Login({route}) {
           selectionColor={colors.white}
           onChange={setUsername}
           maxLength={50}
+          borderBottomColor={{borderBottomColor: colors.white}}
         />
         <InputWrap
           // icon={image.pwIcon}
@@ -315,6 +330,7 @@ export default function Login({route}) {
           maxLength={20}
           message={passwordError}
           messageColor={colors.red}
+          borderBottomColor={{borderBottomColor: colors.white}}
         />
       </View>
 

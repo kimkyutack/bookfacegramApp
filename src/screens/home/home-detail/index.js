@@ -55,7 +55,11 @@ export default function HomeDetail({route, navigation}) {
           // fetch();
         }}
       />
-      <TopTabs type={route.params?.type ? route.params?.type : 'detail'} />
+      <TopTabs
+        type={
+          route.params?.params?.type ? route.params?.params?.type : 'detail'
+        }
+      />
     </SafeAreaView>
   );
 }

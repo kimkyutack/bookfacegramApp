@@ -24,7 +24,7 @@ import {getFeedUser} from '../../redux/book/BookActions';
 import FastImage from 'react-native-fast-image';
 
 export default function FeedBookUserImage({route, navigation}) {
-  const {isLoading, userBooks, userPage, totalCnt} = useSelector(s => s.book);
+  const {isLoading, userBooks, userPage} = useSelector(s => s.book);
   const dispatch = useDispatch();
   const listRef = useRef();
   const pinchHandlerRef = useRef();

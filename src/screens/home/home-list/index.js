@@ -58,7 +58,9 @@ export default function HomeList({route, navigation}) {
           // fetch();
         }}
       />
-      <TopTabs type={route.params?.type ? route.params?.type : 'list'} />
+      <TopTabs
+        type={route.params?.params?.type ? route.params?.params?.type : 'list'}
+      />
     </SafeAreaView>
   );
 }

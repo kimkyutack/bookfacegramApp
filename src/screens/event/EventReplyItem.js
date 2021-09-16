@@ -8,25 +8,19 @@ import images from '../../libs/images';
 import {formatTime, fontPercentage} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 
-export default function EventReplyItem({
-  register_dt,
-  comment,
-  register,
-  index,
-}) {
+export default function EventReplyItem({regDate, contents, memberId, index}) {
   return (
     <View style={[styles.mainContent && {marginTop: 10}]}>
       <View style={styles.titleContainer}>
         <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
-          {register}
+          {memberId}
         </TextWrap>
         <TextWrap style={styles.title} font={fonts.kopubWorldDotumProMedium}>
-          {register_dt}
+          {regDate}
         </TextWrap>
       </View>
-
       <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.descText}>
-        {comment}
+        {contents}
       </TextWrap>
     </View>
   );
