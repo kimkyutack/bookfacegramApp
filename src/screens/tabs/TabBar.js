@@ -5,7 +5,7 @@ import fonts from '../../libs/fonts';
 import TextWrap from '../../components/text-wrap/TextWrap';
 export default function TabBar({state, descriptors, navigation}) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
-  if (focusedOptions.tabBarVisible === false) {
+  if (focusedOptions?.tabBarVisible === false) {
     return null;
   }
 
@@ -38,8 +38,7 @@ export default function TabBar({state, descriptors, navigation}) {
             key={label}
             accessibilityRole="button"
             accessibilityStates={isFocused ? ['selected'] : []}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
+            accessibilityLabel={options?.tabBarAccessibilityLabel}
             onPress={onPress}
             style={[styles.tabItem, {borderTopWidth: isFocused ? 2 : 0}]}>
             {options?.tabBarIcon({focused: isFocused, name: route.name})}

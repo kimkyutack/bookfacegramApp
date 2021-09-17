@@ -54,7 +54,7 @@ export default function Comment({route, navigation}) {
       .then(replyData => {
         setData([...replyData.data?.feedReplyList]);
         setLoading(false);
-        listRef.current?.scrollToOffset({y: 0, animated: false});
+        listRef.current?.scrollToOffset({y: 0.1, animated: false});
       })
       .catch(e => {
         setLoading(false);
@@ -105,7 +105,7 @@ export default function Comment({route, navigation}) {
     if (isFocused) {
       inputRef.current?.focus();
       setTabIndex(0);
-      listRef.current?.scrollToOffset({y: 0, animated: false});
+      listRef.current?.scrollToOffset({y: 0.1, animated: false});
       fetchCommentList();
     }
     setData([]);
@@ -183,7 +183,7 @@ export default function Comment({route, navigation}) {
             size={widthPercentage(31)}
             style={styles.avator}
             path={
-              user
+              user.profile_path
                 ? user.profile_path
                 : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
             }

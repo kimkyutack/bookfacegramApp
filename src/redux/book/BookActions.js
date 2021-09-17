@@ -12,25 +12,25 @@ import {clearItem, getItem} from '../../services/preference';
 import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 
 export const bookActionType = {
-  loading: 'book/loading',
-  allLoading: 'book/all/loading',
+  followLoading: 'book/follow/loading',
   followSuccess: 'book/follow/success',
   followSuccessPaging: 'book/follow/successPaging',
+  followFailure: 'book/follow/failure',
+  userLoading: 'book/user/loading',
   userSuccess: 'book/user/success',
   userSuccessPaging: 'book/user/successPaging',
+  userFailure: 'book/user/failure',
+  allLoading: 'book/all/loading',
   allSuccess: 'book/all/success',
   allSuccessPaging: 'book/all/successPaging',
-  followUpdate: 'book/follow/update',
-  userUpdate: 'book/user/update',
-  allUpdate: 'book/all/update',
-  failure: 'book/failure',
-  userFailure: 'book/user/failure',
   allFailure: 'book/all/failure',
+
+  followUpdate: 'book/update',
   init: 'book/init',
 };
 
 export const getFeedHome = (page, limit, time) => async dispatch => {
-  dispatch({type: bookActionType.loading});
+  dispatch({type: bookActionType.followLoading});
   requestGet({
     url: consts.apiUrl + '/mypage/feedBook/home',
     query: {
@@ -54,17 +54,17 @@ export const getFeedHome = (page, limit, time) => async dispatch => {
           data: data.data?.feedBookMainList,
         });
       } else if (data.status === 'FAIL') {
-        dispatch({type: bookActionType.failure, data: data?.msg});
+        dispatch({type: bookActionType.followFailure, data: data?.msg});
       } else {
         dispatch({
-          type: bookActionType.failure,
+          type: bookActionType.followFailure,
           data: `error code : ${data?.code}`,
         });
       }
     })
     .catch(error => {
       dispatch({
-        type: bookActionType.failure,
+        type: bookActionType.followFailure,
         data:
           error?.data?.msg ||
           error?.message ||
@@ -75,7 +75,7 @@ export const getFeedHome = (page, limit, time) => async dispatch => {
 
 export const getFeedUser =
   (memberId, memberIdx, page, limit, time) => async dispatch => {
-    dispatch({type: bookActionType.loading});
+    dispatch({type: bookActionType.userLoading});
     requestGet({
       url: consts.apiUrl + '/mypage/feedBook/other',
       query: {

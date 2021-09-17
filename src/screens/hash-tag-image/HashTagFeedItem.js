@@ -28,6 +28,7 @@ import {navigate} from '../../services/navigation';
 import Avatar from '../../components/avatar/Avatar';
 import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
+import HashTagFeedItemCarousel from './HashTagFeedItemCarousel';
 
 const renderItem = ({
   feedIdx,
@@ -52,7 +53,7 @@ const renderItem = ({
   opacity,
   toggleIndex,
 }) => {
-  const idx = likeMemberList.indexOf(login_idx);
+  const idx = likeMemberList?.indexOf(login_idx);
   return (
     <View style={styles.itemContainer}>
       <View style={styles.infoContainer}>
@@ -84,12 +85,11 @@ const renderItem = ({
         </TouchableOpacity>
         <View>
           {memberId === login_id && (
-            <TextWrap
-              font={fonts.kopubWorldDotumProMedium}
-              style={styles.infoRight}
-              onPress={editOnPress}>
-              수정
-            </TextWrap>
+            <TouchableOpacity
+              onPress={() => editOnPress(feedIdx)}
+              style={styles.infoRight}>
+              <Image source={images.editOpen} style={styles.editOpenIcon} />
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -99,18 +99,12 @@ const renderItem = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableWithoutFeedback onPress={() => handleDoubleTap(feedIdx)}>
-          <FastImage
-            source={{
-              uri: feedImgName?.length
-                ? consts.imgUrl + '/feedBook/' + feedImgName[0]
-                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
+        <HashTagFeedItemCarousel
+          feedImgName={feedImgName}
+          onPress={() => {
+            handleDoubleTap(feedIdx);
+          }}
+        />
         {feedIdx === toggleIndex &&
           (idx !== -1 ? (
             <Animated.View style={{position: 'absolute', opacity: opacity}}>
@@ -130,13 +124,7 @@ const renderItem = ({
             {idx !== -1 ? (
               <Image style={styles.icon} source={images.heartActive} />
             ) : (
-              // <Icon name="heart" size={widthPercentage(18)} color={'#ea0000'} />
               <Image style={styles.icon} source={images.heart} />
-              // <Icon
-              //   name="hearto"
-              //   size={widthPercentage(18)}
-              //   color={'#595959'}
-              // />
             )}
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
@@ -145,6 +133,7 @@ const renderItem = ({
           <TouchableOpacity
             onPress={() =>
               navigate(routes.comment, {
+                timeKey: Date.now(),
                 feedIdx: feedIdx,
                 memberId: memberId,
                 memberIdx: memberIdx,
@@ -207,6 +196,7 @@ const renderItem = ({
           style={styles.replyContainer}
           onPress={() =>
             navigate(routes.comment, {
+              timeKey: Date.now(),
               feedIdx: feedIdx,
               memberId: memberId,
               memberIdx: memberIdx,
@@ -237,7 +227,7 @@ const renderItem = ({
   );
 };
 
-export const FeedItem = React.memo(renderItem);
+export const HashTagFeedItem = React.memo(renderItem);
 
 const styles = StyleSheet.create({
   itemContainer: {
@@ -245,6 +235,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderTopColor: colors.borderLine,
     borderTopWidth: 1,
+    // height: 'heightPercentage(543.4)',
   },
   infoContainer: {
     height: heightPercentage(35),
@@ -327,8 +318,8 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: widthPercentage(22),
     height: widthPercentage(22),
-    justifyContent: 'flex-end',
     alignItems: 'flex-start',
+    justifyContent: 'flex-end',
   },
   icon: {
     width: widthPercentage(19),
@@ -338,6 +329,11 @@ const styles = StyleSheet.create({
   icon2: {
     width: widthPercentage(17),
     height: widthPercentage(17),
+    resizeMode: 'contain',
+  },
+  editOpenIcon: {
+    width: widthPercentage(12),
+    height: widthPercentage(12),
     resizeMode: 'contain',
   },
 });

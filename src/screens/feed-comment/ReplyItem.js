@@ -41,7 +41,7 @@ const renderItem = ({
               ellipsizeMode="tail"
               style={styles.info}
               font={fonts.kopubWorldDotumProBold}>
-              {memberId}
+              {memberId?.split('@')[0]}
             </TextWrap>
             <TextWrap
               style={styles.infoRight}

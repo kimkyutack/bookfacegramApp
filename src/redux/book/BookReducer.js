@@ -1,64 +1,67 @@
 import {bookActionType} from './BookActions';
 
 const initBook = {
-  isLoading: false,
-  isAllLoading: false,
-  isRefreshing: false,
+  isFollowLoading: false,
   followBooks: [],
+  followErrorMessage: '',
+
+  isUserLoading: false,
   userBooks: [],
+  userPage: 1,
+  userErrorMessage: '',
+
+  isAllLoading: false,
   allBooks: [],
   allPage: 1,
-  userPage: 1,
+  allErrorMessage: '',
+
   currentUserId: '',
   profilePath: '',
   followerList: [],
   followerCnt: 0,
   followingList: [],
   followingCnt: 0,
-  errorMessage: '',
-  allErrorMessage: '',
   official: 0,
+  totalCnt: 0,
 };
 
 const book = (state = initBook, action) => {
   switch (action.type) {
-    case bookActionType.loading:
+    case bookActionType.followLoading:
       return {
         ...state,
-        isLoading: true,
-        errorMessage: '',
-      };
-    case bookActionType.allLoading:
-      return {
-        ...state,
-        isAllLoading: true,
-        errorMessage: '',
+        isFollowLoading: true,
+        followErrorMessage: '',
       };
     case bookActionType.followSuccess:
       return {
         ...state,
-        isLoading: false,
-        isRefreshing: false,
+        isFollowLoading: false,
         followBooks: action.data,
-        errorMessage: '',
+        followErrorMessage: '',
       };
     case bookActionType.followSuccessPaging:
       return {
         ...state,
-        isLoading: false,
-        isRefreshing: false,
+        isFollowLoading: false,
         followBooks: [...state.followBooks, ...action.data],
-        errorMessage: '',
+        followErrorMessage: '',
       };
+    case bookActionType.followFailure:
+      return {
+        ...state,
+        isFollowLoading: false,
+        followErrorMessage: action.data,
+      };
+
     case bookActionType.userSuccess:
       return {
         ...state,
-        isLoading: false,
-        isRefreshing: false,
+        isUserLoading: false,
         userBooks: action.data,
-        currentUserId: action.currentUserId,
         userPage: action.userPage,
-        errorMessage: '',
+        userErrorMessage: '',
+        currentUserId: action.currentUserId,
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
         followerList: action.followerList,
@@ -70,12 +73,11 @@ const book = (state = initBook, action) => {
     case bookActionType.userSuccessPaging:
       return {
         ...state,
-        isLoading: false,
-        isRefreshing: false,
+        isUserLoading: false,
         userBooks: [...state.userBooks, ...action.data],
-        currentUserId: action.currentUserId,
         userPage: action.userPage,
-        errorMessage: '',
+        userErrorMessage: '',
+        currentUserId: action.currentUserId,
         profilePath: action.profilePath,
         followerCnt: action.followerCnt,
         followerList: action.followerList,
@@ -84,11 +86,32 @@ const book = (state = initBook, action) => {
         totalCnt: action.totalCnt,
         official: action.official,
       };
+    case bookActionType.userFailure:
+      return {
+        ...state,
+        isUserLoading: false,
+        userErrorMessage: action.data,
+        currentUserId: action.currentUserId,
+        userPage: action.userPage,
+        profilePath: action.profilePath,
+        followerCnt: action.followerCnt,
+        followerList: action.followerList,
+        followingCnt: action.followingCnt,
+        followingList: action.followingList,
+        totalCnt: action.totalCnt,
+        official: action.official,
+      };
+
+    case bookActionType.allLoading:
+      return {
+        ...state,
+        isAllLoading: true,
+        allErrorMessage: '',
+      };
     case bookActionType.allSuccess:
       return {
         ...state,
         isAllLoading: false,
-        isRefreshing: false,
         allBooks: action.data,
         allPage: action.allPage,
         allErrorMessage: '',
@@ -97,42 +120,18 @@ const book = (state = initBook, action) => {
       return {
         ...state,
         isAllLoading: false,
-        isRefreshing: false,
         allBooks: [...state.allBooks, ...action.data],
         allPage: action.allPage,
         allErrorMessage: '',
-      };
-    case bookActionType.failure:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        errorMessage: action.data,
-      };
-    case bookActionType.userFailure:
-      return {
-        ...state,
-        isLoading: false,
-        isRefreshing: false,
-        errorMessage: action.data,
-        currentUserId: action.currentUserId,
-        userPage: action.userPage,
-        profilePath: action.profilePath,
-        followerCnt: action.followerCnt,
-        followerList: action.followerList,
-        followingCnt: action.followingCnt,
-        followingList: action.followingList,
-        totalCnt: action.totalCnt,
-        official: action.official,
       };
     case bookActionType.allFailure:
       return {
         ...state,
         isAllLoading: false,
-        isRefreshing: false,
         allPage: action.allPage,
         allErrorMessage: action.data,
       };
+
     case bookActionType.followUpdate:
       return {
         ...state,

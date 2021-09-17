@@ -156,6 +156,7 @@ const renderItem = ({
             numOfLines={2}
             font={fonts.kopubWorldDotumProMedium}
             style={styles.contents}
+            timeKey={Date.now()}
             index={index}>
             {contents ? contents : ''}
           </TextMoreWrap>
@@ -170,8 +171,16 @@ const renderItem = ({
                 return (
                   <TouchableOpacity
                     key={hashIndex}
-                    // onPress={() => console.log(data)}
-                  >
+                    onPress={() =>
+                      navigate(routes.hashTagImage, {
+                        screen: routes.hashTagPopularImage,
+                        params: {
+                          hashTag: data,
+                          infoType: 'popular',
+                          key: Date.now(),
+                        },
+                      })
+                    }>
                     <TextWrap
                       font={fonts.kopubWorldDotumProLight}
                       style={styles.hashTags}>

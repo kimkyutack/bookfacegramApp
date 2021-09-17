@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import {PinchGestureHandler} from 'react-native-gesture-handler';
@@ -21,31 +22,47 @@ import {
   screenWidth,
   fontPercentage,
 } from '../../services/util';
-import {getFeedAll} from '../../redux/book/BookActions';
 import TextWrap from '../../components/text-wrap/TextWrap';
+import {getNewestHashTag} from '../../redux/tag/TagAction';
 
-export default function FeedBookAllImage({route, navigation}) {
-  const limit = 24;
+export default function HashTagNewestImage({route, navigation}) {
+  const {
+    isNewestLoading,
+    newestPage,
+    newestHashTags,
+    newestErrorMessage,
+    currentHashTag,
+  } = useSelector(s => s.tag);
+
   const dispatch = useDispatch();
   const listRef = useRef();
-  const {isAllLoading, allBooks, allPage, allErrorMessage, totalCnt} =
-    useSelector(s => s.book);
-
+  const pinchHandlerRef = useRef();
+  const limit = 24;
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 
-  const fetchWholeData = (type, newTime) => {
-    let mount = true;
-    if (mount) {
-      if (type === 'reset') {
-        dispatch(getFeedAll(1, limit, newTime));
-      } else {
-        dispatch(getFeedAll(allPage + 1, limit, time));
-      }
+  const fetchNewestTags = (type, newTime) => {
+    if (type === 'reset') {
+      dispatch(
+        getNewestHashTag(
+          currentHashTag ? currentHashTag : route.params?.hashTag,
+          'newest',
+          1,
+          limit,
+          newTime,
+        ),
+      );
+    } else {
+      dispatch(
+        getNewestHashTag(
+          currentHashTag ? currentHashTag : route.params?.hashTag,
+          'newest',
+          newestPage + 1,
+          limit,
+          time,
+        ),
+      );
     }
-    return () => {
-      mount = false;
-    };
   };
 
   useEffect(() => {
@@ -54,12 +71,12 @@ export default function FeedBookAllImage({route, navigation}) {
       listRef.current?.scrollToOffset({y: 0.1, animated: false});
       const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
-      fetchWholeData('reset', newTime);
+      fetchNewestTags('reset', newTime);
     }
     return () => {
       mount = false;
     };
-  }, [totalCnt]);
+  }, [currentHashTag]);
 
   const handleGesture = e => {
     const oldScale = e.nativeEvent.scale;
@@ -76,24 +93,18 @@ export default function FeedBookAllImage({route, navigation}) {
     }
   };
 
-  const onEndReached = e => {
-    if (!isAllLoading && allBooks.length >= limit * allPage) {
-      fetchWholeData();
-    }
-  };
-
   const onPress = (item, index) => {
-    navigation.navigate(routes.feedBookImage, {
-      screen: routes.feedBookFeed,
+    navigation.navigate(routes.hashTagImage, {
+      screen: routes.hashTagFeed,
       params: {
         memberId: item.memberId,
         memberIdx: item.memberIdx,
         feedIdx: item.feedIdx,
-        isNewFeed: false,
         key: Date.now(),
-        page: allPage,
+        page: newestPage,
         index: index,
-        infoType: 'all',
+        infoType: 'newest',
+        hashTag: route.params?.hashTag,
       },
     });
   };
@@ -124,7 +135,7 @@ export default function FeedBookAllImage({route, navigation}) {
   };
 
   const renderFooter = () => {
-    if (!isAllLoading) {
+    if (!isNewestLoading) {
       return <></>;
     } else {
       return (
@@ -140,35 +151,32 @@ export default function FeedBookAllImage({route, navigation}) {
     }
   };
 
+  const onEndReached = e => {
+    if (!isNewestLoading && newestHashTags.length >= limit * newestPage) {
+      fetchNewestTags();
+    }
+  };
+
   const memoizedRenderItem = useMemo(() => renderItem, [handleGesture]);
   const keyExtractor = useCallback((item, index) => {
     return item?.feedIdx.toString() + index.toString();
   }, []);
 
-  return allBooks?.length === 0 ? (
+  return newestHashTags?.length === 0 ? (
     <View style={styles.root}>
-      {allErrorMessage ? (
-        <TextWrap>{allErrorMessage}</TextWrap>
-      ) : (
-        <ActivityIndicator
-          size="large"
-          style={{
-            alignSelf: 'center',
-            top: -50,
-          }}
-          color={colors.blue}
-        />
-      )}
+      <TextWrap>
+        {newestErrorMessage ? newestErrorMessage : '검색 결과가 없습니다.'}
+      </TextWrap>
     </View>
   ) : (
-    <PinchGestureHandler onGestureEvent={handleGesture}>
+    <PinchGestureHandler ref={pinchHandlerRef} onGestureEvent={handleGesture}>
       <FlatList
         key={String(numColumns)}
         numColumns={numColumns}
         initialNumToRender={limit}
         ref={listRef}
-        data={allBooks}
-        extraData={allBooks}
+        data={newestHashTags}
+        extraData={newestHashTags}
         removeClippedSubviews={true}
         disableVirtualization={false}
         showsVerticalScrollIndicator={true}

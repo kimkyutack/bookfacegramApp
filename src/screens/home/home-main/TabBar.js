@@ -12,7 +12,7 @@ import {
 
 export default function TabBar({state, descriptors, navigation}) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
-  if (focusedOptions.tabBarVisible === false) {
+  if (focusedOptions?.tabBarVisible === false) {
     return null;
   }
 
@@ -69,7 +69,7 @@ export default function TabBar({state, descriptors, navigation}) {
             <View
               accessibilityRole="button"
               accessibilityStates={isFocused ? ['selected'] : []}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityLabel={options?.tabBarAccessibilityLabel}
               style={[
                 styles.tabItem,
                 {

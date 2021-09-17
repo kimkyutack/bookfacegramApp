@@ -31,6 +31,8 @@ import Search from './screens/search/Search';
 import Follow from './screens/follow/Follow';
 import Comment from './screens/feed-comment/Comment';
 
+import HashTagImage from './screens/hash-tag-image';
+
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
 import RegisterFormInfo from './screens/register-form/RegisterFormInfo';
@@ -330,6 +332,17 @@ export default function Router() {
                 };
               }}
             />
+
+            <Drawer.Screen
+              name={routes.hashTagImage}
+              component={HashTagImage}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
             <Drawer.Screen
               name={routes.tab}
               component={Tabs}

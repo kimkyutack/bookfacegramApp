@@ -24,19 +24,21 @@ import {
   fontPercentage,
   cameraItem,
 } from '../../services/util';
-import RootLayout from '../../layouts/root-layout/RootLayout';
-import Topbar from '../../components/topbar/Topbar';
-import Avatar from '../../components/avatar/Avatar';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {getFeedUser, getFeedAll} from '../../redux/book/BookActions';
-import {FeedBookFeedItem} from './FeedBookFeedItem';
+import {getNewestHashTag, getPopularHashTag} from '../../redux/tag/TagAction';
+import {HashTagFeedItem} from './HashTagFeedItem';
 import {useIsFocused} from '@react-navigation/core';
 
-export default function FeedBookFeed({route, navigation}) {
+export default function HashTagFeed({route, navigation}) {
   const user = useSelector(s => s.user);
-  const {isUserLoading, userBooks, allBooks, userPage, allPage} = useSelector(
-    s => s.book,
-  );
+  const {
+    isPopularLoading,
+    isNewestLoading,
+    popularHashTags,
+    newestHashTags,
+    popularPage,
+    newestPage,
+  } = useSelector(s => s.tag);
 
   const dispatch = useDispatch();
   const listRef = useRef();
@@ -46,30 +48,21 @@ export default function FeedBookFeed({route, navigation}) {
   const [likeLoading, setLikeLoading] = useState(false);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
-  const [refreshing, setRefreshing] = useState(false);
-
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const opacity = useRef(new Animated.Value(0)).current;
 
-  const fetchUserFeed = (type, newTime) => {
-    setRefreshing(false);
+  const fetchPopularFeed = (type, newTime) => {
     if (type === 'reset') {
       dispatch(
-        getFeedUser(
-          route.params?.memberId,
-          route.params?.memberIdx,
-          1,
-          limit,
-          newTime,
-        ),
+        getPopularHashTag(route.params?.hashTag, 'popular', 1, limit, time),
       );
     } else {
       dispatch(
-        getFeedUser(
-          route.params?.memberId,
-          route.params?.memberIdx,
-          userPage + 1,
+        getPopularHashTag(
+          route.params?.hashTag,
+          'popular',
+          popularPage + 1,
           limit,
           time,
         ),
@@ -77,61 +70,62 @@ export default function FeedBookFeed({route, navigation}) {
     }
   };
 
-  const fetchWholeData = (type, newTime) => {
-    setRefreshing(false);
+  const fetchNewestData = (type, newTime) => {
     if (type === 'reset') {
-      dispatch(getFeedAll(1, limit, newTime));
+      dispatch(
+        getNewestHashTag(route.params?.hashTag, 'newest', 1, limit, time),
+      );
     } else {
-      dispatch(getFeedAll(allPage + 1, limit, time));
+      dispatch(
+        getNewestHashTag(
+          route.params?.hashTag,
+          'newest',
+          newestPage + 1,
+          limit,
+          time,
+        ),
+      );
     }
   };
 
   useEffect(() => {
     let mount = true;
     if (mount && isFocused) {
-      if (route.params?.isNewFeed) {
-        listRef.current?.scrollToOffset({y: 0.1, animated: false});
-        const newTime = moment()
-          .add(20, 'second')
-          .format('YYYY-MM-DD HH:mm:ss');
-        setTime(newTime);
-        fetchUserFeed('reset', newTime);
-      } else {
-        listRef.current?.scrollToIndex({
-          animated: false,
-          index: route.params?.index ? route.params?.index : 0,
-        });
-      }
+      listRef.current?.scrollToIndex({
+        animated: false,
+        index: route.params?.index ? route.params?.index : 0,
+      });
     }
     return () => {
       mount = false;
     };
-  }, [route.params?.key, route.params?.isNewFeed]);
+  }, [route.params?.key]);
 
   const feedEdit = feedIdx => {
     dispatch(dialogError('수정 페이지 제작중...'));
   };
 
   const feedDelete = feedIdx => {
-    requestDelete({
-      url: consts.apiUrl + `/mypage/feedBook/my/${feedIdx}`,
-    })
-      .then(res => {
-        if (res.status === 'SUCCESS') {
-          const newTime = moment()
-            .add(20, 'second')
-            .format('YYYY-MM-DD HH:mm:ss');
-          setTime(newTime);
-          fetchUserFeed('reset', newTime);
-        } else if (res.status === 'FAIL') {
-          // error 일때 해야함
-        } else {
-        }
-      })
-      .catch(error => {
-        dispatch(error);
-        // error 일때 해야함
-      });
+    dispatch(dialogError('삭제 페이지 제작중...'));
+    // requestDelete({
+    //   url: consts.apiUrl + `/mypage/feedBook/my/${feedIdx}`,
+    // })
+    //   .then(res => {
+    //     if (res.status === 'SUCCESS') {
+    //       const newTime = moment()
+    //         .add(20, 'second')
+    //         .format('YYYY-MM-DD HH:mm:ss');
+    //       setTime(newTime);
+    //       fetchUserFeed('reset', newTime);
+    //     } else if (res.status === 'FAIL') {
+    //       // error 일때 해야함
+    //     } else {
+    //     }
+    //   })
+    //   .catch(error => {
+    //     dispatch(error);
+    //     // error 일때 해야함
+    //   });
   };
 
   const editOnPress = feedIdx => {
@@ -175,8 +169,8 @@ export default function FeedBookFeed({route, navigation}) {
   const toggleHeart = feed_idx => {
     setToggleIndex(feed_idx);
     setLikeLoading(true);
-    if (userBooks?.length > 0 && route.params.infoType === 'user') {
-      const modifiedList = userBooks?.map((element, index) => {
+    if (popularHashTags?.length > 0 && route.params.infoType === 'popular') {
+      const modifiedList = popularHashTags?.map((element, index) => {
         if (element.feedIdx === feed_idx) {
           const idx = element.likeMemberList.indexOf(user.member_idx);
           if (idx === -1) {
@@ -218,8 +212,11 @@ export default function FeedBookFeed({route, navigation}) {
         return element;
       });
       fillHeart();
-    } else if (allBooks?.length > 0 && route.params.infoType === 'all') {
-      const modifiedList = allBooks?.map((element, index) => {
+    } else if (
+      newestHashTags?.length > 0 &&
+      route.params.infoType === 'newest'
+    ) {
+      const modifiedList = newestHashTags?.map((element, index) => {
         if (element.feedIdx === feed_idx) {
           const idx = element.likeMemberList.indexOf(user.member_idx);
           if (idx === -1) {
@@ -294,36 +291,25 @@ export default function FeedBookFeed({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isUserLoading && e.distanceFromEnd > 0) {
+    if (!isPopularLoading && e.distanceFromEnd > 0) {
       if (
         route.params?.infoType &&
-        route.params?.infoType === 'user' &&
-        userBooks.length >= limit * userPage
+        route.params?.infoType === 'popular' &&
+        popularHashTags.length >= limit * popularPage
       ) {
-        fetchUserFeed();
+        fetchPopularFeed();
       } else if (
         route.params?.infoType &&
-        route.params?.infoType === 'all' &&
-        allBooks.length >= limit * allPage
+        route.params?.infoType === 'newest' &&
+        newestHashTags.length >= limit * newestPage
       ) {
-        fetchWholeData();
+        fetchNewestData();
       }
     }
   };
 
-  const handleRefresh = async () => {
-    const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
-    setRefreshing(true);
-    setTime(newTime);
-    if (route.params?.infoType === 'user') {
-      fetchUserFeed('reset', newTime);
-    } else {
-      fetchWholeData('reset', newTime);
-    }
-  };
-
   const renderItem = ({item, index}) => (
-    <FeedBookFeedItem
+    <HashTagFeedItem
       {...item}
       index={index}
       login_id={user?.member_id}
@@ -339,19 +325,36 @@ export default function FeedBookFeed({route, navigation}) {
   );
 
   const renderFooter = () => {
-    if (userBooks?.length === 0 || !isUserLoading) {
-      return <></>;
+    if (route.params?.infoType === 'popular') {
+      if (popularHashTags?.length === 0 || !isPopularLoading) {
+        return <></>;
+      } else {
+        return (
+          <ActivityIndicator
+            size="large"
+            style={{
+              alignSelf: 'center',
+              top: -50,
+            }}
+            color={colors.blue}
+          />
+        );
+      }
     } else {
-      return (
-        <ActivityIndicator
-          size="large"
-          style={{
-            alignSelf: 'center',
-            top: -50,
-          }}
-          color={colors.blue}
-        />
-      );
+      if (newestHashTags?.length === 0 || !isNewestLoading) {
+        return <></>;
+      } else {
+        return (
+          <ActivityIndicator
+            size="large"
+            style={{
+              alignSelf: 'center',
+              top: -50,
+            }}
+            color={colors.blue}
+          />
+        );
+      }
     }
   };
 
@@ -367,14 +370,14 @@ export default function FeedBookFeed({route, navigation}) {
         initialScrollIndex={route.params?.index}
         ref={listRef}
         data={
-          route.params?.infoType && route.params?.infoType === 'user'
-            ? userBooks
-            : allBooks
+          route.params?.infoType && route.params?.infoType === 'popular'
+            ? popularHashTags
+            : newestHashTags
         }
         extraData={
-          route.params?.infoType && route.params?.infoType === 'user'
-            ? userBooks
-            : allBooks
+          route.params?.infoType && route.params?.infoType === 'popular'
+            ? popularHashTags
+            : newestHashTags
         }
         removeClippedSubviews={true}
         getItemLayout={(data, index) => ({
@@ -388,8 +391,6 @@ export default function FeedBookFeed({route, navigation}) {
         renderItem={memoizedRenderItem} // arrow 함수 자제
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
         maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}

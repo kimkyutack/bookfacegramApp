@@ -3,10 +3,14 @@ import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import {heightPercentage} from '../../services/util';
-
+import TextWrap from '../../components/text-wrap/TextWrap';
+import {
+  fontPercentage,
+  widthPercentage,
+  heightPercentage,
+} from '../../services/util';
 export default function TabBar({state, descriptors, navigation, position}) {
-  const hideOnScreens = [routes.feedBookFeed];
+  const hideOnScreens = [routes.hashTagFeed];
 
   if (state.index === 2) {
     return <></>;
@@ -17,15 +21,13 @@ export default function TabBar({state, descriptors, navigation, position}) {
           if (hideOnScreens.indexOf(route.name) > -1) {
             return false;
           }
-
           const {options} = descriptors[route.key];
-
-          // const label =
-          //   options.tabBarLabel !== undefined
-          //     ? options.tabBarLabel
-          //     : options.title !== undefined
-          //     ? options.title
-          //     : route.name;
+          const label =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+              ? options.title
+              : route.name;
 
           const isFocused = state.index === index;
 
@@ -40,30 +42,26 @@ export default function TabBar({state, descriptors, navigation, position}) {
               navigation.navigate(route.name);
             }
           };
-
-          // const onLongPress = () => {
-          //   navigation.emit({
-          //     type: 'tabLongPress',
-          //     target: route.key,
-          //   });
-          // };
-
-          // const inputRange = state.routes.map((_, i) => i);
-          // const opacity = Animated.interpolate(position, {
-          //   inputRange,
-          //   outputRange: inputRange.map(i => (i === index ? 1 : 0)),
-          // });
-
           return (
             <TouchableOpacity
-              key={index?.toString()}
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options?.tabBarAccessibilityLabel}
+              key={label}
               onPress={onPress}
-              // onLongPress={onLongPress}
-              style={[styles.tabItem, isFocused && styles.tabFocused]}>
-              {options.tabBarIcon}
+              style={[styles.tabItem, isFocused && styles.tabFocused]}
+              accessibilityRole="button"
+              accessibilityStates={isFocused ? ['selected'] : []}
+              accessibilityLabel={options?.tabBarAccessibilityLabel}>
+              <View>
+                <TextWrap
+                  font={fonts.kopubWorldDotumProMedium}
+                  style={[
+                    styles.label,
+                    {
+                      color: isFocused ? '#333333' : '#acacac',
+                    },
+                  ]}>
+                  {label}
+                </TextWrap>
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -81,9 +79,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e6e6e6',
     borderTopColor: '#e6e6e6',
     justifyContent: 'space-around',
-    height: heightPercentage(30),
-    marginTop: heightPercentage(10),
+    width: widthPercentage(360),
+    height: heightPercentage(35),
+    elevation: 0,
   },
+
   tabItem: {
     alignSelf: 'stretch',
     alignItems: 'center',
@@ -97,8 +97,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#333333',
   },
   label: {
-    lineHeight: 12,
-    fontSize: 11,
-    marginTop: 4,
+    fontSize: fontPercentage(11),
   },
 });

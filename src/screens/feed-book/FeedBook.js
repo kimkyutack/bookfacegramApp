@@ -29,10 +29,13 @@ import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {getFeedHome} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 import Topbar from '../../components/topbar/Topbar';
+import TextWrap from '../../components/text-wrap/TextWrap';
 
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
-  const {isLoading, followBooks} = useSelector(s => s.book);
+  const {isFollowLoading, followBooks, followErrorMessage} = useSelector(
+    s => s.book,
+  );
   const [likeLoading, setLikeLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -189,7 +192,7 @@ export default function FeedBook({route, navigation}) {
   };
 
   const handleRefresh = async () => {
-    const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
     setRefreshing(true);
     setPage(1);
     setTime(newTime);
@@ -197,7 +200,7 @@ export default function FeedBook({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isLoading && followBooks.length >= page * limit) {
+    if (!isFollowLoading && followBooks.length >= page * limit) {
       setPage(p => p + 1);
     }
   };
@@ -224,7 +227,7 @@ export default function FeedBook({route, navigation}) {
   }, []);
 
   const renderFooter = () => {
-    if (followBooks?.length === 0 || !isLoading) {
+    if (followBooks?.length === 0 || !isFollowLoading) {
       return <></>;
     } else {
       return (
@@ -291,29 +294,51 @@ export default function FeedBook({route, navigation}) {
           },
         }}
       />
-      <FlatList
-        initialNumToRender={limit}
-        ref={listRef}
-        data={followBooks}
-        extraData={followBooks}
-        removeClippedSubviews={true}
-        disableVirtualization={false}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={keyExtractor} // arrow 함수 자제
-        renderItem={memoizedRenderItem} // arrow 함수 자제
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.6}
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
-        windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
-        ListFooterComponent={renderFooter}
-      />
+      {followBooks?.length === 0 ? (
+        <View style={styles.root}>
+          {followErrorMessage ? (
+            <TextWrap>{followErrorMessage}</TextWrap>
+          ) : (
+            <ActivityIndicator
+              size="large"
+              style={{
+                alignSelf: 'center',
+                top: -50,
+              }}
+              color={colors.blue}
+            />
+          )}
+        </View>
+      ) : (
+        <FlatList
+          initialNumToRender={limit}
+          ref={listRef}
+          data={followBooks}
+          extraData={followBooks}
+          removeClippedSubviews={true}
+          disableVirtualization={false}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={keyExtractor} // arrow 함수 자제
+          renderItem={memoizedRenderItem} // arrow 함수 자제
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.6}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
+          windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
+          ListFooterComponent={renderFooter}
+        />
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),

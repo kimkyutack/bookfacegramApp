@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {View, Text, TextPropTypes} from 'react-native';
 import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
@@ -17,6 +17,10 @@ export default function TextMoreWrap(props) {
     setStartWidth(e.nativeEvent.lines[props.numOfLines - 1]?.width);
     setLengthMore(e.nativeEvent.lines.length > props.numOfLines);
   }, []);
+
+  useEffect(() => {
+    setTextShown(false);
+  }, [props?.timeKey]);
 
   return (
     <View>

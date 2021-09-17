@@ -27,7 +27,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   const [type, setType] = useState('new');
 
   useEffect(() => {
-    scrollRef.current?.scrollToOffset({y: 0, animated: false});
+    scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
     if (listTab.listTab.grade === null) {
       setType('new');
       setRenderData(newBook);

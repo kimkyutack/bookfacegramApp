@@ -2,16 +2,16 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import dialog from './dialog/DialogReducer';
 import user from './user/UserReducer';
-import loading from './loading/LoadingReducer';
 import keyboard from './keyboard/KeyboardReducer';
 import tab from './tab/TabReducer';
 import book from './book/BookReducer';
+import tag from './tag/TagReducer';
 
 const appReducer = combineReducers({
   user: user,
   tab: tab,
-  loading: loading,
   book: book,
+  tag: tag,
   keyboard: keyboard,
   dialog: dialog,
 });

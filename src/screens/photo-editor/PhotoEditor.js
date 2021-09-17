@@ -83,7 +83,7 @@ export default function PhotoEditor({route, navigation}) {
       } else {
         try {
           // android file write on phone
-          if (params?.image?.length > 1) {
+          if (params?.name === 'gallery') {
             // 여러장
             const formData = new FormData();
             const file = [];
@@ -180,6 +180,7 @@ export default function PhotoEditor({route, navigation}) {
       listRef.current?.scrollToEnd({animated: true});
     }
   };
+
   return (
     <RootLayout
       style={{paddingHorizontal: 16}}

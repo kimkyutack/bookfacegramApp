@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import {
+  View,
   FlatList,
   StyleSheet,
   ActivityIndicator,
@@ -8,6 +9,7 @@ import {
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import moment from 'moment';
+import FastImage from 'react-native-fast-image';
 import {PinchGestureHandler} from 'react-native-gesture-handler';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
@@ -21,10 +23,12 @@ import {
   fontPercentage,
 } from '../../services/util';
 import {getFeedUser} from '../../redux/book/BookActions';
-import FastImage from 'react-native-fast-image';
+import TextWrap from '../../components/text-wrap/TextWrap';
 
 export default function FeedBookUserImage({route, navigation}) {
-  const {isLoading, userBooks, userPage} = useSelector(s => s.book);
+  const {isUserLoading, userBooks, userPage, userErrorMessage} = useSelector(
+    s => s.book,
+  );
   const dispatch = useDispatch();
   const listRef = useRef();
   const pinchHandlerRef = useRef();
@@ -60,8 +64,8 @@ export default function FeedBookUserImage({route, navigation}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
-      listRef.current?.scrollToOffset({y: 0, animated: false});
-      const newTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      listRef.current?.scrollToOffset({y: 0.1, animated: false});
+      const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
       fetchUserData('reset', newTime);
     }
@@ -86,7 +90,7 @@ export default function FeedBookUserImage({route, navigation}) {
   };
 
   const onEndReached = e => {
-    if (!isLoading && userBooks.length >= limit * userPage) {
+    if (!isUserLoading && userBooks.length >= limit * userPage) {
       fetchUserData();
     }
   };
@@ -133,7 +137,7 @@ export default function FeedBookUserImage({route, navigation}) {
   };
 
   const renderFooter = () => {
-    if (!isLoading) {
+    if (!isUserLoading) {
       return <></>;
     } else {
       return (
@@ -154,7 +158,22 @@ export default function FeedBookUserImage({route, navigation}) {
     return item?.feedIdx.toString() + index.toString();
   }, []);
 
-  return (
+  return userBooks?.length === 0 ? (
+    <View style={styles.root}>
+      {userErrorMessage ? (
+        <TextWrap>{userErrorMessage}</TextWrap>
+      ) : (
+        <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: -50,
+          }}
+          color={colors.blue}
+        />
+      )}
+    </View>
+  ) : (
     <PinchGestureHandler ref={pinchHandlerRef} onGestureEvent={handleGesture}>
       <FlatList
         key={String(numColumns)}
@@ -179,6 +198,8 @@ export default function FeedBookUserImage({route, navigation}) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   infoContainer: {
     justifyContent: 'space-between',
