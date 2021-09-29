@@ -211,8 +211,8 @@ export default function Search({route, navigation}) {
     <RootLayout
       topbar={{
         title:
-          user.member_id?.split('@')[0]?.length > 12
-            ? user.member_id?.split('@')[0]?.substring(0, 12) + '...'
+          user.member_id?.split('@')[0]?.length > 10
+            ? user.member_id?.split('@')[0]?.substring(0, 10) + '...'
             : user.member_id?.split('@')[0],
         navigation: navigation,
         back: true,

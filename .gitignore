@@ -61,4 +61,11 @@ buck-out/
 .gitignore
 .gitignore
 
+# Env
+.env.development
+.env.staging
+.env.production
 
+
+# google-services config
+android/app/google-services.json

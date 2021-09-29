@@ -186,8 +186,8 @@ export default function PhotoEditor({route, navigation}) {
       style={{paddingHorizontal: 16}}
       topbar={{
         title:
-          user.member_id?.split('@')[0]?.length > 12
-            ? user.member_id?.split('@')[0]?.substring(0, 12) + '...'
+          user.member_id?.split('@')[0]?.length > 10
+            ? user.member_id?.split('@')[0]?.substring(0, 10) + '...'
             : user.member_id?.split('@')[0],
         back: true,
         navigation: navigation,

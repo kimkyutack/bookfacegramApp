@@ -1,15 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {
-  Image,
-  Keyboard,
-  StyleSheet,
-  View,
-  PixelRatio,
-  Dimensions,
-  Text,
-  BackHandler,
-  TouchableOpacity,
-} from 'react-native';
+import {Image, Keyboard, StyleSheet, View, Platform} from 'react-native';
+import Config from 'react-native-config';
+import axios from 'axios';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import InputWrap from '../../components/input-wrap/InputWrap';
@@ -31,8 +23,6 @@ import {
 import {
   dialogError,
   dialogOpenMessage,
-  dialogOpenAction,
-  dialogOpenSelect,
   dialogOpenKakaoLoginSelect,
   dialogClose,
 } from '../../redux/dialog/DialogActions';
@@ -40,14 +30,17 @@ import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
 import {navigationRef, reset, navigate} from '../../services/navigation';
 import {requestGet, requestPost} from '../../services/network';
 import {getItem, setItem} from '../../services/preference';
-import {screenWidth, validationEmail} from '../../services/util';
 import Avatar from '../../components/avatar/Avatar';
+
 import {
   getProfile as getKakaoProfile,
-  login,
+  login as kakaoLogin,
   unlink,
   loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
+import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager, Profile} from 'react-native-fbsdk-next';
 
 export default function Login({route}) {
   const dispatch = useDispatch();
@@ -57,6 +50,21 @@ export default function Login({route}) {
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const [facebookAccessToken, setFacebookAccessToken] = useState('');
+
+  const naverIosKeys = {
+    kConsumerKey: Config.NAVER_CLIENT_ID,
+    kConsumerSecret: Config.NAVER_CLIENT_SECRET,
+    kServiceAppName: Config.NAVER_CLIENT_NAME,
+    kServiceAppUrlScheme: Config.NAVER_CLINET_SCHEME, // only for iOS
+  };
+  const naverAndroidKeys = {
+    kConsumerKey: Config.NAVER_CLIENT_ID,
+    kConsumerSecret: Config.NAVER_CLIENT_SECRET,
+    kServiceAppName: Config.NAVER_CLIENT_NAME,
+  };
+  const naverInitials = Platform.OS === 'ios' ? naverIosKeys : naverAndroidKeys;
+
   useEffect(() => {
     if ((username || password) && passwordError) {
       setPasswordError('');
@@ -64,6 +72,7 @@ export default function Login({route}) {
   }, [username, password]);
 
   useEffect(() => {
+    signInWithGoogleConfigure();
     return () => {
       setLoading(false);
       setPasswordError('');
@@ -148,6 +157,14 @@ export default function Login({route}) {
     // navigate(routes.findIdPassword);
   };
 
+  const signInWithApp = async () => {
+    try {
+      handleLogin('app');
+    } catch (e) {
+      dispatch(dialogError(e));
+    }
+  };
+
   const signInWithToaping = () => {
     try {
       handleLogin('toaping');
@@ -162,7 +179,7 @@ export default function Login({route}) {
     //         name: '토핑계정으로 간편로그인',
     //         source: images.toapingIcon,
     //         type: 'login',
-    //         onPress: () => signInWithToapingType(),
+    //         onPress: () => signInWithToapingSelect(),
     //       },
     //       {
     //         name: '다른 토핑계정으로 로그인',
@@ -175,7 +192,7 @@ export default function Login({route}) {
     // );
   };
 
-  const signInWithToapingType = async () => {
+  const signInWithToapingSelect = async () => {
     try {
       handleLogin('toaping');
     } catch (e) {
@@ -192,14 +209,14 @@ export default function Login({route}) {
             // name: '카카오톡으로 간편로그인',
             source: images.kakaoLogin,
             type: 'login',
-            onPress: () => signInWithKakaoType('exist'),
+            onPress: () => signInWithKakaoSelect('exist'),
           },
           {
             // name: '다른 카카오계정으로 로그인',
             source: images.kakaoLoginAuth,
             type: 'login',
             onPress: async () => {
-              await signInWithKakaoType('change');
+              await signInWithKakaoSelect('change');
             },
           },
           {
@@ -213,11 +230,11 @@ export default function Login({route}) {
     );
   };
 
-  const signInWithKakaoType = async type => {
+  const signInWithKakaoSelect = async type => {
     try {
       let token = '';
       if (type === 'exist') {
-        token = await login();
+        token = await kakaoLogin();
       } else if (type === 'change') {
         token = await loginWithKakaoAccount();
       }
@@ -305,12 +322,166 @@ export default function Login({route}) {
     }
   };
 
+  const signInWithNaver = () => {
+    NaverLogin.login(naverInitials, async (err, naverToken) => {
+      if (err) {
+        dispatch(dialogError(err));
+      } else {
+        const profileResult = await getProfile(naverToken.accessToken);
+        if (profileResult.resultcode === '024') {
+          dispatch(dialogError('로그인 실패' + profileResult.message));
+          return;
+        }
+        const {data, status} = await requestPost({
+          url: consts.apiUrl + '/auth/naverLogin',
+          body: {
+            platformType: 'naver',
+            memberId: profileResult.response?.email,
+            email: profileResult.response?.email,
+            handphone: profileResult.response?.mobile?.replace(/-/g, ''),
+            kor_nm: profileResult.response?.name,
+            profile_path: profileResult.response?.profile_image,
+          },
+        });
+        if (status === 'SUCCESS') {
+          await setItem('accessToken', data.accessToken);
+          await setItem('refreshToken', data.refreshToken);
+          await setItem('platformType', 'naver');
+          dispatch(userCheckToken);
+        } else {
+          // fail
+          setPasswordError('네이버 로그인 에러');
+        }
+      }
+    });
+  };
+
+  const signInWithGoogleConfigure = () => {
+    try {
+      GoogleSignin.configure({
+        scopes: [
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/user.phonenumbers.read',
+        ],
+        webClientId: Config.GOOGLE_WEB_CLIENT_ID,
+        offlineAccess: false,
+      });
+    } catch (e) {
+      dispatch(dialogError('구글설정오류'));
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const {accessToken} = await GoogleSignin.getTokens();
+      await axios({
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: 'application/json',
+        },
+        url: `https://people.googleapis.com/v1/people/${userInfo.user.id}?personFields=phoneNumbers`,
+      })
+        .then(async function (response) {
+          if (response.data.phoneNumbers) {
+            const {data, status} = await requestPost({
+              url: consts.apiUrl + '/auth/googleLogin',
+              body: {
+                platformType: 'google',
+                memberId: userInfo.user.email,
+                email: userInfo.user.email,
+                handphone: '0' + response.data?.phoneNumbers[0]?.value,
+                kor_nm: userInfo.user.name,
+                profile_path: userInfo.user.photo,
+              },
+            });
+            if (status === 'SUCCESS') {
+              await setItem('accessToken', data.accessToken);
+              await setItem('refreshToken', data.refreshToken);
+              await setItem('platformType', 'google');
+              dispatch(userCheckToken);
+            } else {
+              setPasswordError('구글 로그인 에러');
+            }
+          } else {
+            const {data, status} = await requestPost({
+              url: consts.apiUrl + '/auth/googleLogin',
+              body: {
+                platformType: 'google',
+                memberId: userInfo.user.email,
+                email: userInfo.user.email,
+                kor_nm: userInfo.user.name,
+                profile_path: userInfo.user.photo,
+              },
+            });
+            if (status === 'SUCCESS') {
+              await setItem('accessToken', data.accessToken);
+              await setItem('refreshToken', data.refreshToken);
+              await setItem('platformType', 'google');
+              dispatch(userCheckToken);
+            } else {
+              setPasswordError('구글 로그인 에러');
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log('catch error', error);
+          dispatch(dialogError(error));
+        });
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+
+  const signWithFacebook = async () => {
+    LoginManager.logInWithPermissions(['public_profile']).then(
+      async function (result) {
+        if (result.isCancelled) {
+          dispatch(dialogError('Login cancelled'));
+        } else {
+          const profile = await Profile.getCurrentProfile();
+          if (profile === null) {
+            signWithFacebook();
+          } else {
+            try {
+              const {data, status} = await requestPost({
+                url: consts.apiUrl + '/auth/facebookLogin',
+                body: {
+                  platformType: 'facebook',
+                  memberId: profile.userID,
+                  email: profile.email,
+                  kor_nm: profile.name,
+                  profile_path: profile.imageURL,
+                },
+              });
+              if (status === 'SUCCESS') {
+                await setItem('accessToken', data.accessToken);
+                await setItem('refreshToken', data.refreshToken);
+                await setItem('platformType', 'facebook');
+                dispatch(userCheckToken);
+              } else {
+                setPasswordError('구글 로그인 에러');
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        }
+      },
+      function (error) {
+        dispatch(dialogError(error));
+      },
+    );
+  };
+
   return (
     <RootLayout style={styles.root}>
       <View style={styles.inputRow}>
         <Image source={images.login} style={styles.logo} />
         <InputWrap
-          // icon={image.idIcon}
           style={styles.input}
           placeholder="아이디"
           value={username}
@@ -320,7 +491,6 @@ export default function Login({route}) {
           borderBottomColor={{borderBottomColor: colors.white}}
         />
         <InputWrap
-          // icon={image.pwIcon}
           style={styles.input2}
           placeholder="비밀번호"
           selectionColor={colors.white}
@@ -337,7 +507,7 @@ export default function Login({route}) {
       <View style={styles.row}>
         <ButtonWrap
           loading={loading}
-          onPress={() => handleLogin('app')}
+          onPress={signInWithApp}
           disabled={!password || !username || passwordError}
           style={styles.button}
           styleTitle={styles.buttonTitle}>
@@ -375,9 +545,6 @@ export default function Login({route}) {
 
       <View style={styles.rowCenter}>
         <TextButton
-          onPress={() => {
-            // navigate(routes.findIdPassword);
-          }}
           disabled
           styleTitle={styles.text}
           font={fonts.kopubWorldDotumProMedium}>
@@ -411,7 +578,11 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar style={styles.avator} source={images.naverIcon} />
+          <Avatar
+            style={styles.avator}
+            source={images.naverIcon}
+            onPress={signInWithNaver}
+          />
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.avatarTitle}>
@@ -419,15 +590,24 @@ export default function Login({route}) {
           </TextWrap>
         </View>
         <View>
-          <Avatar style={styles.avator} source={images.facebookIcon} />
+          <Avatar
+            style={styles.avator}
+            source={images.facebookIcon}
+            onPress={signWithFacebook}
+          />
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.avatarTitle}>
             페이스북
           </TextWrap>
         </View>
+
         <View>
-          <Avatar style={styles.avator} source={images.googleIcon} />
+          <Avatar
+            style={styles.avator}
+            source={images.googleIcon}
+            onPress={signInWithGoogle}
+          />
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.avatarTitle}>

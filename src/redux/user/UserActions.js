@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {addons} from 'react-native';
+import Config from 'react-native-config';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import {reset} from '../../services/navigation';
@@ -13,6 +14,23 @@ import {getImageFromGallery} from '../../services/picker';
 import {clearItem, getItem} from '../../services/preference';
 import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
+import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
+import {
+  LoginManager,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk-next';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+GoogleSignin.configure({
+  scopes: [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/user.phonenumbers.read',
+  ],
+  webClientId: Config.GOOGLE_WEB_CLIENT_ID,
+  offlineAccess: false,
+});
 // import messging from '@react-native-firebase/messaging';
 
 export const userActionType = {
@@ -39,6 +57,32 @@ export const userSignOut = userId => async dispatch => {
   if (platformType === 'kakao') {
     await logout();
     // await unlink();
+  } else if (platformType === 'naver') {
+    NaverLogin.logout();
+  } else if (platformType === 'google') {
+    await GoogleSignin.signOut();
+  } else if (platformType === 'facebook') {
+    try {
+      let tokenObj = await AccessToken.getCurrentAccessToken();
+      let current_access_token = tokenObj.accessToken.toString();
+      let facebookLogout = new GraphRequest(
+        'me/permissions/',
+        {
+          accessToken: current_access_token,
+          httpMethod: 'DELETE',
+        },
+        (error, result) => {
+          if (error) {
+            throw error?.toString();
+          } else {
+            LoginManager.logOut();
+          }
+        },
+      );
+      new GraphRequestManager().addRequest(facebookLogout).start();
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
 

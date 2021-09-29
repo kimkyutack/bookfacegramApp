@@ -26,7 +26,7 @@ export default function BookMainCarouselImage({item, index, style}) {
             bookThumbnail !== '' && bookThumbnail !== undefined
               ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
               : consts.imgUrl + '/thumbnail/bookDefault.gif',
-          priority: FastImage.priority.normal,
+          priority: FastImage.priority.high,
         }}
         resizeMode={FastImage.resizeMode.cover}
         style={[styles.image, style && style]}
@@ -43,7 +43,7 @@ export default function BookMainCarouselImage({item, index, style}) {
             bookThumbnail !== '' && bookThumbnail !== undefined
               ? consts.toapingUrl + '/book/book_img/' + bookThumbnail + '.gif'
               : consts.imgUrl + '/thumbnail/bookDefault.gif',
-          priority: FastImage.priority.normal,
+          priority: FastImage.priority.high,
         }}
         resizeMode={FastImage.resizeMode.cover}
         style={[styles.image, style && style]}

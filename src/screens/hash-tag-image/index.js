@@ -43,10 +43,12 @@ export default function HashTagImage({route, navigation}) {
       <Topbar
         title={
           currentHashTag
-            ? currentHashTag
+            ? currentHashTag?.length > 10
+              ? '#' + currentHashTag?.substring(0, 10) + '...'
+              : '#' + currentHashTag
             : route.params?.params?.hashTag
-            ? route.params?.params?.hashTag?.length > 9
-              ? '#' + route.params?.params?.hashTag?.substring(0, 9) + '...'
+            ? route.params?.params?.hashTag?.length > 10
+              ? '#' + route.params?.params?.hashTag?.substring(0, 10) + '...'
               : '#' + route.params?.params?.hashTag
             : '해시태그'
         }

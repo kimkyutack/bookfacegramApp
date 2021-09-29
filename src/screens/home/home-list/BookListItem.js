@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
       },
       android: {
         backgroundColor: 'white',
-        elevation: 5,
+        elevation: 1,
       },
     }),
   },

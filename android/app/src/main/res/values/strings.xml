@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">토핑</string>
+    <string name="facebook_app_id">1692266707648963</string> <string name="fb_login_protocol_scheme">fb1692266707648963</string>
 </resources>

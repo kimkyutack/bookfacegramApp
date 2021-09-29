@@ -66,7 +66,10 @@ export default function TopNewBooksDetail({route, navigation}) {
       setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/bookDetail',
-        query: {book_cd: selectedBook},
+        query: {
+          book_cd: selectedBook,
+          type: detailTab.detailTab?.viewType || 'new',
+        },
       });
       if (status === 'SUCCESS') {
         setBookThumbnail(data.bookDetail[0]?.img_nm);
@@ -137,7 +140,7 @@ export default function TopNewBooksDetail({route, navigation}) {
               <FastImage
                 source={{
                   uri:
-                    bookThumbnail !== ''
+                    bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
                         '/book/book_img/' +
                         bookThumbnail +
@@ -191,7 +194,7 @@ export default function TopNewBooksDetail({route, navigation}) {
               <FastImage
                 source={{
                   uri:
-                    bookThumbnail !== ''
+                    bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
                         '/book/book_img/' +
                         bookThumbnail +
@@ -245,7 +248,7 @@ export default function TopNewBooksDetail({route, navigation}) {
               <FastImage
                 source={{
                   uri:
-                    bookThumbnail !== ''
+                    bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
                         '/book/book_img/' +
                         bookThumbnail +
@@ -315,7 +318,7 @@ const styles = StyleSheet.create({
       },
       android: {
         backgroundColor: 'white',
-        elevation: 2,
+        elevation: 1,
       },
     }),
   },

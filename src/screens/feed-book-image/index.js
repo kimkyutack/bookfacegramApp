@@ -128,8 +128,8 @@ export default function FeedBookImage({route, navigation}) {
       <Topbar
         title={
           userCurrentUserId
-            ? userCurrentUserId?.split('@')[0]?.length > 12
-              ? userCurrentUserId?.split('@')[0]?.substring(0, 12) + '...'
+            ? userCurrentUserId?.split('@')[0]?.length > 10
+              ? userCurrentUserId?.split('@')[0]?.substring(0, 10) + '...'
               : userCurrentUserId?.split('@')[0]
             : '피드북'
         }

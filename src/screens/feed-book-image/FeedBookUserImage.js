@@ -158,7 +158,7 @@ export default function FeedBookUserImage({route, navigation}) {
     return item?.feedIdx.toString() + index.toString();
   }, []);
 
-  return userBooks?.length === 0 ? (
+  return userBooks?.length === 0 || userErrorMessage === 'nodata' ? (
     <View style={styles.root}>
       {userErrorMessage ? (
         <TextWrap>{userErrorMessage}</TextWrap>

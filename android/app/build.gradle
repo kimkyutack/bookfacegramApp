@@ -1,12 +1,20 @@
 apply plugin: "com.android.application"
-
 import com.android.build.OutputFile
 
 project.ext.react = [
     enableHermes: false,
     bundleInDebug: true,
 ]
+project.ext.envConfigFiles = [
+  productiondebug: ".env.production",
+  productionrelease: ".env.production",
+  developmentrelease: ".env.development",
+  developmentdebug: ".env.development",
+  stagingrelease: ".env.staging",
+  stagingdebug: ".env.staging"
+]
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 def enableSeparateBuildPerCPUArchitecture = false
 
@@ -20,9 +28,7 @@ def useIntlJsc = false
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-
     compileSdkVersion rootProject.ext.compileSdkVersion
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -57,6 +63,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             signingConfig signingConfigs.debug
@@ -64,7 +71,14 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
-
+    flavorDimensions "default"
+    productFlavors {
+        production {}
+        staging {
+        // We can have build-specific configurations here. Like using applicationIdSuffix to create different package name (ex. ".staging")
+        }
+        development {}
+    }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -84,17 +98,18 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    // implementation "com.facebook.react:react-native:+"
     implementation 'com.facebook.fbjni:fbjni-java-only:0.0.4'
-    implementation('com.facebook.react:react-native:+') {
+    implementation 'com.facebook.android:facebook-login:[8,9)'
+    // implementation 'com.facebook.android:facebook-login:5.+'
+    implementation('com.facebook.react:react-native:0.64.2') {
         exclude group: 'com.facebook.fbjni', module: 'fbjni-java-only'
         exclude group: 'com.facebook.yoga', module: 'proguard-annotations'
     }
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation project(':react-native-config')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.android.support:multidex:1.0.3'
-
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.6'
-
     implementation "com.kakao.sdk:v2-user:2.5.2" // 카카오 로그인
     implementation "com.kakao.sdk:v2-talk:2.5.2" // 친구, 메시지(카카오톡)
     implementation "com.kakao.sdk:v2-story:2.5.2" // 카카오스토리
@@ -138,3 +153,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'

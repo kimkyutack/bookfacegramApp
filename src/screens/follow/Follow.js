@@ -197,8 +197,8 @@ export default function Follow({route, navigation}) {
     <RootLayout
       topbar={{
         title:
-          route.params?.memberId?.split('@')[0]?.length > 12
-            ? route.params?.memberId?.split('@')[0]?.substring(0, 12) + '...'
+          route.params?.memberId?.split('@')[0]?.length > 10
+            ? route.params?.memberId?.split('@')[0]?.substring(0, 10) + '...'
             : route.params?.memberId?.split('@')[0],
         navigation: navigation,
         back: true,

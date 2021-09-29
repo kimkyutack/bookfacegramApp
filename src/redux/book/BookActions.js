@@ -175,7 +175,7 @@ export const getFeedUser =
             (typeof error === 'object' ? JSON.stringify(error) : error),
           currentUserId: memberId,
           userPage: page,
-          profilePath: error?.data?.profile,
+          profilePath: error?.data?.profilePath,
           followerCnt: error.data?.followerCnt,
           followerList: error.data?.followerList,
           followingCnt: error.data?.followingCnt,

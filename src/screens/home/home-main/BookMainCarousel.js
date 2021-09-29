@@ -115,7 +115,7 @@ export default function BookMainCarousel({
                       ellipsizeMode="tail"
                       font={fonts.kopubWorldDotumProBold}
                       numberOfLines={2}>
-                      {item1?.writer}/{'\n'}
+                      {item1?.writer.substring(0, 9)}/{'\n'}
                       {item1?.book_nm}
                     </TextWrap>
                   </View>
@@ -183,7 +183,7 @@ export default function BookMainCarousel({
                       ellipsizeMode="tail"
                       font={fonts.kopubWorldDotumProBold}
                       numberOfLines={2}>
-                      {item1?.writer}/{'\n'}
+                      {item1?.writer.substring(0, 9)}/{'\n'}
                       {item1?.bookNm}
                     </TextWrap>
                   </View>
