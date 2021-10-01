@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
@@ -20,6 +21,7 @@ import SearchListItemLocal from '../../components/search-listitem-local/SearchLi
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
+import colors from '../../libs/colors';
 import images from '../../libs/images';
 import {
   dialogError,
@@ -43,16 +45,19 @@ export default function Search({route, navigation}) {
   const {params} = useRoute();
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
+  const inputRef = useRef();
 
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [accountData, setAccountData] = useState([]);
   const [hashTagData, setHashTagData] = useState([]);
   const [text, setText] = useState('');
   const [tabIndex, setTabIndex] = useState(0); // 0 계정 1 해시태그
 
+  // text 초기화
   useEffect(() => {
-    if (!text.length) {
+    if (!text?.length) {
       setSearched(false);
       getItem('accountLocal').then(d => {
         if (d) {
@@ -77,6 +82,7 @@ export default function Search({route, navigation}) {
     }
   }, [text]);
 
+  // 탭변경시 초기화
   useEffect(() => {
     setText('');
     setSearched(false);
@@ -102,75 +108,96 @@ export default function Search({route, navigation}) {
     });
   }, [params?.timeKey, tabIndex]);
 
-  const fetchAccount = () => {
-    setData([
-      {id: 1, name: '첫아디'},
-      {id: 2, name: '둘아디'},
-      {id: 3, name: '셋아디'},
-    ]);
+  const fetchAccount = historyText => {
     setSearched(true);
-    // requestGet({
-    //   url: consts.apiUrl + '/users/' + user.userId + '/friends',
-    //   query: {
-    //     type: 'account',
-    //   },
-    // })
-    //   .then(account => {
-    //     setData([...account]);
-    //     setSearched(true);
-    //   })
-    //   .catch(e => {
-    //     dispatch(dialogError(e));
-    //   });
+    setLoading(true);
+    requestGet({
+      url: consts.apiUrl + '/mypage/feedBook/search',
+      query: {
+        type: 'member',
+        word: historyText ? historyText : text,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setData(res.data?.memberList);
+        } else if (data.status === 'FAIL') {
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+      })
+      .catch(error => {
+        dispatch(dialogError(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  const fetchHashTag = () => {
-    setData([
-      {id: 1, name: '첫태그'},
-      {id: 2, name: '둘태그'},
-      {id: 3, name: '셋태그'},
-    ]);
+  const fetchHashTag = historyText => {
     setSearched(true);
-    // requestGet({
-    //   url: consts.apiUrl + '/users/' + user.userId + '/report-messages',
-    //   query: {
-    //     type: 'hashtag',
-    //   },
-    // })
-    //   .then(hastag => {
-    //     setData([...hastag]);
-    //     setSearched(true);
-    //   })
-    //   .catch(e => {
-    //     dispatch(dialogError(e));
-    //   });
+    setLoading(true);
+    requestGet({
+      url: consts.apiUrl + '/mypage/feedBook/search',
+      query: {
+        type: 'hashTag',
+        word: historyText ? historyText : text,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          const newArr = res.data?.hashTagList.map(v => ({
+            ...v,
+            hashTagList: v.hashTagList.toString(),
+          }));
+          const result = newArr.reduce((unique, o) => {
+            if (!unique.some(obj => obj.hashTagList === o.hashTagList)) {
+              unique.push(o);
+            }
+            return unique;
+          }, []);
+          setData(result);
+        } else if (data.status === 'FAIL') {
+          dispatch(dialogError('fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+      })
+      .catch(error => {
+        dispatch(dialogError(error));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+
   const handleSearch = () => {
-    if (text.length < 2) {
+    if (text?.length < 2) {
       dispatch(dialogOpenMessage({message: '두글자 이상 입력해주세요.'}));
     } else {
       if (tabIndex === 0) {
+        fetchAccount();
         getItem('accountLocal').then(d => {
           let list = [];
           if (d) {
             list = JSON.parse(d);
             list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
           }
-          list.push({name: text});
+          list.push({memberId: text});
           setItem('accountLocal', JSON.stringify(list));
         });
-        fetchAccount();
       } else if (tabIndex === 1) {
+        fetchHashTag();
         getItem('hashTagLocal').then(d => {
           let list = [];
           if (d) {
             list = JSON.parse(d);
             list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
           }
-          list.push({name: text});
+          list.push({memberId: text});
           setItem('hashTagLocal', JSON.stringify(list));
         });
-        fetchHashTag();
       }
     }
   };
@@ -184,8 +211,16 @@ export default function Search({route, navigation}) {
           list = JSON.parse(d);
           list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
         }
-        list.push({name: obj.name});
+        list.push({memberId: obj.memberId});
         setItem('accountLocal', JSON.stringify(list));
+      });
+      navigation.navigate(routes.feedBookImage, {
+        screen: routes.feedBookUserImage,
+        params: {
+          memberId: obj.memberId,
+          memberIdx: obj.memberIdx,
+          key: Date.now(),
+        },
       });
     } else if (tabIndex === 1) {
       getItem('hashTagLocal').then(d => {
@@ -194,19 +229,20 @@ export default function Search({route, navigation}) {
           list = JSON.parse(d);
           list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
         }
-        list.push({name: obj.name});
+        list.push({memberId: obj.hashTagList?.toString()});
         setItem('hashTagLocal', JSON.stringify(list));
+        navigate(routes.hashTagImage, {
+          screen: routes.hashTagPopularImage,
+          params: {
+            hashTag: e,
+            infoType: 'popular',
+            key: Date.now(),
+          },
+        });
       });
     }
-
-    // 유저 피드이동
-    // navigate(routes.profile, {
-    //   userId: member.userId,
-    // });
   };
 
-  // console.log('data');
-  // console.log(data);
   return (
     <RootLayout
       topbar={{
@@ -259,12 +295,17 @@ export default function Search({route, navigation}) {
       }}>
       <SearchBar
         value={text}
+        inputRef={inputRef}
         onChange={setText}
-        style={styles.searchbar}
+        style={styles.searchBar}
         placeholder="검색어를 입력해주세요."
         optionComponent={
           text && (
-            <TouchableOpacity onPress={() => setText('')}>
+            <TouchableOpacity
+              onPress={() => {
+                inputRef.current?.focus();
+                setText('');
+              }}>
               <Image style={styles.x} source={images.delete} />
             </TouchableOpacity>
           )
@@ -285,13 +326,13 @@ export default function Search({route, navigation}) {
         data={['계정', '해시태그']}
       />
       <View style={styles.container}>
-        {!searched && Boolean(data.length) && (
+        {!searched && Boolean(data?.length) && (
           <ListHeader
             label="최근 검색어"
             button={
               !searched && tabIndex === 0
-                ? Boolean(accountData.length)
-                : Boolean(hashTagData.length)
+                ? Boolean(accountData?.length)
+                : Boolean(hashTagData?.length)
             }
             buttonLabel="전체삭제"
             onPress={() => {
@@ -307,10 +348,25 @@ export default function Search({route, navigation}) {
             }}
           />
         )}
-        {!searched && !data.length ? (
+        {!searched && !data?.length ? (
           <NoFound message="최근 검색어가 없습니다." />
-        ) : searched && !data.length ? (
+        ) : searched && !data?.length ? (
           <NoFound message="검색 결과가 없습니다." />
+        ) : loading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
+            <ActivityIndicator
+              size="large"
+              style={{
+                alignSelf: 'center',
+              }}
+              color={colors.blue}
+            />
+          </View>
         ) : (
           <FlatList
             data={data}
@@ -323,11 +379,10 @@ export default function Search({route, navigation}) {
               if (searched) {
                 return (
                   <SearchListItem
-                    primary
                     {...item}
+                    tabIndex={tabIndex}
                     index={index}
                     onItemPress={handleItemPress(item)}
-                    search={{keyword: text}}
                   />
                 );
               } else {
@@ -340,7 +395,9 @@ export default function Search({route, navigation}) {
                     setText={setText}
                     index={index}
                     onDelete={() => {
-                      const d = [...data.filter(x => x.name !== item.name)];
+                      const d = [
+                        ...data.filter(x => x.memberId !== item.memberId),
+                      ];
                       setData(d);
                       if (tabIndex === 0) {
                         setItem('accountLocal', JSON.stringify(d));
@@ -363,7 +420,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  searchbar: {
+  searchBar: {
     backgroundColor: '#ececec',
   },
   noFound: {

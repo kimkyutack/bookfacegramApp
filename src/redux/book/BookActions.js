@@ -43,7 +43,7 @@ export const getFeedHome = (page, limit, time) => async dispatch => {
       if (data.status === 'SUCCESS') {
         if (data.data?.feedBookMainList.length === 0) {
           if (page === 1) {
-            throw {data: {msg: 'nodata'}};
+            throw {data: {msg: '검색 결과가 없습니다.'}};
           }
         }
         dispatch({
@@ -91,22 +91,7 @@ export const getFeedUser =
             if (page === 1) {
               throw {
                 data: {
-                  msg: 'nodata',
-                  currentUserId: memberId,
-                  userPage: page,
-                  profilePath: data.data?.profile,
-                  followerCnt: data.data?.followerCnt,
-                  followerList: data.data?.followerList,
-                  followingCnt: data.data?.followingCnt,
-                  followingList: data.data?.followingList,
-                  totalCnt: data.data?.totalCnt,
-                  official: data.data?.official ? data.data?.official : 0,
-                },
-              };
-            } else {
-              throw {
-                data: {
-                  msg: 'nomoredata',
+                  msg: '검색 결과가 없습니다.',
                   currentUserId: memberId,
                   userPage: page,
                   profilePath: data.data?.profile,
@@ -119,6 +104,22 @@ export const getFeedUser =
                 },
               };
             }
+            // else {
+            //   throw {
+            //     data: {
+            //       msg: 'nomoredata',
+            //       currentUserId: memberId,
+            //       userPage: page,
+            //       profilePath: data.data?.profile,
+            //       followerCnt: data.data?.followerCnt,
+            //       followerList: data.data?.followerList,
+            //       followingCnt: data.data?.followingCnt,
+            //       followingList: data.data?.followingList,
+            //       totalCnt: data.data?.totalCnt,
+            //       official: data.data?.official ? data.data?.official : 0,
+            //     },
+            //   };
+            // }
           }
           dispatch({
             type:
@@ -200,10 +201,11 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
       if (data.status === 'SUCCESS') {
         if (data.data?.feedBookAllList.length === 0) {
           if (page === 1) {
-            throw {data: {msg: 'nodata'}};
-          } else {
-            throw {data: {msg: 'nomoredata'}};
+            throw {data: {msg: '검색 결과가 없습니다.'}};
           }
+          // else {
+          //   throw {data: {msg: 'nomoredata'}};
+          // }
         }
         dispatch({
           type:

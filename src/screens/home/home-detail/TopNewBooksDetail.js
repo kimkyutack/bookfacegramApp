@@ -53,12 +53,12 @@ FastImage.preload([
 
 export default function TopNewBooksDetail({route, navigation}) {
   const [loading, setLoading] = useState(false);
+  const detailTab = useSelector(s => s.tab, shallowEqual);
   const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
   const [bookThumbnail, setBookThumbnail] = useState('');
   const [selectedBook, setSelectedBook] = useState('');
   const dispatch = useDispatch();
-  const detailTab = useSelector(s => s.tab, shallowEqual);
   const isFocused = useIsFocused();
 
   const fetchRequested = async () => {
@@ -94,7 +94,11 @@ export default function TopNewBooksDetail({route, navigation}) {
 
   useEffect(() => {
     if (isFocused) {
-      setTabs(0);
+      if (detailTab.tabType === 'talk') {
+        setTabs(2);
+      } else {
+        setTabs(0);
+      }
     }
   }, [isFocused]);
 

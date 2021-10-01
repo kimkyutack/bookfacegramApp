@@ -3,11 +3,12 @@ import moment from 'moment';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import StarRating from 'react-native-star-rating';
-
+import {navigate} from '../../../services/navigation';
 import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
 import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
+import routes from '../../../libs/routes';
 import {
   fontPercentage,
   formatTime,
@@ -61,8 +62,16 @@ export default function BookDetailTalkItem({
               return (
                 <TouchableOpacity
                   key={hashIndex}
-                  // onPress={() => console.log(data)}
-                >
+                  onPress={() =>
+                    navigate(routes.hashTagImage, {
+                      screen: routes.hashTagPopularImage,
+                      params: {
+                        hashTag: data,
+                        infoType: 'popular',
+                        key: Date.now(),
+                      },
+                    })
+                  }>
                   <TextWrap
                     font={fonts.kopubWorldDotumProLight}
                     style={styles.hashTags}>

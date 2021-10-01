@@ -158,7 +158,8 @@ export default function FeedBookUserImage({route, navigation}) {
     return item?.feedIdx.toString() + index.toString();
   }, []);
 
-  return userBooks?.length === 0 || userErrorMessage === 'nodata' ? (
+  return userBooks?.length === 0 ||
+    userErrorMessage === '검색 결과가 없습니다.' ? (
     <View style={styles.root}>
       {userErrorMessage ? (
         <TextWrap>{userErrorMessage}</TextWrap>

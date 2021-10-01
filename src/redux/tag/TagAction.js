@@ -44,22 +44,23 @@ export const getPopularHashTag =
             if (page === 1) {
               throw {
                 data: {
-                  msg: 'nodata',
-                  popularPage: page,
-                  totalCnt: data.data?.totalCnt,
-                  currentHashTag: hashTag,
-                },
-              };
-            } else {
-              throw {
-                data: {
-                  msg: 'nomoredata',
+                  msg: '검색 결과가 없습니다.',
                   popularPage: page,
                   totalCnt: data.data?.totalCnt,
                   currentHashTag: hashTag,
                 },
               };
             }
+            // else {
+            //   throw {
+            //     data: {
+            //       msg: 'nomoredata',
+            //       popularPage: page,
+            //       totalCnt: data.data?.totalCnt,
+            //       currentHashTag: hashTag,
+            //     },
+            //   };
+            // }
           }
           dispatch({
             type:
@@ -120,10 +121,11 @@ export const getNewestHashTag =
         if (data.status === 'SUCCESS') {
           if (data.data?.feedList.length === 0) {
             if (page === 1) {
-              throw {data: {msg: 'nodata'}};
-            } else {
-              throw {data: {msg: 'nomoredata'}};
+              throw {data: {msg: '검색 결과가 없습니다.'}};
             }
+            // else {
+            //   throw {data: {msg: 'nomoredata'}};
+            // }
           }
           dispatch({
             type:

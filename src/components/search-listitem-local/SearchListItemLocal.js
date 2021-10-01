@@ -9,8 +9,7 @@ import {fontPercentage, widthPercentage} from '../../services/util';
 
 export default function SearchListItemLocal({
   onDelete,
-  id,
-  name,
+  memberId,
   profilePath,
   showStatus,
   index,
@@ -24,18 +23,18 @@ export default function SearchListItemLocal({
       onPress={
         tabIndex === 1
           ? () => {
-              setText(name);
-              fetchHashTag();
+              setText(memberId);
+              fetchHashTag(memberId);
             }
           : () => {
-              setText(name);
-              fetchAccount();
+              setText(memberId);
+              fetchAccount(memberId);
             }
       }>
       <View style={styles.root} key={index}>
         <View style={styles.main}>
-          <TextWrap font={fonts.kopubWorldDotumProLighto} style={styles.name}>
-            {name && (tabIndex === 1 ? `#${name}` : name)}
+          <TextWrap font={fonts.kopubWorldDotumProLight} style={styles.name}>
+            {memberId}
           </TextWrap>
         </View>
         <ButtonImage

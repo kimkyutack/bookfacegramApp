@@ -47,6 +47,7 @@ const tag = (state = initTag, action) => {
         isPopularLoading: false,
         popularPage: action.popularPage,
         popularErrorMessage: action.data,
+        popularHashTags: [],
         totalCnt: action.totalCnt,
         currentHashTag: action.currentHashTag,
       };
@@ -78,6 +79,7 @@ const tag = (state = initTag, action) => {
         ...state,
         isNewestLoading: false,
         newestPage: action.newestPage,
+        newestHashTags: [],
         newestErrorMessage: action.data,
       };
 

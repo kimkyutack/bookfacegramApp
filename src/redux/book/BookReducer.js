@@ -51,6 +51,7 @@ const book = (state = initBook, action) => {
       return {
         ...state,
         isFollowLoading: false,
+        followBooks: [],
         followErrorMessage: action.data,
       };
 
@@ -90,6 +91,7 @@ const book = (state = initBook, action) => {
       return {
         ...state,
         isUserLoading: false,
+        userBooks: [],
         userErrorMessage: action.data,
         currentUserId: action.currentUserId,
         userPage: action.userPage,
@@ -128,6 +130,7 @@ const book = (state = initBook, action) => {
       return {
         ...state,
         isAllLoading: false,
+        allBooks: [],
         allPage: action.allPage,
         allErrorMessage: action.data,
       };

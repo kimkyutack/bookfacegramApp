@@ -2,6 +2,7 @@ import {tabActionType} from './TabAction';
 
 const initTab = {
   tab: 'main',
+  tabType: '',
   mainTab: {},
   listTab: {},
   detailTab: {viewType: ''},
@@ -29,6 +30,7 @@ export default function loading(state = initTab, action) {
       return {
         ...state,
         tab: action.tab,
+        tabType: action.tabType,
         detailTab: {
           selectedBook: action.selectedBook,
           viewType: action.viewType,

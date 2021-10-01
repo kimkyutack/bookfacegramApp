@@ -11,39 +11,80 @@ import {
 } from '../../services/util';
 
 export default function SearchListItem({
-  id,
-  name,
+  tabIndex,
+  memberId,
   profilePath,
   onItemPress,
+  hashTagList,
   index,
 }) {
-  return (
-    <TouchableOpacity onPress={onItemPress}>
-      <View
-        style={[styles.root, index === 0 && {marginTop: heightPercentage(20)}]}>
-        <Avatar
-          size={widthPercentage(38)}
-          path={
-            profilePath
-              ? profilePath
-              : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
-          }
-        />
-        <View style={styles.main}>
-          <TextWrap font={fonts.kopubWorldDotumProLighto} style={styles.name}>
-            {name && name}
-          </TextWrap>
+  if (tabIndex === 0) {
+    return (
+      <TouchableOpacity onPress={onItemPress}>
+        <View
+          style={[
+            styles.root,
+            index === 0 && {marginTop: heightPercentage(20)},
+          ]}>
+          <Avatar
+            size={widthPercentage(38)}
+            path={
+              profilePath
+                ? profilePath
+                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+            }
+          />
+          <View style={styles.main}>
+            <TextWrap font={fonts.kopubWorldDotumProLight} style={styles.name}>
+              {memberId}
+            </TextWrap>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  } else {
+    return hashTagList?.split(',')?.map((x, i) => {
+      return (
+        <TouchableOpacity onPress={() => onItemPress(x)} key={i}>
+          <View
+            style={[
+              styles.root,
+              index === 0 && {marginTop: heightPercentage(20)},
+            ]}>
+            <Avatar size={widthPercentage(38)} source={images.hashTag} />
+            <View style={styles.main}>
+              <TextWrap
+                font={fonts.kopubWorldDotumProLight}
+                style={styles.name}>
+                {x}
+              </TextWrap>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    });
+    // <TouchableOpacity onPress={onItemPress}>
+    //   <View
+    //     style={[
+    //       styles.root,
+    //       index === 0 && {marginTop: heightPercentage(20)},
+    //     ]}>
+    //     <Avatar size={widthPercentage(38)} source={images.hashTag} />
+    //     <View style={styles.main}>
+    //       <TextWrap font={fonts.kopubWorldDotumProLight} style={styles.name}>
+    //         {hashTagList?.toString()}
+    //       </TextWrap>
+    //     </View>
+    //   </View>
+    // </TouchableOpacity>
+  }
 }
 
 const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     marginTop: heightPercentage(14),
   },
   main: {

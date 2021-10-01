@@ -428,7 +428,6 @@ export default function Login({route}) {
           }
         })
         .catch(function (error) {
-          console.log('catch error', error);
           dispatch(dialogError(error));
         });
     } catch (error) {
@@ -466,7 +465,7 @@ export default function Login({route}) {
                 setPasswordError('구글 로그인 에러');
               }
             } catch (e) {
-              console.log(e);
+              // console.log(e);
             }
           }
         }

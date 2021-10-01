@@ -51,4 +51,5 @@ export default {
   recommendHalf: require('../assets/images/recommend_half.png'),
   recommend: require('../assets/images/recommend.png'),
   editOpen: require('../assets/images/edit_open.png'),
+  hashTag: require('../assets/images/hash_tag.png'),
 };

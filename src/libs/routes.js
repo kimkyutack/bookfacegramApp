@@ -22,6 +22,7 @@ export default {
   feedBookAllImage: 'feedBookAllImage',
   feedBookFeed: 'feedBookFeed',
   search: 'search',
+  searchBook: 'searchBook',
   follow: 'follow',
   comment: 'comment',
   hashTagImage: 'hashTagImage',

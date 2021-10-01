@@ -80,9 +80,6 @@ export default function Topbar({
             onPress={
               title === 'TOAPING'
                 ? () =>
-                    // navigation.navigate(routes.home, {
-                    //   type: 'main',
-                    // })
                     navigation.navigate(routes.home, {
                       screen: routes.topNewBooks,
                       params: {

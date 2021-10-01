@@ -81,7 +81,7 @@ export const userSignOut = userId => async dispatch => {
       );
       new GraphRequestManager().addRequest(facebookLogout).start();
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   }
 };

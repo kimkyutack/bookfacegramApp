@@ -4,7 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {BackHandler} from 'react-native';
-import {dialogOpenAction, dialogClose} from './redux/dialog/DialogActions';
+import {dialogOpenAction} from './redux/dialog/DialogActions';
 import routes from './libs/routes';
 import {
   navigationRef,
@@ -28,6 +28,7 @@ import EventDetail from './screens/event/EventDetail';
 import FeedBook from './screens/feed-book/FeedBook';
 import FeedBookImage from './screens/feed-book-image';
 import Search from './screens/search/Search';
+import SearchBook from './screens/search-book/SearchBook';
 import Follow from './screens/follow/Follow';
 import Comment from './screens/feed-comment/Comment';
 
@@ -308,6 +309,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.search}
               component={Search}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.searchBook}
+              component={SearchBook}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,
