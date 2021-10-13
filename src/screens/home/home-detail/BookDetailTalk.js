@@ -30,7 +30,7 @@ import {
   dialogOpenMessage,
   dialogError,
 } from '../../../redux/dialog/DialogActions';
-export default function BookDetailTalk({selectedBook}) {
+export default function BookDetailTalk({selectedBook, wait}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [raplyContent, setReplyContent] = useState('');
@@ -39,7 +39,13 @@ export default function BookDetailTalk({selectedBook}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    talkReplyList();
+    let mount = true;
+    if (mount) {
+      // talkReplyList();
+    }
+    return () => {
+      mount = false;
+    };
   }, []);
 
   const talkReplyList = () => {

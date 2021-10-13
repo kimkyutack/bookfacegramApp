@@ -97,10 +97,14 @@ export default function FeedBookFeed({route, navigation}) {
         setTime(newTime);
         fetchUserFeed('reset', newTime);
       } else {
-        listRef.current?.scrollToIndex({
-          animated: false,
-          index: route.params?.index ? route.params?.index : 0,
-        });
+        if (route.params?.index === 0) {
+          listRef.current?.scrollToOffset({y: 0, animated: false});
+        } else {
+          listRef.current?.scrollToIndex({
+            animated: false,
+            index: route.params?.index,
+          });
+        }
       }
     }
     return () => {

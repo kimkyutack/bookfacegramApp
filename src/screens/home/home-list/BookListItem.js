@@ -27,9 +27,19 @@ import {numFormat} from '../../../services/util';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import BookMainCarouselImage from '../home-main/BookMainCarouselImage';
 import {setTab} from '../../../redux/tab/TabAction';
-import {dialogError} from '../../../redux/dialog/DialogActions';
+import {
+  dialogError,
+  dialogOpenDrawerSelect,
+} from '../../../redux/dialog/DialogActions';
 
-export default function BookListItem({item, index, grade, th, gradeStyle}) {
+export default function BookListItem({
+  item,
+  index,
+  grade,
+  th,
+  gradeStyle,
+  getDrawerList,
+}) {
   const dispatch = useDispatch();
   return (
     <>
@@ -117,7 +127,24 @@ export default function BookListItem({item, index, grade, th, gradeStyle}) {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(dialogError('준비중입니다.'));
+              getDrawerList(
+                item.type === 'kbs' ? item.bookCd : item.book_cd,
+              ).then(res => {
+                res.map(x => {
+                  x.contentsIdx = x.drawIdx;
+                  x.bookIdx = item.type === 'kbs' ? item.bookCd : item.book_cd;
+                  x.type = item.type;
+                });
+                dispatch(
+                  dialogOpenDrawerSelect({
+                    drawerList: res.map(x => [x]),
+                    title: '보관 책서랍 선택',
+                    from: 'list',
+                    bookIdx: item.type === 'kbs' ? item.bookCd : item.book_cd,
+                    viewType: item.type,
+                  }),
+                );
+              });
             }}>
             <Image style={styles.button1} source={images.like} />
           </TouchableOpacity>

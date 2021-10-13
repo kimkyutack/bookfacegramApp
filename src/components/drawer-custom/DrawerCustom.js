@@ -71,8 +71,9 @@ export default function DrawerCustom(props) {
               label="ㆍ책 서랍"
               labelStyle={styles.label}
               onPress={() => {
-                dispatch(dialogError('페이지 제작중...'));
-                // props.navigation.navigate('home');
+                props.navigation.navigate(routes.bookDrawer, {
+                  timeKey: Date.now(),
+                });
               }}
             />
           </View>

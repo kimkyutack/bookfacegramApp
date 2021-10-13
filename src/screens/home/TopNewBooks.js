@@ -22,6 +22,7 @@ export default function TopNewBooks({route}) {
   const [newBook, setNewBook] = useState(null);
   const [kbsBook, setKbsBook] = useState(null);
   const [th, setTh] = useState(18);
+  const [drawerList, setDrawerList] = useState([]);
 
   const fetchRequested = async () => {
     try {
@@ -44,8 +45,11 @@ export default function TopNewBooks({route}) {
     fetchRequested().then(res => {
       if (res === 'SUCCESS') {
         setLoading(false);
+      } else {
+        dispatch(dialogError(res || 'fail'));
       }
     });
+
     return () => {
       setLoading(true);
       setNewBook([]);

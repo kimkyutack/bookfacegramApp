@@ -3,6 +3,8 @@ export const dialogActionType = {
   openMessage: 'dialog/openMessage',
   openSelect: 'dialog/openSelect',
   openKakaoLogin: 'dialog/openKakaoLogin',
+  openDrawer: 'dialog/openDrawer',
+  openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   close: 'dialog/close',
 };
 
@@ -61,6 +63,61 @@ export const dialogOpenKakaoLoginSelect =
       item,
     });
   };
+
+export const dialogOpenDrawerSelect =
+  ({
+    drawerList,
+    selectedArr,
+    title = '',
+    onPress,
+    currentDrawerIndex,
+    from,
+    bookIdx,
+    viewType,
+  }) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openDrawer,
+      title,
+      drawerList,
+      selectedArr,
+      currentDrawerIndex,
+      onPress,
+      from,
+      bookIdx,
+      viewType,
+    });
+  };
+
+export const dialogOpenDrawerKeyBoard =
+  ({
+    title = '',
+    buttonTitle = '확인',
+    text = '',
+    drawIdx,
+    onPress,
+    from,
+    currentDrawerIndex,
+    selectedArr,
+    bookIdx,
+    viewType,
+  }) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openDrawerKeyBoard,
+      title,
+      buttonTitle,
+      text,
+      drawIdx,
+      onPress,
+      from,
+      selectedArr,
+      currentDrawerIndex,
+      bookIdx,
+      viewType,
+    });
+  };
+
 export const dialogClose = () => dispatch => {
   dispatch({
     type: dialogActionType.close,

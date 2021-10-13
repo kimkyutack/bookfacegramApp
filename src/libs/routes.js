@@ -26,6 +26,8 @@ export default {
   follow: 'follow',
   comment: 'comment',
   hashTagImage: 'hashTagImage',
+  bookDrawer: 'bookDrawer',
+  bookDrawerDetail: 'bookDrawerDetail',
   hashTagPopularImage: 'hashTagPopularImage',
   hashTagNewestImage: 'hashTagNewestImage',
   hashTagFeed: 'hashTagFeed',

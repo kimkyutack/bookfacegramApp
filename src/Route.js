@@ -4,7 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {BackHandler} from 'react-native';
-import {dialogOpenAction} from './redux/dialog/DialogActions';
+import {dialogClose, dialogOpenAction} from './redux/dialog/DialogActions';
 import routes from './libs/routes';
 import {
   navigationRef,
@@ -33,6 +33,9 @@ import Follow from './screens/follow/Follow';
 import Comment from './screens/feed-comment/Comment';
 
 import HashTagImage from './screens/hash-tag-image';
+
+import BookDrawer from './screens/book-drawer/BookDrawer';
+import BookDrawerDetail from './screens/book-drawer-detail/BookDrawerDetail';
 
 import Policy from './screens/register-form/Policy';
 import RegisterForm from './screens/register-form/RegisterForm';
@@ -117,6 +120,35 @@ export default function Router() {
       return () => backHandler.remove();
     }
   }, [currentRouteName, dialog.selectKakaoLoginDialog?.open]);
+
+  useEffect(() => {
+    const backDialogCloseAction = () => {
+      dispatch(dialogClose());
+      return true;
+    };
+    let backHandler = null;
+    if (
+      dialog.messageDialog?.open ||
+      dialog.actionDialog?.open ||
+      dialog.selectKakaoLoginDialog?.open ||
+      dialog.drawerDialog?.open ||
+      dialog.drawerKeyBoardDialog?.open ||
+      dialog.selectDialog?.open
+    ) {
+      backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backDialogCloseAction,
+      );
+      return () => backHandler.remove();
+    }
+  }, [
+    dialog.messageDialog?.open,
+    dialog.actionDialog?.open,
+    dialog.selectKakaoLoginDialog?.open,
+    dialog.drawerDialog?.open,
+    dialog.drawerKeyBoardDialog?.open,
+    dialog.selectDialog?.open,
+  ]);
 
   return (
     <SafeAreaProvider>
@@ -346,6 +378,26 @@ export default function Router() {
             <Drawer.Screen
               name={routes.hashTagImage}
               component={HashTagImage}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Drawer.Screen
+              name={routes.bookDrawer}
+              component={BookDrawer}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Drawer.Screen
+              name={routes.bookDrawerDetail}
+              component={BookDrawerDetail}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

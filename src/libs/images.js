@@ -52,4 +52,13 @@ export default {
   recommend: require('../assets/images/recommend.png'),
   editOpen: require('../assets/images/edit_open.png'),
   hashTag: require('../assets/images/hash_tag.png'),
+  bookDrawerDefault: require('../assets/images/book_drawer_default.png'),
+  toolTipRename: require('../assets/images/tooltip_rename.png'),
+  toolTipDelete: require('../assets/images/tooltip_delete.png'),
+  toolTipShare: require('../assets/images/tooltip_share.png'),
+  drawerCheckActive: require('../assets/images/drawer_check_active.png'),
+  drawerCheckInActive: require('../assets/images/drawer_check_inactive.png'),
+  drawerMove: require('../assets/images/drawer_move.png'),
+  drawerDelete: require('../assets/images/drawer_delete.png'),
+  drawerAdd: require('../assets/images/drawer_add.png'),
 };

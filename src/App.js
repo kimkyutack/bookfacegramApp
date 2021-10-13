@@ -8,6 +8,8 @@ import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
 import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/DialogKakaoLogin';
+import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
+import DialogDrawerKeyBoard from './redux-components/dialog-drawer-keyboard/DialogDrawerKeyBoard';
 function App({}) {
   const dispatch = useDispatch();
 
@@ -36,6 +38,8 @@ function App({}) {
       <DialogAction />
       <DialogSelect />
       <DialogKakaoLogin />
+      <DialogDrawer />
+      <DialogDrawerKeyBoard />
     </>
   );
 }

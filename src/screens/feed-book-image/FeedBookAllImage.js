@@ -30,7 +30,6 @@ export default function FeedBookAllImage({route, navigation}) {
   const listRef = useRef();
   const {isAllLoading, allBooks, allPage, allErrorMessage, totalCnt} =
     useSelector(s => s.book);
-
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
 

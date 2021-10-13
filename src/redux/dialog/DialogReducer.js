@@ -28,6 +28,24 @@ const initDialog = {
     title: '',
     cancelTitle: '',
   },
+  drawerDialog: {
+    open: false,
+    title: '',
+    drawerList: [],
+    selectedArr: [],
+    currentDrawerIndex: null,
+    onPress: null,
+    from: '',
+  },
+  drawerKeyBoardDialog: {
+    open: false,
+    title: '',
+    buttonTitle: '',
+    text: '',
+    drawIdx: null,
+    onPress: null,
+    from: '',
+  },
 };
 
 export default function dialog(state = initDialog, action) {
@@ -64,9 +82,6 @@ export default function dialog(state = initDialog, action) {
           open: true,
           onPress: action.onPress,
           item: action.item,
-          titleColor: action.titleColor,
-          title: action.title,
-          cancelTitle: action.cancelTitle,
         },
       };
     case dialogActionType.openKakaoLogin:
@@ -76,9 +91,38 @@ export default function dialog(state = initDialog, action) {
           open: true,
           onPress: action.onPress,
           item: action.item,
-          titleColor: action.titleColor,
+        },
+      };
+    case dialogActionType.openDrawer:
+      return {
+        ...state,
+        drawerDialog: {
+          open: true,
           title: action.title,
-          cancelTitle: action.cancelTitle,
+          onPress: action.onPress,
+          drawerList: action.drawerList,
+          selectedArr: action.selectedArr,
+          currentDrawerIndex: action.currentDrawerIndex,
+          from: action.from,
+          viewType: action.viewType,
+          bookIdx: action.bookIdx,
+        },
+      };
+    case dialogActionType.openDrawerKeyBoard:
+      return {
+        ...state,
+        drawerKeyBoardDialog: {
+          open: true,
+          title: action.title,
+          buttonTitle: action.buttonTitle,
+          text: action.text,
+          drawIdx: action.drawIdx,
+          onPress: action.onPress,
+          selectedArr: action.selectedArr,
+          currentDrawerIndex: action.currentDrawerIndex,
+          from: action.from,
+          viewType: action.viewType,
+          bookIdx: action.bookIdx,
         },
       };
     default:

@@ -39,8 +39,7 @@ import {
 } from '../../../services/picker';
 import {
   dialogError,
-  dialogOpenSelect,
-  dialogOpenAction,
+  dialogOpenDrawerSelect,
 } from '../../../redux/dialog/DialogActions';
 import fonts from '../../../libs/fonts';
 import {useIsFocused} from '@react-navigation/core';
@@ -51,15 +50,16 @@ FastImage.preload([
   },
 ]);
 
-export default function TopNewBooksDetail({route, navigation}) {
+export default function TopNewBooksDetail({route}) {
   const [loading, setLoading] = useState(false);
   const detailTab = useSelector(s => s.tab, shallowEqual);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
   const [bookThumbnail, setBookThumbnail] = useState('');
   const [selectedBook, setSelectedBook] = useState('');
-  const dispatch = useDispatch();
-  const isFocused = useIsFocused();
+  const [drawerList, setDrawerList] = useState([]);
 
   const fetchRequested = async () => {
     try {
@@ -82,23 +82,55 @@ export default function TopNewBooksDetail({route, navigation}) {
     }
   };
 
-  useEffect(() => {
-    if (selectedBook) {
-      fetchRequested();
-    }
-  }, [selectedBook]);
-
-  useEffect(() => {
-    setSelectedBook(detailTab.detailTab.selectedBook);
-  }, [detailTab.detailTab.selectedBook]);
+  const getDrawerList = () => {
+    requestGet({
+      url: consts.apiUrl + '/mypage/bookDrawer/keep',
+      query: {
+        bookIdx: selectedBook,
+      },
+    })
+      .then(res => {
+        res.data.map(x => {
+          x.contentsIdx = x.drawIdx;
+          x.bookIdx = detailTab.detailTab.selectedBook;
+          x.type = detailTab.detailTab.viewType;
+        });
+        dispatch(
+          dialogOpenDrawerSelect({
+            drawerList: res.data.map(x => [x]),
+            title: '보관 책서랍 선택',
+            from: 'detail',
+            bookIdx: detailTab.detailTab.selectedBook,
+            viewType: detailTab.detailTab.viewType,
+          }),
+        );
+      })
+      .catch(e => {
+        dispatch(dialogError(e));
+      });
+  };
 
   useEffect(() => {
     if (isFocused) {
-      if (detailTab.tabType === 'talk') {
-        setTabs(2);
-      } else {
-        setTabs(0);
-      }
+      setSelectedBook(detailTab.detailTab.selectedBook);
+    }
+  }, [detailTab.detailTab.selectedBook]);
+
+  useEffect(() => {
+    let mount = true;
+    if (mount && selectedBook) {
+      fetchRequested();
+    }
+    return () => {
+      mount = false;
+    };
+  }, [selectedBook]);
+
+  useEffect(() => {
+    if (detailTab.tabType === 'talk') {
+      setTabs(2);
+    } else {
+      setTabs(0);
     }
   }, [isFocused]);
 
@@ -176,6 +208,29 @@ export default function TopNewBooksDetail({route, navigation}) {
             font={fonts.kopubWorldDotumProBold}>
             {bookDetail?.book_nm}
           </TextWrap>
+
+          <TouchableOpacity
+            onPress={getDrawerList}
+            style={{
+              marginTop: 10,
+              marginBottom: 35,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.heart}
+              style={{
+                width: widthPercentage(15),
+                height: widthPercentage(15),
+                resizeMode: 'contain',
+              }}
+            />
+            <TextWrap
+              style={styles.drawerTitle}
+              font={fonts.kopubWorldDotumProMedium}>
+              책서랍
+            </TextWrap>
+          </TouchableOpacity>
           <View style={styles.tabContainer}>
             <Tab
               title="도서소개"
@@ -230,6 +285,28 @@ export default function TopNewBooksDetail({route, navigation}) {
             font={fonts.kopubWorldDotumProBold}>
             {bookDetail?.book_nm}
           </TextWrap>
+          <TouchableOpacity
+            onPress={getDrawerList}
+            style={{
+              marginTop: 10,
+              marginBottom: 35,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.heart}
+              style={{
+                width: widthPercentage(15),
+                height: widthPercentage(15),
+                resizeMode: 'contain',
+              }}
+            />
+            <TextWrap
+              style={styles.drawerTitle}
+              font={fonts.kopubWorldDotumProMedium}>
+              책서랍
+            </TextWrap>
+          </TouchableOpacity>
           <View style={styles.tabContainer}>
             <Tab
               title="도서소개"
@@ -284,6 +361,28 @@ export default function TopNewBooksDetail({route, navigation}) {
             font={fonts.kopubWorldDotumProBold}>
             {bookDetail?.book_nm}
           </TextWrap>
+          <TouchableOpacity
+            onPress={getDrawerList}
+            style={{
+              marginTop: 10,
+              marginBottom: 35,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.heart}
+              style={{
+                width: widthPercentage(15),
+                height: widthPercentage(15),
+                resizeMode: 'contain',
+              }}
+            />
+            <TextWrap
+              style={styles.drawerTitle}
+              font={fonts.kopubWorldDotumProMedium}>
+              책서랍
+            </TextWrap>
+          </TouchableOpacity>
           <View style={styles.tabContainer}>
             <Tab
               title="도서소개"
@@ -334,7 +433,10 @@ const styles = StyleSheet.create({
   imageTitle: {
     textAlign: 'center',
     fontSize: fontPercentage(16),
-    marginBottom: 35,
+  },
+  drawerTitle: {
+    fontSize: fontPercentage(14),
+    marginLeft: 5,
   },
   tabContainer: {
     width: screenWidth,
