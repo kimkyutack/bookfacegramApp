@@ -1,5 +1,10 @@
 package com.bookfacegram;
 
+//expo
+import android.content.res.Configuration;
+import expo.modules.ApplicationLifecycleDispatcher;
+import expo.modules.ReactNativeHostWrapper;
+
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -20,7 +25,7 @@ import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
-      new ReactNativeHost(this) {
+      new ReactNativeHostWrapper(this, new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
@@ -30,9 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
-          // packages.add(new MyReactNativePackage());
           // packages.add(new RNNaverLoginPackage()); // naver login
-          // packages.add(new ReactNativeConfigPackage());
           return packages;
         }
 
@@ -44,11 +47,24 @@ public class MainApplication extends Application implements ReactApplication {
         protected JSIModulePackage getJSIModulePackage() {
           return new ReanimatedJSIModulePackage(); // <- add
         }
-      };
+      });
+
+  // @Override
+  // public ReactNativeHost getReactNativeHost() {
+  //   return mReactNativeHost;
+  // }
 
   @Override
   public ReactNativeHost getReactNativeHost() {
+    super.onCreate();
+    ApplicationLifecycleDispatcher.onApplicationCreate(this);
     return mReactNativeHost;
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig);
   }
 
   @Override
