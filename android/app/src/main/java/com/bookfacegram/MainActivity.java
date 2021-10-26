@@ -1,6 +1,4 @@
 package com.bookfacegram;
-
-import expo.modules.ReactActivityDelegateWrapper;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactActivity;
 
