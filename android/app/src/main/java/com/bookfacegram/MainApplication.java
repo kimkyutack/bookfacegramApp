@@ -20,7 +20,7 @@ import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
-      new ReactNativeHostWrapper(this, new ReactNativeHost(this) {
+     new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
@@ -42,25 +42,13 @@ public class MainApplication extends Application implements ReactApplication {
         protected JSIModulePackage getJSIModulePackage() {
           return new ReanimatedJSIModulePackage(); // <- add
         }
-      });
+     };
 
-  // @Override
-  // public ReactNativeHost getReactNativeHost() {
-  //   return mReactNativeHost;
-  // }
+   @Override
+   public ReactNativeHost getReactNativeHost() {
+     return mReactNativeHost;
+   }
 
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    super.onCreate();
-    ApplicationLifecycleDispatcher.onApplicationCreate(this);
-    return mReactNativeHost;
-  }
-
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig);
-  }
 
   @Override
   public void onCreate() {

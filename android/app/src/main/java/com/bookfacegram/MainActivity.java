@@ -1,5 +1,5 @@
 package com.bookfacegram;
-import com.facebook.react.ReactActivityDelegate;
+
 import com.facebook.react.ReactActivity;
 
 public class MainActivity extends ReactActivity {
@@ -12,10 +12,5 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "bookfacegram";
   }
-  @Override
-  protected ReactActivityDelegate createReactActivityDelegate() {
-    return new ReactActivityDelegateWrapper(this,
-      new ReactActivityDelegate(this, getMainComponentName())
-    );
-  }
+
 }
