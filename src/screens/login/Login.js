@@ -130,7 +130,7 @@ export default function Login({route}) {
       } else {
         if (type === 'app') {
           setPasswordError(
-            '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.',
+            '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.22',
           );
         } else {
           dispatch(
