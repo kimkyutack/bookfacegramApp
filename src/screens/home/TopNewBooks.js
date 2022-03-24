@@ -19,9 +19,9 @@ import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 export default function TopNewBooks({route}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [newBook, setNewBook] = useState(null);
-  const [kbsBook, setKbsBook] = useState(null);
-  const [banner, setBanner] = useState(null);
+  const [newBook, setNewBook] = useState([]);
+  const [kbsBook, setKbsBook] = useState([]);
+  const [banner, setBanner] = useState([]);
   const [th, setTh] = useState(18);
   const [drawerList, setDrawerList] = useState([]);
 
@@ -35,17 +35,30 @@ export default function TopNewBooks({route}) {
           endPaging: 30,
         },
       });
-      const {response} = await requestGet({
+
+      if (status === 'SUCCESS') {
+        setNewBook([...data.newBook]);
+        setKbsBook([...data.kbsBook.kbsBookList]);
+        setTh(data.kbsBook?.seqKbs);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+
+  const fetchRequested2 = async () => {
+    try {
+      setLoading(true);
+      const {data, status} = await requestGet({
         url: consts.apiUrl + '/banner',
         query: {
           bannerGroupCode: 'banner01',
         },
       });
+
       if (status === 'SUCCESS') {
-        setNewBook([...data.newBook]);
-        setKbsBook([...data.kbsBook.kbsBookList]);
-        setBanner([...response.banner]);
-        setTh(data.kbsBook?.seqKbs);
+        setBanner([...data.banner]);
       }
       return status;
     } catch (error) {
@@ -55,12 +68,22 @@ export default function TopNewBooks({route}) {
 
   useEffect(() => {
     fetchRequested().then(res => {
+      fetchRequested2().then(response => {
+        if (response === 'SUCCESS') {
+          setLoading(false);
+        } else {
+          dispatch(dialogError(response || 'fail'));
+        }
+      });
+    });
+
+    /*fetchRequested2().then(res => {
       if (res === 'SUCCESS') {
         setLoading(false);
       } else {
         dispatch(dialogError(res || 'fail'));
       }
-    });
+    });*/
 
     return () => {
       setLoading(true);

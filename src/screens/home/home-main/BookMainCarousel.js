@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Platform,
+  Linking,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';
@@ -50,10 +51,11 @@ export default function BookMainCarousel({
           <View style={styles.bannerContainer}>
             <FastImage
               source={{
-                uri: consts.imgUrl + '/banner/' + item?.bannerImageName,
+                uri: consts.bannerUrl + '/banner/' + item?.bannerImageName,
               }}
               resizeMode={FastImage.resizeMode.stretch}
               style={styles.banner}
+              //onPress={() => Linking.openURL(item?.bannerLink)}
               onError={() => (item.title = 'bookDefault.gif')}
             />
           </View>
