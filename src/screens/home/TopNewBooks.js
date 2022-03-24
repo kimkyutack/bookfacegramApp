@@ -29,6 +29,10 @@ export default function TopNewBooks({route}) {
       setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/bookList',
+        query: {
+                startPaging: 0,
+                endPaging: 30,
+              },
       });
       if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
