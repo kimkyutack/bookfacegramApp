@@ -35,13 +35,13 @@ export default function TopNewBooks({route}) {
           endPaging: 30,
         },
       });
-      const {response, stat} = await requestGet({
+      const {response} = await requestGet({
         url: consts.apiUrl + '/banner',
         query: {
           bannerGroupCode: 'banner01',
         },
       });
-      if (status === 'SUCCESS' && stat === 'SUCCESS') {
+      if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
         setBanner([...response.banner]);
