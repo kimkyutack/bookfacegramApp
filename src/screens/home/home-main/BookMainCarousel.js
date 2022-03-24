@@ -42,17 +42,22 @@ export default function BookMainCarousel({
   th,
 }) {
   const dispatch = useDispatch();
+  const [bannerImg, setBannerImg] = useState(
+    item?.bannerImageName,
+  );
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
         <TouchableWithoutFeedback key={index}>
           <View style={styles.bannerContainer}>
             <FastImage
-              style={styles.banner}
-              source={item.title}
+              source={{
+                uri:
+                consts.imgUrl + '/banner/' + bannerImg,
+              }}
               resizeMode={FastImage.resizeMode.stretch}
+              style={styles.banner}
               onError={() => (item.title = 'bookDefault.gif')}
-              // 배너 이미지 가져오기 해야함
             />
           </View>
         </TouchableWithoutFeedback>

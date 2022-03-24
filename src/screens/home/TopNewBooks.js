@@ -34,9 +34,16 @@ export default function TopNewBooks({route}) {
                 endPaging: 30,
               },
       });
-      if (status === 'SUCCESS') {
+      const {response, stat} = await requestGet({
+        url: consts.apiUrl + '/banner',
+         query: {
+                bannerGroupCode : 'banner01',
+              },
+      });
+      if (status === 'SUCCESS' && stat === 'SUCCESS' ) {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
+        setBanner([...data.banner]);
         setTh(data.kbsBook?.seqKbs);
       }
       return status;
@@ -58,6 +65,7 @@ export default function TopNewBooks({route}) {
       setLoading(true);
       setNewBook([]);
       setKbsBook([]);
+      setBanner([]);
       setTh(18);
     };
   }, []);
@@ -71,6 +79,7 @@ export default function TopNewBooks({route}) {
           route={route}
           kbsBook={kbsBook}
           newBook={newBook}
+          banner={banner}
           th={th}
         />
       ) : !loading && route.params.type === 'list' ? (
