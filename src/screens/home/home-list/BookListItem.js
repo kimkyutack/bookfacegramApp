@@ -119,7 +119,10 @@ export default function BookListItem({
               <TextWrap
                 style={[styles.title, styles.date]}
                 font={fonts.kopubWorldDotumProMedium}>
-                {numFormat(item?.buy_price)}원
+                {item.type === 'kbs'
+                  ? numFormat(item?.price)
+                  : numFormat(item?.buy_price)}
+                원
               </TextWrap>
             </View>
           </View>
