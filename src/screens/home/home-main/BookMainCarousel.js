@@ -57,21 +57,6 @@ export default function BookMainCarousel({
               //onPress={() => Linking.openURL(item?.bannerLink)}
               onError={() => (item.title = 'bookDefault.gif')}
             />
-            
-            <CardWrap
-              onPress={() => {
-                dispatch(
-                  setTab({
-                    tab: 'detail',
-                    selectedBook: item?.bannerLink
-                    viewType: 'new',
-                  }),
-                );
-                navigate(routes.homeDetail, {
-                  type: 'detail',
-                });
-              }}
-            />
           </View>
         </TouchableWithoutFeedback>
       );
