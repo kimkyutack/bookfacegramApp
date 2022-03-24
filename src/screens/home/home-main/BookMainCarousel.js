@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Platform,
+  Linking,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import moment from 'moment-timezone';
@@ -53,7 +54,23 @@ export default function BookMainCarousel({
               }}
               resizeMode={FastImage.resizeMode.stretch}
               style={styles.banner}
+              //onPress={() => Linking.openURL(item?.bannerLink)}
               onError={() => (item.title = 'bookDefault.gif')}
+            />
+            
+            <CardWrap
+              onPress={() => {
+                dispatch(
+                  setTab({
+                    tab: 'detail',
+                    selectedBook: item?.bannerLink
+                    viewType: 'new',
+                  }),
+                );
+                navigate(routes.homeDetail, {
+                  type: 'detail',
+                });
+              }}
             />
           </View>
         </TouchableWithoutFeedback>

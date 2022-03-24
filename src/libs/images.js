@@ -8,6 +8,7 @@ export default {
   kakaoLoginAuth: require('../assets/images/kakao_login_auth.png'),
   kakaoLoginClose: require('../assets/images/kakao_login_close.png'),
   naverIcon: require('../assets/images/naver_icon.png'),
+  appleIcon: require('../assets/images/apple_icon.png'),
   toapingIcon: require('../assets/images/toaping_icon.png'),
   back: require('../assets/images/top-back.png'),
   hamberger: require('../assets/images/top-hamberger.png'),

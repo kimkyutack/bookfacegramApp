@@ -21,6 +21,10 @@ export default function TopNewBooks({route}) {
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState([]);
   const [kbsBook, setKbsBook] = useState([]);
+<<<<<<< HEAD
+  const [banner, setBanner] = useState([]);
+=======
+>>>>>>> 821c3f10b46f3dfbb8e283b8ea99e497a750447a
   const [th, setTh] = useState(18);
   const [banner, setBanner] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
@@ -73,6 +77,17 @@ export default function TopNewBooks({route}) {
         }
       });
     });
+<<<<<<< HEAD
+
+    /*fetchRequested2().then(res => {
+      if (res === 'SUCCESS') {
+        setLoading(false);
+      } else {
+        dispatch(dialogError(res || 'fail'));
+      }
+    });*/
+=======
+>>>>>>> 821c3f10b46f3dfbb8e283b8ea99e497a750447a
 
     return () => {
       setLoading(true);

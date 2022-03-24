@@ -613,6 +613,19 @@ export default function Login({route}) {
             구글
           </TextWrap>
         </View>
+
+        <View>
+          <Avatar
+            style={styles.avator}
+            source={images.appleIcon}
+            onPress={signInWithGoogle}
+          />
+          <TextWrap
+            font={fonts.kopubWorldDotumProMedium}
+            style={styles.avatarTitle}>
+            애플
+          </TextWrap>
+        </View>
       </View>
     </RootLayout>
   );
