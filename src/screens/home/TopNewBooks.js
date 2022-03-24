@@ -21,6 +21,7 @@ export default function TopNewBooks({route}) {
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState(null);
   const [kbsBook, setKbsBook] = useState(null);
+  const [banner, setBanner] = useState(null);
   const [th, setTh] = useState(18);
   const [drawerList, setDrawerList] = useState([]);
 

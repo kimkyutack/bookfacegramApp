@@ -11,7 +11,7 @@ import images from '../../../libs/images';
 import {screenWidth, widthPercentage, chunk} from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
 
-export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
+export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   const [arrayGrade, setArrayGrade] = useState([
     ...new Set(kbsBook.map(x => x.grade)),
   ]);
@@ -67,10 +67,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, th}) {
     setNewBookList([...newBook]);
     setKbsBookList1([...kbsBook?.filter(x => x.grade === arrayGrade[0])]);
     setKbsBookList2([...kbsBook?.filter(x => x.grade === arrayGrade[1])]);
-    setBannerList([
-      {index: 0, id: 1, title: images.bannerOne},
-      {index: 1, id: 2, title: images.bannerTwo},
-    ]);
+    setBannerList([...banner]);
   }, []);
 
   useEffect(() => {
