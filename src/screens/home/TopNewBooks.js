@@ -31,20 +31,20 @@ export default function TopNewBooks({route}) {
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/bookList',
         query: {
-                startPaging: 0,
-                endPaging: 30,
-              },
+          startPaging: 0,
+          endPaging: 30,
+        },
       });
       const {response, stat} = await requestGet({
         url: consts.apiUrl + '/banner',
-         query: {
-                bannerGroupCode : 'banner01',
-              },
+        query: {
+          bannerGroupCode: 'banner01',
+        },
       });
-      if (status === 'SUCCESS' && stat === 'SUCCESS' ) {
+      if (status === 'SUCCESS' && stat === 'SUCCESS') {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
-        setBanner([...data.banner]);
+        setBanner([...response.banner]);
         setTh(data.kbsBook?.seqKbs);
       }
       return status;
@@ -53,8 +53,34 @@ export default function TopNewBooks({route}) {
     }
   };
 
+  const fetchRequested2 = async () => {
+    try {
+      setLoading(true);
+      const {response, stat} = await requestGet({
+        url: consts.apiUrl + '/banner',
+        query: {
+          bannerGroupCode: 'banner01',
+        },
+      });
+      if (stat === 'SUCCESS') {
+        setBanner([...response.banner]);
+      }
+      return stat;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+
   useEffect(() => {
     fetchRequested().then(res => {
+      if (res === 'SUCCESS') {
+        setLoading(false);
+      } else {
+        dispatch(dialogError(res || 'fail'));
+      }
+    });
+
+    fetchRequested2().then(res => {
       if (res === 'SUCCESS') {
         setLoading(false);
       } else {
