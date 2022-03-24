@@ -21,8 +21,12 @@ export default function TopNewBooks({route}) {
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState([]);
   const [kbsBook, setKbsBook] = useState([]);
+<<<<<<< HEAD
   const [banner, setBanner] = useState([]);
+=======
+>>>>>>> 821c3f10b46f3dfbb8e283b8ea99e497a750447a
   const [th, setTh] = useState(18);
+  const [banner, setBanner] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
 
   const fetchRequested = async () => {
@@ -35,7 +39,6 @@ export default function TopNewBooks({route}) {
           endPaging: 30,
         },
       });
-
       if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
@@ -56,7 +59,6 @@ export default function TopNewBooks({route}) {
           bannerGroupCode: 'banner01',
         },
       });
-
       if (status === 'SUCCESS') {
         setBanner([...data.banner]);
       }
@@ -65,7 +67,6 @@ export default function TopNewBooks({route}) {
       dispatch(dialogError(error));
     }
   };
-
   useEffect(() => {
     fetchRequested().then(res => {
       fetchRequested2().then(response => {
@@ -76,6 +77,7 @@ export default function TopNewBooks({route}) {
         }
       });
     });
+<<<<<<< HEAD
 
     /*fetchRequested2().then(res => {
       if (res === 'SUCCESS') {
@@ -84,6 +86,8 @@ export default function TopNewBooks({route}) {
         dispatch(dialogError(res || 'fail'));
       }
     });*/
+=======
+>>>>>>> 821c3f10b46f3dfbb8e283b8ea99e497a750447a
 
     return () => {
       setLoading(true);
