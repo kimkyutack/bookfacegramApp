@@ -31,20 +31,20 @@ export default function TopNewBooks({route}) {
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/bookList',
         query: {
-                startPaging: 0,
-                endPaging: 30,
-              },
+          startPaging: 0,
+          endPaging: 30,
+        },
       });
-      const {response, stat} = await requestGet({
+      const {response} = await requestGet({
         url: consts.apiUrl + '/banner',
-         query: {
-                bannerGroupCode : 'banner01',
-              },
+        query: {
+          bannerGroupCode: 'banner01',
+        },
       });
-      if (status === 'SUCCESS' && stat === 'SUCCESS' ) {
+      if (status === 'SUCCESS') {
         setNewBook([...data.newBook]);
         setKbsBook([...data.kbsBook.kbsBookList]);
-        setBanner([...data.banner]);
+        setBanner([...response.banner]);
         setTh(data.kbsBook?.seqKbs);
       }
       return status;

@@ -42,9 +42,7 @@ export default function BookMainCarousel({
   th,
 }) {
   const dispatch = useDispatch();
-  const [bannerImg, setBannerImg] = useState(
-    item?.bannerImageName,
-  );
+
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
@@ -52,8 +50,7 @@ export default function BookMainCarousel({
           <View style={styles.bannerContainer}>
             <FastImage
               source={{
-                uri:
-                consts.imgUrl + '/banner/' + bannerImg,
+                uri: consts.imgUrl + '/banner/' + item?.bannerImageName,
               }}
               resizeMode={FastImage.resizeMode.stretch}
               style={styles.banner}

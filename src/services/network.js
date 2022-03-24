@@ -286,6 +286,7 @@ export const requestGet = async ({url, headers, query = {}}) => {
         },
       },
     );
+
     return response.data;
   } catch (error) {
     // request 토큰 만료 accesstoken 만료시 refeshtoken으로 다시 accesstoken, refreshtoken 가져와서 저장
