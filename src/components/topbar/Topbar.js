@@ -69,7 +69,16 @@ export default function Topbar({
         </TouchableWithoutFeedback>
       )}
 
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(routes.home, {
+            screen: routes.topNewBooks,
+            params: {
+              type: 'main',
+              key: Date.now(),
+            },
+          })
+        }>
         <View style={styles.toapingCenter} onLayout={handleOptionLayout}>
           <Image style={styles.titleIcon} source={images.title} />
         </View>
