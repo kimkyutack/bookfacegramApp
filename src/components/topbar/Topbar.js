@@ -70,28 +70,8 @@ export default function Topbar({
       )}
 
       <TouchableWithoutFeedback>
-        <View
-          style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
-          onLayout={handleOptionLayout}>
-          <TextWrap
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            font={fonts.kopubWorldDotumProBold}
-            onPress={
-              title === 'TOAPING'
-                ? () =>
-                    navigation.navigate(routes.home, {
-                      screen: routes.topNewBooks,
-                      params: {
-                        type: 'main',
-                        key: Date.now(),
-                      },
-                    })
-                : null
-            }
-            style={styles.title}>
-            {title}
-          </TextWrap>
+        <View style={styles.toapingCenter} onLayout={handleOptionLayout}>
+          <Image style={styles.titleIcon} source={images.title} />
         </View>
       </TouchableWithoutFeedback>
 
@@ -204,6 +184,11 @@ const styles = StyleSheet.create({
   hambergerIcon: {
     width: widthPercentage(20),
     height: heightPercentage(20),
+    resizeMode: 'cover',
+  },
+  titleIcon: {
+    width: widthPercentage(100),
+    height: heightPercentage(30),
     resizeMode: 'cover',
   },
   noneIcon: {

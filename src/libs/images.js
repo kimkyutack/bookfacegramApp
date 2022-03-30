@@ -1,5 +1,6 @@
 export default {
   splash: require('../assets/images/splash.png'),
+  title: require('../assets/images/title.png'),
   login: require('../assets/images/login.png'),
   facebookIcon: require('../assets/images/facebook_icon.png'),
   googleIcon: require('../assets/images/google_icon.png'),
