@@ -60,7 +60,7 @@ export default function BookDetailInfo({
         <View style={styles.divider} />
       </View>
       <View>
-        <View style={styles.mainContent}>
+        {/*<View style={styles.mainContent}>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             저자소개
           </TextWrap>
@@ -72,7 +72,7 @@ export default function BookDetailInfo({
             font={fonts.kopubWorldDotumProLight}
             numberOfLines={!open2 ? 2 : 0}>
             {/* {summary} */}
-          </TextWrap>
+        {/*</TextWrap>
         </View>
         <TouchableOpacity
           style={styles.main}
@@ -102,7 +102,7 @@ export default function BookDetailInfo({
             font={fonts.kopubWorldDotumProLight}
             numberOfLines={!open3 ? 2 : 0}>
             {/* {summary} */}
-          </TextWrap>
+        {/*} </TextWrap>
         </View>
         <TouchableOpacity
           style={styles.main}
@@ -117,6 +117,7 @@ export default function BookDetailInfo({
             <TextWrap font={fonts.kopubWorldDotumProMedium}> 자세히</TextWrap>
           </View>
         </TouchableOpacity>
+        */}
         <View style={styles.divider} />
       </View>
     </View>
