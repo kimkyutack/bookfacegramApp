@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {Image, Keyboard, StyleSheet, View, Platform} from 'react-native';
 import Config from 'react-native-config';
 import axios from 'axios';
+import {decode as atob, encode as btoa} from 'base-64';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import InputWrap from '../../components/input-wrap/InputWrap';
@@ -482,6 +483,41 @@ export default function Login({route}) {
       },
     );
   };
+
+  function b64DecodeUnicode(str) {
+    return decodeURIComponent(
+      atob(str).replace(/(.)/g, function (m, p) {
+        var code = p.charCodeAt(0).toString(16).toUpperCase();
+        if (code.length < 2) {
+          code = '0' + code;
+        }
+        return '%' + code;
+      }),
+    );
+  }
+
+  function base64_url_decode(str) {
+    var output = str.replace(/-/g, '+').replace(/_/g, '/');
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += '==';
+        break;
+      case 3:
+        output += '=';
+        break;
+      default:
+        throw 'Illegal base64url string!';
+    }
+
+    try {
+      return b64DecodeUnicode(output);
+    } catch (err) {
+      return atob(output);
+    }
+  }
+
   // Initialize the module
   AppleAuthenticationAndroid.configure({
     clientId: 'com.bookfacegram.app',
@@ -506,15 +542,18 @@ export default function Login({route}) {
       if (response) {
         const code = response.code; // Present if selected ResponseType.ALL / ResponseType.CODE
         const id_token = response.id_token; // Present if selected ResponseType.ALL / ResponseType.ID_TOKEN
-        const users = response.user; // Present when user first logs in using appleid
-        alert(JSON.stringify(response));
+        //const users = response.user; // Present when user first logs in using appleid
+        const result = JSON.parse(base64_url_decode(id_token.split('.')[1]));
         //const name_type = typeof response.user;
         //const email = 'ddr1323@gmail.com';
-        const appleemail = response.user.email;
-        const applename = response.user.name.lastName;
+        var appleemail = result.email;
+        /*const applename = response.user.name.lastName;
         const applename2 = response.user.name.firstName;
-        const fullName = applename + applename2;
+        const fullName = applename + applename2;*/
 
+        // if (appleemail != null) {
+        //  appleemail = result.email;
+        // }
         await axios({
           method: 'GET',
           url: `https://toaping.me:8811/bookApp/auth/apple?email=${appleemail}`,
@@ -538,6 +577,9 @@ export default function Login({route}) {
                 setPasswordError('애플 로그인 에러');
               }
             } else {
+              const applename = response.user.name.lastName;
+              const applename2 = response.user.name.firstName;
+              const fullName = applename + applename2;
               const {data, status} = await requestPost({
                 url: consts.apiUrl + '/auth/appleLogin',
                 body: {
