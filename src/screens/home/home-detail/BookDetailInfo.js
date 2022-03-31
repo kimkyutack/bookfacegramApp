@@ -57,7 +57,6 @@ export default function BookDetailInfo({
             <TextWrap font={fonts.kopubWorldDotumProMedium}> 자세히</TextWrap>
           </View>
         </TouchableOpacity>
-        <View style={styles.divider} />
       </View>
       <View>
         {/*<View style={styles.mainContent}>
@@ -118,7 +117,6 @@ export default function BookDetailInfo({
           </View>
         </TouchableOpacity>
         */}
-        <View style={styles.divider} />
       </View>
     </View>
   );

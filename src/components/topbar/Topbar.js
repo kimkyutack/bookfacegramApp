@@ -69,20 +69,45 @@ export default function Topbar({
         </TouchableWithoutFeedback>
       )}
 
-      <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate(routes.home, {
-            screen: routes.topNewBooks,
-            params: {
-              type: 'main',
-              key: Date.now(),
-            },
-          })
-        }>
-        <View style={styles.toapingCenter} onLayout={handleOptionLayout}>
-          <Image style={styles.titleIcon} source={images.title} />
-        </View>
-      </TouchableWithoutFeedback>
+      <View
+        style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
+        onLayout={handleOptionLayout}>
+        {title !== 'TOAPING' && (
+          <TextWrap
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            font={fonts.kopubWorldDotumProBold}
+            onPress={
+              title === 'TOAPING'
+                ? () =>
+                    navigation.navigate(routes.home, {
+                      screen: routes.topNewBooks,
+                      params: {
+                        type: 'main',
+                        key: Date.now(),
+                      },
+                    })
+                : null
+            }
+            style={styles.title}>
+            {title}
+          </TextWrap>
+        )}
+        {title === 'TOAPING' && (
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate(routes.home, {
+                screen: routes.topNewBooks,
+                params: {
+                  type: 'main',
+                  key: Date.now(),
+                },
+              })
+            }>
+            <Image style={styles.titleIcon} source={images.title} />
+          </TouchableWithoutFeedback>
+        )}
+      </View>
 
       <View style={(optionsSearch || optionsAvator) && styles.rightConatiner}>
         {optionsSearch && (
