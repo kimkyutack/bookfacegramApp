@@ -169,7 +169,7 @@ const renderItem = ({
             style={styles.contents}
             timeKey={Date.now()}
             index={index}>
-            {contents ? contents : ''}
+            {contents ? contents.replace(/&nbsp/g, ' ') : ''}
           </TextMoreWrap>
         </View>
         <View>

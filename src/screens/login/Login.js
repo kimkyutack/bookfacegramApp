@@ -13,6 +13,13 @@ import consts from '../../libs/consts';
 import images from '../../libs/images';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
+import AppleAuthenticationAndroid, {
+  NOT_CONFIGURED_ERROR,
+  SIGNIN_CANCELLED_ERROR,
+  SIGNIN_FAILED_ERROR,
+  ResponseType,
+  Scope,
+} from 'react-native-apple-authentication-android';
 import {
   convertKorPhoneFormat,
   getAgeFromMoment,
@@ -110,7 +117,7 @@ export default function Login({route}) {
         if (data?.lnupMember) {
           navigate(routes.registerForm, {
             data: data?.lnupMember,
-            userId: userId,
+            userId: 'userId',
             password: userPw,
             platformType: type,
           });
@@ -475,6 +482,104 @@ export default function Login({route}) {
       },
     );
   };
+  // Initialize the module
+  AppleAuthenticationAndroid.configure({
+    clientId: 'com.bookfacegram.app',
+    redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
+
+    // [OPTIONAL]
+    // Scope.ALL (DEFAULT) = 'email name'
+    // Scope.Email = 'email';
+    // Scope.Name = 'name';
+    scope: Scope.ALL,
+
+    // [OPTIONAL]
+    // ResponseType.ALL (DEFAULT) = 'code id_token';
+    // ResponseType.CODE = 'code';
+    // ResponseType.ID_TOKEN = 'id_token';
+    responseType: ResponseType.ALL,
+  });
+  // Sign In with Apple
+  const signInWithApple = async () => {
+    try {
+      const response = await AppleAuthenticationAndroid.signIn();
+      if (response) {
+        const code = response.code; // Present if selected ResponseType.ALL / ResponseType.CODE
+        const id_token = response.id_token; // Present if selected ResponseType.ALL / ResponseType.ID_TOKEN
+        const users = response.user; // Present when user first logs in using appleid
+        alert(JSON.stringify(response));
+        //const name_type = typeof response.user;
+        //const email = 'ddr1323@gmail.com';
+        const appleemail = response.user.email;
+        const applename = response.user.name.lastName;
+        const applename2 = response.user.name.firstName;
+        const fullName = applename + applename2;
+
+        await axios({
+          method: 'GET',
+          url: `https://toaping.me:8811/bookApp/auth/apple?email=${appleemail}`,
+        })
+          .then(async function (res) {
+            if (res.data.status === 'SUCCESS') {
+              const {data, status} = await requestPost({
+                url: consts.apiUrl + '/auth/appleLogin',
+                body: {
+                  email: appleemail,
+                  memberId: appleemail,
+                  platformType: 'apple',
+                },
+              });
+              if (status === 'SUCCESS') {
+                await setItem('accessToken', data.accessToken);
+                await setItem('refreshToken', data.refreshToken);
+                await setItem('platformType', 'apple');
+                dispatch(userCheckToken);
+              } else {
+                setPasswordError('애플 로그인 에러');
+              }
+            } else {
+              const {data, status} = await requestPost({
+                url: consts.apiUrl + '/auth/appleLogin',
+                body: {
+                  email: appleemail,
+                  memberId: appleemail,
+                  kor_nm: fullName,
+                  platformType: 'apple',
+                },
+              });
+              if (status === 'SUCCESS') {
+                await setItem('accessToken', data.accessToken);
+                await setItem('refreshToken', data.refreshToken);
+                await setItem('platformType', 'apple');
+                dispatch(userCheckToken);
+              } else {
+                setPasswordError('애플 로그인 에러');
+              }
+            }
+          })
+          .catch(function (error) {
+            dispatch(dialogError(error));
+          });
+      }
+    } catch (error) {
+      if (error && error.message) {
+        switch (error.message) {
+          case NOT_CONFIGURED_ERROR:
+            console.log('AppleAuthenticationAndroid not configured yet.');
+            break;
+          case SIGNIN_FAILED_ERROR:
+            console.log('Apple signin failed.');
+            break;
+          case SIGNIN_CANCELLED_ERROR:
+            console.log('User cancelled apple signin.');
+            break;
+
+          default:
+            break;
+        }
+      }
+    }
+  };
 
   return (
     <RootLayout style={styles.root}>
@@ -618,7 +723,7 @@ export default function Login({route}) {
           <Avatar
             style={styles.avator}
             source={images.appleIcon}
-            onPress={signInWithGoogle}
+            onPress={signInWithApple}
           />
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
