@@ -63,7 +63,7 @@ export default function Notice({route, navigation}) {
           return <NoticeItem {...item} isFocused={isFocused} />;
         }}
       />
-      <Footer />
+      <Footer page="notice" />
     </RootLayout>
   );
 }

@@ -16,7 +16,7 @@ import TopNewBooksList from './home-list/TopNewBooksList';
 import TopNewBooksDetail from './home-detail/TopNewBooksDetail';
 import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 
-export default function TopNewBooks({route}) {
+export default function TopNewBooks({route}, start, end) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState([]);
@@ -25,14 +25,19 @@ export default function TopNewBooks({route}) {
   const [banner, setBanner] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
 
+  if (JSON.stringify(start) === '{}') {
+    start = 0;
+    end = 30;
+  }
+
   const fetchRequested = async () => {
     try {
       setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/bookList',
         query: {
-          startPaging: 0,
-          endPaging: 30,
+          startPaging: start,
+          endPaging: end,
         },
       });
       if (status === 'SUCCESS') {

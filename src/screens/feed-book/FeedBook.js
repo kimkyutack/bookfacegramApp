@@ -330,7 +330,7 @@ export default function FeedBook({route, navigation}) {
           ListFooterComponent={renderFooter}
         />
       )}
-      <Footer />
+      <Footer page="feed" />
     </SafeAreaView>
   );
 }

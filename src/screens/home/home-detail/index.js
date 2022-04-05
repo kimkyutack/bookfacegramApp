@@ -90,7 +90,7 @@ export default function HomeDetail({route, navigation}) {
           route.params?.params?.type ? route.params?.params?.type : 'detail'
         }
       />
-      <Footer />
+      <Footer page={'book'} />
     </SafeAreaView>
   );
 }

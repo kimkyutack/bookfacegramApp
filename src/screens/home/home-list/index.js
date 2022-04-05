@@ -89,7 +89,7 @@ export default function HomeList({route, navigation}) {
       <TopTabs
         type={route.params?.params?.type ? route.params?.params?.type : 'list'}
       />
-      <Footer />
+      <Footer page="list" />
     </SafeAreaView>
   );
 }

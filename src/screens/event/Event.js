@@ -60,7 +60,7 @@ export default function Event({navigation}) {
           return <EventItem item={item} navigation={navigation} />;
         }}
       />
-      <Footer />
+      <Footer page="event" />
     </RootLayout>
   );
 }

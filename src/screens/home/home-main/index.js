@@ -97,7 +97,7 @@ export default function HomeMain({route, navigation}) {
         grade={route.params?.params?.grade}
         type={route.params?.params?.type ? route.params?.params?.type : 'main'}
       />
-      <Footer />
+      <Footer page="home" />
     </SafeAreaView>
   );
 }

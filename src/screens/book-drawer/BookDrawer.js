@@ -493,7 +493,7 @@ export default function BookDrawer({route, navigation}) {
           </View>
         </TouchableWithoutFeedback>
       )}
-      <Footer />
+      <Footer page="draw" />
     </RootLayout>
   );
 }
