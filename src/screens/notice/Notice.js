@@ -9,6 +9,7 @@ import NoticeItem from './NoticeItem';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import images from '../../libs/images';
+import Footer from '../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -62,6 +63,7 @@ export default function Notice({route, navigation}) {
           return <NoticeItem {...item} isFocused={isFocused} />;
         }}
       />
+      <Footer />
     </RootLayout>
   );
 }

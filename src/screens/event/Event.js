@@ -6,6 +6,7 @@ import consts from '../../libs/consts';
 import {requestGet} from '../../services/network';
 import EventItem from './EventItem';
 import images from '../../libs/images';
+import Footer from '../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -59,6 +60,7 @@ export default function Event({navigation}) {
           return <EventItem item={item} navigation={navigation} />;
         }}
       />
+      <Footer />
     </RootLayout>
   );
 }

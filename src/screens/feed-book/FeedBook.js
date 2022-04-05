@@ -30,6 +30,7 @@ import {getFeedHome} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 import Topbar from '../../components/topbar/Topbar';
 import TextWrap from '../../components/text-wrap/TextWrap';
+import Footer from '../../libs/footer';
 
 export default function FeedBook({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
@@ -329,6 +330,7 @@ export default function FeedBook({route, navigation}) {
           ListFooterComponent={renderFooter}
         />
       )}
+      <Footer />
     </SafeAreaView>
   );
 }

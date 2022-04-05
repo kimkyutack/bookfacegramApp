@@ -36,6 +36,7 @@ import {
 } from '../../services/util';
 import {requestGet, requestPost} from '../../services/network';
 import EditToolTip from './editTooltip';
+import Footer from '../../libs/footer';
 import {useIsFocused} from '@react-navigation/core';
 
 export default function BookDrawer({route, navigation}) {
@@ -492,6 +493,7 @@ export default function BookDrawer({route, navigation}) {
           </View>
         </TouchableWithoutFeedback>
       )}
+      <Footer />
     </RootLayout>
   );
 }
