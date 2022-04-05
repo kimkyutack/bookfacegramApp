@@ -23,6 +23,7 @@ export default {
   footerEvent1: require('../assets/images/footer_event.png'),
   footerEvent2: require('../assets/images/footer_event2.png'),
   back: require('../assets/images/top-back.png'),
+  scrollTop: require('../assets/images/top.png'),
   hamberger: require('../assets/images/top-hamberger.png'),
   camera: require('../assets/images/top-camera.png'),
   feedCamera: require('../assets/images/feed-camera.png'),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   Image,
   View,
@@ -10,7 +10,16 @@ import TextWrap from '../components/text-wrap/TextWrap';
 import images from '../libs/images';
 import routes from '../libs/routes';
 import {navigate} from '../services/navigation';
+import ButtonWrap from '../components/button-wrap/ButtonWrap';
+function Totop() {
+  alert('!');
+  const scrollRef = useRef();
 
+  scrollRef.current?.scrollTo({
+    y: 0,
+    animated: true,
+  });
+}
 export function Footer(page) {
   return (
     <View style={styles.footer}>
@@ -92,6 +101,12 @@ export function Footer(page) {
               }>
               책서랍
             </TextWrap>
+          </View>
+
+          <View style={{display: 'none'}}>
+            <TouchableWithoutFeedback onPress={Totop}>
+              <Image source={images.scrollTop} style={[styles.scrolltotop]} />
+            </TouchableWithoutFeedback>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -189,6 +204,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 49,
+  },
+  scrolltotop: {
+    display: 'none',
+    width: 40,
+    height: 40,
+    position: 'absolute',
+    bottom: 60,
+    right: 0,
   },
 });
 
