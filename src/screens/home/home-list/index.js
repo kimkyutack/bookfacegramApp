@@ -16,6 +16,7 @@ import SearchBar from '../../../components/search-bar/SearchBar';
 import TopTabs from './TopTabs';
 import images from '../../../libs/images';
 import colors from '../../../libs/colors';
+import Footer from '../../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -88,6 +89,7 @@ export default function HomeList({route, navigation}) {
       <TopTabs
         type={route.params?.params?.type ? route.params?.params?.type : 'list'}
       />
+      <Footer />
     </SafeAreaView>
   );
 }

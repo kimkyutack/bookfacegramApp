@@ -15,6 +15,7 @@ import TopTabs from './TopTabs';
 import images from '../../../libs/images';
 import colors from '../../../libs/colors';
 import routes from '../../../libs/routes';
+import Footer from '../../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -89,6 +90,7 @@ export default function HomeDetail({route, navigation}) {
           route.params?.params?.type ? route.params?.params?.type : 'detail'
         }
       />
+      <Footer />
     </SafeAreaView>
   );
 }

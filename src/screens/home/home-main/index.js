@@ -16,6 +16,8 @@ import images from '../../../libs/images';
 import colors from '../../../libs/colors';
 import {navigate} from '../../../services/navigation';
 import routes from '../../../libs/routes';
+import Footer from '../../../libs/footer';
+
 import {
   widthPercentage,
   heightPercentage,
@@ -95,6 +97,7 @@ export default function HomeMain({route, navigation}) {
         grade={route.params?.params?.grade}
         type={route.params?.params?.type ? route.params?.params?.type : 'main'}
       />
+      <Footer />
     </SafeAreaView>
   );
 }
