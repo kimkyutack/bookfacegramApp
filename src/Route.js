@@ -22,6 +22,7 @@ import Home from './screens/home/home-main';
 import HomeList from './screens/home/home-list';
 import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
+import Faq from './screens/faq/Faq';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
 
@@ -417,6 +418,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.notice}
               component={Notice}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.faq}
+              component={Faq}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

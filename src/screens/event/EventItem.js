@@ -18,9 +18,11 @@ export default function EventItem({item, navigation}) {
         }}>
         <View style={styles.mainContent}>
           <Image
-            source={
-              item.ev_img === 'event1_thumb.jpg' ? images.event1 : images.event2
-            }
+            source={{
+              uri:
+                'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/event/' +
+                item.ev_img,
+            }}
             style={styles.thumbnail}
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>

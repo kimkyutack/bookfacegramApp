@@ -12,6 +12,7 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {requestGet, requestPost} from '../../services/network';
+import Footer from '../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -106,13 +107,12 @@ export default function EventDetail({route, navigation}) {
       }}>
       <ScrollView contentContainerStyle={{flexGrow: 2}} scrollEnabled>
         <View style={styles.root}>
+          {/*uri: routeParams.ev_img_f,*/}
           {routeParams && (
             <Image
-              source={
-                routeParams.ev_img === 'event1_thumb.jpg'
-                  ? images.event1Body
-                  : images.event2Body
-              }
+              source={{
+                uri: routeParams.ev_img_f,
+              }}
               style={styles.image}
             />
           )}
@@ -184,6 +184,7 @@ export default function EventDetail({route, navigation}) {
           )}
         </View>
       </ScrollView>
+      <Footer page="event" />
     </RootLayout>
   );
 }
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
+    height: heightPercentage(1000),
     resizeMode: 'stretch',
   },
   button: {

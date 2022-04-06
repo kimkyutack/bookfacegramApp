@@ -7,6 +7,7 @@ import colors from '../../libs/colors';
 import TabIcon from './TabIcon';
 import TabBar from './TabBar';
 import Notice from '../notice/Notice';
+import Faq from '../faq/Faq';
 import Home from './TabsHome';
 import Back from './TabsBack';
 import Menu from './TabsMenu';
@@ -94,6 +95,20 @@ export default function Tabs({route, navigation}) {
           }}
           name={routes.notice}
           component={Notice}
+        />
+        <BottomTab.Screen
+          options={{
+            tabBarLabel: 'faq',
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
+          }}
+          name={routes.faq}
+          component={Faq}
         />
       </BottomTab.Navigator>
     </SafeAreaView>

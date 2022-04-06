@@ -120,8 +120,7 @@ export default function DrawerCustom(props) {
               label="ㆍ도움말"
               labelStyle={styles.label}
               onPress={() => {
-                dispatch(dialogError('페이지 제작중...'));
-                // props.navigation.navigate(routes.tab);
+                props.navigation.navigate(routes.faq);
               }}
             />
           </View>

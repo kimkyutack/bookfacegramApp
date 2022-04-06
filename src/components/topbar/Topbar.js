@@ -72,7 +72,7 @@ export default function Topbar({
       <View
         style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
         onLayout={handleOptionLayout}>
-        {title !== 'TOAPING' && (
+        {(title === '도움말(FAQ)' || title === '공지사항') && (
           <TextWrap
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -89,10 +89,33 @@ export default function Topbar({
                     })
                 : null
             }
-            style={styles.title}>
+            style={styles.notice}>
             {title}
           </TextWrap>
         )}
+        {title !== 'TOAPING' &&
+          title !== '도움말(FAQ)' &&
+          title !== '공지사항' && (
+            <TextWrap
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              font={fonts.kopubWorldDotumProBold}
+              onPress={
+                title === 'TOAPING'
+                  ? () =>
+                      navigation.navigate(routes.home, {
+                        screen: routes.topNewBooks,
+                        params: {
+                          type: 'main',
+                          key: Date.now(),
+                        },
+                      })
+                  : null
+              }
+              style={styles.title}>
+              {title}
+            </TextWrap>
+          )}
         {title === 'TOAPING' && (
           <TouchableWithoutFeedback
             onPress={() =>
@@ -206,6 +229,12 @@ const styles = StyleSheet.create({
     borderColor: '#0077ff',
   },
   title: {
+    fontSize: fontPercentage(19),
+    letterSpacing: -0.5,
+    color: '#000000',
+  },
+  notice: {
+    left: widthPercentage(80),
     fontSize: fontPercentage(19),
     letterSpacing: -0.5,
     color: '#000000',

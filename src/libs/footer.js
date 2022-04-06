@@ -3,24 +3,16 @@ import {
   Image,
   View,
   TouchableWithoutFeedback,
-  Text,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import TextWrap from '../components/text-wrap/TextWrap';
 import images from '../libs/images';
 import routes from '../libs/routes';
 import {navigate} from '../services/navigation';
-import ButtonWrap from '../components/button-wrap/ButtonWrap';
-function Totop() {
-  alert('!');
-  const scrollRef = useRef();
 
-  scrollRef.current?.scrollTo({
-    y: 0,
-    animated: true,
-  });
-}
 export function Footer(page) {
+  const scrollRef = useRef();
   return (
     <View style={styles.footer}>
       <TouchableWithoutFeedback
@@ -102,12 +94,14 @@ export function Footer(page) {
               책서랍
             </TextWrap>
           </View>
-
-          <View style={{display: 'none'}}>
-            <TouchableWithoutFeedback onPress={Totop}>
-              <Image source={images.scrollTop} style={[styles.scrolltotop]} />
-            </TouchableWithoutFeedback>
-          </View>
+          {/*display: flex로 변경*/}
+          <TouchableOpacity
+            onPress={() =>
+              scrollRef.current.scrollToOffset({offset: 0, animated: true})
+            }
+            style={{display: 'none'}}>
+            <Image source={images.scrollTop} style={[styles.scrolltotop]} />
+          </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
@@ -206,7 +200,7 @@ const styles = StyleSheet.create({
     right: 49,
   },
   scrolltotop: {
-    display: 'none',
+    display: 'flex',
     width: 40,
     height: 40,
     position: 'absolute',

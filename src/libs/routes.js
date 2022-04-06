@@ -33,6 +33,7 @@ export default {
   hashTagFeed: 'hashTagFeed',
   notice: 'notice',
   event: 'event',
+  faq: 'faq',
   eventDetail: 'eventDetail',
   registerForm: 'registerForm',
   registerFormInfo: 'registerFormInfo',
