@@ -195,6 +195,7 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
       startPaging: (page === 1 ? 0 : page - 1) * limit, // limit start
       endPaging: limit, // limit end
       time: time,
+      memberIdx: 1, // 수정 필요
     },
   })
     .then(data => {

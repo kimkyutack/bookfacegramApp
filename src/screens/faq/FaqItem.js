@@ -82,7 +82,27 @@ export default function FaqItem({
               />
             </TouchableOpacity>
           )
-        : category === '회원' && (
+        : categoryType === 'mem'
+        ? category === '회원' && (
+            <TouchableOpacity
+              style={[styles.main, open && styles.mainOpend]}
+              onPress={() => {
+                setOpen(!open);
+              }}>
+              <View style={[styles.mainContent, open && {marginTop: 6}]}>
+                <TextWrap
+                  font={fonts.kopubWorldDotumProMedium}
+                  style={styles.title}>
+                  {question}
+                </TextWrap>
+              </View>
+              <Image
+                source={open ? images.angleUp : images.angleDown}
+                style={styles.up}
+              />
+            </TouchableOpacity>
+          )
+        : category === '서비스' && (
             <TouchableOpacity
               style={[styles.main, open && styles.mainOpend]}
               onPress={() => {
