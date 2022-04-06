@@ -78,7 +78,7 @@ export default function Router() {
         dialogOpenAction({
           titleColor: '#000',
           cancelTitle: '취소',
-          message: 'Exit App\nDo you want to exit?',
+          message: '앱을 종료하시겠습니까??',
           onPress: a => {
             if (a) {
               RNExitApp.exitApp();
