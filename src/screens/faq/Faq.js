@@ -25,7 +25,7 @@ import {
 
 export default function Faq({route, navigation}) {
   const [data, setData] = useState([]);
-  const [color1, setColor1] = useState('#c9c9c9');
+  const [color1, setColor1] = useState('#FED500');
   const [color2, setColor2] = useState('#c9c9c9');
   const [color3, setColor3] = useState('#c9c9c9');
   const [color4, setColor4] = useState('#c9c9c9');

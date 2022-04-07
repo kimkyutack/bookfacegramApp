@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import images from '../../libs/images';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -62,15 +63,7 @@ export default function TopActivity({}) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box2}
-          onPress={() =>
-            navigate(routes.activity, {
-              screen: routes.topNewBooks,
-              params: {
-                type: 'main',
-                key: Date.now(),
-              },
-            })
-          }>
+          onPress={() => Alert.alert('페이지 제작중..')}>
           <View style={styles.box3}>
             <Image style={styles.img1} source={images.quiz} />
             <TextWrap style={styles.font3}>독서퀴즈</TextWrap>

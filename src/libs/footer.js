@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import TextWrap from '../components/text-wrap/TextWrap';
 import images from '../libs/images';
@@ -104,16 +105,7 @@ export function Footer(page) {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() =>
-          navigate(routes.event, {
-            screen: routes.event,
-            params: {
-              type: 'event',
-              key: Date.now(),
-            },
-          })
-        }>
+      <TouchableWithoutFeedback onPress={() => Alert.alert('페이지 제작중...')}>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
             style={styles.footerIcon}

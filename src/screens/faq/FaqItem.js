@@ -16,6 +16,7 @@ export default function FaqItem({
   isFocused,
 }) {
   const [open, setOpen] = useState(false);
+  //alert(JSON.stringify(category));
 
   useEffect(() => {
     setOpen(false);
