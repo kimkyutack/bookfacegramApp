@@ -20,6 +20,7 @@ import routes from '../../libs/routes';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import fonts from '../../libs/fonts';
+import Footer from '../../libs/footer';
 import {
   dialogError,
   dialogOpenDrawerSelect,
@@ -392,6 +393,7 @@ export default function BookDrawerDetail({route, navigation}) {
           )}
         </View>
       )}
+      <Footer page="draw" />
     </RootLayout>
   );
 }

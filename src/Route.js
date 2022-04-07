@@ -18,6 +18,9 @@ import {userSignOut} from './redux/user/UserActions';
 import Splash from './screens/splash/Splash';
 import Login from './screens/login/Login';
 import Tabs from './screens/tabs/Tabs';
+import BookContest from './screens/home/home-main/bookcontest';
+import Kbstest from './screens/home/home-main/kbstest';
+import Examtest from './screens/home/home-main/examtest';
 import Home from './screens/home/home-main';
 import HomeList from './screens/home/home-list';
 import HomeDetail from './screens/home/home-detail';
@@ -342,6 +345,33 @@ export default function Router() {
             <Drawer.Screen
               name={routes.search}
               component={Search}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.kbstest}
+              component={Kbstest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.examtest}
+              component={Examtest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.bookContest}
+              component={BookContest}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

@@ -15,6 +15,7 @@ import colors from '../../../libs/colors';
 import images from '../../../libs/images';
 import routes from '../../../libs/routes';
 import BookListItem from './BookListItem';
+import TopNewBooks from '../TopNewBooks';
 import {
   screenWidth,
   widthPercentage,
@@ -22,12 +23,37 @@ import {
 } from '../../../services/util';
 import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
+
 export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [rednerData, setRenderData] = useState([]);
   const [type, setType] = useState('new');
+  const [start, setStart] = useState(30);
+  const [morenewBook, setNewBook] = useState([]);
+  const [morekbsBook, setKbsBook] = useState([]);
+  const [moreth, setTh] = useState(18);
+
+  const fetchRequested = async () => {
+    try {
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/book/bookList',
+        query: {
+          startPaging: 0,
+          endPaging: start,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setNewBook([...data.newBook]);
+        setKbsBook([...data.kbsBook.kbsBookList]);
+        setTh(data.kbsBook?.seqKbs);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
 
   useEffect(() => {
     let mount = true;
@@ -79,6 +105,58 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
       mount = false;
     };
   }, [listTab.listTab.grade]);
+  const loadMore = () => {
+    setStart(start + 30);
+    fetchRequested();
+    let mount = true;
+    if (mount) {
+      //scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
+      if (listTab.listTab.grade === null) {
+        setType('new');
+        setRenderData(morenewBook);
+      } else if (listTab.listTab.grade === '1급') {
+        setType('kbs');
+        setRenderData(
+          morekbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급'),
+        );
+      } else if (listTab.listTab.grade === '2급') {
+        setType('kbs');
+        setRenderData(
+          morekbsBook?.filter(x => x.grade === '2급' || x.grade === '준2급'),
+        );
+      } else if (
+        listTab.listTab.grade === '3급' ||
+        listTab.listTab.grade === '준3급'
+      ) {
+        setType('kbs');
+        setRenderData(
+          morekbsBook?.filter(x => x.grade === '3급' || x.grade === '준3급'),
+        );
+      } else if (
+        listTab.listTab.grade === '4급' ||
+        listTab.listTab.grade === '준4급'
+      ) {
+        setType('kbs');
+        setRenderData(
+          morekbsBook?.filter(x => x.grade === '4급' || x.grade === '준4급'),
+        );
+      } else if (
+        listTab.listTab.grade === '5급' ||
+        listTab.listTab.grade === '준5급'
+      ) {
+        setType('kbs');
+        setRenderData(
+          morekbsBook?.filter(x => x.grade === '5급' || x.grade === '준5급'),
+        );
+      } else if (listTab.listTab.grade === '누리급') {
+        setType('kbs');
+        setRenderData(morekbsBook?.filter(x => x.grade === '누리급'));
+      }
+    }
+    return () => {
+      mount = false;
+    };
+  };
 
   const getDrawerList = async bookCd => {
     const {data, status} = await requestGet({
@@ -126,6 +204,8 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
               />
             );
           }}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0}
         />
       )}
     </View>
