@@ -15,6 +15,7 @@ import colors from '../../libs/colors';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
 import QuizBookitem from '../activity/QuizBookitem';
+import Footer from '../../libs/footer';
 import MainQuiz from '../activity/MainQuiz';
 import {
   screenWidth,
@@ -78,17 +79,17 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
     <View
       style={[
         styles.root,
-        morekbsBook.length === 0 && {flex: 1, justifyContent: 'center'},
+        kbsBook.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      {morekbsBook.length === 0 ? (
+      {kbsBook.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>QuizList가 없습니다.</TextWrap>
         </View>
       ) : (
         <FlatList
           ref={scrollRef}
-          data={morekbsBook}
-          extraData={morekbsBook}
+          data={kbsBook}
+          extraData={kbsBook}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -99,6 +100,7 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
           onEndReachedThreshold={0}
         />
       )}
+      <Footer page="quiz" />
     </View>
   );
 }

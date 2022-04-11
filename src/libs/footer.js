@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   footer: {
     position: 'relative',
     top: 0,
-    bottom: 10,
+    bottom: heightPercentage(10),
     left: 0,
     right: 0,
     backgroundColor: 'white',
@@ -181,12 +181,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: heightPercentage(60),
     flexDirection: 'row',
-    padding: 25,
+    padding: widthPercentage(23),
     borderTopColor: '#c9c9c9',
     borderTopWidth: 1,
   },
   footerIcon: {
-    bottom: 10,
+    bottom: heightPercentage(10),
     width: widthPercentage(20),
     height: heightPercentage(20),
     resizeMode: 'contain',
@@ -199,12 +199,12 @@ const styles = StyleSheet.create({
   quizs: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(19),
+    right: widthPercentage(18),
   },
   events: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(23),
+    right: widthPercentage(21),
   },
   scrolltotop: {
     display: 'flex',
