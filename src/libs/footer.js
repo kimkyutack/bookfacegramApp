@@ -116,7 +116,13 @@ export function Footer(page) {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => Alert.alert('페이지 제작중...')}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigate(routes.mainQuiz, {
+            type: 'quiz',
+            start: 0,
+          })
+        }>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
             style={styles.footerIcon}
