@@ -25,11 +25,11 @@ import {
 
 export default function Faq({route, navigation}) {
   const [data, setData] = useState([]);
-  const [color1, setColor1] = useState('#FED500');
-  const [color2, setColor2] = useState('#c9c9c9');
+  const [color1, setColor1] = useState('#c9c9c9');
+  const [color2, setColor2] = useState('#FED500');
   const [color3, setColor3] = useState('#c9c9c9');
   const [color4, setColor4] = useState('#c9c9c9');
-  const [category_, setCategory] = useState('service');
+  const [category_, setCategory] = useState('feed');
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const changeStyle = type => {
@@ -86,40 +86,6 @@ export default function Faq({route, navigation}) {
       }}>
       <View style={styles.menu}>
         <View>
-          <TouchableOpacity onPress={() => changeStyle('service')}>
-            {color1 === '#c9c9c9' ? (
-              <TextWrap
-                style={{
-                  borderBottomColor: color1,
-                  width: '100%',
-                  height: 60,
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.5%',
-                  borderBottomWidth: 0,
-                }}>
-                서비스
-              </TextWrap>
-            ) : (
-              <TextWrap
-                style={{
-                  borderBottomColor: color1,
-                  width: '100%',
-                  height: 60,
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.5%',
-                  borderBottomWidth: 4,
-                }}>
-                서비스
-              </TextWrap>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View>
           <TouchableOpacity onPress={() => changeStyle('feed')}>
             {color2 === '#c9c9c9' ? (
               <TextWrap
@@ -148,6 +114,39 @@ export default function Faq({route, navigation}) {
                   borderBottomWidth: 4,
                 }}>
                 피드북
+              </TextWrap>
+            )}
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity onPress={() => changeStyle('service')}>
+            {color1 === '#c9c9c9' ? (
+              <TextWrap
+                style={{
+                  borderBottomColor: color1,
+                  width: '100%',
+                  height: 60,
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  fontSize: 20,
+                  paddingHorizontal: '8.5%',
+                  borderBottomWidth: 0,
+                }}>
+                서비스
+              </TextWrap>
+            ) : (
+              <TextWrap
+                style={{
+                  borderBottomColor: color1,
+                  width: '100%',
+                  height: 60,
+                  alignItems: 'center',
+                  alignSelf: 'stretch',
+                  fontSize: 20,
+                  paddingHorizontal: '8.5%',
+                  borderBottomWidth: 4,
+                }}>
+                서비스
               </TextWrap>
             )}
           </TouchableOpacity>
