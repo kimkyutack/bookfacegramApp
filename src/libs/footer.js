@@ -11,6 +11,11 @@ import TextWrap from '../components/text-wrap/TextWrap';
 import images from '../libs/images';
 import routes from '../libs/routes';
 import {navigate} from '../services/navigation';
+import {
+  widthPercentage,
+  heightPercentage,
+  fontPercentage,
+} from '../services/util';
 
 export function Footer(page) {
   const scrollRef = useRef();
@@ -36,7 +41,9 @@ export function Footer(page) {
           <View style={[styles.homes]}>
             <TextWrap
               style={
-                page.page === 'home' ? {color: '#0066ff'} : {color: 'black'}
+                page.page === 'home'
+                  ? {color: '#0066ff', fontSize: fontPercentage(10)}
+                  : {color: 'black', fontSize: fontPercentage(10)}
               }>
               홈
             </TextWrap>
@@ -63,7 +70,9 @@ export function Footer(page) {
           <View style={[styles.events]}>
             <TextWrap
               style={
-                page.page === 'feed' ? {color: '#0066ff'} : {color: 'black'}
+                page.page === 'feed'
+                  ? {color: '#0066ff', fontSize: fontPercentage(10)}
+                  : {color: 'black', fontSize: fontPercentage(10)}
               }>
               피드북
             </TextWrap>
@@ -90,7 +99,9 @@ export function Footer(page) {
           <View style={[styles.events]}>
             <TextWrap
               style={
-                page.page === 'draw' ? {color: '#0066ff'} : {color: 'black'}
+                page.page === 'draw'
+                  ? {color: '#0066ff', fontSize: fontPercentage(10)}
+                  : {color: 'black', fontSize: fontPercentage(10)}
               }>
               책서랍
             </TextWrap>
@@ -116,7 +127,9 @@ export function Footer(page) {
           <View style={[styles.quizs]}>
             <TextWrap
               style={
-                page.page === 'quiz' ? {color: '#0066ff'} : {color: 'black'}
+                page.page === 'quiz'
+                  ? {color: '#0066ff', fontSize: fontPercentage(10)}
+                  : {color: 'black', fontSize: fontPercentage(10)}
               }>
               독서퀴즈
             </TextWrap>
@@ -143,7 +156,9 @@ export function Footer(page) {
           <View style={[styles.events]}>
             <TextWrap
               style={
-                page.page === 'event' ? {color: '#0066ff'} : {color: 'black'}
+                page.page === 'event'
+                  ? {color: '#0066ff', fontSize: fontPercentage(10)}
+                  : {color: 'black', fontSize: fontPercentage(10)}
               }>
               이벤트
             </TextWrap>
@@ -164,32 +179,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 110,
+    height: heightPercentage(60),
     flexDirection: 'row',
-    padding: 50,
+    padding: 25,
     borderTopColor: '#c9c9c9',
     borderTopWidth: 1,
   },
   footerIcon: {
-    bottom: 15,
-    width: 35,
-    height: 35,
-    resizeMode: 'cover',
+    bottom: 10,
+    width: widthPercentage(20),
+    height: heightPercentage(20),
+    resizeMode: 'contain',
   },
   homes: {
     position: 'absolute',
-    bottom: 20,
-    right: 61,
+    bottom: heightPercentage(10),
+    right: widthPercentage(30),
   },
   quizs: {
     position: 'absolute',
-    bottom: 20,
-    right: 45,
+    bottom: heightPercentage(10),
+    right: widthPercentage(19),
   },
   events: {
     position: 'absolute',
-    bottom: 20,
-    right: 49,
+    bottom: heightPercentage(10),
+    right: widthPercentage(23),
   },
   scrolltotop: {
     display: 'flex',
