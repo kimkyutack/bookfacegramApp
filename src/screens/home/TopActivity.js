@@ -63,7 +63,12 @@ export default function TopActivity({}) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box2}
-          onPress={() => Alert.alert('페이지 제작중..')}>
+          onPress={() =>
+            navigate(routes.mainQuiz, {
+              type: 'quiz',
+              start: 0,
+            })
+          }>
           <View style={styles.box3}>
             <Image style={styles.img1} source={images.quiz} />
             <TextWrap style={styles.font3}>독서퀴즈</TextWrap>

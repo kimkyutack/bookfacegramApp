@@ -22,6 +22,7 @@ import BookContest from './screens/home/home-main/bookcontest';
 import Kbstest from './screens/home/home-main/kbstest';
 import Examtest from './screens/home/home-main/examtest';
 import Home from './screens/home/home-main';
+import MainQuiz from './screens/activity/MainQuiz';
 import HomeList from './screens/home/home-list';
 import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
@@ -354,6 +355,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.kbstest}
               component={Kbstest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.mainQuiz}
+              component={MainQuiz}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,
