@@ -40,6 +40,7 @@ export default {
   notice: 'notice',
   event: 'event',
   faq: 'faq',
+  setting: 'setting',
   eventDetail: 'eventDetail',
   registerForm: 'registerForm',
   registerFormInfo: 'registerFormInfo',
