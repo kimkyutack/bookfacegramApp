@@ -30,6 +30,19 @@ export default function Setting({route, navigation}) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
+  // useEffect(() => {
+  //   requestGet({url: consts.apiUrl + '/mypage/setting'})
+  //     .then(x => {
+  //       setNotice(x.data.agreeNotice);
+  //       setPush(x.data.agreeAppPush);
+  //       setEvent(x.data.agreeEvent);
+  //     })
+  //     .catch(e => {
+  //       // console.log(e);
+  //       // dispatch(dialogError(e));
+  //     });
+  // });
+
   useEffect(() => {
     requestGet({url: consts.apiUrl + '/mypage/setting'})
       .then(x => {
@@ -37,22 +50,21 @@ export default function Setting({route, navigation}) {
         setPush(x.data.agreeAppPush);
         setEvent(x.data.agreeEvent);
 
-        if (notice === 0) {
+        if (x.data.agreeNotice === 0) {
           setNoticecheck(false);
         } else {
           setNoticecheck(true);
         }
 
-        if (push === 0) {
-          setPushcheck(false);
-        } else {
-          setPushcheck(true);
-        }
-
-        if (event === 0) {
+        if (x.data.agreeEvent === 0) {
           setEventcheck(false);
         } else {
           setEventcheck(true);
+        }
+        if (x.data.agreeAppPush === 0) {
+          setPushcheck(false);
+        } else {
+          setPushcheck(true);
         }
       })
       .catch(e => {
@@ -136,7 +148,10 @@ export default function Setting({route, navigation}) {
           토핑 공지사항 알림
         </TextWrap>
         <View>
-          <CheckBox value={noticecheck} onChange={() => noticeChange(notice)} />
+          <CheckBox
+            value={noticecheck}
+            onValueChange={() => noticeChange(notice)}
+          />
         </View>
       </View>
       <View style={styles.divider} />
@@ -145,7 +160,10 @@ export default function Setting({route, navigation}) {
           토핑 이벤트 알림
         </TextWrap>
         <View>
-          <CheckBox value={eventcheck} onChange={() => eventChange(event)} />
+          <CheckBox
+            value={eventcheck}
+            onValueChange={() => eventChange(event)}
+          />
         </View>
       </View>
       <View style={styles.divider} />
@@ -154,7 +172,7 @@ export default function Setting({route, navigation}) {
           광고 PUSH 알림
         </TextWrap>
         <View style={styles.flexView}>
-          <CheckBox value={pushcheck} onChange={() => appChange(push)} />
+          <CheckBox value={pushcheck} onValueChange={() => appChange(push)} />
         </View>
       </View>
       <View style={styles.divider} />
