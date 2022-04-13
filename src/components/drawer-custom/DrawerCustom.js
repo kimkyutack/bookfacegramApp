@@ -130,8 +130,7 @@ export default function DrawerCustom(props) {
               label="ㆍ앱설정"
               labelStyle={styles.label}
               onPress={() => {
-                dispatch(dialogError('페이지 제작중...'));
-                // props.navigation.navigate('tab');
+                props.navigation.navigate(routes.setting);
               }}
             />
           </View>

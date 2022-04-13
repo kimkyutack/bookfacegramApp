@@ -8,6 +8,7 @@ import TabIcon from './TabIcon';
 import TabBar from './TabBar';
 import Notice from '../notice/Notice';
 import Faq from '../faq/Faq';
+import Setting from '../setting/Setting';
 import Home from './TabsHome';
 import Back from './TabsBack';
 import Menu from './TabsMenu';
@@ -109,6 +110,20 @@ export default function Tabs({route, navigation}) {
           }}
           name={routes.faq}
           component={Faq}
+        />
+        <BottomTab.Screen
+          options={{
+            tabBarLabel: 'setting',
+            tabBarIcon: props => (
+              <TabIcon
+                {...props}
+                icon={images.tabChatOff}
+                focusedIcon={images.tabChatOn}
+              />
+            ),
+          }}
+          name={routes.setting}
+          component={Setting}
         />
       </BottomTab.Navigator>
     </SafeAreaView>
