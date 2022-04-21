@@ -21,6 +21,7 @@ import {
   widthPercentage,
   heightPercentage,
   cameraItem,
+  fontPercentage,
 } from '../../services/util';
 
 export default function Faq({route, navigation}) {
@@ -91,12 +92,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color2,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.9%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
                 피드북
@@ -105,12 +106,13 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color2,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.9%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
+
                   borderBottomWidth: 4,
                 }}>
                 피드북
@@ -124,12 +126,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color1,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
                 서비스
@@ -138,12 +140,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color1,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
                 서비스
@@ -157,12 +159,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color3,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(100),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
                 독후활동
@@ -171,12 +173,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color3,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(100),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
                 독후활동
@@ -190,12 +192,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color4,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
                 회원
@@ -204,12 +206,12 @@ export default function Faq({route, navigation}) {
               <TextWrap
                 style={{
                   borderBottomColor: color4,
-                  width: '100%',
-                  height: 60,
+                  width: widthPercentage(90),
+                  height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: 20,
-                  paddingHorizontal: '8.8%',
+                  fontSize: fontPercentage(15),
+                  paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
                 회원
@@ -249,12 +251,12 @@ const styles = StyleSheet.create({
   menu: {
     resizeMode: 'cover',
     flexDirection: 'row',
-    width: '100%',
+    width: widthPercentage(300),
     height: heightPercentage(36),
   },
   tapmenu: {
     width: '100%',
-    height: 60,
+    height: heightPercentage(40),
     alignItems: 'center',
     alignSelf: 'stretch',
     fontSize: 20,
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
   },
   selectmenu: {
     width: '100%',
-    height: 60,
+    height: heightPercentage(40),
     alignItems: 'center',
     alignSelf: 'stretch',
     fontSize: 20,
