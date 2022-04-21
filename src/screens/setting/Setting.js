@@ -18,6 +18,7 @@ import {
   screenWidth,
   widthPercentage,
   heightPercentage,
+  screenHeight,
 } from '../../services/util';
 
 export default function Setting({route, navigation}) {
@@ -137,47 +138,50 @@ export default function Setting({route, navigation}) {
         navigation: navigation,
         back: true,
       }}>
-      <View style={styles.main}>
-        <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title2}>
-          알림
-        </TextWrap>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.main}>
-        <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
-          토핑 공지사항 알림
-        </TextWrap>
-        <View>
-          <CheckBox
-            value={noticecheck}
-            onValueChange={() => noticeChange(notice)}
-          />
+      <View style={{flex: 1}}>
+        <View style={styles.main}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title2}>
+            알림
+          </TextWrap>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.main}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
+            토핑 공지사항 알림
+          </TextWrap>
+          <View>
+            <CheckBox
+              value={noticecheck}
+              onValueChange={() => noticeChange(notice)}
+            />
+          </View>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.main}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
+            토핑 이벤트 알림
+          </TextWrap>
+          <View>
+            <CheckBox
+              value={eventcheck}
+              onValueChange={() => eventChange(event)}
+            />
+          </View>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.main}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
+            광고 PUSH 알림
+          </TextWrap>
+          <View style={styles.flexView}>
+            <CheckBox value={pushcheck} onValueChange={() => appChange(push)} />
+          </View>
+        </View>
+        <View style={styles.divider} />
+        <View style={styles.bottom}>
+          <Footer page="notice" />
         </View>
       </View>
-      <View style={styles.divider} />
-      <View style={styles.main}>
-        <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
-          토핑 이벤트 알림
-        </TextWrap>
-        <View>
-          <CheckBox
-            value={eventcheck}
-            onValueChange={() => eventChange(event)}
-          />
-        </View>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.main}>
-        <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
-          광고 PUSH 알림
-        </TextWrap>
-        <View style={styles.flexView}>
-          <CheckBox value={pushcheck} onValueChange={() => appChange(push)} />
-        </View>
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.emptyHeight} />
-      <Footer page="notice" />
     </RootLayout>
   );
 }
@@ -213,7 +217,9 @@ const styles = StyleSheet.create({
   flexView: {
     display: 'flex',
   },
-  emptyHeight: {
-    height: heightPercentage(265),
+  bottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
   },
 });
