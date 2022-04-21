@@ -44,6 +44,7 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
   const [render, setRender] = useState([]);
   const [type, setType] = useState('kbs');
   const [start, setStart] = useState(20);
+  const [grade, setGrade] = useState('전체');
   const [morenotBook, setNotBook] = useState([]);
   const [morekbsBook, setKbsBook] = useState([]);
 
@@ -142,7 +143,7 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
             elevation: 1,
           }}>
           <View>
-            <TextWrap style={styles.selectfont}>{'전체'}</TextWrap>
+            <TextWrap style={styles.selectfont}>{grade}</TextWrap>
             <Image source={images.selectbox} style={styles.select} />
           </View>
         </TouchableOpacity>
@@ -154,8 +155,8 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
       ) : (
         <FlatList
           ref={scrollRef}
-          data={morekbsBook}
-          extraData={morekbsBook}
+          data={kbsBook} //morekbsbook
+          extraData={kbsBook} //morekbsbook
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -189,8 +190,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: widthPercentage(160),
     height: heightPercentage(28),
-    zIndex: 3, // works on ios
-    elevation: 3, // works on android
+    //zIndex: 3, // works on ios
+    //elevation: 3, // works on android
   },
   selectfont: {
     marginLeft: widthPercentage(5),
