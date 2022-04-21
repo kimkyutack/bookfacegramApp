@@ -34,25 +34,20 @@ import {
 
 export default function QuizBookitem({item, index}) {
   const dispatch = useDispatch();
+  //alert(JSON.stringify(item));
   return (
     <>
-      <View style={styles.headerContainer}>
-        {/*<TextWrap
-          style={styles.cardHeaderTitle}
-          font={fonts.kopubWorldDotumProBold}>
-          {'학년별'}
-          <Text style={styles.cardHeaderTitle}>{'전체'}</Text>
-  </TextWrap>*/}
-      </View>
+      <View style={styles.headerContainer} />
       <View style={styles.root}>
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
             dispatch(
               setTab({
-                tab: 'detail',
-                selectedBook: item.type === 'kbs' ? item.bookCd : item.book_cd,
-                viewType: item.type,
+                tab: 'quiz',
+                selectedBook: item.bookCd,
+                viewType: 'kbs',
+                selectType: 'quiz',
               }),
             );
             navigate(routes.homeDetail, {
@@ -63,24 +58,21 @@ export default function QuizBookitem({item, index}) {
             <BookQuizCarouselImage item={item} style={styles.thumbnail} />
             <View style={styles.info}>
               <TextWrap
-                ellipsizeMode="tail"
-                numberOfLines={1}
                 font={fonts.kopubWorldDotumProMedium}
-                style={styles.title}>
+                style={styles.title}
+                numberOfLines={1}
+                ellipsizeMode="tail">
                 {item.bookNm}
               </TextWrap>
               <TextWrap
-                style={styles.title}
-                font={fonts.kopubWorldDotumProLight}
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {item.writer}
+                style={styles.writer}
+                font={fonts.kopubWorldDotumProLight}>
+                {item.publisherNm} | {item.writer}
               </TextWrap>
             </View>
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.divider} />
     </>
   );
 }
@@ -89,10 +81,11 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'row',
-    width: screenWidth,
+    width: screenWidth / 3,
     paddingVertical: 20,
-    paddingHorizontal: 16,
-    justifyContent: 'flex-start',
+    margin: 10,
+    paddingRight: widthPercentage(10),
+    justifyContent: 'space-between',
     backgroundColor: colors.white,
   },
   main: {
@@ -100,9 +93,9 @@ const styles = StyleSheet.create({
     width: widthPercentage(100),
   },
   mainContent: {
-    flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
+    paddingVertical: 20,
   },
   date: {
     marginTop: 5,
@@ -110,9 +103,18 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.black,
-    marginVertical: 1.5,
-    fontSize: fontPercentage(13),
+    marginVertical: 3,
+    fontSize: fontPercentage(11),
     lineHeight: fontPercentage(17),
+    textAlign: 'center',
+    top: 10,
+  },
+  writer: {
+    color: colors.black,
+    marginVertical: 1.5,
+    fontSize: fontPercentage(8),
+    lineHeight: fontPercentage(17),
+    textAlign: 'center',
   },
   divider: {
     marginHorizontal: 16,
@@ -120,9 +122,11 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   thumbnail: {
-    height: heightPercentage(120),
+    height: heightPercentage(150),
     width: widthPercentage(90),
+    marginLeft: widthPercentage(30),
     resizeMode: 'cover',
+    flexDirection: 'row',
     ...Platform.select({
       ios: {
         shadowColor: '#000',

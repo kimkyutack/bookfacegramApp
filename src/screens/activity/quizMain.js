@@ -7,6 +7,7 @@ import {
   View,
   SafeAreaView,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -14,18 +15,29 @@ import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
+import Topbar from '../../components/topbar/Topbar';
+import SearchBar from '../../components/search-bar/SearchBar';
+import TopTabs from '../activity/TopTabs';
 import QuizBookitem from '../activity/QuizBookitem';
 import Footer from '../../libs/footer';
+import TextButton from '../../components/text-button/TextButton';
+import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
 import {
   screenWidth,
   widthPercentage,
   heightPercentage,
+  cameraItem,
 } from '../../services/util';
 import {requestGet, requestPost} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
+import {
+  dialogOpenSelect,
+  dialogOpenMessage,
+} from '../../redux/dialog/DialogActions';
+import {relativeTimeRounding} from 'moment-timezone';
 
-export default function QuizMain({route, kbsBook, notKbsBook}) {
+export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const listTab = useSelector(s => s.tab, shallowEqual);
@@ -42,7 +54,7 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
         query: {
           rank: 'all',
           startPaging: 0,
-          endPaging: 20,
+          endPaging: start,
         },
       });
       if (status === 'SUCCESS') {
@@ -74,6 +86,23 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
       mount = false;
     };
   };
+  const [keyword, setKeyword] = useState('');
+  const inputRef = useRef();
+
+  useEffect(() => {
+    return () => {
+      setKeyword('');
+    };
+  }, []);
+
+  const handleSearch = () => {
+    if (keyword?.length < 2) {
+      dispatch(dialogOpenMessage({message: '두글자 이상 입력해주세요.'}));
+    } else {
+      setKeyword('');
+      navigate(routes.searchBook, {keyword: keyword});
+    }
+  };
 
   return (
     <View
@@ -81,6 +110,43 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
         styles.root,
         kbsBook.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={{
+            marginLeft: widthPercentage(20),
+            width: widthPercentage(160),
+            height: heightPercentage(30),
+            top: heightPercentage(15),
+            borderWidth: 0.5,
+            borderStyle: 'solid',
+            borderColor: '#c9c9c9',
+            position: 'relative',
+            zIndex: 1, // works on ios
+            elevation: 1,
+          }}>
+          <View>
+            <TextWrap style={styles.selectfont}>{'학년별'}</TextWrap>
+            <Image source={images.selectbox} style={styles.select} />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            width: widthPercentage(160),
+            height: heightPercentage(30),
+            top: heightPercentage(15),
+            borderWidth: 0.5,
+            borderStyle: 'solid',
+            borderColor: '#c9c9c9',
+            zIndex: 1, // works on ios
+            elevation: 1,
+          }}>
+          <View>
+            <TextWrap style={styles.selectfont}>{'전체'}</TextWrap>
+            <Image source={images.selectbox} style={styles.select} />
+          </View>
+        </TouchableOpacity>
+      </View>
       {kbsBook.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>QuizList가 없습니다.</TextWrap>
@@ -88,8 +154,8 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
       ) : (
         <FlatList
           ref={scrollRef}
-          data={kbsBook}
-          extraData={kbsBook}
+          data={morekbsBook}
+          extraData={morekbsBook}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -98,6 +164,7 @@ export default function QuizMain({route, kbsBook, notKbsBook}) {
           }}
           onEndReached={loadMore}
           onEndReachedThreshold={0}
+          numColumns={2}
         />
       )}
       <Footer page="quiz" />
@@ -110,9 +177,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  row: {
+    flexDirection: 'row',
+  },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
+  },
+  select: {
+    position: 'absolute',
+    width: widthPercentage(160),
+    height: heightPercentage(28),
+    zIndex: 3, // works on ios
+    elevation: 3, // works on android
+  },
+  selectfont: {
+    marginLeft: widthPercentage(5),
+    top: heightPercentage(8),
+    zIndex: 10, // works on ios
+    elevation: 10,
   },
 });

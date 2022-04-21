@@ -22,6 +22,7 @@ export default {
   footerQuiz2: require('../assets/images/footer_quiz2.png'),
   footerEvent1: require('../assets/images/footer_event.png'),
   footerEvent2: require('../assets/images/footer_event2.png'),
+  selectbox: require('../assets/images/selectbox.png'),
   exam: require('../assets/images/exam.png'),
   exam_title: require('../assets/images/exam_title.png'),
   title_img: require('../assets/images/title_img.png'),

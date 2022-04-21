@@ -57,6 +57,7 @@ import PhotoEditor from './screens/photo-editor/PhotoEditor';
 import RNExitApp from 'react-native-exit-app';
 import {widthPercentage} from './services/util';
 import colors from './libs/colors';
+import Activity from './screens/activity';
 
 const Drawer = createDrawerNavigator();
 
@@ -365,6 +366,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.mainQuiz}
               component={MainQuiz}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.activity}
+              component={Activity}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

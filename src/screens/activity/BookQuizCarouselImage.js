@@ -21,7 +21,7 @@ export default function BookQuizCarouselImage({item, index, style}) {
       source={{
         uri:
           bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
-            ? consts.imgUrl + '/thumbnail/' + bookThumbnail + '.gif'
+            ? consts.toapingUrl + '/book/book_img/' + bookThumbnail + '.gif'
             : consts.imgUrl + '/thumbnail/bookDefault.gif',
         priority: FastImage.priority.high,
       }}

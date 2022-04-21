@@ -59,6 +59,7 @@ export default function TopNewBooksDetail({route}) {
   const [tabs, setTabs] = useState(0);
   const [bookThumbnail, setBookThumbnail] = useState('');
   const [selectedBook, setSelectedBook] = useState('');
+  const [selectType, setSelectType] = useState('detail');
   const [drawerList, setDrawerList] = useState([]);
 
   const fetchRequested = async () => {
@@ -113,6 +114,7 @@ export default function TopNewBooksDetail({route}) {
   useEffect(() => {
     if (isFocused) {
       setSelectedBook(detailTab.detailTab.selectedBook);
+      setSelectType(detailTab.detailTab.selectType);
     }
   }, [detailTab.detailTab.selectedBook]);
 
@@ -127,8 +129,10 @@ export default function TopNewBooksDetail({route}) {
   }, [selectedBook]);
 
   useEffect(() => {
-    if (detailTab.tabType === 'talk') {
+    if (detailTab.detailTab.selectType === 'talk') {
       setTabs(2);
+    } else if (detailTab.detailTab.selectType === 'quiz') {
+      setTabs(1);
     } else {
       setTabs(0);
     }
@@ -231,19 +235,44 @@ export default function TopNewBooksDetail({route}) {
               책서랍
             </TextWrap>
           </TouchableOpacity>
-          <View style={styles.tabContainer}>
-            <Tab
-              title="도서소개"
-              id={0}
-              isSelected={tabs === 0 ? true : false}
-            />
-            <Tab
-              title="독서퀴즈"
-              id={1}
-              isSelected={tabs === 1 ? true : false}
-            />
-            <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
-          </View>
+          {selectType === 'quiz' ? (
+            <View style={styles.tabContainer}>
+              <Tab
+                title="도서소개"
+                id={0}
+                isSelected={tabs === 0 ? true : false}
+              />
+              <Tab
+                title="독서퀴즈"
+                id={1}
+                isSelected={tabs === 1 ? true : false}
+              />
+              <Tab
+                title="토핑톡"
+                id={2}
+                isSelected={tabs === 2 ? true : false}
+              />
+            </View>
+          ) : (
+            <View style={styles.tabContainer}>
+              <Tab
+                title="도서소개"
+                id={0}
+                isSelected={tabs === 0 ? true : false}
+              />
+              <Tab
+                title="독서퀴즈"
+                id={1}
+                isSelected={tabs === 1 ? true : false}
+              />
+              <Tab
+                title="토핑톡"
+                id={2}
+                isSelected={tabs === 2 ? true : false}
+              />
+            </View>
+          )}
+
           <BookDetailInfo {...bookDetail} />
         </>
       ) : tabs === 1 ? (

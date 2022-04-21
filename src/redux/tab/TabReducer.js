@@ -34,6 +34,7 @@ export default function loading(state = initTab, action) {
         detailTab: {
           selectedBook: action.selectedBook,
           viewType: action.viewType,
+          selectType: action.selectType,
         },
       };
     default:
