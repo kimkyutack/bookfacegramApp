@@ -96,7 +96,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.9%',
                   borderBottomWidth: 0,
                 }}>
                 피드북
@@ -110,7 +110,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.9%',
                   borderBottomWidth: 4,
                 }}>
                 피드북
@@ -129,7 +129,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 0,
                 }}>
                 서비스
@@ -143,7 +143,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 4,
                 }}>
                 서비스
@@ -162,7 +162,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 0,
                 }}>
                 독후활동
@@ -176,7 +176,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 4,
                 }}>
                 독후활동
@@ -195,7 +195,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 0,
                 }}>
                 회원
@@ -209,7 +209,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: 20,
-                  paddingHorizontal: '8.5%',
+                  paddingHorizontal: '8.8%',
                   borderBottomWidth: 4,
                 }}>
                 회원
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     flexDirection: 'row',
     width: '100%',
-    height: 60,
+    height: heightPercentage(36),
   },
   tapmenu: {
     width: '100%',
