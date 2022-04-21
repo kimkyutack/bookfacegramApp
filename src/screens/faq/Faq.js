@@ -96,7 +96,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
@@ -110,7 +110,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
 
                   borderBottomWidth: 4,
@@ -130,7 +130,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
@@ -144,7 +144,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
@@ -163,7 +163,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
@@ -177,7 +177,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
@@ -196,7 +196,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 0,
                 }}>
@@ -210,7 +210,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  fontSize: fontPercentage(15),
+                  fontSize: fontPercentage(13),
                   paddingHorizontal: widthPercentage(25),
                   borderBottomWidth: 4,
                 }}>
@@ -223,7 +223,6 @@ export default function Faq({route, navigation}) {
       <View
         style={{
           borderBottomColor: colors.borderLine,
-          borderBottomWidth: 1,
         }}
       />
       <FlatList
