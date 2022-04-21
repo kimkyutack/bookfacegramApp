@@ -4,7 +4,7 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import {fontPercentage} from '../../services/util';
+import {fontPercentage, heightPercentage} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 
 export default function FaqItem({
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
   },
-  mainContent: {flex: 1, paddingVertical: 20, height: 80},
+  mainContent: {flex: 1, paddingVertical: 20, height: heightPercentage(50)},
   mainOpend: {paddingVertical: 10},
   date: {
     fontSize: fontPercentage(12),
