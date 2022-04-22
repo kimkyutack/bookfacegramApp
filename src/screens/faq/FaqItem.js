@@ -161,7 +161,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
   },
-  mainContent: {flex: 1, paddingVertical: heightPercentage(10), height: heightPercentage(50)},
+  mainContent: {
+    flex: 1,
+    paddingVertical: heightPercentage(10),
+    height: heightPercentage(50),
+  },
   mainOpend: {paddingVertical: 10},
   date: {
     fontSize: fontPercentage(12),

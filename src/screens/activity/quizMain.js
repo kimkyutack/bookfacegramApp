@@ -46,21 +46,25 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
   const [start, setStart] = useState(20);
   const [grade, setGrade] = useState('전체');
   const [morenotBook, setNotBook] = useState([]);
-  const [morekbsBook, setKbsBook] = useState([]);
-
-  const fetchRequested = async () => {
+  const [morekbsBook, setKbsBook] = useState(kbsBook);
+  const [state, setState] = useState({req: kbsBook, page: 1});
+  const fetchRequested = async start => {
     try {
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/quiz/activity',
         query: {
           rank: 'all',
-          startPaging: 0,
-          endPaging: start,
+          startPaging: start,
+          endPaging: 20,
         },
       });
       if (status === 'SUCCESS') {
-        setNotBook([...data.notKbsBookQuizs]);
-        setKbsBook([...data.kbsBookQuizs]);
+        setState({
+          req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
+          page: state.page + 1,
+        });
+        //setNotBook([...data.notKbsBookQuizs]);
+        //setKbsBook([...data.kbsBookQuizs]);
       }
       return status;
     } catch (error) {
@@ -80,12 +84,10 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
 
   const loadMore = () => {
     setStart(start + 20);
-    fetchRequested();
+    fetchRequested(start + 20);
     let mount = true;
 
-    return () => {
-      mount = false;
-    };
+    return () => {};
   };
   const [keyword, setKeyword] = useState('');
   const inputRef = useRef();
@@ -155,8 +157,8 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
       ) : (
         <FlatList
           ref={scrollRef}
-          data={kbsBook} //morekbsbook
-          extraData={kbsBook} //morekbsbook
+          data={state.req} //morekbsbook
+          extraData={state.req} //morekbsbook
           keyExtractor={(item, index) => {
             return index.toString();
           }}

@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   homes: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(30),
+    right: widthPercentage(29),
   },
   quizs: {
     position: 'absolute',
