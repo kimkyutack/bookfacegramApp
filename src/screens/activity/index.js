@@ -93,9 +93,7 @@ export default function Activity({route, navigation}) {
         }
         onSearch={handleSearch}
       />
-      <TopTabs
-        type={route.params?.params?.type ? route.params?.params?.type : 'main'}
-      />
+      <TopTabs type={route.params.type ? route.params.type : 'main'} />
       <Footer page={'quiz'} />
     </SafeAreaView>
   );

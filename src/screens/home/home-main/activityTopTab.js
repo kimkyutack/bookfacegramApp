@@ -40,6 +40,7 @@ export default function TopTabs({grade, type}) {
       <Tab.Screen
         name={routes.topActivity}
         component={TopActivity}
+        initialParams={{type: type}}
         options={{tabBarLabel: 'ACTIVITY'}}
       />
     </Tab.Navigator>

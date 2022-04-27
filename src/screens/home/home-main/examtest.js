@@ -23,6 +23,7 @@ import {
 import TopTabs from './activityTopTab';
 import Footer from '../../../libs/footer';
 import {
+  screenHeight,
   widthPercentage,
   heightPercentage,
   fontPercentage,
@@ -126,7 +127,7 @@ export default function Examtest({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    paddingBottom: '100%',
+    paddingBottom: screenHeight / 1.7,
     flex: 1,
     backgroundColor: '#ffffff',
   },

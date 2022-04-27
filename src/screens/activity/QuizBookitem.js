@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     width: screenWidth / 3,
     paddingVertical: 20,
     margin: 5,
-    top: 250,
+    top: 0,
     paddingRight: widthPercentage(10),
     justifyContent: 'space-between',
     backgroundColor: colors.white,

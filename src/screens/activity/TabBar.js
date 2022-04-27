@@ -28,7 +28,7 @@ export default function TabBar({state, descriptors, navigation}) {
             : route.name;
 
         const isFocused = state.index === index;
-
+        //alert(JSON.stringify(state));
         const onPress = () => {
           const event = navigation.emit({
             type: 'tabPress',
@@ -68,12 +68,12 @@ export default function TabBar({state, descriptors, navigation}) {
           <TouchableWithoutFeedback key={label} onPress={onPress}>
             <View
               accessibilityRole="button"
-              accessibilityStates={isFocused ? ['selected'] : []}
+              accessibilityStates={label === 'ACTIVITY' ? ['selected'] : []}
               accessibilityLabel={options?.tabBarAccessibilityLabel}
               style={[
                 styles.tabItem,
                 {
-                  borderBottomColor: isFocused ? '#FED500' : 0,
+                  borderBottomColor: label === 'ACTIVITY' ? '#FED500' : 0,
                 },
               ]}>
               <TextWrap
@@ -81,7 +81,7 @@ export default function TabBar({state, descriptors, navigation}) {
                 style={[
                   styles.label,
                   {
-                    color: isFocused ? '#333333' : '#acacac',
+                    color: label === 'ACTIVITY' ? '#333333' : '#acacac',
                   },
                 ]}>
                 {label}

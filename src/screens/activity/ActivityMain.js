@@ -13,7 +13,6 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
-import ActivityMain from '../activity/ActivityMain';
 import {
   widthPercentage,
   heightPercentage,
@@ -21,15 +20,66 @@ import {
   cameraItem,
 } from '../../services/util';
 
-export default function TopActivity({route}) {
-  //alert(JSON.stringify(route));
+export default function ActivityMain({route}) {
   return (
     <View style={styles.root}>
-      {route.params.type === 'quiz' ? (
-        <MainQuiz route={route} start={0} />
-      ) : (
-        <ActivityMain route={route} />
-      )}
+      <TextWrap style={styles.font}>다양한 독후활동에 참여해보세요!</TextWrap>
+      <View style={styles.root2}>
+        <TouchableOpacity
+          style={styles.box2}
+          onPress={() =>
+            navigate(routes.examtest, {
+              type: 'main',
+            })
+          }>
+          <View style={styles.box3}>
+            <Image style={styles.img1} source={images.exam} />
+            <TextWrap style={styles.font4}>문해고사</TextWrap>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box2}
+          onPress={() =>
+            navigate(routes.kbstest, {
+              type: 'main',
+            })
+          }>
+          <View style={styles.box3}>
+            <Image style={styles.img2} source={images.kbs_exam} />
+            <TextWrap style={styles.font6}>
+              {'\t'}
+              {'\t'}책과함께
+            </TextWrap>
+            <TextWrap style={styles.font5}>{'\n'}KBS한국어능력시험</TextWrap>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.root2}>
+        <TouchableOpacity
+          style={styles.box2}
+          onPress={() =>
+            navigate(routes.bookContest, {
+              type: 'main',
+            })
+          }>
+          <View style={styles.box3}>
+            <Image style={styles.img2} source={images.competition} />
+            <TextWrap style={styles.font2}>독후감대회</TextWrap>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box2}
+          onPress={() => {
+            navigate(routes.activity, {
+              type: 'quiz',
+            });
+          }}>
+          <View style={styles.box3}>
+            <Image style={styles.img1} source={images.quiz} />
+            <TextWrap style={styles.font3}>독서퀴즈</TextWrap>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
