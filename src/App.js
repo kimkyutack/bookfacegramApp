@@ -5,6 +5,7 @@ import store from './redux/store';
 import {Keyboard, StatusBar, Dimensions} from 'react-native';
 import {keyboardActionType} from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
+import DialogGrade from './redux-components/dialog-grade/DialogGrade';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
 import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/DialogKakaoLogin';
@@ -35,6 +36,7 @@ function App({}) {
       <StatusBar barStyle="dark-content" />
       <Router />
       <DialogMessage />
+      <DialogGrade />
       <DialogAction />
       <DialogSelect />
       <DialogKakaoLogin />

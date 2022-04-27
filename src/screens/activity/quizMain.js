@@ -35,6 +35,7 @@ import {dialogError} from '../../redux/dialog/DialogActions';
 import {
   dialogOpenSelect,
   dialogOpenMessage,
+  dialogOpenGrade,
 } from '../../redux/dialog/DialogActions';
 import {relativeTimeRounding} from 'moment-timezone';
 
@@ -111,6 +112,9 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
             position: 'relative',
             zIndex: 1, // works on ios
             elevation: 1,
+          }}
+          onPress={() => {
+            dispatch(dialogOpenGrade({message: '준비중.'}));
           }}>
           <View>
             <TextWrap style={styles.selectfont}>{'학년별'}</TextWrap>
@@ -128,6 +132,9 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
             borderColor: '#c9c9c9',
             zIndex: 1, // works on ios
             elevation: 1,
+          }}
+          onPress={() => {
+            dispatch(dialogOpenGrade({message: '준비중.'}));
           }}>
           <View>
             <TextWrap style={styles.selectfont}>{grade}</TextWrap>

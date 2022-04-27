@@ -4,6 +4,7 @@ export const dialogActionType = {
   openSelect: 'dialog/openSelect',
   openKakaoLogin: 'dialog/openKakaoLogin',
   openDrawer: 'dialog/openDrawer',
+  openGrade: 'dialog/openGrade',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   close: 'dialog/close',
 };
@@ -30,6 +31,30 @@ export const dialogOpenMessage =
       title,
       onPress,
       label,
+    });
+  };
+export const dialogOpenGrade =
+  ({
+    drawerList,
+    selectedArr,
+    title = '',
+    onPress,
+    currentDrawerIndex,
+    from,
+    bookIdx,
+    viewType,
+  }) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openDrawer,
+      title,
+      drawerList,
+      selectedArr,
+      currentDrawerIndex,
+      onPress,
+      from,
+      bookIdx,
+      viewType,
     });
   };
 export const dialogOpenAction =

@@ -7,6 +7,12 @@ const initDialog = {
     onPress: null,
     title: '확인',
   },
+  gradeDialog: {
+    open: false,
+    message: '',
+    onPress: null,
+    title: '확인',
+  },
   actionDialog: {
     open: false,
     onPress: null,
@@ -56,6 +62,17 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         messageDialog: {
+          title: action.title,
+          open: true,
+          message: action.message,
+          onPress: action.onPress,
+          label: action.label,
+        },
+      };
+    case dialogActionType.openGrade:
+      return {
+        ...state,
+        gradeDialog: {
           title: action.title,
           open: true,
           message: action.message,
