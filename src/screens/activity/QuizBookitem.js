@@ -83,14 +83,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: screenWidth / 3,
     paddingVertical: 20,
-    margin: 10,
+    margin: 5,
+    top: 250,
     paddingRight: widthPercentage(10),
     justifyContent: 'space-between',
     backgroundColor: colors.white,
   },
   main: {
     flex: 2.5,
-    width: widthPercentage(100),
+    width: screenWidth,
   },
   mainContent: {
     flexDirection: 'column',
@@ -122,9 +123,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   thumbnail: {
-    height: heightPercentage(150),
-    width: widthPercentage(90),
-    marginLeft: widthPercentage(30),
+    height: screenWidth / 2.8,
+    width: screenWidth / 4,
+    marginLeft: screenWidth / 13,
     resizeMode: 'cover',
     flexDirection: 'row',
     ...Platform.select({
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   info: {
     flex: 1,
     flexDirection: 'column',
-    paddingLeft: 12,
+    paddingLeft: 0,
     padding: 0,
     alignSelf: 'center',
   },

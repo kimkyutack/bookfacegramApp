@@ -40,6 +40,8 @@ import {relativeTimeRounding} from 'moment-timezone';
 export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
+  const [keyword, setKeyword] = useState('');
+  const inputRef = useRef();
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [render, setRender] = useState([]);
   const [type, setType] = useState('kbs');
@@ -48,6 +50,7 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
   const [morenotBook, setNotBook] = useState([]);
   const [morekbsBook, setKbsBook] = useState(kbsBook);
   const [state, setState] = useState({req: kbsBook, page: 1});
+
   const fetchRequested = async start => {
     try {
       const {data, status} = await requestGet({
@@ -89,8 +92,6 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
 
     return () => {};
   };
-  const [keyword, setKeyword] = useState('');
-  const inputRef = useRef();
 
   useEffect(() => {
     return () => {
@@ -113,6 +114,52 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
         styles.root,
         kbsBook.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+        <Topbar
+          title="TOAPING"
+          navigation={navigation}
+          options={{
+            component: (
+              <Image style={styles.cameraIcon} source={images.camera} />
+            ),
+            name: 'camera',
+            onPress: () =>
+              dispatch(
+                dialogOpenSelect({
+                  item: cameraItem(),
+                }),
+              ),
+          }}
+        />
+
+        <SearchBar
+          value={keyword}
+          inputRef={inputRef}
+          onChange={setKeyword}
+          style={styles.searchBar}
+          placeholder="책제목, 저자, 출판사를 입력해주세요. "
+          optionComponent={
+            keyword ? (
+              <TouchableOpacity
+                onPress={() => {
+                  setKeyword('');
+                  inputRef.current?.focus();
+                }}>
+                <Image style={styles.x} source={images.delete} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  inputRef.current?.focus();
+                }}>
+                <Image style={styles.cameraIcon} source={images.search} />
+              </TouchableOpacity>
+            )
+          }
+          onSearch={handleSearch}
+        />
+        <TopTabs type={'main'} />
+      </SafeAreaView>
       <View style={styles.row}>
         <TouchableOpacity
           style={{
@@ -181,7 +228,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   row: {
+    flex: 1,
     flexDirection: 'row',
+    top: 200,
   },
   cameraIcon: {
     width: widthPercentage(24),
@@ -192,8 +241,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: widthPercentage(160),
     height: heightPercentage(28),
-    //zIndex: 3, // works on ios
-    //elevation: 3, // works on android
+    zIndex: 3, // works on ios
+    elevation: 3, // works on android
   },
   selectfont: {
     marginLeft: widthPercentage(5),
