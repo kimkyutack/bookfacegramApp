@@ -16,17 +16,44 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
 import images from '../../libs/images';
+import routes from '../../libs/routes';
+import {setTab} from '../../redux/tab/TabAction';
+import {navigate} from '../../services/navigation';
+import TopActivity from '../../screens/home/TopActivity';
+import MainQuiz from '../../screens/activity/MainQuiz';
 import {
+  screenHeight,
   fontPercentage,
   heightPercentage,
   screenWidth,
   widthPercentage,
 } from '../../services/util';
 
-export default function DialogGrade({}) {
+export default function DialogGrade({route}) {
   const dispatch = useDispatch();
   const {gradeDialog} = useSelector(s => s.dialog, shallowEqual);
-
+  const gradeArr = [
+    {name: '전체', value: 'all'},
+    {name: '유아', value: 'preSchool'},
+    {name: '초등학교 1학년', value: '00004'},
+    {name: '초등학교 2학년', value: '00005'},
+    {name: '초등학교 3학년', value: '00006'},
+    {name: '초등학교 4학년', value: '00007'},
+    {name: '초등학교 5학년', value: '00008'},
+    {name: '초등학교 6학년', value: '00009'},
+    {name: '중학교 1학년', value: '00010'},
+    {name: '중학교 2학년', value: '00011'},
+    {name: '중학교 3학년', value: '00012'},
+    {name: '고등학교 1학년', value: '00013'},
+    {name: '고등학교 2학년', value: '00014'},
+    {name: '고등학교 3학년', value: '00015'},
+  ];
+  const {Troutes} = {
+    name: routes.topActivity,
+    component: TopActivity,
+    initialParams: {type: 'quiz', rank: '00004'},
+    options: {tabBarLabel: 'ACTIVITY'},
+  };
   useEffect(() => {
     if (gradeDialog.open) {
       Keyboard.dismiss();
@@ -47,83 +74,37 @@ export default function DialogGrade({}) {
           }}>
           <View
             style={{
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              backgroundColor: colors.white,
-              height: heightPercentage(350),
+              backgroundColor: '#403737',
+              height: screenHeight / 1.07,
+              marginLeft: widthPercentage(15),
+              marginRight: widthPercentage(15),
               alignItems: 'center',
             }}>
-            <View
-              style={{
-                width: widthPercentage(31),
-                borderBottomColor: '#c2c2c2',
-                borderRadius: 3,
-                borderBottomWidth: 4,
-                position: 'absolute',
-                top: 12,
-                alignSelf: 'center',
-              }}
-            />
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                top: heightPercentage(30),
-                left: widthPercentage(20),
-              }}
-              onPress={() => dispatch(dialogClose())}
-            />
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                top: heightPercentage(25),
-                right: widthPercentage(20),
-              }}
-              onPress={() => {
-                dispatch(dialogClose());
-              }}
-            />
-            <TextWrap
-              style={styles.inputTitle}
-              font={fonts.kopubWorldDotumProBold}>
-              {gradeDialog.title ? gradeDialog.title : '이동 책서랍 선택'}
-            </TextWrap>
-            <View
-              style={{
-                width: screenWidth,
-                borderBottomColor: '#eeeeee',
-                borderBottomWidth: 1.5,
-                position: 'absolute',
-                top: heightPercentage(61.5),
-              }}
-            />
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
-                marginTop: heightPercentage(30),
-                marginBottom: 20,
               }}>
-              {gradeDialog.drawerList?.length > 0 &&
-                gradeDialog?.drawerList?.map((x, index) => {
-                  if (gradeDialog.currentDrawerIndex === x[0].contentsIdx) {
-                    return <View key={index} />;
-                  } else {
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        style={styles.iconContainer}
-                        onPress={() => {
-                          alert('11');
-                        }}>
-                        <TextWrap
-                          font={fonts.kopubWorldDotumProMedium}
-                          style={styles.message}>
-                          {x[0]?.name}
-                        </TextWrap>
-                      </TouchableOpacity>
+              {gradeArr.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.iconContainer}
+                  onPress={() => {
+                    dispatch(
+                      setTab({
+                        tab: 'quiz',
+                        rank: item.value,
+                      }),
                     );
-                  }
-                })}
+                    dispatch(dialogClose());
+                  }}>
+                  <TextWrap
+                    font={fonts.kopubWorldDotumProMedium}
+                    style={styles.message}>
+                    {item.name}
+                  </TextWrap>
+                </TouchableOpacity>
+              ))}
             </ScrollView>
           </View>
         </TouchableWithoutFeedback>
@@ -149,12 +130,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   message: {
-    lineHeight: 21,
-    fontSize: 14,
-    color: '#222222',
+    lineHeight: 17,
+    fontSize: fontPercentage(10),
+    color: 'white',
     textAlign: 'left',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: screenHeight / 35,
   },
   label: {
     paddingHorizontal: 30,
@@ -176,5 +157,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 21,
     color: colors.blue,
+  },
+  iconContainer: {
+    borderBottomWidth: 1,
+    borderColor: '#c9c9c9',
+    height: screenHeight / 15,
+    marginLeft: widthPercentage(15),
+    marginRight: widthPercentage(15),
   },
 });

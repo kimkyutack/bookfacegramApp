@@ -38,10 +38,18 @@ import {
   dialogOpenGrade,
 } from '../../redux/dialog/DialogActions';
 import {relativeTimeRounding} from 'moment-timezone';
+import {useHandler} from 'react-native-reanimated';
 
-export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
+export default function QuizMain({
+  route,
+  rank,
+  kbsBook,
+  notKbsBook,
+  navigation,
+}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [render, setRender] = useState([]);
   const [type, setType] = useState('kbs');
@@ -53,15 +61,17 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
 
   const fetchRequested = async start => {
     try {
+      setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/quiz/activity',
         query: {
-          rank: 'all',
+          rank: rank,
           startPaging: start,
           endPaging: 20,
         },
       });
       if (status === 'SUCCESS') {
+        setLoading(false);
         setState({
           req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
           page: state.page + 1,
@@ -85,11 +95,27 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
     };
   }, []);
 
+  const renderFooter = () => {
+    if (kbsBook?.length === 0 || !loading) {
+      return <></>;
+    } else {
+      return (
+        <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: -50,
+          }}
+          color={colors.blue}
+        />
+      );
+    }
+  };
+
   const loadMore = () => {
+    setLoading(true);
     setStart(start + 20);
     fetchRequested(start + 20);
-    let mount = true;
-
     return () => {};
   };
 
@@ -99,49 +125,6 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
         styles.root,
         kbsBook.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={{
-            marginLeft: widthPercentage(20),
-            width: widthPercentage(160),
-            height: heightPercentage(30),
-            top: heightPercentage(15),
-            borderWidth: 0.5,
-            borderStyle: 'solid',
-            borderColor: '#c9c9c9',
-            position: 'relative',
-            zIndex: 1, // works on ios
-            elevation: 1,
-          }}
-          onPress={() => {
-            dispatch(dialogOpenGrade({message: '준비중.'}));
-          }}>
-          <View>
-            <TextWrap style={styles.selectfont}>{'학년별'}</TextWrap>
-            <Image source={images.selectbox} style={styles.select} />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            width: widthPercentage(160),
-            height: heightPercentage(30),
-            top: heightPercentage(15),
-            borderWidth: 0.5,
-            borderStyle: 'solid',
-            borderColor: '#c9c9c9',
-            zIndex: 1, // works on ios
-            elevation: 1,
-          }}
-          onPress={() => {
-            dispatch(dialogOpenGrade({message: '준비중.'}));
-          }}>
-          <View>
-            <TextWrap style={styles.selectfont}>{grade}</TextWrap>
-            <Image source={images.selectbox} style={styles.select} />
-          </View>
-        </TouchableOpacity>
-      </View>
       {kbsBook.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>QuizList가 없습니다.</TextWrap>
@@ -158,8 +141,9 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
             return <QuizBookitem item={item} type={type} index={index} />;
           }}
           onEndReached={loadMore}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.8}
           numColumns={2}
+          ListFooterComponent={renderFooter}
         />
       )}
     </View>
@@ -168,8 +152,7 @@ export default function QuizMain({route, kbsBook, notKbsBook, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    marginRight: screenWidth / 20,
-    flex: 1,
+    width: screenWidth,
     flexDirection: 'column',
   },
   row: {

@@ -44,7 +44,7 @@ export default function QuizBookitem({item, index}) {
           onPress={() => {
             dispatch(
               setTab({
-                tab: 'quiz',
+                tab: 'detail',
                 selectedBook: item.bookCd,
                 viewType: 'kbs',
                 selectType: 'quiz',
@@ -81,21 +81,20 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'row',
-    width: screenWidth / 3,
     paddingVertical: 20,
     margin: 5,
     top: 0,
-    paddingRight: widthPercentage(10),
+    //paddingRight: widthPercentage(10),
     justifyContent: 'space-between',
     backgroundColor: colors.white,
   },
   main: {
-    flex: 2.5,
-    width: screenWidth,
+    width: screenWidth / 2.5,
   },
   mainContent: {
+    alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingVertical: 20,
   },
   date: {
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
   thumbnail: {
     height: screenWidth / 2.8,
     width: screenWidth / 4,
-    marginLeft: screenWidth / 13,
     resizeMode: 'cover',
     flexDirection: 'row',
     ...Platform.select({
@@ -136,15 +134,12 @@ const styles = StyleSheet.create({
       },
       android: {
         backgroundColor: 'white',
-        elevation: 1,
       },
     }),
   },
   info: {
     flex: 1,
     flexDirection: 'column',
-    paddingLeft: 0,
-    padding: 0,
     alignSelf: 'center',
   },
   buttonContainer: {

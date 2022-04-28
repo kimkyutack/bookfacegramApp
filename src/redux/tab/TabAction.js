@@ -6,7 +6,16 @@ export const tabActionType = {
 };
 
 export const setTab =
-  ({tab, tabType, grade, selectedBook, gradeStyle, viewType, selectType}) =>
+  ({
+    tab,
+    tabType,
+    grade,
+    selectedBook,
+    gradeStyle,
+    viewType,
+    selectType,
+    rank,
+  }) =>
   dispatch => {
     if (tab === 'main') {
       dispatch({type: tabActionType.main, tab, grade});
@@ -14,12 +23,13 @@ export const setTab =
       dispatch({type: tabActionType.list, tab, grade, gradeStyle});
     } else if (tab === 'quiz') {
       dispatch({
-        type: tabActionType.detail,
+        type: tabActionType.quiz,
         tab,
         tabType,
         selectedBook,
         viewType,
         selectType,
+        rank,
       });
     } else {
       dispatch({
@@ -28,6 +38,7 @@ export const setTab =
         tabType,
         selectedBook,
         viewType,
+        selectType,
       });
     }
   };

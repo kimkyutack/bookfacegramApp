@@ -17,7 +17,8 @@ import TabBar from '../activity/TabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function TopTabs({grade, type}) {
+export default function TopTabs({type, rank}) {
+  //alert(JSON.stringify(rank));
   return (
     <Tab.Navigator
       initialRouteName={routes.topActivity}
@@ -28,7 +29,7 @@ export default function TopTabs({grade, type}) {
       <Tab.Screen
         name={routes.topNewBooks}
         component={TopNewBooks}
-        initialParams={{type: type, grade: grade}}
+        initialParams={{type: type}}
         options={{
           tabBarLabel: 'NEW BOOKS',
         }}
@@ -41,7 +42,7 @@ export default function TopTabs({grade, type}) {
       <Tab.Screen
         name={routes.topActivity}
         component={TopActivity}
-        initialParams={{type: type}}
+        initialParams={{type: type, rank: rank}}
         options={{tabBarLabel: 'ACTIVITY'}}
       />
     </Tab.Navigator>

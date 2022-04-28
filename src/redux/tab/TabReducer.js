@@ -6,9 +6,11 @@ const initTab = {
   mainTab: {},
   listTab: {},
   detailTab: {viewType: ''},
+  rank: '',
 };
 
 export default function loading(state = initTab, action) {
+  //alert(action.selectType);
   switch (action.type) {
     case tabActionType.main:
       return {
@@ -36,6 +38,13 @@ export default function loading(state = initTab, action) {
           viewType: action.viewType,
           selectType: action.selectType,
         },
+      };
+    case tabActionType.quiz:
+      return {
+        ...state,
+        tab: action.tab,
+        tabType: action.tabType,
+        rank: action.rank,
       };
     default:
       return state;

@@ -61,7 +61,7 @@ export default function TopNewBooksDetail({route}) {
   const [selectedBook, setSelectedBook] = useState('');
   const [selectType, setSelectType] = useState('detail');
   const [drawerList, setDrawerList] = useState([]);
-
+  //alert(detailTab.detailTab.selectType);
   const fetchRequested = async () => {
     try {
       setLoading(true);

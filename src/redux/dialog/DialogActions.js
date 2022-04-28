@@ -46,7 +46,7 @@ export const dialogOpenGrade =
   }) =>
   dispatch => {
     dispatch({
-      type: dialogActionType.openDrawer,
+      type: dialogActionType.openGrade,
       title,
       drawerList,
       selectedArr,
