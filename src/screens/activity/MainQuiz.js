@@ -18,6 +18,7 @@ import {
   screenHeight,
   widthPercentage,
   heightPercentage,
+  fontPercentage,
 } from '../../services/util';
 import {dialogError} from '../../redux/dialog/DialogActions';
 import {dialogOpenGrade} from '../../redux/dialog/DialogActions';
@@ -208,10 +209,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: screenWidth / 2.2,
     height: heightPercentage(28),
-    zIndex: 3, // works on ios
-    elevation: 3, // works on android
   },
   selectfont: {
+    fontSize: fontPercentage(9),
     marginLeft: widthPercentage(5),
     top: heightPercentage(8),
     zIndex: 10, // works on ios

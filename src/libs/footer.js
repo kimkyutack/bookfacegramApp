@@ -10,7 +10,9 @@ import {
 import TextWrap from '../components/text-wrap/TextWrap';
 import images from '../libs/images';
 import routes from '../libs/routes';
+import {useDispatch} from 'react-redux';
 import {navigate} from '../services/navigation';
+import {setTab} from '../redux/tab/TabAction';
 import {
   widthPercentage,
   heightPercentage,
@@ -18,6 +20,7 @@ import {
 } from '../services/util';
 
 export function Footer(page) {
+  const dispatch = useDispatch();
   const scrollRef = useRef();
   return (
     <View style={styles.footer}>
@@ -117,12 +120,18 @@ export function Footer(page) {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
-          navigate(routes.mainQuiz, {
+        onPress={() => {
+          dispatch(
+            setTab({
+              tab: 'quiz',
+              rank: 'all',
+            }),
+          );
+          navigate(routes.activity, {
             type: 'quiz',
-            start: 0,
-          })
-        }>
+            rank: 'all',
+          });
+        }}>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
             style={styles.footerIcon}

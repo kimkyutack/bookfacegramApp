@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   main: {
-    width: screenWidth / 2.5,
+    flex: 1,
   },
   mainContent: {
     alignItems: 'center',
@@ -165,7 +165,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     marginVertical: 15,
-    paddingHorizontal: 16,
     backgroundColor: colors.white,
   },
   header: {

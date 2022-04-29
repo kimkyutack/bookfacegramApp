@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   message: {
-    lineHeight: 17,
+    lineHeight: screenHeight / 72,
     fontSize: fontPercentage(10),
     color: 'white',
     textAlign: 'left',
