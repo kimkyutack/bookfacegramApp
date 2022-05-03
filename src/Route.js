@@ -28,6 +28,7 @@ import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
 import Faq from './screens/faq/Faq';
 import Setting from './screens/setting/Setting';
+import Profile from './screens/profile/profile';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
 
@@ -487,6 +488,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.setting}
               component={Setting}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.profile}
+              component={Profile}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

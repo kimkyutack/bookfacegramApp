@@ -37,6 +37,7 @@ export default {
   exam_top: require('../assets/images/exam_top.png'),
   hamberger: require('../assets/images/top-hamberger.png'),
   camera: require('../assets/images/top-camera.png'),
+  userCamera: require('../assets/images/camera.png'),
   feedCamera: require('../assets/images/feed-camera.png'),
   search: require('../assets/images/search-mdpi.png'),
   tabFriendOn: require('../assets/images/tab_friend_on.png'),

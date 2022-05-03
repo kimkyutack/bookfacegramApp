@@ -48,7 +48,7 @@
     "react-native-exit-app": "^1.1.0",
     "react-native-fast-image": "^8.3.5",
     "react-native-fbsdk-next": "^4.4.0",
-    "react-native-gesture-handler": "^2.3.2",
+    "react-native-gesture-handler": "2.1.1",
     "react-native-htmlview": "^0.16.0",
     "react-native-image-crop-picker": "^0.36.2",
     "react-native-material-ripple": "^0.9.1",

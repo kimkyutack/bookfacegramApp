@@ -135,11 +135,33 @@ export default function Topbar({
             {title}
           </TextWrap>
         )}
+        {title === '개인정보수정' && (
+          <TextWrap
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            font={fonts.kopubWorldDotumProBold}
+            onPress={
+              title === 'TOAPING'
+                ? () =>
+                    navigation.navigate(routes.home, {
+                      screen: routes.topNewBooks,
+                      params: {
+                        type: 'main',
+                        key: Date.now(),
+                      },
+                    })
+                : null
+            }
+            style={styles.profiles}>
+            {title}
+          </TextWrap>
+        )}
         {title !== 'TOAPING' &&
           title !== '도움말(FAQ)' &&
           title !== '공지사항' &&
           title !== '이벤트' &&
-          title !== '앱설정' && (
+          title !== '앱설정' &&
+          title !== '개인정보수정' && (
             <TextWrap
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -293,6 +315,12 @@ const styles = StyleSheet.create({
     left: widthPercentage(90),
     fontSize: fontPercentage(19),
     letterSpacing: -0.5,
+    color: '#000000',
+  },
+  profiles: {
+    left: widthPercentage(75),
+    fontSize: fontPercentage(20),
+    letterSpacing: -0.1,
     color: '#000000',
   },
   backIcon: {

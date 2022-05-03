@@ -41,6 +41,7 @@ export default {
   event: 'event',
   faq: 'faq',
   setting: 'setting',
+  profile: 'profile',
   eventDetail: 'eventDetail',
   registerForm: 'registerForm',
   registerFormInfo: 'registerFormInfo',

@@ -109,8 +109,8 @@ export default function DrawerCustom(props) {
               label="ㆍ개인정보수정"
               labelStyle={styles.label}
               onPress={() => {
-                dispatch(dialogError('페이지 제작중...'));
-                // props.navigation.navigate('topActivity');
+                //dispatch(dialogError('페이지 제작중...'));
+                props.navigation.navigate(routes.profile);
               }}
             />
           </View>

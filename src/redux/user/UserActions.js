@@ -10,7 +10,7 @@ import {
   requestPost,
   requestPut,
 } from '../../services/network';
-import {getImageFromGallery} from '../../services/picker';
+import {getImageFromGallery, getImageFromCamera} from '../../services/picker';
 import {clearItem, getItem} from '../../services/preference';
 import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
@@ -86,29 +86,65 @@ export const userSignOut = userId => async dispatch => {
   }
 };
 
-export const userUpdateProfileImage = (userId, toDefault) => async dispatch => {
+export const userUpdateProfileImage = userId => async dispatch => {
   try {
-    if (toDefault) {
-      await requestPut({
-        url: consts.apiUrl + '/users/' + userId,
-        body: {columns: ['profilePath'], values: ['']},
-      });
-      dispatch({type: userActionType.update, user: {profilePath: ''}});
-    } else {
-      const file = await getImageFromGallery();
-      if (!file) {
-        return;
-      }
+    // if (toDefault) {
+    //   await requestPut({
+    //     url: consts.apiUrl + '/users/' + userId,
+    //     body: {columns: ['profilePath'], values: ['']},
+    //   });
+    //   dispatch({type: userActionType.update, user: {profilePath: ''}});
+    // } else {
+    const {data, status} = await requestGet({
+      url: consts.apiUrl + '/mypage/info',
+    });
+    const file = await getImageFromGallery();
 
-      const formData = new FormData();
-      formData.append('profileImage', file);
-
-      const user = await requestFile(
-        {url: consts.apiUrl + '/users/' + userId, method: 'put'},
-        formData,
-      );
-      dispatch({type: userActionType.update, user});
+    if (!file) {
+      return;
     }
+
+    const formData = new FormData();
+    let originProfile;
+    if (
+      data.profilePath.includes(
+        'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/profile',
+      )
+    ) {
+      originProfile = data.profilePath.substring(
+        data.profilePath.lastIndexOf('/') + 1,
+      );
+      formData.append('originProfile', originProfile);
+    }
+    formData.append('profile', file);
+
+    // const user = await requestFile(
+    //   {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
+    //   formData,
+    // );
+    const user = await requestPut({
+      url: consts.apiUrl + '/mypage/info/profile',
+      body: {formData: formData},
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          alert(res.status);
+          dispatch({
+            type: userActionType.update,
+            user: user,
+          });
+        } else if (res.status === 'FAIL') {
+          dispatch(dialogError(res.data?.msg || 'fail'));
+        } else {
+          dispatch(dialogError('fail'));
+        }
+      })
+      .catch(error => {
+        dispatch(dialogError(error));
+      });
+    // alert(JSON.stringify(originProfile));
+    // alert(JSON.stringify(file));
+    // dispatch({type: userActionType.update, user});
   } catch (error) {
     dispatch(dialogError(error));
   }
