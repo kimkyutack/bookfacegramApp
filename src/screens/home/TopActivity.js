@@ -13,6 +13,9 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
+import Kbstest from '../activity/kbstest';
+import Examtest from '../activity/examtest';
+import Bookcontest from '../activity/bookcontest';
 import ActivityMain from '../activity/ActivityMain';
 import {
   widthPercentage,
@@ -27,6 +30,12 @@ export default function TopActivity({route}) {
     <View style={styles.root}>
       {route.params.type === 'quiz' ? (
         <MainQuiz route={route} start={0} />
+      ) : route.params.type === 'kbstest' ? (
+        <Kbstest route={route} />
+      ) : route.params.type === 'examtest' ? (
+        <Examtest route={route} />
+      ) : route.params.type === 'contest' ? (
+        <Bookcontest route={route} />
       ) : (
         <ActivityMain route={route} />
       )}

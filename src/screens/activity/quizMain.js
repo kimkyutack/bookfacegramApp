@@ -59,19 +59,20 @@ export default function QuizMain({
   const [morekbsBook, setKbsBook] = useState(kbsBook);
   const [state, setState] = useState({req: kbsBook, page: 1});
 
-  const fetchRequested = async start => {
+  const fetchRequested = async startpage => {
     try {
       setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/book/quiz/activity',
         query: {
           rank: rank,
-          startPaging: start,
+          startPaging: startpage,
           endPaging: 20,
         },
       });
+      setLoading(false);
       if (status === 'SUCCESS') {
-        setLoading(false);
+        setStart(start + 20);
         setState({
           req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
           page: state.page + 1,
@@ -81,6 +82,7 @@ export default function QuizMain({
       }
       return status;
     } catch (error) {
+      setLoading(false);
       dispatch(dialogError(error));
     }
   };
@@ -113,9 +115,7 @@ export default function QuizMain({
   };
 
   const loadMore = () => {
-    setLoading(true);
-    setStart(start + 20);
-    fetchRequested(start + 20);
+    fetchRequested(start);
     return () => {};
   };
 

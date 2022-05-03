@@ -53,6 +53,7 @@ const renderItem = ({
   opacity,
   toggleIndex,
 }) => {
+  const replacecontents = contents.replace(/&nbsp/g, ' ');
   const idx = likeMemberList.indexOf(login_idx);
   return (
     <View style={styles.itemContainer}>
@@ -158,7 +159,9 @@ const renderItem = ({
             style={styles.contents}
             timeKey={Date.now()}
             index={index}>
-            {contents ? contents : ''}
+            {contents
+              ? replacecontents.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')
+              : ''}
           </TextMoreWrap>
         </View>
         <View>

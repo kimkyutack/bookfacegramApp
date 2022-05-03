@@ -30,6 +30,7 @@ import {
 } from '../../redux/dialog/DialogActions';
 
 export default function Activity({route, navigation}) {
+  //alert(route.params.type);
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
   const inputRef = useRef();
@@ -97,7 +98,7 @@ export default function Activity({route, navigation}) {
         type={route.params.type ? route.params.type : 'main'}
         rank={route.params.rank}
       />
-      <Footer page={'quiz'} />
+      <Footer page={route.params.type} />
     </SafeAreaView>
   );
 }

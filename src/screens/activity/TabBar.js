@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, TouchableWithoutFeedback, Text, StyleSheet} from 'react-native';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
@@ -10,8 +10,19 @@ import {
   heightPercentage,
 } from '../../services/util';
 
-export default function TabBar({state, descriptors, navigation}) {
+export default function TabBar({state, descriptors, navigation, type}) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
+
+  /*useEffect(() => {
+    navigation.navigate(routes.home, {
+      screen: routes.topActivity,
+      params: {
+        type: type,
+        key: Date.now(),
+      },
+    });
+  }, [type]);*/
+
   if (focusedOptions?.tabBarVisible === false) {
     return null;
   }

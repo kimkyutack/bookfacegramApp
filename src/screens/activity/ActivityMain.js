@@ -35,11 +35,15 @@ export default function ActivityMain({route}) {
         <View style={styles.root2}>
           <View style={styles.box2}>
             <TouchableOpacity
-              onPress={() =>
-                navigate(routes.examtest, {
-                  type: 'main',
-                })
-              }>
+              onPress={() => {
+                navigate(routes.home, {
+                  screen: routes.topActivity,
+                  params: {
+                    type: 'examtest',
+                    key: Date.now(),
+                  },
+                });
+              }}>
               <View style={styles.box3}>
                 <View style={styles.font4}>
                   <Image style={styles.img1} source={images.exam} />
@@ -51,11 +55,15 @@ export default function ActivityMain({route}) {
           </View>
           <View style={styles.box2}>
             <TouchableOpacity
-              onPress={() =>
-                navigate(routes.kbstest, {
-                  type: 'main',
-                })
-              }>
+              onPress={() => {
+                navigate(routes.home, {
+                  screen: routes.topActivity,
+                  params: {
+                    type: 'kbstest',
+                    key: Date.now(),
+                  },
+                });
+              }}>
               <View style={styles.box3}>
                 <View style={styles.font4}>
                   <Image style={styles.img2} source={images.kbs_exam} />
@@ -72,11 +80,15 @@ export default function ActivityMain({route}) {
         <View style={styles.root2}>
           <View style={styles.box2}>
             <TouchableOpacity
-              onPress={() =>
-                navigate(routes.bookContest, {
-                  type: 'main',
-                })
-              }>
+              onPress={() => {
+                navigate(routes.home, {
+                  screen: routes.topActivity,
+                  params: {
+                    type: 'contest',
+                    key: Date.now(),
+                  },
+                });
+              }}>
               <View style={styles.box3}>
                 <View style={styles.font4}>
                   <Image style={styles.img2} source={images.competition} />

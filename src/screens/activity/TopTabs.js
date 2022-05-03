@@ -18,13 +18,13 @@ import TabBar from '../activity/TabBar';
 const Tab = createMaterialTopTabNavigator();
 
 export default function TopTabs({type, rank}) {
-  //alert(JSON.stringify(rank));
+  //alert(JSON.stringify(type));
   return (
     <Tab.Navigator
       initialRouteName={routes.topActivity}
       swipeEnabled={false}
       tabBar={props => {
-        return <TabBar {...props} />;
+        return <TabBar {...props} type={type} />;
       }}>
       <Tab.Screen
         name={routes.topNewBooks}

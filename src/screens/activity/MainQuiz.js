@@ -128,10 +128,10 @@ export default function MainQuiz({route}, start) {
       <View style={styles.row}>
         <TouchableOpacity
           style={{
-            width: screenWidth / 2.2,
-            height: heightPercentage(30),
+            flex: 1,
+            height: heightPercentage(29),
             top: heightPercentage(15),
-            borderWidth: 0.5,
+            borderWidth: 0.3,
             borderStyle: 'solid',
             borderColor: '#c9c9c9',
             position: 'relative',
@@ -146,10 +146,10 @@ export default function MainQuiz({route}, start) {
 
         <TouchableOpacity
           style={{
-            width: screenWidth / 2.2,
-            height: heightPercentage(30),
+            flex: 1,
+            height: heightPercentage(29),
             top: heightPercentage(15),
-            borderWidth: 0.5,
+            borderWidth: 0.3,
             borderStyle: 'solid',
             borderColor: '#c9c9c9',
             position: 'relative',
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
 
   row: {
     top: 10,
-    width: screenWidth,
+    width: screenWidth * 0.9,
     alignItems: 'center',
     justifyContent: 'center',
     height: screenHeight / 15,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   select: {
     position: 'absolute',
-    width: screenWidth / 2.2,
+    width: '100%',
     height: heightPercentage(28),
   },
   selectfont: {
