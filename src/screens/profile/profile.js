@@ -2,6 +2,7 @@ import {useRoute} from '@react-navigation/native';
 import React, {useState, useRef, useCallback, useMemo, useEffect} from 'react';
 import CameraRoll from '@react-native-community/cameraroll';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import {
   Image,
   SafeAreaView,
@@ -11,6 +12,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import TagInput from 'react-native-tags-input';
 import Avatar from '../../components/avatar/Avatar';
@@ -32,7 +34,12 @@ import {
   widthPercentage,
 } from '../../services/util';
 import {goBack, navigate} from '../../services/navigation';
-import {requestFile, requestPost, requestGet} from '../../services/network';
+import {
+  requestFile,
+  requestPost,
+  requestGet,
+  requestPut,
+} from '../../services/network';
 import {
   openSettings,
   PERMISSIONS,
@@ -44,11 +51,17 @@ import {
   dialogOpenAction,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
-import {userUpdateProfileImage} from '../../redux/user/UserActions';
+import {
+  userUpdateProfileImage,
+  userUpdate,
+  userCheckToken,
+} from '../../redux/user/UserActions';
+import Footer from '../../libs/footer';
 
 export default function Profile({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const inputRef = useRef();
+  const isFocused = useIsFocused();
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
@@ -64,6 +77,19 @@ export default function Profile({route, navigation}) {
   const [emailError, setEmailError] = useState('');
   let infograde = user.grade * 1;
   let grade = '';
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      alert(JSON.stringify(user));
+      setPhone(user?.handphone ? user?.handphone : '');
+      setEmail(user?.email ? user?.email : '');
+
+      //alert(JSON.stringify(user));
+      //Put your Data loading function here instead of my loadData()
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   switch (infograde) {
     case 2:
@@ -130,7 +156,39 @@ export default function Profile({route, navigation}) {
       return tmp;
     }
   };
-  const UpdateProfile = async () => {};
+  const UpdateProfile = async () => {
+    let emails = email;
+    let phoneNum = phone;
+    phoneNum = phoneNum.replace(/-/gi, '');
+
+    requestPut({
+      url: consts.apiUrl + '/mypage/info',
+      body: {
+        handphone: phoneNum,
+        email: emails,
+        grade: infograde,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setEmail(res.data.email);
+          setPhone(res.data.handphone);
+
+          dispatch(userUpdate);
+          dispatch(dialogError('수정되었습니다.'));
+          //alert(JSON.stringify(user));
+          setSaveButtonDisabled(false);
+        } else if (res.status === 'FAIL') {
+          // error 일때 해야함
+          dispatch(dialogError(res.data.msg));
+        } else {
+        }
+      })
+      .catch(error => {
+        dispatch(dialogError(error));
+        // error 일때 해야함
+      });
+  };
   const emailDuplicatedCheck = async e => {
     let preventKorReg = /[^A-Za-z0-9@.]/gi;
     let emailFormatReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -153,8 +211,10 @@ export default function Profile({route, navigation}) {
         if (status === 'SUCCESS') {
           if (emailFormatReg.test(e)) {
             setEmailError('');
+            setSaveButtonDisabled(true);
           } else {
             setEmailError('이메일 형식이 맞지 않습니다. ex) toaping@naver.com');
+            setSaveButtonDisabled(false);
           }
         }
         setEmailLoading(false);
@@ -166,6 +226,7 @@ export default function Profile({route, navigation}) {
           (typeof error === 'object' ? JSON.stringify(error) : error),
       );
       setEmailLoading(false);
+      setSaveButtonDisabled(false);
     }
   };
 
@@ -188,7 +249,7 @@ export default function Profile({route, navigation}) {
               저장
             </TextWrap>
           ),
-          onPress: () => (saveButtonDisabled ? null : UpdateProfile()),
+          onPress: () => (saveButtonDisabled ? UpdateProfile() : null),
         },
       }}>
       <ScrollView>
@@ -269,7 +330,10 @@ export default function Profile({route, navigation}) {
             style={styles.inputStyle}
             inputStyle={styles.inputValue}
             value={autoHypenPhone(phone)}
-            onChange={setPhone}
+            onChange={eve => {
+              setPhone(eve);
+              setSaveButtonDisabled(true);
+            }}
             maxLength={13}
             placeholder="핸드폰번호(필수)"
             placeholderTextColor="#acacac"
@@ -363,6 +427,7 @@ export default function Profile({route, navigation}) {
         </TouchableOpacity>
         <View style={styles.divider} />
       </ScrollView>
+      <Footer page={'wer'} />
     </RootLayout>
   );
 }
