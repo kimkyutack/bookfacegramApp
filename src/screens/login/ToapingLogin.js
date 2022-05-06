@@ -66,8 +66,7 @@ export default function ToapingLogin({}) {
           dialogOpenMessage({
             label: '확인',
             title: '확인',
-            message:
-              '입력하신 계정의 회원정보가 확인되었습니다.\n해당 계정으로 앱 회원가입을 진행합니다.',
+            message: '입력하신 계정의 회원정보가 확인되었습니다.',
             onPress: () => {
               dispatch(userCheckToken);
             },
