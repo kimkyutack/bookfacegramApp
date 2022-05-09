@@ -98,7 +98,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
                   borderBottomWidth: 0,
                 }}>
                 피드북
@@ -112,7 +112,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
 
                   borderBottomWidth: 4,
                 }}>
@@ -132,7 +132,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
                   borderBottomWidth: 0,
                 }}>
                 서비스
@@ -146,7 +146,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
                   borderBottomWidth: 4,
                 }}>
                 서비스
@@ -165,7 +165,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
 
-                  textAlign:'center',
+                  textAlign: 'center',
                   fontSize: fontPercentage(13),
                   borderBottomWidth: 0,
                 }}>
@@ -179,7 +179,7 @@ export default function Faq({route, navigation}) {
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
-                  textAlign:'center',
+                  textAlign: 'center',
                   fontSize: fontPercentage(13),
                   borderBottomWidth: 4,
                 }}>
@@ -199,7 +199,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
                   borderBottomWidth: 0,
                 }}>
                 회원
@@ -213,7 +213,7 @@ export default function Faq({route, navigation}) {
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
-                  textAlign:'center',
+                  textAlign: 'center',
                   borderBottomWidth: 4,
                 }}>
                 회원
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   menu: {
     resizeMode: 'cover',
     flexDirection: 'row',
-width:screenWidth,
+    width: screenWidth,
     height: heightPercentage(36),
   },
   tapmenu: {

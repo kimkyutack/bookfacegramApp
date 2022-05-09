@@ -85,12 +85,11 @@ const renderItem = ({
         </TouchableOpacity>
         <View>
           {memberId === login_id && (
-            <TextWrap
-              font={fonts.kopubWorldDotumProMedium}
-              style={styles.infoRight}
-              onPress={editOnPress}>
-              수정
-            </TextWrap>
+            <TouchableOpacity
+              onPress={() => editOnPress(feedIdx)}
+              style={styles.infoRight}>
+              <Image source={images.editOpen} style={styles.editOpenIcon} />
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -264,11 +263,21 @@ const styles = StyleSheet.create({
     width: screenWidth,
     alignItems: 'center',
   },
+  infoRight: {
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(17),
+    alignSelf: 'center',
+  },
   infoContainerEdit: {
     width: widthPercentage(130),
     height: heightPercentage(35),
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  editOpenIcon: {
+    width: widthPercentage(12),
+    height: widthPercentage(12),
+    resizeMode: 'contain',
   },
   contentContainer: {
     flexDirection: 'column',

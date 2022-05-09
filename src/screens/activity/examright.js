@@ -16,6 +16,7 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
+import {navigate} from '../../services/navigation';
 import colors from '../../libs/colors';
 import SearchBar from '../../components/search-bar/SearchBar';
 import Topbar from '../../components/topbar/Topbar';
@@ -33,28 +34,74 @@ import {
   heightPercentage,
   fontPercentage,
   cameraItem,
+  screenWidth,
 } from '../../services/util';
 import routes from '../../libs/routes';
 
-export default function Examtest({route, navigation}) {
+export default function Examright({route, navigation}) {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.white,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
       <ScrollView style={styles.root}>
+        <View style={{width: screenWidth * 0.9, top: heightPercentage(10)}}>
+          <TextWrap style={styles.font3}>
+            문해고사를 통해 문해력 UP 시키기!
+          </TextWrap>
+        </View>
         <View style={styles.root2}>
           <Image style={styles.img1} source={images.exam_top} />
           <Image style={styles.img1} source={images.right} />
-          <Image style={styles.img1} source={images.exam_body1} />
+          <TextWrap
+            style={{
+              fontSize: fontPercentage(12),
+              fontWeight: 'bold',
+            }}>
+            ③번 '얼굴에 화색이 돌다
+          </TextWrap>
+          <Image style={styles.img2} source={images.exam_body1} />
         </View>
         <TextWrap style={styles.font}>
-          위의 대화는 오랜만에 만난 유정이와 미진이의 대화입니다. 밑줄친 '
-          <TextWrap style={styles.font3}>얼굴이 피다</TextWrap>' 의 뜻은 무슨
-          의미일까요?
+          '얼굴이 피다'는 '얼굴에 살이 오르고 화색이 돌다.'라는 뜻의
+          관용구입니다.
+          {'\n'}
+          {'\n'}
+          유정이와 미진이의 대화를 살펴보면 오랜만에 만난 미진이가 유정이의
+          얼굴을 보며 "얼굴이 완전 폈네~"라고 말합니다.
+          {'\n'}
+          {'\n'}
+          이는 상대방의 얼굴이 예뻐졌거나, 얼굴에 화색이 돌아 보기 좋다는 의미를
+          나타냅니다.
+          {'\n'}
+          {'\n'}
         </TextWrap>
+        <TextWrap style={styles.exfont}>
+          [참고예시]]
+          {'\n'}
+          1. 진영이가 요즘 좋은 일이 많은지, 얼굴이 폈다.
+          {'\n'}
+          2.보약을 먹더니 얼굴이 피었다.
+          {'\n'}
+          3. 전보다 얼굴이 많이 펴서 보기 좋다.
+        </TextWrap>
+
         <View style={styles.button}>
           <Button
             title="다른 활동하기"
             color="black"
-            onPress={() => alert('정답')}
+            onPress={() => {
+              navigate(routes.home, {
+                screen: routes.topActivity,
+                params: {
+                  type: 'main',
+                  key: Date.now(),
+                },
+              });
+            }}
           />
         </View>
       </ScrollView>
@@ -64,32 +111,42 @@ export default function Examtest({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    marginTop: 10,
     flex: 1,
+    width: '90%',
     backgroundColor: '#ffffff',
+    top: heightPercentage(10),
   },
   button: {
     left: '5%',
     width: '90%',
-    bottom: '1%',
+    height: screenHeight / 10,
   },
   root2: {
     width: '100%',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    height: screenHeight * 1.35,
   },
   font: {
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
-    top: heightPercentage(6),
     fontSize: fontPercentage(12),
+    bottom: heightPercentage(150),
     fontWeight: 'bold',
+  },
+  exfont: {
+    marginRight: widthPercentage(30),
+    left: widthPercentage(17),
+    fontSize: fontPercentage(12),
+    bottom: heightPercentage(150),
+    fontWeight: 'bold',
+    color: 'gray',
   },
   font3: {
     fontSize: fontPercentage(12),
     fontWeight: 'bold',
-    textDecorationLine: 'underline',
+    textAlign: 'left',
   },
   font2: {
     margin: widthPercentage(10),
@@ -99,7 +156,13 @@ const styles = StyleSheet.create({
   },
   img1: {
     resizeMode: 'contain',
-    flex: 1,
+    width: screenWidth,
+    bottom: heightPercentage(20),
+  },
+  img2: {
+    resizeMode: 'contain',
+    width: screenWidth,
+    bottom: heightPercentage(100),
   },
   searchBar: {
     marginHorizontal: 18,

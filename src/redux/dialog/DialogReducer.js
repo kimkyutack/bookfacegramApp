@@ -78,6 +78,7 @@ export default function dialog(state = initDialog, action) {
           message: action.message,
           onPress: action.onPress,
           label: action.label,
+          grade: action.grade,
         },
       };
     case dialogActionType.openAction:

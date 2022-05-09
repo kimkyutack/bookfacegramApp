@@ -92,7 +92,7 @@ export default function DrawerCustom(props) {
               }}
             />
           </View>
-          <View style={styles.itemList}>
+          {/*<View style={styles.itemList}>
             <DrawerItem
               style={styles.drawerItem}
               label="ㆍ토핑스토어"
@@ -102,7 +102,7 @@ export default function DrawerCustom(props) {
                 // props.navigation.navigate('topMyBooks');
               }}
             />
-          </View>
+            </View>*/}
           <View style={styles.itemList}>
             <DrawerItem
               style={styles.drawerItem}

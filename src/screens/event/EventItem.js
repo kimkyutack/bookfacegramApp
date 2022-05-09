@@ -6,7 +6,12 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
-import {fontPercentage, formatTime, screenWidth} from '../../services/util';
+import {
+  fontPercentage,
+  formatTime,
+  screenHeight,
+  screenWidth,
+} from '../../services/util';
 
 export default function EventItem({item, navigation}) {
   return (
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
   },
-  mainContent: {flex: 1},
+  mainContent: {flex: 1, height: screenHeight / 2.5},
   date: {
     fontSize: fontPercentage(12),
     color: colors.black,
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     width: '100%',
-    height: 290,
+    height: screenHeight / 3,
     resizeMode: 'stretch',
   },
 });

@@ -31,7 +31,7 @@ export default function MainQuiz({route}, start) {
   const [KbsQuiz, setKbsQuiz] = useState([]);
   const [Rank, setRank] = useState(detailTab.rank);
   const [grade, setGrade] = useState('전체');
-
+  //console.log(detailTab);
   useEffect(() => {
     setRank(detailTab.rank);
   }, [detailTab.rank]);
@@ -157,7 +157,7 @@ export default function MainQuiz({route}, start) {
             elevation: 1,
           }}
           onPress={() => {
-            dispatch(dialogOpenGrade({message: '준비중.'}));
+            dispatch(dialogOpenGrade({message: '준비중.', grade: Rank}));
           }}>
           <View>
             <TextWrap style={styles.selectfont}>{grade}</TextWrap>

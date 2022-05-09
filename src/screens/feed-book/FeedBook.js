@@ -76,17 +76,17 @@ export default function FeedBook({route, navigation}) {
     };
   }, []);
 
-  const editOnPress = () => {
+  const editOnPress = feedIdx => {
     dispatch(
       dialogOpenSelect({
         item: [
           {
             name: '수정',
-            // onPress: () => console.log('수정해'),
+            onPress: () => console.log('수정해'),
           },
           {
             name: '삭제',
-            // onPress: () => console.log('삭제해'),
+            onPress: () => console.log('삭제해'),
           },
         ],
       }),

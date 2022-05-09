@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Keyboard,
   SafeAreaView,
@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   View,
-  Image,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -15,12 +14,15 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
-import images from '../../libs/images';
 import routes from '../../libs/routes';
 import {setTab} from '../../redux/tab/TabAction';
 import {navigate} from '../../services/navigation';
 import TopActivity from '../../screens/home/TopActivity';
-import MainQuiz from '../../screens/activity/MainQuiz';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
 import {
   screenHeight,
   fontPercentage,
@@ -31,6 +33,7 @@ import {
 
 export default function DialogGrade({route}) {
   const dispatch = useDispatch();
+  const [rank, setRank] = useState('all');
   const {gradeDialog} = useSelector(s => s.dialog, shallowEqual);
   const gradeArr = [
     {name: '전체', value: 'all'},
@@ -47,6 +50,22 @@ export default function DialogGrade({route}) {
     {name: '고등학교 1학년', value: '00013'},
     {name: '고등학교 2학년', value: '00014'},
     {name: '고등학교 3학년', value: '00015'},
+  ];
+  const radio_props = [
+    {label: '전체', value: 'all'},
+    {label: '유아', value: 'preSchool'},
+    {label: '초등학교 1학년', value: '00004'},
+    {label: '초등학교 2학년', value: '00005'},
+    {label: '초등학교 3학년', value: '00006'},
+    {label: '초등학교 4학년', value: '00007'},
+    {label: '초등학교 5학년', value: '00008'},
+    {label: '초등학교 6학년', value: '00009'},
+    {label: '중학교 1학년', value: '00010'},
+    {label: '중학교 2학년', value: '00011'},
+    {label: '중학교 3학년', value: '00012'},
+    {label: '고등학교 1학년', value: '00013'},
+    {label: '고등학교 2학년', value: '00014'},
+    {label: '고등학교 3학년', value: '00015'},
   ];
   const {Troutes} = {
     name: routes.topActivity,
@@ -105,6 +124,52 @@ export default function DialogGrade({route}) {
                   </TextWrap>
                 </TouchableOpacity>
               ))}
+              {/*<RadioForm animation={true}>
+
+                {radio_props.map((obj, i) => (
+                  <RadioButton labelHorizontal={true} key={i}>
+
+                    <RadioButtonLabel
+                      obj={obj}
+                      index={i}
+                      labelHorizontal={true}
+                      onPress={() => {
+                        dispatch(
+                          setTab({
+                            tab: 'quiz',
+                            rank: obj.value,
+                          }),
+                        );
+                        setRank(obj.value);
+                        dispatch(dialogClose());
+                      }}
+                      labelStyle={styles.message}
+                      labelWrapStyle={{}}
+                    />
+                    <RadioButtonInput
+                      obj={obj}
+                      index={i}
+                      isSelected={rank === obj.value}
+                      onPress={() => {
+                        dispatch(
+                          setTab({
+                            tab: 'quiz',
+                            rank: obj.value,
+                          }),
+                        );
+                        setRank(obj.value);
+                        dispatch(dialogClose());
+                      }}
+                      borderWidth={1}
+                      buttonOuterColor={'#fff'}
+                      buttonSize={25}
+                      buttonOuterSize={50}
+                      buttonStyle={{}}
+                      buttonWrapStyle={{left: 500}}
+                    />
+                  </RadioButton>
+                ))}
+                    </RadioForm>*/}
             </ScrollView>
           </View>
         </TouchableWithoutFeedback>

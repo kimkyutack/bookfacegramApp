@@ -26,6 +26,7 @@ import {
   dialogOpenSelect,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
+import {navigate} from '../../services/navigation';
 import Footer from '../../libs/footer';
 import {
   screenHeight,
@@ -84,7 +85,23 @@ export default function Examtest({route, navigation}) {
           <Button
             title="정답 제출하기"
             color="black"
-            onPress={() => (answer === 3 ? alert('정답') : alert('오답'))}
+            onPress={() =>
+              answer === 3
+                ? navigate(routes.home, {
+                    screen: routes.topActivity,
+                    params: {
+                      type: 'examright',
+                      key: Date.now(),
+                    },
+                  })
+                : navigate(routes.home, {
+                    screen: routes.topActivity,
+                    params: {
+                      type: 'examwrong',
+                      key: Date.now(),
+                    },
+                  })
+            }
           />
         </View>
       </ScrollView>

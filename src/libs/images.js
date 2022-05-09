@@ -34,7 +34,7 @@ export default {
   scrollTop: require('../assets/images/top.png'),
   exam_body1: require('../assets/images/exam_body1.png'),
   exam_body2: require('../assets/images/exam_body2.png'),
-  exam_top: require('../assets/images/exam_top.png'),
+  exam_top: require('../assets/images/exam_top.jpg'),
   hamberger: require('../assets/images/top-hamberger.png'),
   camera: require('../assets/images/top-camera.png'),
   userCamera: require('../assets/images/camera.png'),

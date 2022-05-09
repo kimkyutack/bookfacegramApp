@@ -28,7 +28,7 @@ export default function EventDetail({route, navigation}) {
   const [raplyContent, setReplyContent] = useState('');
   const routeParams = route.params.item;
   const isFocused = useIsFocused();
-
+  console.log(routeParams);
   useEffect(() => {
     if (isFocused) {
       getEventList();

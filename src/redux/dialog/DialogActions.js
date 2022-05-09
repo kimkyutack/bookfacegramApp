@@ -43,6 +43,7 @@ export const dialogOpenGrade =
     from,
     bookIdx,
     viewType,
+    grade,
   }) =>
   dispatch => {
     dispatch({
@@ -55,6 +56,7 @@ export const dialogOpenGrade =
       from,
       bookIdx,
       viewType,
+      grade,
     });
   };
 export const dialogOpenAction =

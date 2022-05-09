@@ -15,6 +15,8 @@ import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
 import Kbstest from '../activity/kbstest';
 import Examtest from '../activity/examtest';
+import Examright from '../activity/examright';
+import Examwrong from '../activity/examwrong';
 import Bookcontest from '../activity/bookcontest';
 import ActivityMain from '../activity/ActivityMain';
 import {
@@ -36,6 +38,10 @@ export default function TopActivity({route}) {
         <Examtest route={route} />
       ) : route.params.type === 'contest' ? (
         <Bookcontest route={route} />
+      ) : route.params.type === 'examright' ? (
+        <Examright route={route} />
+      ) : route.params.type === 'examwrong' ? (
+        <Examwrong route={route} />
       ) : (
         <ActivityMain route={route} />
       )}

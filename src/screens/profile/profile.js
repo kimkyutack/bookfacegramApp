@@ -75,21 +75,24 @@ export default function Profile({route, navigation}) {
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
   const [emailError, setEmailError] = useState('');
+  const [length, setLength] = useState('');
   let infograde = user.grade * 1;
   let grade = '';
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      alert(JSON.stringify(user));
-      setPhone(user?.handphone ? user?.handphone : '');
-      setEmail(user?.email ? user?.email : '');
+      console.log(length);
+      if (length.length < 13) {
+        setPhone(user?.handphone ? user?.handphone : '');
+        setEmail(user?.email ? user?.email : '');
+      }
 
       //alert(JSON.stringify(user));
       //Put your Data loading function here instead of my loadData()
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [phone]);
 
   switch (infograde) {
     case 2:
@@ -331,6 +334,7 @@ export default function Profile({route, navigation}) {
             inputStyle={styles.inputValue}
             value={autoHypenPhone(phone)}
             onChange={eve => {
+              setLength(eve);
               setPhone(eve);
               setSaveButtonDisabled(true);
             }}

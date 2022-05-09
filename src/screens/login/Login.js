@@ -705,11 +705,6 @@ export default function Login({route}) {
             source={images.toapingIcon}
             onPress={signInWithToaping}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            토핑
-          </TextWrap>
         </View>
         <View>
           <Avatar
@@ -717,11 +712,6 @@ export default function Login({route}) {
             source={images.kakaoIcon}
             onPress={signInWithKakao}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            카카오톡
-          </TextWrap>
         </View>
         <View>
           <Avatar
@@ -729,24 +719,14 @@ export default function Login({route}) {
             source={images.naverIcon}
             onPress={signInWithNaver}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            네이버
-          </TextWrap>
         </View>
-        <View>
+        {/*<View>
           <Avatar
             style={styles.avator}
             source={images.facebookIcon}
             onPress={signWithFacebook}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            페이스북
-          </TextWrap>
-        </View>
+  </View>*/}
 
         <View>
           <Avatar
@@ -754,11 +734,6 @@ export default function Login({route}) {
             source={images.googleIcon}
             onPress={signInWithGoogle}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            구글
-          </TextWrap>
         </View>
 
         <View>
@@ -767,11 +742,6 @@ export default function Login({route}) {
             source={images.appleIcon}
             onPress={signInWithApple}
           />
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
-            style={styles.avatarTitle}>
-            애플
-          </TextWrap>
         </View>
       </View>
     </RootLayout>
@@ -799,6 +769,8 @@ const styles = StyleSheet.create({
   rowCenter: {
     flexDirection: 'row',
     marginTop: heightPercentage(71),
+    borderBottomWidth: 2,
+    borderBottomColor: colors.white,
   },
   rowAround: {
     marginTop: heightPercentage(23),
@@ -827,9 +799,8 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(17),
     fontFamily: fonts.kopubWorldDotumProMedium,
     color: '#ffffff',
-    borderBottomWidth: 0.2,
+    bottom: heightPercentage(2),
     textAlign: 'center',
-    borderBottomColor: colors.white,
   },
   input: {
     marginTop: heightPercentage(33.5),
