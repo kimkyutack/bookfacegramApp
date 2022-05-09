@@ -14,6 +14,7 @@ export default function BookDetailInfo({
   buy_price,
   publish_dt,
   publisher,
+  publisher_nm,
   summary,
   writer,
 }) {
@@ -29,7 +30,7 @@ export default function BookDetailInfo({
             저자 | {writer}
           </TextWrap>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
-            출판사 | {book_nm}
+            출판사 | {publisher ? publisher : publisher_nm}
           </TextWrap>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             출판년도 | {publish_dt ? publish_dt : publisher ? publisher : ''}
