@@ -32,14 +32,12 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   const [rednerData, setRenderData] = useState([]);
   const [type, setType] = useState('new');
   const [start, setStart] = useState(30);
-  const [morenewBook, setNewBook] = useState(
-    listTab.listTab.grade === null ? newBook : kbsBook,
-  );
+  const [morenewBook, setNewBook] = useState([]);
   const [state, setState] = useState({
     req: listTab.listTab.grade === null ? newBook : kbsBook,
     page: 1,
   });
-  console.log(listTab.listTab.grade);
+
   const fetchRequested = async startpage => {
     try {
       setLoading(true);
@@ -66,27 +64,24 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
     }
   };
   useEffect(() => {
+    console.log(listTab.listTab.grade);
     setNewBook(listTab.listTab.grade === null ? newBook : kbsBook);
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       if (listTab.listTab.grade === null) {
         setType('new');
-        setState({req: morenewBook, page: 1});
+        setState({req: newBook, page: 1});
       } else if (listTab.listTab.grade === '1급') {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(
-            x => x.grade === '1급' || x.grade === '준1급',
-          ),
+          req: kbsBook?.filter(x => x.grade === '1급' || x.grade === '준1급'),
           page: 1,
         });
       } else if (listTab.listTab.grade === '2급') {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(
-            x => x.grade === '2급' || x.grade === '준2급',
-          ),
+          req: kbsBook?.filter(x => x.grade === '2급' || x.grade === '준2급'),
           page: 1,
         });
       } else if (
@@ -95,9 +90,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
       ) {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(
-            x => x.grade === '3급' || x.grade === '준3급',
-          ),
+          req: kbsBook?.filter(x => x.grade === '3급' || x.grade === '준3급'),
           page: 1,
         });
       } else if (
@@ -106,9 +99,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
       ) {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(
-            x => x.grade === '4급' || x.grade === '준4급',
-          ),
+          req: kbsBook?.filter(x => x.grade === '4급' || x.grade === '준4급'),
           page: 1,
         });
       } else if (
@@ -117,15 +108,13 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
       ) {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(
-            x => x.grade === '5급' || x.grade === '준5급',
-          ),
+          req: kbsBook?.filter(x => x.grade === '5급' || x.grade === '준5급'),
           page: 1,
         });
       } else if (listTab.listTab.grade === '누리급') {
         setType('kbs');
         setState({
-          req: morenewBook?.filter(x => x.grade === '누리급'),
+          req: kbsBook?.filter(x => x.grade === '누리급'),
           page: 1,
         });
       }
