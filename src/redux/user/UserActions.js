@@ -15,12 +15,12 @@ import {clearItem, getItem} from '../../services/preference';
 import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
-import {
-  LoginManager,
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk-next';
+// import {
+//   LoginManager,
+//   AccessToken,
+//   GraphRequest,
+//   GraphRequestManager,
+// } from 'react-native-fbsdk-next';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 GoogleSignin.configure({
   scopes: [
@@ -47,6 +47,7 @@ export const userUpdate = dispatch => {
     .then(res => {
       if (res.status === 'SUCCESS') {
         //alert(JSON.stringify(res));
+
         dispatch({
           type: userActionType.update,
           user: {...res.data},
@@ -63,6 +64,12 @@ export const userUpdate = dispatch => {
     });
 };
 
+export const userUpdate2 =
+  ({user, updated = true}) =>
+  dispatch => {
+    dispatch({type: userActionType.update, user});
+  };
+
 export const userSignOut = userId => async dispatch => {
   const platformType = await getItem('platformType');
   await clearItem('accessToken');
@@ -78,29 +85,30 @@ export const userSignOut = userId => async dispatch => {
     NaverLogin.logout();
   } else if (platformType === 'google') {
     await GoogleSignin.signOut();
-  } else if (platformType === 'facebook') {
-    try {
-      let tokenObj = await AccessToken.getCurrentAccessToken();
-      let current_access_token = tokenObj.accessToken.toString();
-      let facebookLogout = new GraphRequest(
-        'me/permissions/',
-        {
-          accessToken: current_access_token,
-          httpMethod: 'DELETE',
-        },
-        (error, result) => {
-          if (error) {
-            throw error?.toString();
-          } else {
-            LoginManager.logOut();
-          }
-        },
-      );
-      new GraphRequestManager().addRequest(facebookLogout).start();
-    } catch (e) {
-      // console.log(e);
-    }
   }
+  // else if (platformType === 'facebook') {
+  //   try {
+  //     let tokenObj = await AccessToken.getCurrentAccessToken();
+  //     let current_access_token = tokenObj.accessToken.toString();
+  //     let facebookLogout = new GraphRequest(
+  //       'me/permissions/',
+  //       {
+  //         accessToken: current_access_token,
+  //         httpMethod: 'DELETE',
+  //       },
+  //       (error, result) => {
+  //         if (error) {
+  //           throw error?.toString();
+  //         } else {
+  //           LoginManager.logOut();
+  //         }
+  //       },
+  //     );
+  //     new GraphRequestManager().addRequest(facebookLogout).start();
+  //   } catch (e) {
+  //     // console.log(e);
+  //   }
+  // }
 };
 
 export const userUpdateProfileImage = userId => async dispatch => {

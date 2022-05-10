@@ -33,13 +33,14 @@
     "axios": "^0.21.1",
     "base-64": "^0.1.0",
     "fbjs": "^3.0.4",
+    "jetifier": "^2.0.0",
     "jwt-decode": "^3.1.2",
     "moment-timezone": "^0.5.33",
     "prop-types": "^15.7.2",
     "query-string": "^7.0.1",
-    "react": "17.0.1",
+    "react": "17.0.2",
     "react-dom": "^17.0.2",
-    "react-native": "0.64.2",
+    "react-native": "0.65.2",
     "react-native-apple-authentication-android": "^1.0.6",
     "react-native-config": "^1.4.4",
     "react-native-default-preference": "^1.4.3",
@@ -81,8 +82,9 @@
     "eslint": "^7.29.0",
     "jest": "^27.0.5",
     "metro-react-native-babel-preset": "^0.66.0",
+    "react-native-codegen": "^0.0.7",
     "react-devtools": "^4.13.5",
-    "react-test-renderer": "17.0.1"
+    "react-test-renderer": "17.0.2"
   },
   "jest": {
     "preset": "react-native"

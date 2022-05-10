@@ -48,7 +48,7 @@ import {
 } from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {LoginManager, Profile} from 'react-native-fbsdk-next';
+// import {LoginManager, Profile} from 'react-native-fbsdk-next';
 
 export default function Login({route}) {
   const dispatch = useDispatch();
@@ -443,46 +443,46 @@ export default function Login({route}) {
     }
   };
 
-  const signWithFacebook = async () => {
-    LoginManager.logInWithPermissions(['public_profile']).then(
-      async function (result) {
-        if (result.isCancelled) {
-          dispatch(dialogError('Login cancelled'));
-        } else {
-          const profile = await Profile.getCurrentProfile();
-          if (profile === null) {
-            signWithFacebook();
-          } else {
-            try {
-              const {data, status} = await requestPost({
-                url: consts.apiUrl + '/auth/facebookLogin',
-                body: {
-                  platformType: 'facebook',
-                  memberId: profile.userID,
-                  email: profile.email,
-                  kor_nm: profile.name,
-                  profile_path: profile.imageURL,
-                },
-              });
-              if (status === 'SUCCESS') {
-                await setItem('accessToken', data.accessToken);
-                await setItem('refreshToken', data.refreshToken);
-                await setItem('platformType', 'facebook');
-                dispatch(userCheckToken);
-              } else {
-                setPasswordError('구글 로그인 에러');
-              }
-            } catch (e) {
-              // console.log(e);
-            }
-          }
-        }
-      },
-      function (error) {
-        dispatch(dialogError(error));
-      },
-    );
-  };
+  // const signWithFacebook = async () => {
+  //   LoginManager.logInWithPermissions(['public_profile']).then(
+  //     async function (result) {
+  //       if (result.isCancelled) {
+  //         dispatch(dialogError('Login cancelled'));
+  //       } else {
+  //         const profile = await Profile.getCurrentProfile();
+  //         if (profile === null) {
+  //           signWithFacebook();
+  //         } else {
+  //           try {
+  //             const {data, status} = await requestPost({
+  //               url: consts.apiUrl + '/auth/facebookLogin',
+  //               body: {
+  //                 platformType: 'facebook',
+  //                 memberId: profile.userID,
+  //                 email: profile.email,
+  //                 kor_nm: profile.name,
+  //                 profile_path: profile.imageURL,
+  //               },
+  //             });
+  //             if (status === 'SUCCESS') {
+  //               await setItem('accessToken', data.accessToken);
+  //               await setItem('refreshToken', data.refreshToken);
+  //               await setItem('platformType', 'facebook');
+  //               dispatch(userCheckToken);
+  //             } else {
+  //               setPasswordError('구글 로그인 에러');
+  //             }
+  //           } catch (e) {
+  //             // console.log(e);
+  //           }
+  //         }
+  //       }
+  //     },
+  //     function (error) {
+  //       dispatch(dialogError(error));
+  //     },
+  //   );
+  // };
 
   function b64DecodeUnicode(str) {
     return decodeURIComponent(

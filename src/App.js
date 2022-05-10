@@ -26,8 +26,10 @@ function App({}) {
     Keyboard.addListener('keyboardDidShow', showListenr);
 
     return () => {
-      Keyboard.removeListener('keyboardWillHide', hideListenr);
-      Keyboard.removeListener('keyboardWillShow', showListenr);
+      // Keyboard.removeListener('keyboardWillHide', hideListenr);
+      // Keyboard.removeListener('keyboardWillShow', showListenr);
+      Keyboard.remove('keyboardWillHide', hideListenr);
+      Keyboard.remove('keyboardWillShow', showListenr);
     };
   }, []);
 
