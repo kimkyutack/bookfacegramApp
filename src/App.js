@@ -27,8 +27,8 @@ function App({}) {
     LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
     return () => {
-      Keyboard.removeListener('keyboardWillHide', hideListenr);
-      Keyboard.removeListener('keyboardWillShow', showListenr);
+      Keyboard.remove('keyboardWillHide', hideListenr);
+      Keyboard.remove('keyboardWillShow', showListenr);
     };
   }, []);
 
