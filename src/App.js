@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Router from './Route';
 import {Provider, useDispatch, useSelector, shallowEqual} from 'react-redux';
 import store from './redux/store';
-import {Keyboard, StatusBar, Dimensions} from 'react-native';
+import {Keyboard, StatusBar, Dimensions, LogBox} from 'react-native';
 import {keyboardActionType} from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogGrade from './redux-components/dialog-grade/DialogGrade';
@@ -24,12 +24,11 @@ function App({}) {
 
     Keyboard.addListener('keyboardDidHide', hideListenr);
     Keyboard.addListener('keyboardDidShow', showListenr);
+    LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
     return () => {
-      // Keyboard.removeListener('keyboardWillHide', hideListenr);
-      // Keyboard.removeListener('keyboardWillShow', showListenr);
-      Keyboard.remove('keyboardWillHide', hideListenr);
-      Keyboard.remove('keyboardWillShow', showListenr);
+      Keyboard.removeListener('keyboardWillHide', hideListenr);
+      Keyboard.removeListener('keyboardWillShow', showListenr);
     };
   }, []);
 
