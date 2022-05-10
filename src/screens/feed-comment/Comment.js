@@ -18,6 +18,7 @@ import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
 import {requestGet, requestPost} from '../../services/network';
+import Footer from '../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -250,6 +251,7 @@ export default function Comment({route, navigation}) {
           )}
         </View>
       </View>
+      <Footer page="feed" />
     </RootLayout>
   );
 }
@@ -310,6 +312,7 @@ const styles = StyleSheet.create({
   avator: {
     resizeMode: 'cover',
     alignSelf: 'center',
+    bottom: 10,
   },
   cameraIcon: {
     width: widthPercentage(24),

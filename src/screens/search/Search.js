@@ -12,6 +12,7 @@ import {
 import {useRoute} from '@react-navigation/native';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import ListHeader from '../../components/list-header/ListHeader';
+import Footer from '../../libs/footer';
 import NoFound from '../../components/no-found/NoFound';
 import SearchBar from '../../components/search-bar/SearchBar';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -412,6 +413,7 @@ export default function Search({route, navigation}) {
           />
         )}
       </View>
+      <Footer page="search" />
     </RootLayout>
   );
 }

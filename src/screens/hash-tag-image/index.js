@@ -12,6 +12,7 @@ import images from '../../libs/images';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
+import Footer from '../../libs/footer';
 import {
   widthPercentage,
   heightPercentage,
@@ -102,6 +103,7 @@ export default function HashTagImage({route, navigation}) {
       <View style={styles.root}>
         <FeedTopTabs route={route} />
       </View>
+      <Footer page="feed" />
     </SafeAreaView>
   );
 }
