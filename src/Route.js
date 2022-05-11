@@ -54,6 +54,7 @@ import Intro3 from './screens/register-form/Intro3';
 import ToapingLogin from './screens/login/ToapingLogin';
 import CameraRollPicker from './screens/cameraroll-picker/CameraRollPicker';
 import PhotoEditor from './screens/photo-editor/PhotoEditor';
+import FeedBookEditor from './screens/feed-book/FeedBookEditor';
 
 import RNExitApp from 'react-native-exit-app';
 import {widthPercentage} from './services/util';
@@ -68,7 +69,7 @@ export default function Router() {
   const user = useSelector(s => s.user, shallowEqual);
   const dialog = useSelector(s => s.dialog, shallowEqual);
   const dispatch = useDispatch();
-
+  //console.log(user);
   useEffect(() => {
     if (user.inited && !user.signed) {
       reset(routes.login);
@@ -533,6 +534,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.photoEditor}
               component={PhotoEditor}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.feedBookEditor}
+              component={FeedBookEditor}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

@@ -165,7 +165,7 @@ export default function HashTagNewestImage({route, navigation}) {
   return newestHashTags?.length === 0 ? (
     <View style={styles.root}>
       <TextWrap>
-        {newestErrorMessage ? newestErrorMessage : '검색 결과가 없습니다.'}
+        {newestErrorMessage ? newestErrorMessage : '검색 22결과가 없습니다.'}
       </TextWrap>
     </View>
   ) : (

@@ -193,7 +193,10 @@ export default function FeedBook({route, navigation}) {
   };
 
   const handleRefresh = async () => {
-    const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+    const newTime = new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\..*/, '');
     setRefreshing(true);
     setPage(1);
     setTime(newTime);

@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
 import {
+  Alert,
   FlatList,
   SafeAreaView,
   View,
@@ -91,9 +92,10 @@ export default function FeedBookFeed({route, navigation}) {
     if (mount && isFocused) {
       if (route.params?.isNewFeed) {
         listRef.current?.scrollToOffset({y: 0.1, animated: false});
-        const newTime = moment()
-          .add(20, 'second')
-          .format('YYYY-MM-DD HH:mm:ss');
+        const newTime = new Date(+new Date() + 3240 * 10000)
+          .toISOString()
+          .replace('T', ' ')
+          .replace(/\..*/, '');
         setTime(newTime);
         fetchUserFeed('reset', newTime);
       } else {
@@ -113,7 +115,14 @@ export default function FeedBookFeed({route, navigation}) {
   }, [route.params?.key, route.params?.isNewFeed]);
 
   const feedEdit = feedIdx => {
-    dispatch(dialogError('수정 페이지 제작중...'));
+    navigation.navigate(routes.feedBookEditor, {
+      image: undefined,
+      isNewFeed: false,
+      key: Date.now(),
+      name: 'gallery',
+      idx: feedIdx,
+    });
+    //dispatch(dialogError('수정 페이지 제작중...'));
   };
 
   const feedDelete = feedIdx => {
@@ -122,11 +131,23 @@ export default function FeedBookFeed({route, navigation}) {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          const newTime = moment()
-            .add(20, 'second')
-            .format('YYYY-MM-DD HH:mm:ss');
+          Alert.alert('삭제되었습니다.');
+          const newTime = new Date(+new Date() + 3240 * 10000)
+            .toISOString()
+            .replace('T', ' ')
+            .replace(/\..*/, '');
           setTime(newTime);
           fetchUserFeed('reset', newTime);
+          if (userBooks?.length - 1 === 0) {
+            navigation.navigate(routes.feedBookImage, {
+              screen: routes.feedBookUserImage,
+              params: {
+                memberId: user.member_id,
+                memberIdx: user.member_idx,
+                key: Date.now(),
+              },
+            });
+          }
         } else if (res.status === 'FAIL') {
           // error 일때 해야함
         } else {
@@ -316,7 +337,10 @@ export default function FeedBookFeed({route, navigation}) {
   };
 
   const handleRefresh = async () => {
-    const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+    const newTime = new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\..*/, '');
     setRefreshing(true);
     setTime(newTime);
     if (route.params?.infoType === 'user') {

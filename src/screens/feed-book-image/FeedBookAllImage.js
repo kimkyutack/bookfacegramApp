@@ -51,7 +51,11 @@ export default function FeedBookAllImage({route, navigation}) {
     let mount = true;
     if (mount) {
       listRef.current?.scrollToOffset({y: 0.1, animated: false});
-      const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+      //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+      const newTime = new Date(+new Date() + 3240 * 10000)
+        .toISOString()
+        .replace('T', ' ')
+        .replace(/\..*/, '');
       setTime(newTime);
       fetchWholeData('reset', newTime);
     }
