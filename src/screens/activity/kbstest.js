@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   img1: {
-    resizeMode: 'contain',
     width: '90%',
     height: '100%',
   },

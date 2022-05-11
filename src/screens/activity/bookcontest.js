@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   img1: {
     resizeMode: 'contain',
     width: '90%',
-    height: screenHeight * 2.1,
+    height: screenHeight * 2,
   },
   searchBar: {
     marginHorizontal: 18,
