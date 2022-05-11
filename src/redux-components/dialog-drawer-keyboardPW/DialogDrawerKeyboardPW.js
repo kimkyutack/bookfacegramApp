@@ -102,6 +102,8 @@ export default function DialogDrawerKeyBoardPW({}) {
       .then(res => {
         if (res.status === 'SUCCESS') {
           dispatch(dialogError('수정되었습니다.'));
+          setPassword('');
+          setPasswordConfirm('');
         } else if (res.status === 'FAIL') {
           dispatch(dialogError(res.data?.msg || 'fail'));
         } else {
@@ -305,8 +307,9 @@ const styles = StyleSheet.create({
     color: colors.text,
     width: screenWidth,
     marginTop: heightPercentage(14),
+    paddingTop: heightPercentage(14),
     paddingLeft: widthPercentage(20),
-    paddingRight: widthPercentage(28),
+    paddingRight: widthPercentage(20),
     fontFamily: fonts.kopubWorldDotumProMedium,
   },
   inputContainer: {

@@ -89,7 +89,7 @@ export default function Profile({route, navigation}) {
     });
 
     return unsubscribe;
-  }, [navigate, user.handphone, user.email]);
+  }, [navigate, user.handphone, user.email, user?.profile_path]);
 
   useEffect(() => {
     console.log(JSON.stringify(user));
@@ -264,7 +264,7 @@ export default function Profile({route, navigation}) {
         <View style={styles.userInfoContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(userUpdateProfileImage(user.member_id));
+              dispatch(userUpdateProfileImage(user.profile_path));
             }}>
             <Avatar
               size={84}
