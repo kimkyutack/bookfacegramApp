@@ -174,8 +174,12 @@ export default function Search({route, navigation}) {
   };
 
   const handleSearch = () => {
-    if (text?.length < 2) {
-      dispatch(dialogOpenMessage({message: '두글자 이상 입력해주세요.'}));
+    if (text.replace(/ /g, '')?.length < 1) {
+      dispatch(
+        dialogOpenMessage({
+          message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.',
+        }),
+      );
     } else {
       if (tabIndex === 0) {
         fetchAccount();
@@ -185,7 +189,7 @@ export default function Search({route, navigation}) {
             list = JSON.parse(d);
             list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
           }
-          list.push({memberId: text});
+          list.push({memberId: text.replace(/ /g, '')});
           setItem('accountLocal', JSON.stringify(list));
         });
       } else if (tabIndex === 1) {
@@ -196,7 +200,7 @@ export default function Search({route, navigation}) {
             list = JSON.parse(d);
             list = [...new Set(list.map(JSON.stringify))].map(JSON.parse);
           }
-          list.push({memberId: text});
+          list.push({memberId: text.replace(/ /g, '')});
           setItem('hashTagLocal', JSON.stringify(list));
         });
       }
@@ -413,7 +417,7 @@ export default function Search({route, navigation}) {
           />
         )}
       </View>
-      <Footer page="search" />
+      <Footer page="feed" />
     </RootLayout>
   );
 }

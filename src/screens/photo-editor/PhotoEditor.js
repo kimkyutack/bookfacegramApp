@@ -22,6 +22,7 @@ import images from '../../libs/images';
 import routes from '../../libs/routes';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
+import Footer from '../../libs/footer';
 import {
   fontPercentage,
   heightPercentage,
@@ -267,13 +268,52 @@ export default function PhotoEditor({route, navigation}) {
                 <TextWrap
                   style={styles.hashTagTitle}
                   font={fonts.kopubWorldDotumProBold}>
+                  #도서 상세정보 입력
+                </TextWrap>
+                <InputWrap
+                  inputStyle={{
+                    fontSize: fontPercentage(12),
+                    lineHeight: fontPercentage(19),
+                    color: '#858585',
+                    fontFamily: fonts.kopubWorldDotumProBold,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#333333',
+                  }}
+                  placeholder="#책제목"
+                  placeholderTextColor="#acacac"
+                  placeholderSize={fontPercentage(12)}
+                />
+                <InputWrap
+                  inputStyle={{
+                    fontSize: fontPercentage(12),
+                    lineHeight: fontPercentage(19),
+                    color: '#858585',
+                    fontFamily: fonts.kopubWorldDotumProBold,
+                    borderBottomWidth: 0.5,
+                    borderBottomColor: '#333333',
+                  }}
+                  placeholder="#저자명"
+                  placeholderTextColor="#acacac"
+                  placeholderSize={fontPercentage(12)}
+                />
+                <TextWrap
+                  font={fonts.kopubWorldDotumProLight}
+                  style={styles.customElement2}>
+                  *상세정보를 입력하시면 정확한 나만의 도서를 추천받을 수
+                  있습니다.
+                </TextWrap>
+              </View>
+              <View style={styles.hashTagContianer}>
+                <TextWrap
+                  style={styles.hashTagTitle}
+                  font={fonts.kopubWorldDotumProBold}>
                   #나만의 해시태그 입력
                 </TextWrap>
 
                 <TagInput
                   updateState={setTagHandle}
                   tags={tags}
-                  placeholder="#책제목"
+                  placeholder="#"
                   containerStyle={{
                     width: screenWidth,
                     paddingHorizontal: 10,
@@ -332,6 +372,7 @@ export default function PhotoEditor({route, navigation}) {
           }}
         />
       )}
+      <Footer />
     </RootLayout>
   );
 }
@@ -435,7 +476,6 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   tagText: {
-    fontSize: fontPercentage(11),
     color: '#858585',
     fontFamily: fonts.kopubWorldDotumProBold,
   },
@@ -450,13 +490,18 @@ const styles = StyleSheet.create({
   hashTagInput: {
     borderBottomWidth: 0.5,
     borderBottomColor: '#333333',
-    height: 35,
     marginTop: 10,
     flexDirection: 'row',
   },
   customElement: {
     color: colors.red,
-    paddingLeft: widthPercentage(6),
+    paddingLeft: widthPercentage(5),
+    fontSize: fontPercentage(10),
+  },
+  customElement2: {
+    width: screenWidth,
+    paddingLeft: widthPercentage(10),
+    color: colors.blue,
     fontSize: fontPercentage(10),
   },
 });
