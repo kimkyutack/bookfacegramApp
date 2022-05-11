@@ -6,6 +6,7 @@ export const dialogActionType = {
   openDrawer: 'dialog/openDrawer',
   openGrade: 'dialog/openGrade',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
+  openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
   close: 'dialog/close',
 };
 
@@ -142,6 +143,17 @@ export const dialogOpenDrawerKeyBoard =
       currentDrawerIndex,
       bookIdx,
       viewType,
+    });
+  };
+
+export const dialogOpenDrawerKeyBoardPW =
+  ({title = '', buttonTitle = '등록', text = ''}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openDrawerKeyBoardPW,
+      title,
+      buttonTitle,
+      text,
     });
   };
 

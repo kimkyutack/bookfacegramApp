@@ -40,28 +40,21 @@ export const userActionType = {
   init: 'user/init',
 };
 
-export const userUpdate = dispatch => {
-  const {data, status} = requestGet({
-    url: consts.apiUrl + '/mypage/info',
-  })
-    .then(res => {
-      if (res.status === 'SUCCESS') {
-        //alert(JSON.stringify(res));
-
-        dispatch({
-          type: userActionType.update,
-          user: {...res.data},
-        });
-      } else if (res.status === 'FAIL') {
-        // error 일때 해야함
-        dispatch(dialogError(res.data.msg));
-      } else {
-      }
-    })
-    .catch(error => {
-      dispatch(dialogError(error));
-      // error 일때 해야함
+export const userUpdate = async dispatch => {
+  try {
+    const {data, status} = await requestGet({
+      url: consts.apiUrl + '/mypage/info',
     });
+
+    //console.log(data);
+    if (status === 'FAIL') {
+      throw 'member is null';
+    } else if (status === 'SUCCESS') {
+      dispatch({type: userActionType.update, user: data});
+    }
+  } catch (error) {
+    dispatch({type: userActionType.init});
+  }
 };
 
 export const userUpdate2 =
@@ -153,7 +146,7 @@ export const userUpdateProfileImage = userId => async dispatch => {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          alert(res.status);
+          console.log(res.status);
           dispatch({
             type: userActionType.update,
             user: user,

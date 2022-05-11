@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     bottom: '1%',
   },
   root2: {
+    alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     height: screenHeight * 2,
     flexDirection: 'row',
-    top: heightPercentage(-15),
   },
   font: {
     left: widthPercentage(20),
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   img1: {
-    resizeMode: 'contain',
     width: '90%',
     height: '100%',
   },
