@@ -124,7 +124,7 @@ export default function HashTagNewestImage({route, navigation}) {
           source={{
             uri: item.feedImgName?.length
               ? consts.imgUrl + '/feedBook/' + item.feedImgName[0]
-              : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
+              : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
             priority: FastImage.priority.normal,
           }}
           resizeMode={FastImage.resizeMode.cover}
@@ -165,7 +165,7 @@ export default function HashTagNewestImage({route, navigation}) {
   return newestHashTags?.length === 0 ? (
     <View style={styles.root}>
       <TextWrap>
-        {newestErrorMessage ? newestErrorMessage : '검색 결과가 없습니다.'}
+        {newestErrorMessage ? newestErrorMessage : '검색 22결과가 없습니다.'}
       </TextWrap>
     </View>
   ) : (

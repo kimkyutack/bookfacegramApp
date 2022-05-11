@@ -103,12 +103,19 @@ export default function CameraRollPicker({navigation}) {
             </TextWrap>
           ),
           onPress: () =>
-            navigation.navigate(routes.photoEditor, {
-              image: convertFileArr,
-              isNewFeed: true,
-              key: Date.now(),
-              name: 'gallery',
-            }),
+            params.type === 'edit'
+              ? navigation.navigate(routes.feedBookEditor, {
+                  image: convertFileArr,
+                  isNewFeed: true,
+                  key: Date.now(),
+                  name: 'gallery',
+                })
+              : navigation.navigate(routes.photoEditor, {
+                  image: convertFileArr,
+                  isNewFeed: true,
+                  key: Date.now(),
+                  name: 'gallery',
+                }),
         },
       }}>
       <FlatList

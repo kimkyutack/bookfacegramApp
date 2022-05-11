@@ -29,9 +29,10 @@ import {
   isIos,
   screenWidth,
   widthPercentage,
+  cameraEditItem,
 } from '../../services/util';
 import {goBack, navigate} from '../../services/navigation';
-import {requestFile, requestPost} from '../../services/network';
+import {requestGet, requestFile, requestPost} from '../../services/network';
 import {
   openSettings,
   PERMISSIONS,
@@ -42,11 +43,15 @@ import {
   dialogError,
   dialogOpenAction,
   dialogOpenMessage,
+  dialogOpenSelect,
 } from '../../redux/dialog/DialogActions';
 
-export default function PhotoEditor({route, navigation}) {
+export default function FeedBookEditor({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   const [contents, setContents] = useState('');
+  const [title, setTitle] = useState('');
+  const [writer, setWriter] = useState('');
+  const [Feedimage, setImage] = useState([{name: '', uri: ''}]);
   const [tags, setTags] = useState({tag: '', tagsArray: []});
   const {params} = useRoute();
   const dispatch = useDispatch();
@@ -54,8 +59,39 @@ export default function PhotoEditor({route, navigation}) {
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
   useEffect(() => {
-    setContents('');
-    setTags({tag: '', tagsArray: []});
+    requestGet({
+      url: consts.apiUrl + '/mypage/feedBook/my',
+      query: {
+        feedIdx: route.params.idx,
+      },
+    })
+      .then(res => {
+        if (res.status === 'SUCCESS') {
+          setImage([
+            {
+              name: res.data.feedImageName,
+              uri: res.data.feedImageName,
+            },
+          ]);
+          //console.log(Feedimage);
+          let contentReplace = res.data.contents.replace(
+            /(<br>|<br\/>|<br \/>)/g,
+            '\r\n',
+          );
+          setContents(contentReplace.replace(/&nbsp/g, ' '));
+          setTags({tag: '', tagsArray: res.data.feedHashtag});
+          if (res.data.title != null) {
+            setTitle(res.data.title);
+          }
+          if (res.data.writer != null) {
+            setWriter(res.data.writer);
+          }
+        }
+      })
+      .catch(error => {
+        setContents('');
+        setTags({tag: '', tagsArray: []});
+      });
   }, [params.key]);
 
   const save = async () => {
@@ -86,26 +122,33 @@ export default function PhotoEditor({route, navigation}) {
           // android file write on phone
           if (params?.name === 'gallery') {
             // 여러장
+            console.log('1');
             const formData = new FormData();
             const file = [];
-            for (let i = 0; i < params.image.length; i++) {
-              file.push({
-                uri: params.image[i].uri,
-                type: params.image[i].type,
-                name: params.image[i].name,
-              });
-              formData.append('file', file[i]);
+            if (params.image !== undefined) {
+              for (let i = 0; i < params.image.length; i++) {
+                file.push({
+                  uri: params.image[i].uri,
+                  type: params.image[i].type,
+                  name: params.image[i].name,
+                });
+                formData.append('file', file[i]);
+              }
             }
+            formData.append('feedIdx', route.params.idx);
             formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
             const {data, status} = await requestFile(
               {
-                url: consts.apiUrl + '/mypage/feedBook/my/upload',
-                method: 'post',
+                url: consts.apiUrl + '/mypage/feedBook/my',
+                method: 'put',
               },
               formData,
             );
+            console.log(data);
             if (status === 'SUCCESS') {
               setSaveButtonDisabled(false);
               navigate(routes.feedBookImage, {
@@ -124,20 +167,25 @@ export default function PhotoEditor({route, navigation}) {
 
             var formData = new FormData();
             var file = [];
-            file.push({
-              uri: params.image[0].uri,
-              type: params.image[0].type,
-              name: params.image[0].name,
-            });
+            if (params.image !== undefined) {
+              file.push({
+                uri: params.image[0].uri,
+                type: params.image[0].type,
+                name: params.image[0].name,
+              });
 
-            formData.append('file', file[0]);
+              formData.append('file', file[0]);
+            }
+            formData.append('feedIdx', route.params.idx);
             formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
             const {data, status} = await requestFile(
               {
-                url: consts.apiUrl + '/mypage/feedBook/my/upload',
-                method: 'post',
+                url: consts.apiUrl + '/mypage/feedBook/my',
+                method: 'put',
               },
               formData,
             );
@@ -195,17 +243,29 @@ export default function PhotoEditor({route, navigation}) {
         options: {
           name: 'complete',
           component: (
-            <TextWrap
-              font={fonts.kopubWorldDotumProBold}
-              style={
-                saveButtonDisabled
-                  ? styles.disabledTextIcon
-                  : styles.completeTextIcon
-              }>
-              등록
-            </TextWrap>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() =>
+                  dispatch(
+                    dialogOpenSelect({
+                      item: cameraEditItem(),
+                    }),
+                  )
+                }>
+                <Image style={styles.cameraIcon} source={images.camera} />
+              </TouchableOpacity>
+              <TextWrap
+                font={fonts.kopubWorldDotumProBold}
+                style={
+                  saveButtonDisabled
+                    ? styles.disabledTextIcon
+                    : styles.completeTextIcon
+                }
+                onPress={() => (saveButtonDisabled ? null : save())}>
+                수정
+              </TextWrap>
+            </View>
           ),
-          onPress: () => (saveButtonDisabled ? null : save()),
         },
       }}>
       {saveButtonDisabled ? (
@@ -222,8 +282,8 @@ export default function PhotoEditor({route, navigation}) {
         <FlatList
           ref={listRef}
           numColumns={4}
-          extraData={params.image}
-          data={params.image}
+          extraData={params.image === undefined ? Feedimage : params.image}
+          data={params.image === undefined ? Feedimage : params.image}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => {
             return index.toString();
@@ -279,6 +339,8 @@ export default function PhotoEditor({route, navigation}) {
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#333333',
                   }}
+                  value={title}
+                  onChange={setTitle}
                   placeholder="#책제목"
                   placeholderTextColor="#acacac"
                   placeholderSize={fontPercentage(12)}
@@ -292,6 +354,8 @@ export default function PhotoEditor({route, navigation}) {
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#333333',
                   }}
+                  value={writer}
+                  onChange={setWriter}
                   placeholder="#저자명"
                   placeholderTextColor="#acacac"
                   placeholderSize={fontPercentage(12)}
@@ -343,15 +407,6 @@ export default function PhotoEditor({route, navigation}) {
             </>
           }
           renderItem={({item, index}) => {
-            let ext = item.name.split('.').pop().toLowerCase();
-            if (ext === 'jpg') {
-              ext = 'jpeg';
-            }
-            const file = {
-              uri: item.uri,
-              type: `image/${ext}`,
-              name: item.name,
-            };
             return (
               <View
                 style={{
@@ -363,7 +418,15 @@ export default function PhotoEditor({route, navigation}) {
                 }}>
                 <View>
                   <Image
-                    source={{uri: item.uri}}
+                    source={
+                      params.image === undefined
+                        ? {
+                            uri:
+                              'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/books/feedBook/' +
+                              item.uri,
+                          }
+                        : {uri: item.uri}
+                    }
                     style={{width: '100%', height: '100%', resizeMode: 'cover'}}
                   />
                 </View>
@@ -378,6 +441,13 @@ export default function PhotoEditor({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  cameraIcon: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    resizeMode: 'cover',
+    marginRight: widthPercentage(10),
+    bottom: 3,
+  },
   input: {
     width: widthPercentage(291),
     maxHeight: heightPercentage(190),
@@ -437,6 +507,7 @@ const styles = StyleSheet.create({
   completeTextIcon: {
     // width: 24,
     // height: 24,
+    fontSize: fontPercentage(12),
     textAlign: 'right',
     bottom: -3,
     color: colors.blue,
@@ -444,6 +515,7 @@ const styles = StyleSheet.create({
   disabledTextIcon: {
     // width: 24,
     // height: 24,
+    fontSize: fontPercentage(12),
     textAlign: 'right',
     bottom: -3,
     color: colors.border,

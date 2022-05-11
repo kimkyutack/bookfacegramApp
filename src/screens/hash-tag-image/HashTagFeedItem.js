@@ -76,7 +76,7 @@ const renderItem = ({
             path={
               profile
                 ? profile
-                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
             }
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.info}>
@@ -211,7 +211,7 @@ const renderItem = ({
             path={
               userProfile
                 ? userProfile
-                : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
             }
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.reply}>

@@ -48,12 +48,14 @@ import {
 } from 'react-native-permissions';
 import {
   dialogError,
-  dialogOpenAction,
-  dialogOpenMessage,
+  dialogClose,
+  dialogOpenSelect,
+  dialogOpenDrawerKeyBoardPW,
 } from '../../redux/dialog/DialogActions';
 import {
   userUpdateProfileImage,
   userUpdate,
+  userUpdate2,
   userCheckToken,
 } from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
@@ -66,12 +68,8 @@ export default function Profile({route, navigation}) {
   const dispatch = useDispatch();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
-  const [password, setPassword] = useState(
-    user?.password ? user?.password : '',
-  );
-  const [passwordConfirm, setPasswordConfirm] = useState(
-    user?.password ? user?.password : '',
-  );
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
   const [emailError, setEmailError] = useState('');
@@ -80,19 +78,26 @@ export default function Profile({route, navigation}) {
   let grade = '';
 
   useEffect(() => {
+    console.log(JSON.stringify(user));
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log(length);
-      if (length.length < 13) {
-        setPhone(user?.handphone ? user?.handphone : '');
-        setEmail(user?.email ? user?.email : '');
-      }
+      setSaveButtonDisabled(false);
+      setPhone(user?.handphone ? user?.handphone : '');
 
-      //alert(JSON.stringify(user));
+      setEmail(user?.email ? user?.email : '');
+
       //Put your Data loading function here instead of my loadData()
     });
 
     return unsubscribe;
-  }, [phone]);
+  }, [navigate, user.handphone, user.email, user?.profile_path]);
+
+  useEffect(() => {
+    console.log(JSON.stringify(user));
+    setSaveButtonDisabled(false);
+    setPhone(user?.handphone ? user?.handphone : '');
+
+    setEmail(user?.email ? user?.email : '');
+  }, [user]);
 
   switch (infograde) {
     case 2:
@@ -259,7 +264,7 @@ export default function Profile({route, navigation}) {
         <View style={styles.userInfoContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(userUpdateProfileImage(user.member_id));
+              dispatch(userUpdateProfileImage(user.profile_path));
             }}>
             <Avatar
               size={84}
@@ -267,7 +272,7 @@ export default function Profile({route, navigation}) {
               path={
                 user?.profile_path
                   ? user?.profile_path
-                  : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
             />
 
@@ -334,7 +339,6 @@ export default function Profile({route, navigation}) {
             inputStyle={styles.inputValue}
             value={autoHypenPhone(phone)}
             onChange={eve => {
-              setLength(eve);
               setPhone(eve);
               setSaveButtonDisabled(true);
             }}
@@ -348,7 +352,7 @@ export default function Profile({route, navigation}) {
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.userInfo}>
-            연락처
+            이메일
           </TextWrap>
           <InputWrap2
             style={styles.inputStyle}
@@ -384,7 +388,16 @@ export default function Profile({route, navigation}) {
           </TextWrap>
         </View>
         <View style={styles.divider} />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(dialogClose());
+            dispatch(
+              dialogOpenDrawerKeyBoardPW({
+                title: '비밀번호변경',
+                buttonTitle: '등록',
+              }),
+            );
+          }}>
           <View style={styles.mainUser}>
             <TextWrap
               font={fonts.kopubWorldDotumProMedium}

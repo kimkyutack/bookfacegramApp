@@ -11,6 +11,8 @@ import DialogSelect from './redux-components/dialog-select/DialogSelect';
 import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/DialogKakaoLogin';
 import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
 import DialogDrawerKeyBoard from './redux-components/dialog-drawer-keyboard/DialogDrawerKeyBoard';
+import DialogDrawerKeyBoardPW from './redux-components/dialog-drawer-keyboardPW/DialogDrawerKeyboardPW';
+
 function App({}) {
   const dispatch = useDispatch();
 
@@ -43,6 +45,7 @@ function App({}) {
       <DialogKakaoLogin />
       <DialogDrawer />
       <DialogDrawerKeyBoard />
+      <DialogDrawerKeyBoardPW />
     </>
   );
 }

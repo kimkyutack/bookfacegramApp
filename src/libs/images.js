@@ -11,7 +11,7 @@ export default {
   naverIcon: require('../assets/images/naver_icon.png'),
   appleIcon: require('../assets/images/apple_icon.png'),
   toapingIcon: require('../assets/images/toaping_icon.png'),
-
+  publicIcon: require('../assets/images/public_icon.png'),
   footerHome1: require('../assets/images/footer_home.png'),
   footerHome2: require('../assets/images/footer_home2.png'),
   footerDraw1: require('../assets/images/footer_draw.png'),

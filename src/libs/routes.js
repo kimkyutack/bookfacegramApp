@@ -53,4 +53,5 @@ export default {
   toapingLogin: 'toapingLogin',
   cameraRollPicker: 'cameraRollPicker',
   photoEditor: 'photoEditor',
+  feedBookEditor: 'feedBookEditor',
 };

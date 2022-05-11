@@ -193,7 +193,10 @@ export default function FeedBook({route, navigation}) {
   };
 
   const handleRefresh = async () => {
-    const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+    const newTime = new Date(+new Date() + 3240 * 10000)
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\..*/, '');
     setRefreshing(true);
     setPage(1);
     setTime(newTime);
@@ -278,7 +281,7 @@ export default function FeedBook({route, navigation}) {
               path={
                 user?.profile_path
                   ? user?.profile_path
-                  : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
             />
           ),

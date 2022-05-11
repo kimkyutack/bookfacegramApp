@@ -21,6 +21,7 @@ import routes from '../../libs/routes';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import fonts from '../../libs/fonts';
+import Footer from '../../libs/footer';
 import {
   dialogError,
   dialogOpenMessage,
@@ -171,6 +172,7 @@ export default function SearchBook({route, navigation}) {
           )}
         </View>
       )}
+      <Footer />
     </RootLayout>
   );
 }

@@ -51,7 +51,11 @@ export default function FeedBookAllImage({route, navigation}) {
     let mount = true;
     if (mount) {
       listRef.current?.scrollToOffset({y: 0.1, animated: false});
-      const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+      //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+      const newTime = new Date(+new Date() + 3240 * 10000)
+        .toISOString()
+        .replace('T', ' ')
+        .replace(/\..*/, '');
       setTime(newTime);
       fetchWholeData('reset', newTime);
     }
@@ -112,7 +116,7 @@ export default function FeedBookAllImage({route, navigation}) {
           source={{
             uri: item.feedImgName?.length
               ? consts.imgUrl + '/feedBook/' + item.feedImgName[0]
-              : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
+              : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
             priority: FastImage.priority.normal,
           }}
           resizeMode={FastImage.resizeMode.cover}

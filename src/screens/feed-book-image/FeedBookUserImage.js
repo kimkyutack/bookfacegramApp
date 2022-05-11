@@ -64,8 +64,13 @@ export default function FeedBookUserImage({route, navigation}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
+      const newTime = new Date(+new Date() + 3240 * 10000)
+        .toISOString()
+        .replace('T', ' ')
+        .replace(/\..*/, '');
+      //console.log(today);
       listRef.current?.scrollToOffset({y: 0.1, animated: false});
-      const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
+      //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
       fetchUserData('reset', newTime);
     }

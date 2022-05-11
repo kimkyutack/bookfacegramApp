@@ -52,6 +52,11 @@ const initDialog = {
     onPress: null,
     from: '',
   },
+  drawerKeyBoardDialogPW: {
+    open: false,
+    title: '',
+    buttonTitle: '',
+  },
 };
 
 export default function dialog(state = initDialog, action) {
@@ -141,6 +146,15 @@ export default function dialog(state = initDialog, action) {
           from: action.from,
           viewType: action.viewType,
           bookIdx: action.bookIdx,
+        },
+      };
+    case dialogActionType.openDrawerKeyBoardPW:
+      return {
+        ...state,
+        drawerKeyBoardDialogPW: {
+          open: true,
+          title: action.title,
+          buttonTitle: action.buttonTitle,
         },
       };
     default:
