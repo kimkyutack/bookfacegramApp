@@ -28,7 +28,7 @@ const HashTagFeedItemCarousel = ({feedImgName, onPress}) => {
               source={{
                 uri: feedImgName?.length
                   ? consts.imgUrl + '/feedBook/' + url
-                  : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp',
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 priority: FastImage.priority.normal,
               }}
               resizeMode={FastImage.resizeMode.cover}

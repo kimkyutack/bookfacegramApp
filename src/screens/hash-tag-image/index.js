@@ -83,7 +83,7 @@ export default function HashTagImage({route, navigation}) {
               path={
                 user?.profile_path
                   ? user?.profile_path
-                  : 'https://img.insight.co.kr/static/2021/06/04/700/img_20210604103620_zga8c04k.webp'
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
             />
           ),
