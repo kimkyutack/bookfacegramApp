@@ -195,12 +195,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   message: {
-    lineHeight: screenHeight / 72,
     fontSize: fontPercentage(10),
     color: 'white',
     textAlign: 'left',
     paddingHorizontal: 20,
-    paddingVertical: screenHeight / 35,
   },
   label: {
     paddingHorizontal: 30,
@@ -229,5 +227,8 @@ const styles = StyleSheet.create({
     height: screenHeight / 15,
     marginLeft: widthPercentage(15),
     marginRight: widthPercentage(15),
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
 });
