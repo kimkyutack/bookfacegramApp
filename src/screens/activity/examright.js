@@ -158,10 +158,12 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenHeight / 5,
     bottom: heightPercentage(20),
+    resizeMode: 'stretch',
   },
   img2: {
     height: screenHeight / 2,
     width: screenWidth,
+    resizeMode: 'stretch',
   },
   img3: {
     width: screenWidth,

@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     width: '90%',
     height: screenHeight / 1.5,
     top: heightPercentage(12),
+    resizeMode: 'stretch',
   },
   searchBar: {
     marginHorizontal: 18,

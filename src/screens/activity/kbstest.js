@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: screenHeight * 1.85,
+    height: screenHeight * 2.2,
     flexDirection: 'row',
   },
   font: {
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   img1: {
+    resizeMode: 'stretch',
     width: '90%',
     height: '100%',
   },

@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     left: '5%',
     width: '90%',
     bottom: '1%',
-
   },
   root2: {
     alignItems: 'center',
@@ -75,10 +74,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   img1: {
-
     width: '90%',
     height: '97%',
-    bottom:heightPercentage(10),
+    bottom: heightPercentage(10),
+    resizeMode: 'stretch',
   },
   searchBar: {
     marginHorizontal: 18,
