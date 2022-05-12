@@ -55,7 +55,7 @@ export default function DialogDrawerKeyBoardPW({}) {
       (password.length < 8 || password.length > 20) &&
       !containPasswordCheck(password)
     ) {
-      setPasswordError('8~20자리 영문소문자+숫자 조합');
+      setPasswordError('8~20자리 영문소문자+숫자+특수문자 조합');
     } else if (
       password &&
       password.length >= 8 &&
@@ -71,7 +71,7 @@ export default function DialogDrawerKeyBoardPW({}) {
       passwordConfirm &&
       (passwordConfirm.length < 8 || passwordConfirm.length > 20)
     ) {
-      setPasswordConfirmError('8~20자리 영문소문자+숫자 조합');
+      setPasswordConfirmError('8~20자리 영문소문자+숫자+특수문자 조합');
     } else if (
       passwordConfirm &&
       passwordConfirm.length >= 8 &&
@@ -180,7 +180,7 @@ export default function DialogDrawerKeyBoardPW({}) {
                   passwordError
                     ? passwordError
                     : !password
-                    ? '8~20자리 영문소문자+숫자 조합'
+                    ? '8~20자리 영문소문자+숫자+특수문자 조합'
                     : '정상입력입니다.'
                 }
                 messageColor={

@@ -601,7 +601,7 @@ export function containPasswordCheck(str) {
     (?=.*[A-Z])       // should contain at least one upper case
     [a-zA-Z0-9]{8,}   // should contain at least 8 from the mentioned characters
   */
-  return str.match(/^(?=.*[0-9])(?=.*[a-z])([a-z0-9\d@$!%*#?&]{8,})$/);
+  return str.match(/^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[a-z\d@$!%*#?&]{8,}$/);
 }
 
 export function convertKorPhoneFormat(str) {
