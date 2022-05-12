@@ -334,7 +334,7 @@ export default function RegisterFormInfo({}) {
               passwordError
                 ? passwordError
                 : !password
-                ? '8~20자리 영문소문자+숫자 조합'
+                ? '8~20자리 영문+숫자+특수문자 조합'
                 : '정상입력입니다.'
             }
             messageColor={
@@ -358,7 +358,7 @@ export default function RegisterFormInfo({}) {
               passwordConfirmError
                 ? passwordConfirmError
                 : !passwordConfirm
-                ? '8~20자리 영문소문자+숫자 조합'
+                ? '8~20자리 영문+숫자+특수문자 조합'
                 : '비밀번호가 일치합니다.'
             }
             messageColor={
@@ -379,8 +379,10 @@ export default function RegisterFormInfo({}) {
             placeholder="핸드폰번호(필수)"
             placeholderTextColor="#acacac"
             number
-            message={phone ? 'ex) 01033334444' : '-없이 숫자만 입력'}
-            messageColor={phone ? colors.blue : colors.black}
+            message={
+              phone.length === 11 ? '정상입력입니다.' : '-없이 숫자만 입력'
+            }
+            messageColor={phone.length === 11 ? colors.blue : colors.black}
           />
           <InputWrap
             style={styles.input}

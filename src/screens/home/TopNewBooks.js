@@ -42,7 +42,7 @@ export default function TopNewBooks({route}) {
       }
       return status;
     } catch (error) {
-      dispatch(dialogError(error));
+      //dispatch(dialogError(error));
     }
   };
 
