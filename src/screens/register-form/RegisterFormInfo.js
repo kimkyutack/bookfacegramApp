@@ -75,7 +75,7 @@ export default function RegisterFormInfo({}) {
       (password.length < 8 || password.length > 20) &&
       !containPasswordCheck(password)
     ) {
-      setPasswordError('8~20자리 영문소문자+숫자 조합');
+      setPasswordError('8~20자리 영문+숫자+특수문자 조합');
     } else if (
       password &&
       password.length >= 8 &&
@@ -91,7 +91,7 @@ export default function RegisterFormInfo({}) {
       passwordConfirm &&
       (passwordConfirm.length < 8 || passwordConfirm.length > 20)
     ) {
-      setPasswordConfirmError('8~20자리 영문소문자+숫자 조합');
+      setPasswordConfirmError('8~20자리 영문+숫자+특수문자 조합');
     } else if (
       passwordConfirm &&
       passwordConfirm.length >= 8 &&

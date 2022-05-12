@@ -7,6 +7,7 @@ export const dialogActionType = {
   openGrade: 'dialog/openGrade',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
+  openDrawerKeyBoardWD: 'dialog/openDrawer/keyBoardWD',
   close: 'dialog/close',
 };
 
@@ -154,6 +155,16 @@ export const dialogOpenDrawerKeyBoardPW =
       title,
       buttonTitle,
       text,
+    });
+  };
+
+export const dialogOpenDrawerKeyBoardWD =
+  ({title = '', buttonTitle = '탈퇴 및 계정 삭제'}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openDrawerKeyBoardWD,
+      title,
+      buttonTitle,
     });
   };
 

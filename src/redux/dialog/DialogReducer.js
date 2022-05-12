@@ -57,6 +57,11 @@ const initDialog = {
     title: '',
     buttonTitle: '',
   },
+  drawerKeyBoardDialogWD: {
+    open: false,
+    title: '',
+    buttonTitle: '',
+  },
 };
 
 export default function dialog(state = initDialog, action) {
@@ -152,6 +157,15 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         drawerKeyBoardDialogPW: {
+          open: true,
+          title: action.title,
+          buttonTitle: action.buttonTitle,
+        },
+      };
+    case dialogActionType.openDrawerKeyBoardWD:
+      return {
+        ...state,
+        drawerKeyBoardDialogWD: {
           open: true,
           title: action.title,
           buttonTitle: action.buttonTitle,

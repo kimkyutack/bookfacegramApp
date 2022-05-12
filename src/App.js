@@ -12,6 +12,7 @@ import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/Dialo
 import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
 import DialogDrawerKeyBoard from './redux-components/dialog-drawer-keyboard/DialogDrawerKeyBoard';
 import DialogDrawerKeyBoardPW from './redux-components/dialog-drawer-keyboardPW/DialogDrawerKeyboardPW';
+import DialogDrawerKeyBoardWD from './redux-components/dialog-drawer-keyboardWD/DialogDrawerKeyBoardWD';
 
 function App({}) {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function App({}) {
       <DialogDrawer />
       <DialogDrawerKeyBoard />
       <DialogDrawerKeyBoardPW />
+      <DialogDrawerKeyBoardWD />
     </>
   );
 }

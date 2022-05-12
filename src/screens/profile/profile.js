@@ -51,34 +51,25 @@ import {
   dialogClose,
   dialogOpenSelect,
   dialogOpenDrawerKeyBoardPW,
+  dialogOpenDrawerKeyBoardWD,
 } from '../../redux/dialog/DialogActions';
-import {
-  userUpdateProfileImage,
-  userUpdate,
-  userUpdate2,
-  userCheckToken,
-} from '../../redux/user/UserActions';
+import {userUpdateProfileImage, userUpdate} from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
 
 export default function Profile({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
-  const inputRef = useRef();
-  const isFocused = useIsFocused();
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
   const [emailError, setEmailError] = useState('');
-  const [length, setLength] = useState('');
   let infograde = user.grade * 1;
   let grade = '';
 
   useEffect(() => {
-    console.log(JSON.stringify(user));
+    //console.log(JSON.stringify(user));
     const unsubscribe = navigation.addListener('focus', () => {
       setSaveButtonDisabled(false);
       setPhone(user?.handphone ? user?.handphone : '');
@@ -430,7 +421,16 @@ export default function Profile({route, navigation}) {
           </View>
         </TouchableOpacity>
         <View style={styles.divider} />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(dialogClose());
+            dispatch(
+              dialogOpenDrawerKeyBoardWD({
+                title: '회원탈퇴',
+                buttonTitle: '탈퇴 및 계정 삭제',
+              }),
+            );
+          }}>
           <View style={styles.mainUser}>
             <TextWrap
               font={fonts.kopubWorldDotumProMedium}

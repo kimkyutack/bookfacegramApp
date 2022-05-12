@@ -89,4 +89,6 @@ export default {
   drawerMove: require('../assets/images/drawer_move.png'),
   drawerDelete: require('../assets/images/drawer_delete.png'),
   drawerAdd: require('../assets/images/drawer_add.png'),
+  deleteMemberNo: require('../assets/images/withdraw_check1.png'),
+  deleteMemberOk: require('../assets/images/withdraw_check2.png'),
 };
