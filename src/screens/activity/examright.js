@@ -17,6 +17,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import {navigate} from '../../services/navigation';
+
 import colors from '../../libs/colors';
 import SearchBar from '../../components/search-bar/SearchBar';
 import Topbar from '../../components/topbar/Topbar';
@@ -55,7 +56,7 @@ export default function Examright({route, navigation}) {
         </View>
         <View style={styles.root2}>
           <Image style={styles.img1} source={images.exam_top} />
-          <Image style={styles.img1} source={images.right} />
+          <Image style={styles.img3} source={images.right} />
           <TextWrap
             style={{
               fontSize: fontPercentage(12),
@@ -119,27 +120,26 @@ const styles = StyleSheet.create({
   button: {
     left: '5%',
     width: '90%',
-    height: screenHeight / 10,
+    top: heightPercentage(20),
+    height: screenHeight / 11,
   },
   root2: {
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: screenHeight * 1.35,
+    height: screenHeight,
   },
   font: {
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
     fontSize: fontPercentage(12),
-    bottom: heightPercentage(150),
     fontWeight: 'bold',
   },
   exfont: {
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
     fontSize: fontPercentage(12),
-    bottom: heightPercentage(150),
     fontWeight: 'bold',
     color: 'gray',
   },
@@ -155,14 +155,20 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(11),
   },
   img1: {
-    resizeMode: 'contain',
     width: screenWidth,
+    height: screenHeight / 5,
     bottom: heightPercentage(20),
   },
   img2: {
-    resizeMode: 'contain',
+    height: screenHeight / 2,
     width: screenWidth,
-    bottom: heightPercentage(100),
+  },
+  img3: {
+    width: screenWidth,
+    height: screenHeight / 6,
+    resizeMode: 'contain',
+    bottom: heightPercentage(20),
+    top: 5,
   },
   searchBar: {
     marginHorizontal: 18,

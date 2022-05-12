@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: screenHeight * 2,
+    height: screenHeight * 1.85,
     flexDirection: 'row',
   },
   font: {

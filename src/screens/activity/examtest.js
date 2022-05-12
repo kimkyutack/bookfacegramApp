@@ -17,10 +17,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import colors from '../../libs/colors';
-import SearchBar from '../../components/search-bar/SearchBar';
-import Topbar from '../../components/topbar/Topbar';
 import images from '../../libs/images';
-import Radio from '../../components/radio/Radio';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import {
   dialogOpenSelect,
@@ -34,6 +31,7 @@ import {
   heightPercentage,
   fontPercentage,
   cameraItem,
+  screenWidth,
 } from '../../services/util';
 import routes from '../../libs/routes';
 
@@ -48,6 +46,15 @@ export default function Examtest({route, navigation}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={styles.root}>
+        <View
+          style={{
+            width: '90%',
+            left: widthPercentage(17),
+          }}>
+          <TextWrap style={styles.fonta}>
+            문해고사를 통해 문해력 UP 시키기!
+          </TextWrap>
+        </View>
         <View style={styles.root2}>
           <Image style={styles.img1} source={images.exam_title} />
         </View>
@@ -65,16 +72,16 @@ export default function Examtest({route, navigation}) {
           <RadioForm
             radio_props={radio_props}
             initial={0}
-            buttonSize={12}
-            buttonOuterSize={23}
-            borderWidth={0.5}
+            buttonSize={screenWidth / 70}
+            buttonOuterSize={screenWidth / 30}
+            borderWidth={0}
             buttonColor={'black'}
             selectedButtonColor={'black'}
             labelStyle={{
               fontSize: fontPercentage(12),
               textAlignVertical: 'center',
               height: screenHeight / 28,
-              bottom: heightPercentage(3.5),
+              bottom: screenHeight / 110,
             }}
             onPress={value => {
               setAnswer(value);
@@ -120,6 +127,11 @@ const styles = StyleSheet.create({
     width: '90%',
     bottom: '1%',
   },
+  fonta: {
+    fontSize: fontPercentage(12),
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
   root2: {
     width: '100%',
     flexDirection: 'row',
@@ -129,7 +141,7 @@ const styles = StyleSheet.create({
   font: {
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
-    top: heightPercentage(6),
+    top: heightPercentage(15),
     fontSize: fontPercentage(12),
     fontWeight: 'bold',
   },
@@ -145,9 +157,9 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(11),
   },
   img1: {
-    resizeMode: 'contain',
-    width: '100%',
+    width: '90%',
     height: screenHeight / 1.5,
+    top: heightPercentage(12),
   },
   searchBar: {
     marginHorizontal: 18,
