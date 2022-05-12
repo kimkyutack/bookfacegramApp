@@ -72,8 +72,8 @@ export default function Examtest({route, navigation}) {
           <RadioForm
             radio_props={radio_props}
             initial={0}
-            buttonSize={widthPercentage(6)}
-            buttonOuterSize={widthPercentage(11)}
+            buttonSize={screenWidth / 70}
+            buttonOuterSize={screenWidth / 30}
             borderWidth={0}
             buttonColor={'black'}
             selectedButtonColor={'black'}
@@ -81,7 +81,7 @@ export default function Examtest({route, navigation}) {
               fontSize: fontPercentage(12),
               textAlignVertical: 'center',
               height: screenHeight / 28,
-              bottom: heightPercentage(3.5),
+              bottom: screenHeight / 110,
             }}
             onPress={value => {
               setAnswer(value);
