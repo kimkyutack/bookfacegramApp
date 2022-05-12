@@ -463,6 +463,7 @@ const styles = StyleSheet.create({
   inputValue: {
     fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: fontPercentage(16),
+    color: colors.black,
   },
   image: {
     width: widthPercentage(30),
