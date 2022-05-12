@@ -54,8 +54,8 @@ export default function Intro2({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 0
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(0)}>
                 0권
@@ -70,8 +70,8 @@ export default function Intro2({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 1
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(1)}>
                 1권 ~ 2권
@@ -86,8 +86,8 @@ export default function Intro2({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 3
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(3)}>
                 3권 ~ 5권
@@ -102,8 +102,8 @@ export default function Intro2({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 6
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(6)}>
                 6권 ~ 9권
@@ -118,8 +118,8 @@ export default function Intro2({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 10
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(10)}>
                 10권 이상
@@ -141,7 +141,7 @@ export default function Intro2({route, navigation}) {
               //     : styles.disabledStyle
               // }
               disabledStyle={styles.disabledStyle2}
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               이전
             </ButtonBox>
           </View>
@@ -190,7 +190,7 @@ export default function Intro2({route, navigation}) {
               onPress={() =>
                 navigate('intro3', {...route.params, reading: pressButtonIdx})
               }
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               다음
             </ButtonBox>
           </View>
@@ -262,6 +262,16 @@ const styles = StyleSheet.create({
   buttonBoxSelected: {
     color: colors.white,
     fontSize: fontPercentage(11),
+  },
+  buttonBox3: {
+    color: colors.black,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
+  },
+  buttonBox3Selected: {
+    color: colors.white,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
   },
   buttonBox2: {
     color: colors.black,

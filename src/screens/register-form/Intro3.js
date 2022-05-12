@@ -108,8 +108,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('소설') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('소설')}>
                 소설
@@ -122,8 +122,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('시') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('시')}>
                 시
@@ -138,8 +138,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('에세이') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('에세이')}>
                 에세이
@@ -152,8 +152,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('인문학') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('인문학')}>
                 인문학
@@ -168,8 +168,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('역사') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('역사')}>
                 역사
@@ -182,8 +182,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('수학') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('수학')}>
                 수학
@@ -198,8 +198,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('과학') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('과학')}>
                 과학
@@ -212,8 +212,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('사회') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('사회')}>
                 사회
@@ -228,8 +228,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('경제') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('경제')}>
                 경제
@@ -242,8 +242,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('정치') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('정치')}>
                 정치
@@ -258,8 +258,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('운동') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('운동')}>
                 운동
@@ -272,8 +272,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('자기계발') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('자기계발')}>
                 자기계발
@@ -288,8 +288,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('만들기') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('만들기')}>
                 만들기
@@ -302,8 +302,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('외국어') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('외국어')}>
                 외국어
@@ -318,8 +318,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('여행') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('여행')}>
                 여행
@@ -332,8 +332,8 @@ export default function Intro3({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonArr.indexOf('만화') !== -1
-                    ? styles.buttonBoxSelected
-                    : styles.buttonBox
+                    ? styles.buttonBox3Selected
+                    : styles.buttonBox3
                 }
                 onPress={() => pressButton('만화')}>
                 만화
@@ -355,7 +355,7 @@ export default function Intro3({route, navigation}) {
               //     : styles.disabledStyle
               // }
               disabledStyle={styles.disabledStyle2}
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               이전
             </ButtonBox>
           </View>
@@ -402,7 +402,7 @@ export default function Intro3({route, navigation}) {
                   : styles.disabledStyle2
               }
               onPress={handleInfoRegister}
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               다음
             </ButtonBox>
           </View>
@@ -473,6 +473,16 @@ const styles = StyleSheet.create({
   buttonBoxSelected: {
     color: colors.white,
     fontSize: fontPercentage(11),
+  },
+  buttonBox3: {
+    color: colors.black,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
+  },
+  buttonBox3Selected: {
+    color: colors.white,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
   },
   buttonBox2: {
     color: colors.black,

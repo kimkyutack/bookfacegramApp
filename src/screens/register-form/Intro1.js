@@ -109,8 +109,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 2
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(2)}>
                 유치원
@@ -123,8 +123,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 3
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(3)}>
                 초등학교 1학년
@@ -139,8 +139,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 4
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(4)}>
                 초등학교 2학년
@@ -153,8 +153,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 5
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(5)}>
                 초등학교 3학년
@@ -169,8 +169,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 6
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(6)}>
                 초등학교 4학년
@@ -183,8 +183,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 7
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(7)}>
                 초등학교 5학년
@@ -199,8 +199,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 8
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(8)}>
                 초등학교 6학년
@@ -213,8 +213,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 9
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(9)}>
                 중학교 1학년
@@ -229,8 +229,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 10
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(10)}>
                 중학교 2학년
@@ -243,8 +243,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 11
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(11)}>
                 중학교 3학년
@@ -259,8 +259,8 @@ export default function Intro1({route, navigation}) {
                 style={styles.buttonBox}
                 fontStyle={
                   pressButtonIdx !== 12
-                    ? styles.buttonBox
-                    : styles.buttonBoxSelected
+                    ? styles.buttonBox3
+                    : styles.buttonBox3Selected
                 }
                 onPress={() => setPressButtonIdx(12)}>
                 고등학교 1학년
@@ -278,7 +278,7 @@ export default function Intro1({route, navigation}) {
               // onPress={() => setPressButtonIdx(12)}
               disabled={route.name === 'intro1' ? true : false}
               disabledStyle={styles.disabledStyle2}
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               이전
             </ButtonBox>
           </View>
@@ -325,7 +325,7 @@ export default function Intro1({route, navigation}) {
                   : styles.disabledStyle2
               }
               onPress={() => navigate('intro2', {grade: pressButtonIdx})}
-              fontStyle={styles.buttonBox}>
+              fontStyle={styles.buttonBox3}>
               다음
             </ButtonBox>
           </View>
@@ -392,10 +392,22 @@ const styles = StyleSheet.create({
   buttonBox: {
     color: colors.black,
     fontSize: fontPercentage(11),
+    height: heightPercentage(46),
+  },
+  buttonBox3: {
+    color: colors.black,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
   },
   buttonBoxSelected: {
     color: colors.white,
     fontSize: fontPercentage(11),
+    height: heightPercentage(46),
+  },
+  buttonBox3Selected: {
+    color: colors.white,
+    fontSize: fontPercentage(11),
+    lineHeight: heightPercentage(46),
   },
   buttonBox2: {
     color: colors.black,

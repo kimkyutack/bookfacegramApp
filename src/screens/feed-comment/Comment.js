@@ -309,11 +309,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(19),
     color: colors.border,
   },
-  avator: {
-    resizeMode: 'cover',
-    alignSelf: 'center',
-    bottom: 10,
-  },
+
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),

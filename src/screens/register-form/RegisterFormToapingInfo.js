@@ -245,8 +245,10 @@ export default function RegisterFormToapingInfo({}) {
             placeholder="핸드폰번호(필수)"
             placeholderTextColor="#acacac"
             number
-            message={phone ? 'ex) 01033334444' : '-없이 숫자만 입력'}
-            messageColor={phone ? colors.blue : colors.black}
+            message={
+              phone.length === 11 ? '정상입력입니다.' : '-없이 숫자만 입력'
+            }
+            messageColor={phone.length === 11 ? colors.blue : colors.black}
           />
           <InputWrap
             style={styles.input}
