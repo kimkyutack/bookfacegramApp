@@ -22,6 +22,7 @@ import {
   dialogOpenMessage,
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
+import {userUpdate} from '../../redux/user/UserActions';
 
 export default function Intro3({route, navigation}) {
   const scrollRef = useRef();
@@ -59,6 +60,7 @@ export default function Intro3({route, navigation}) {
           },
         });
         if (status === 'SUCCESS') {
+          dispatch(userUpdate);
           reset(routes.home);
         } else {
           dispatch(dialogOpenMessage({message: 'info update failed'}));

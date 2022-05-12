@@ -65,7 +65,8 @@ export default function Profile({route, navigation}) {
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
   const [emailError, setEmailError] = useState('');
-  let infograde = user.grade * 1;
+  const [grades, setGrades] = useState(user?.grade ? user?.grade : '');
+  let infograde = grades * 1;
   let grade = '';
 
   useEffect(() => {
@@ -80,7 +81,7 @@ export default function Profile({route, navigation}) {
     });
 
     return unsubscribe;
-  }, [navigate, user.handphone, user.email, user?.profile_path]);
+  }, [navigate, user.handphone, user.email, user?.profile_path, infograde]);
 
   useEffect(() => {
     console.log(JSON.stringify(user));
@@ -88,7 +89,7 @@ export default function Profile({route, navigation}) {
     setPhone(user?.handphone ? user?.handphone : '');
 
     setEmail(user?.email ? user?.email : '');
-  }, [user]);
+  }, [user.handphone, user.email, user?.profile_path, infograde]);
 
   switch (infograde) {
     case 2:
