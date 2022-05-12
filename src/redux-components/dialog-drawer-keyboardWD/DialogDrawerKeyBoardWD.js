@@ -174,6 +174,7 @@ export default function DialogDrawerKeyBoardWD({}) {
                               if (res.status === 'SUCCESS') {
                                 if (user.platform_type === 'kakao') {
                                   logout();
+                                  dispatch({type: 'clear'});
                                 } else {
                                   dispatch({type: 'clear'});
                                 }
