@@ -5,6 +5,7 @@ export const dialogActionType = {
   openKakaoLogin: 'dialog/openKakaoLogin',
   openDrawer: 'dialog/openDrawer',
   openGrade: 'dialog/openGrade',
+  openGradeProfile: 'dialog/openGradeProfile',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
   openDrawerKeyBoardWD: 'dialog/openDrawer/keyBoardWD',
@@ -59,6 +60,15 @@ export const dialogOpenGrade =
       bookIdx,
       viewType,
       grade,
+    });
+  };
+export const dialogOpenGradeProfile =
+  ({title = '확인', onPress}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openGradeProfile,
+      title,
+      onPress,
     });
   };
 export const dialogOpenAction =

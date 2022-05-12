@@ -49,7 +49,7 @@ import {
 import {
   dialogError,
   dialogClose,
-  dialogOpenSelect,
+  dialogOpenGradeProfile,
   dialogOpenDrawerKeyBoardPW,
   dialogOpenDrawerKeyBoardWD,
 } from '../../redux/dialog/DialogActions';
@@ -74,22 +74,28 @@ export default function Profile({route, navigation}) {
     const unsubscribe = navigation.addListener('focus', () => {
       setSaveButtonDisabled(false);
       setPhone(user?.handphone ? user?.handphone : '');
-
+      setGrades(user?.grade ? user?.grade : '');
       setEmail(user?.email ? user?.email : '');
 
       //Put your Data loading function here instead of my loadData()
     });
 
     return unsubscribe;
-  }, [navigate, user.handphone, user.email, user?.profile_path, infograde]);
+  }, [navigate, user.handphone, user.email, user?.profile_path, user?.grade]);
 
   useEffect(() => {
     console.log(JSON.stringify(user));
     setSaveButtonDisabled(false);
     setPhone(user?.handphone ? user?.handphone : '');
+    setGrades(user?.grade ? user?.grade : '');
 
     setEmail(user?.email ? user?.email : '');
-  }, [user.handphone, user.email, user?.profile_path, infograde]);
+  }, [user.handphone, user.email, user?.profile_path, user?.grade]);
+
+  useEffect(() => {
+    setGrades(route.params?.grade ? route.params?.grade : user?.grade);
+    setSaveButtonDisabled(true);
+  }, [route.params?.grade]);
 
   switch (infograde) {
     case 2:
@@ -313,11 +319,14 @@ export default function Profile({route, navigation}) {
             style={styles.userInfo}>
             학년
           </TextWrap>
-          <TextWrap
-            font={fonts.kopubWorldDotumProMedium}
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(dialogClose());
+              dispatch(dialogOpenGradeProfile({title: '확인'}));
+            }}
             style={styles.inputStyle}>
-            {grade}
-          </TextWrap>
+            <TextWrap font={fonts.kopubWorldDotumProMedium}>{grade}</TextWrap>
+          </TouchableOpacity>
         </View>
         <View style={styles.divider} />
         <View style={styles.mainSub}>
