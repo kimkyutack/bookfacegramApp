@@ -20,7 +20,7 @@ export default function FaqItem({
 
   useEffect(() => {
     setOpen(false);
-  }, [categoryType]);
+  }, [categoryType, isFocused]);
   return (
     <View>
       {categoryType === 'service'
