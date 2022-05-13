@@ -17,6 +17,7 @@ import TopNewBooksDetail from './home-detail/TopNewBooksDetail';
 import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 
 export default function TopNewBooks({route}) {
+  const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [newBook, setNewBook] = useState([]);
@@ -81,7 +82,7 @@ export default function TopNewBooks({route}) {
       setBanner([]);
       setTh(18);
     };
-  }, []);
+  }, [user?.grade]);
 
   return (
     <View style={styles.root}>
