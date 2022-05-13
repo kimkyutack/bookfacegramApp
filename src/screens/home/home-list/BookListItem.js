@@ -39,6 +39,7 @@ export default function BookListItem({
   th,
   gradeStyle,
   getDrawerList,
+  max,
 }) {
   const dispatch = useDispatch();
   return (
@@ -76,87 +77,14 @@ export default function BookListItem({
           </View>
         )
       ) : null}
-      <View style={styles.root}>
-        <TouchableOpacity
-          style={styles.main}
-          onPress={() => {
-            dispatch(
-              setTab({
-                tab: 'detail',
-                selectedBook: item.type === 'kbs' ? item.bookCd : item.book_cd,
-                viewType: item.type,
-              }),
-            );
-            navigate(routes.homeDetail, {
-              type: 'detail',
-            });
-          }}>
-          <View style={styles.mainContent}>
-            <BookMainCarouselImage item={item} style={styles.thumbnail} />
-            <View style={styles.info}>
-              <TextWrap
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                font={fonts.kopubWorldDotumProMedium}
-                style={styles.title}>
-                {item.type === 'kbs' ? item.bookNm : item.book_nm}
-              </TextWrap>
-              <TextWrap
-                style={styles.title}
-                font={fonts.kopubWorldDotumProLight}
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {item.writer}
-              </TextWrap>
-              <TextWrap
-                ellipsizeMode="tail"
-                font={fonts.kopubWorldDotumProLight}
-                numberOfLines={1}
-                style={styles.title}>
-                "{item.topic}"
-              </TextWrap>
-
-              <TextWrap
-                style={[styles.title, styles.date]}
-                font={fonts.kopubWorldDotumProMedium}>
-                {item.type === 'kbs'
-                  ? numFormat(item?.price)
-                  : numFormat(item?.buy_price)}
-                원
-              </TextWrap>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.buttonContainer}>
+      {max === 30 || index < max ? (
+        <View style={styles.root}>
           <TouchableOpacity
-            onPress={() => {
-              getDrawerList(
-                item.type === 'kbs' ? item.bookCd : item.book_cd,
-              ).then(res => {
-                res.map(x => {
-                  x.contentsIdx = x.drawIdx;
-                  x.bookIdx = item.type === 'kbs' ? item.bookCd : item.book_cd;
-                  x.type = item.type;
-                });
-                dispatch(
-                  dialogOpenDrawerSelect({
-                    drawerList: res.map(x => [x]),
-                    title: '보관 책서랍 선택',
-                    from: 'list',
-                    bookIdx: item.type === 'kbs' ? item.bookCd : item.book_cd,
-                    viewType: item.type,
-                  }),
-                );
-              });
-            }}>
-            <Image style={styles.button1} source={images.like} />
-          </TouchableOpacity>
-          <TouchableOpacity
+            style={styles.main}
             onPress={() => {
               dispatch(
                 setTab({
                   tab: 'detail',
-                  tabType: 'talk',
                   selectedBook:
                     item.type === 'kbs' ? item.bookCd : item.book_cd,
                   viewType: item.type,
@@ -166,11 +94,88 @@ export default function BookListItem({
                 type: 'detail',
               });
             }}>
-            <Image style={styles.button2} source={images.talk} />
+            <View style={styles.mainContent}>
+              <BookMainCarouselImage item={item} style={styles.thumbnail} />
+              <View style={styles.info}>
+                <TextWrap
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  font={fonts.kopubWorldDotumProMedium}
+                  style={styles.title}>
+                  {item.type === 'kbs' ? item.bookNm : item.book_nm}
+                </TextWrap>
+                <TextWrap
+                  style={styles.title}
+                  font={fonts.kopubWorldDotumProLight}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}>
+                  {item.writer}
+                </TextWrap>
+                <TextWrap
+                  ellipsizeMode="tail"
+                  font={fonts.kopubWorldDotumProLight}
+                  numberOfLines={1}
+                  style={styles.title}>
+                  "{item.topic}"
+                </TextWrap>
+
+                <TextWrap
+                  style={[styles.title, styles.date]}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  {item.type === 'kbs'
+                    ? numFormat(item?.price)
+                    : numFormat(item?.buy_price)}
+                  원
+                </TextWrap>
+              </View>
+            </View>
           </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                getDrawerList(
+                  item.type === 'kbs' ? item.bookCd : item.book_cd,
+                ).then(res => {
+                  res.map(x => {
+                    x.contentsIdx = x.drawIdx;
+                    x.bookIdx =
+                      item.type === 'kbs' ? item.bookCd : item.book_cd;
+                    x.type = item.type;
+                  });
+                  dispatch(
+                    dialogOpenDrawerSelect({
+                      drawerList: res.map(x => [x]),
+                      title: '보관 책서랍 선택',
+                      from: 'list',
+                      bookIdx: item.type === 'kbs' ? item.bookCd : item.book_cd,
+                      viewType: item.type,
+                    }),
+                  );
+                });
+              }}>
+              <Image style={styles.button1} source={images.like} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(
+                  setTab({
+                    tab: 'detail',
+                    tabType: 'talk',
+                    selectedBook:
+                      item.type === 'kbs' ? item.bookCd : item.book_cd,
+                    viewType: item.type,
+                  }),
+                );
+                navigate(routes.homeDetail, {
+                  type: 'detail',
+                });
+              }}>
+              <Image style={styles.button2} source={images.talk} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.divider} />
         </View>
-      </View>
-      <View style={styles.divider} />
+      ) : null}
     </>
   );
 }

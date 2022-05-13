@@ -29,7 +29,6 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
-  const [rednerData, setRenderData] = useState([]);
   const [type, setType] = useState('new');
   const [start, setStart] = useState(30);
   const [morenewBook, setNewBook] = useState([]);
@@ -275,6 +274,11 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
                 th={th}
                 gradeStyle={listTab.listTab.gradeStyle}
                 getDrawerList={getDrawerList}
+                max={
+                  listTab.listTab.grade !== null
+                    ? kbsBook.length
+                    : newBook.length
+                }
               />
             );
           }}
