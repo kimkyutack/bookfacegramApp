@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '90%',
     backgroundColor: '#ffffff',
-    top: heightPercentage(10),
   },
   button: {
     left: '5%',
@@ -123,6 +122,7 @@ const styles = StyleSheet.create({
     height: screenHeight / 11,
   },
   root2: {
+    top: heightPercentage(10),
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
   },
   img1: {
     width: screenWidth,
-    height: screenHeight / 5,
-    bottom: heightPercentage(20),
+    height: screenHeight / 4,
+    bottom: heightPercentage(8),
     resizeMode: 'stretch',
   },
   img2: {
