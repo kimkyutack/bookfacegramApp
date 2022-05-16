@@ -44,13 +44,15 @@ export default function DialogMessage({}) {
           )}
           <TextWrap
             style={[
-              styles.message,
+              styles.message2,
               {
                 marginTop: messageDialog.label ? 8 : 33,
+                fontWeight: 'bold',
               },
             ]}>
-            {messageDialog.message}
+            알림
           </TextWrap>
+          <TextWrap style={[styles.message]}>{messageDialog.message}</TextWrap>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -86,6 +88,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     marginHorizontal: 30,
     borderRadius: 8,
+  },
+  message2: {
+    lineHeight: 21,
+    fontSize: 16,
+    color: '#222222',
+    textAlign: 'left',
+    paddingHorizontal: 30,
   },
   message: {
     lineHeight: 21,

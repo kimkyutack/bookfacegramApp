@@ -17,6 +17,7 @@ import Topbar from '../../components/topbar/Topbar';
 import images from '../../libs/images';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import {
+  dialogError,
   dialogOpenSelect,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
@@ -31,6 +32,7 @@ import {
 import routes from '../../libs/routes';
 
 export default function BookContest({route, navigation}) {
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={styles.root}>
@@ -42,7 +44,7 @@ export default function BookContest({route, navigation}) {
           <Button
             title="공모전 응모하기"
             color="black"
-            onPress={() => Alert.alert('대회 기간이 아닙니다.')}
+            onPress={() => dispatch(dialogError('시험 기간이 아닙니다.'))}
           />
         </View>
       </ScrollView>

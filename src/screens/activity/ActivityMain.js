@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
   },
   root2: {
     width: screenWidth * 0.9,
-    top: heightPercentage(10),
     flexDirection: 'row',
   },
   font: {
