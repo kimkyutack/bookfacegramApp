@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   font: {
     left: widthPercentage(20),
     top: heightPercentage(15),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   img1: {

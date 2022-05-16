@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
   font: {
     left: widthPercentage(20),
     top: heightPercentage(15),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   font2: {
     left: widthPercentage(16),
     top: heightPercentage(100),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   font3: {
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text_font: {
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
     alignSelf: 'center',
     bottom: screenHeight / 30,
@@ -177,13 +177,13 @@ const styles = StyleSheet.create({
   font5: {
     right: widthPercentage(58),
     top: heightPercentage(90),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   font6: {
     left: widthPercentage(18),
     top: heightPercentage(90),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   img1: {
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   box3: {
     margin: 5,
     flex: 1,
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
     justifyContent: 'center',
     alignContent: 'center',

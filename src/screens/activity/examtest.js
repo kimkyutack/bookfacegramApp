@@ -102,7 +102,7 @@ export default function Examtest({route, navigation}) {
                     setAnswer(value);
                   }}
                   borderWidth={widthPercentage(0.3)}
-                  buttonInnerColor={answer === i + 1 ? '#000' : '#fff'}
+                  buttonInnerColor={answer === i + 1 ? '#0077ff' : '#fff'}
                   buttonOuterColor={'#000'}
                   buttonSize={screenWidth / 70}
                   buttonOuterSize={screenWidth / 30}
@@ -117,7 +117,7 @@ export default function Examtest({route, navigation}) {
                     setAnswer(value);
                   }}
                   labelStyle={{
-                    fontSize: fontPercentage(12),
+                    fontSize: fontPercentage(14),
                     height: screenHeight / 22,
                     bottom: heightPercentage(3),
                     lineHeight: screenHeight / 39,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   fonta: {
     top: heightPercentage(15),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
     textAlign: 'left',
   },
@@ -185,11 +185,11 @@ const styles = StyleSheet.create({
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
     top: heightPercentage(30),
-    fontSize: fontPercentage(12),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   font3: {
-    fontSize: fontPercentage(12),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
@@ -197,11 +197,11 @@ const styles = StyleSheet.create({
     margin: widthPercentage(10),
     left: widthPercentage(8),
     top: heightPercentage(12),
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(12),
   },
   img1: {
     width: '90%',
-    height: screenHeight / 1.5,
+    height: screenHeight / 1.7,
     top: heightPercentage(15),
     resizeMode: 'stretch',
   },

@@ -69,13 +69,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: screenHeight * 1.8,
+    height: screenHeight * 1.9,
     flexDirection: 'row',
+    bottom: heightPercentage(25),
   },
   font: {
     left: widthPercentage(20),
     top: heightPercentage(15),
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(15),
     fontWeight: 'bold',
   },
   img1: {
