@@ -110,11 +110,15 @@ export default function CameraRollPicker({navigation}) {
                   key: Date.now(),
                   name: 'gallery',
                 })
-              : navigation.navigate(routes.photoEditor, {
+              : params.type === 'upload'
+              ? navigation.navigate(routes.photoEditor, {
                   image: convertFileArr,
                   isNewFeed: true,
                   key: Date.now(),
                   name: 'gallery',
+                })
+              : navigation.navigate(routes.profile, {
+                  image: convertFileArr,
                 }),
         },
       }}>

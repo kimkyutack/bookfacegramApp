@@ -114,24 +114,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   button: {
-    borderTopWidth: 1,
     paddingVertical: 18,
-    borderTopColor: '#f2f2f2',
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
   },
   button3: {
-    borderTopWidth: 1,
     paddingVertical: 18,
-    borderTopColor: '#f2f2f2',
     alignItems: 'center',
     flex: 4,
     justifyContent: 'center',
   },
   button2: {
     // borderRightWidth: 1,
-    borderRightColor: colors.border,
   },
   title2: {
     fontSize: 15,

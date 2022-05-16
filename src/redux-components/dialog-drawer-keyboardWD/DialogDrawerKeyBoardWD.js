@@ -9,6 +9,7 @@ import {
   TextInput,
   View,
   Image,
+  Text,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
@@ -103,16 +104,36 @@ export default function DialogDrawerKeyBoardWD({}) {
               <TextWrap style={styles.input}>
                 토핑 회원 탈퇴 전, 꼭 확인해주세요!
               </TextWrap>
-              <TextWrap style={styles.deleteText}>
-                1. 일반 회원가입 회원의 경우, 서비스에서 관리하는 모든 정보가
-                삭제되며 같은 아이디로 가입 시 신규회원으로 가입됩니다. {'\n'}
-                2. 간편 로그인을 통해 가입한 회원의 경우, 서비스에서 관리하는
-                모든 정보가 삭제되며 동일한 소셜 아이디로 재로그인 시
-                신규회원으로 가입됩니다. {'\n'}
-                3. 토핑 독후활동 및 책서랍 등 활동 내역은 모두 삭제되며, 삭제된
-                데이터는 복구되지 않습니다. {'\n'}
-                4. 보유하신 잔여포인트는 모두 소멸되며 복구되지 않습니다.
-              </TextWrap>
+              <View style={styles.deleteText}>
+                <View style={styles.deleteTextInner}>
+                  <TextWrap style={styles.numText}>1.</TextWrap>
+                  <TextWrap style={styles.messageText}>
+                    일반 회원가입 회원의 경우, 서비스에서 관리하는 모든 정보가
+                    삭제되며 같은 아이디로 가입 시 신규회원으로 가입됩니다.{' '}
+                  </TextWrap>
+                </View>
+                <View style={styles.deleteTextInner}>
+                  <TextWrap style={styles.numText}>2.</TextWrap>
+                  <TextWrap style={styles.messageText}>
+                    간편 로그인을 통해 가입한 회원의 경우, 서비스에서 관리하는
+                    모든 정보가 삭제되며 동일한 소셜 아이디로 재로그인 시
+                    신규회원으로 가입됩니다.
+                  </TextWrap>
+                </View>
+                <View style={styles.deleteTextInner}>
+                  <TextWrap style={styles.numText}>3.</TextWrap>
+                  <TextWrap style={styles.messageText}>
+                    토핑 독후활동 및 책서랍 등 활동 내역은 모두 삭제되며, 삭제된
+                    데이터는 복구되지 않습니다.
+                  </TextWrap>
+                </View>
+                <View style={styles.deleteTextInner}>
+                  <TextWrap style={styles.numText}>4.</TextWrap>
+                  <TextWrap style={styles.messageText}>
+                    보유하신 잔여포인트는 모두 소멸되며 복구되지 않습니다.
+                  </TextWrap>
+                </View>
+              </View>
               <TouchableOpacity
                 onPress={() => {
                   if (value === 1) {
@@ -261,7 +282,6 @@ const styles = StyleSheet.create({
   input2: {
     color: colors.text,
     width: screenWidth,
-    paddingTop: heightPercentage(14),
     paddingLeft: widthPercentage(40),
     paddingRight: widthPercentage(28),
     fontFamily: fonts.kopubWorldDotumProMedium,
@@ -273,7 +293,28 @@ const styles = StyleSheet.create({
     width: screenWidth,
     marginTop: heightPercentage(20),
     paddingLeft: widthPercentage(20),
-    paddingRight: widthPercentage(28),
+    paddingRight: widthPercentage(30),
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    fontSize: fontPercentage(14),
+    lineHeight: heightPercentage(25),
+  },
+  deleteTextInner: {
+    color: colors.text,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: heightPercentage(5),
+  },
+  numText: {
+    color: colors.text,
+
+    paddingRight: widthPercentage(5),
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    fontSize: fontPercentage(14),
+    lineHeight: heightPercentage(25),
+  },
+  messageText: {
+    color: colors.text,
     fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: fontPercentage(14),
     lineHeight: heightPercentage(25),

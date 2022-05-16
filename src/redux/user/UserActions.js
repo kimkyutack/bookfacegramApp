@@ -12,8 +12,13 @@ import {
 } from '../../services/network';
 import {getImageFromGallery, getImageFromCamera} from '../../services/picker';
 import {clearItem, getItem} from '../../services/preference';
-import {dialogOpenMessage, dialogError} from '../dialog/DialogActions';
+import {
+  dialogOpenMessage,
+  dialogError,
+  dialogOpenSelect,
+} from '../dialog/DialogActions';
 import {logout, unlink} from '@react-native-seoul/kakao-login';
+import {cameraProfile} from '../../services/util';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
 // import {
 //   LoginManager,
@@ -104,96 +109,105 @@ export const userSignOut = userId => async dispatch => {
   // }
 };
 
-export const userUpdateProfileImage = profile_path => async dispatch => {
-  try {
-    // if (toDefault) {
-    //   await requestPut({
-    //     url: consts.apiUrl + '/users/' + userId,
-    //     body: {columns: ['profilePath'], values: ['']},
-    //   });
-    //   dispatch({type: userActionType.update, user: {profilePath: ''}});
-    // } else {
-    // const {data, status} = await requestGet({
-    //   url: consts.apiUrl + '/mypage/info',
-    // });
+export const userUpdateProfileImage =
+  (file, profile_path) => async dispatch => {
+    try {
+      // if (toDefault) {
+      //   await requestPut({
+      //     url: consts.apiUrl + '/users/' + userId,
+      //     body: {columns: ['profilePath'], values: ['']},
+      //   });
+      //   dispatch({type: userActionType.update, user: {profilePath: ''}});
+      // } else {
+      // const {data, status} = await requestGet({
+      //   url: consts.apiUrl + '/mypage/info',
+      // });
 
-    const file = await getImageFromGallery();
+      //const file2 = await getImageFromGallery();
 
-    if (!file) {
-      return;
-    }
-
-    const formData = new FormData();
-    if (profile_path !== null) {
-      let originProfile;
-      if (
-        profile_path.includes(
-          'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/profile',
-        )
-      ) {
-        originProfile = profile_path.substring(
-          profile_path.lastIndexOf('/') + 1,
-        );
-        formData.append('originProfile', originProfile);
+      // const file23 = await dispatch(
+      //   dialogOpenSelect({
+      //     item: cameraProfile(),
+      //   }),
+      // );
+      console.log('file', file);
+      console.log('profile_path', profile_path);
+      // console.log('file2', file2);
+      if (file === undefined) {
+        return;
       }
+      console.log('file', file);
+      const formData = new FormData();
+      if (profile_path !== null) {
+        let originProfile;
+        if (
+          profile_path.includes(
+            'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/profile',
+          )
+        ) {
+          originProfile = profile_path.substring(
+            profile_path.lastIndexOf('/') + 1,
+          );
+          formData.append('originProfile', originProfile);
+        }
+      }
+
+      formData.append('profile', file);
+
+      const {data, status} = await requestFile(
+        {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
+        formData,
+      );
+      console.log(data);
+      //const user = await requestPut({
+      // url: consts.apiUrl + '/mypage/info/profile',
+      //body: {formData: formData},
+      //})
+      //.then(res => {
+      console.log(status);
+      if (status === 'SUCCESS') {
+        dispatch({
+          type: userActionType.update,
+          user: {
+            profile_path: data,
+          },
+        });
+      } else {
+        dispatch(dialogError('fail'));
+      }
+
+      // const user = await requestFile(
+      //   {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
+      //   formData,
+      // );
+      // const user = await requestPut({
+      //   url: consts.apiUrl + '/mypage/info/profile',
+      //   body: {formData: formData},
+      // })
+      //   .then(res => {
+      //     console.log(res.data);
+      //     if (res.status === 'SUCCESS') {
+      //       console.log(res.status);
+      //       dispatch({
+      //         type: userActionType.update,
+      //         user: user,
+      //       });
+      //     } else if (res.status === 'FAIL') {
+      //       dispatch(dialogError(res.data?.msg || 'fail'));
+      //     } else {
+      //       dispatch(dialogError('fail'));
+      //     }
+      //   })
+      //   .catch(error => {
+      //     dispatch(dialogError(error));
+      //   });
+      // alert(JSON.stringify(originProfile));
+      // alert(JSON.stringify(file));
+      // dispatch({type: userActionType.update, user});
+    } catch (error) {
+      dispatch(dialogError(error));
     }
-
-    formData.append('profile', file[0]);
-
-    const {data, status} = await requestFile(
-      {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
-      formData,
-    );
-    console.log(data);
-    //const user = await requestPut({
-    // url: consts.apiUrl + '/mypage/info/profile',
-    //body: {formData: formData},
-    //})
-    //.then(res => {
-    console.log(status);
-    if (status === 'SUCCESS') {
-      dispatch({
-        type: userActionType.update,
-        user: {
-          profile_path: data,
-        },
-      });
-    } else {
-      dispatch(dialogError('fail'));
-    }
-
-    // const user = await requestFile(
-    //   {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
-    //   formData,
-    // );
-    // const user = await requestPut({
-    //   url: consts.apiUrl + '/mypage/info/profile',
-    //   body: {formData: formData},
-    // })
-    //   .then(res => {
-    //     console.log(res.data);
-    //     if (res.status === 'SUCCESS') {
-    //       console.log(res.status);
-    //       dispatch({
-    //         type: userActionType.update,
-    //         user: user,
-    //       });
-    //     } else if (res.status === 'FAIL') {
-    //       dispatch(dialogError(res.data?.msg || 'fail'));
-    //     } else {
-    //       dispatch(dialogError('fail'));
-    //     }
-    //   })
-    //   .catch(error => {
-    //     dispatch(dialogError(error));
-    //   });
-    // alert(JSON.stringify(originProfile));
-    // alert(JSON.stringify(file));
-    // dispatch({type: userActionType.update, user});
-  } catch (error) {
-    dispatch(dialogError(error));
-  }
-};
+  };
 
 export const userCheckToken = async dispatch => {
   try {

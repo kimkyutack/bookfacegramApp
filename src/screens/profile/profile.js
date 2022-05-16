@@ -31,6 +31,7 @@ import {
   heightPercentage,
   isIos,
   screenWidth,
+  cameraProfile,
   widthPercentage,
 } from '../../services/util';
 import {goBack, navigate} from '../../services/navigation';
@@ -52,6 +53,7 @@ import {
   dialogOpenGradeProfile,
   dialogOpenDrawerKeyBoardPW,
   dialogOpenDrawerKeyBoardWD,
+  dialogOpenSelect,
 } from '../../redux/dialog/DialogActions';
 import {userUpdateProfileImage, userUpdate} from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
@@ -60,6 +62,7 @@ export default function Profile({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
+  const {params, setParams} = useRoute();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
@@ -68,35 +71,61 @@ export default function Profile({route, navigation}) {
   const [grades, setGrades] = useState(user?.grade ? user?.grade : '');
   let infograde = grades * 1;
   let grade = '';
-
   useEffect(() => {
     //console.log(JSON.stringify(user));
     const unsubscribe = navigation.addListener('focus', () => {
-      setSaveButtonDisabled(false);
-      setPhone(user?.handphone ? user?.handphone : '');
-      setGrades(user?.grade ? user?.grade : '');
-      setEmail(user?.email ? user?.email : '');
+      if (params?.image[0]?.uri === undefined) {
+        setSaveButtonDisabled(false);
+        setPhone(user?.handphone ? user?.handphone : '');
+        setGrades(user?.grade ? user?.grade : '');
+        setEmail(user?.email ? user?.email : '');
+      } else {
+        console.log(123);
+        setSaveButtonDisabled(true);
+      }
 
       //Put your Data loading function here instead of my loadData()
     });
 
     return unsubscribe;
-  }, [navigate, user.handphone, user.email, user?.profile_path, user?.grade]);
+  }, [
+    navigate,
+    user.handphone,
+    user.email,
+    user?.profile_path,
+    user?.grade,
+    params.image,
+  ]);
 
   useEffect(() => {
     console.log(JSON.stringify(user));
     setSaveButtonDisabled(false);
     setPhone(user?.handphone ? user?.handphone : '');
     setGrades(user?.grade ? user?.grade : '');
-
     setEmail(user?.email ? user?.email : '');
   }, [user.handphone, user.email, user?.profile_path, user?.grade]);
 
   useEffect(() => {
     setGrades(route.params?.grade ? route.params?.grade : user?.grade);
-    setSaveButtonDisabled(true);
+    console.log('route.params?.grade ::', route.params?.grade);
+    console.log('user?.grade ::', user?.grade);
+
+    if (route.params?.grade * 1 === user?.grade * 1) {
+      setSaveButtonDisabled(false);
+    } else {
+      setSaveButtonDisabled(true);
+    }
   }, [route.params?.grade]);
 
+  useEffect(() => {
+    setSaveButtonDisabled(true);
+  }, [params.image]);
+
+  // if (params?.image !== undefined) {
+  //   console.log(params?.image);
+  // }
+
+  console.log('params', params);
   switch (infograde) {
     case 2:
       grade = '유치';
@@ -181,6 +210,7 @@ export default function Profile({route, navigation}) {
           setPhone(res.data.handphone);
 
           dispatch(userUpdate);
+          dispatch(userUpdateProfileImage(params?.image[0], user.profile_path));
           dispatch(dialogError('수정되었습니다.'));
           //alert(JSON.stringify(user));
           setSaveButtonDisabled(false);
@@ -262,18 +292,25 @@ export default function Profile({route, navigation}) {
         <View style={styles.userInfoContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(userUpdateProfileImage(user.profile_path));
+              //dispatch(userUpdateProfileImage(user.profile_path));
+              dispatch(
+                dialogOpenSelect({
+                  item: cameraProfile(user.profile_path),
+                }),
+              );
+              setSaveButtonDisabled(true);
             }}>
             <Avatar
               size={84}
               style={styles.avator}
               path={
-                user?.profile_path
+                params?.image[0]?.uri
+                  ? params?.image[0]?.uri
+                  : user?.profile_path
                   ? user?.profile_path
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
             />
-
             <Image
               source={images.userCamera}
               borderRadius={100}
@@ -298,7 +335,6 @@ export default function Profile({route, navigation}) {
             {user.member_id}
           </TextWrap>
         </View>
-
         <View style={styles.divider} />
         <View style={styles.mainSub}>
           <TextWrap

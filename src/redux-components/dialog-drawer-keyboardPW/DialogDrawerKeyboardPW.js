@@ -5,8 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  ScrollView,
-  TextInput,
   View,
   Image,
 } from 'react-native';
@@ -17,7 +15,6 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import routes from '../../libs/routes';
 import {
   containPasswordCheck,
   fontPercentage,
@@ -25,13 +22,8 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../services/util';
-import {requestPut, requestPost} from '../../services/network';
-import {
-  dialogClose,
-  dialogError,
-  dialogOpenAction,
-} from '../../redux/dialog/DialogActions';
-import {goBack, navigate} from '../../services/navigation';
+import {requestPut} from '../../services/network';
+import {dialogClose, dialogError} from '../../redux/dialog/DialogActions';
 
 export default function DialogDrawerKeyBoardPW({}) {
   const dispatch = useDispatch();
@@ -122,7 +114,11 @@ export default function DialogDrawerKeyBoardPW({}) {
     <SafeAreaView style={styles.root}>
       <TouchableOpacity
         style={styles.wrap}
-        onPress={() => dispatch(dialogClose())}>
+        onPress={() => {
+          dispatch(dialogClose());
+          setPassword('');
+          setPasswordConfirm('');
+        }}>
         <TouchableWithoutFeedback
           onPress={() => {
             return;
@@ -151,7 +147,11 @@ export default function DialogDrawerKeyBoardPW({}) {
                     top: heightPercentage(30),
                     left: widthPercentage(20),
                   }}
-                  onPress={() => dispatch(dialogClose())}>
+                  onPress={() => {
+                    dispatch(dialogClose());
+                    setPassword('');
+                    setPasswordConfirm('');
+                  }}>
                   <Image source={images.delete} style={styles.delete} />
                 </TouchableOpacity>
                 <TextWrap
@@ -221,22 +221,6 @@ export default function DialogDrawerKeyBoardPW({}) {
                     : colors.black
                 }
               />
-              {/* <TextInput
-                ref={inputRef}
-                placeholder={'새 비밀번호를 입력하세요.'}
-                style={styles.input}
-                autoFocus={true}
-                multiline={true}
-                maxLength={20}
-                autoCapitalize="none"
-                onChangeText={t => {
-                  if (t.length >= 21) {
-                    return;
-                  }
-                  setText(t);
-                }}
-                value={text}
-              /> */}
             </View>
             <TouchableOpacity
               style={
