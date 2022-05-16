@@ -80,7 +80,8 @@ export default function Examtest({route, navigation}) {
             labelStyle={{
               fontSize: fontPercentage(12),
               height: screenHeight / 22,
-              bottom:heightPercentage(3),
+              bottom: heightPercentage(3),
+              lineHeight: screenHeight / 39,
             }}
             onPress={value => {
               setAnswer(value);
