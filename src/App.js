@@ -8,6 +8,7 @@ import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogGrade from './redux-components/dialog-grade/DialogGrade';
 import DialogGradeProfile from './redux-components/dialog-grade-profile/DialogGradeProfile';
 import DialogAction from './redux-components/dialog-action/DialogAction';
+import DialogMore from './redux-components/dialog-select/DialogMore';
 import DialogSelect from './redux-components/dialog-select/DialogSelect';
 import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/DialogKakaoLogin';
 import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
@@ -45,6 +46,7 @@ function App({}) {
       <DialogGradeProfile />
       <DialogAction />
       <DialogSelect />
+      <DialogMore />
       <DialogKakaoLogin />
       <DialogDrawer />
       <DialogDrawerKeyBoard />

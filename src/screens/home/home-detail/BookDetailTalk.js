@@ -183,7 +183,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
               <TextWrap
                 font={fonts.kopubWorldDotumProLight}
                 style={styles.customElement}>
-                *엔터, 콤마, #를 눌러 해시태그를 등록해주세요.
+                *엔터를 눌러 해시태그를 등록해주세요.
               </TextWrap>
             }
           />

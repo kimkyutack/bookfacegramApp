@@ -32,6 +32,13 @@ const initDialog = {
     title: '',
     cancelTitle: '',
   },
+  moreDialog: {
+    open: false,
+    onPress: null,
+    item: [],
+    title: '',
+    cancelTitle: '',
+  },
   selectKakaoLoginDialog: {
     open: false,
     onPress: null,
@@ -121,6 +128,15 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         selectDialog: {
+          open: true,
+          onPress: action.onPress,
+          item: action.item,
+        },
+      };
+    case dialogActionType.openMore:
+      return {
+        ...state,
+        moreDialog: {
           open: true,
           onPress: action.onPress,
           item: action.item,

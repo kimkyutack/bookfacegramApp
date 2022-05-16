@@ -4,6 +4,7 @@ export const dialogActionType = {
   openSelect: 'dialog/openSelect',
   openKakaoLogin: 'dialog/openKakaoLogin',
   openDrawer: 'dialog/openDrawer',
+  openMore: 'dialog/openMore',
   openGrade: 'dialog/openGrade',
   openGradeProfile: 'dialog/openGradeProfile',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
@@ -92,7 +93,15 @@ export const dialogOpenSelect =
       item,
     });
   };
-
+export const dialogOpenMore =
+  ({onPress, item}) =>
+  dispatch => {
+    dispatch({
+      type: dialogActionType.openMore,
+      onPress,
+      item,
+    });
+  };
 export const dialogOpenKakaoLoginSelect =
   ({onPress, item}) =>
   dispatch => {

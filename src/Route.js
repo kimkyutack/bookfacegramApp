@@ -142,7 +142,8 @@ export default function Router() {
       dialog.selectKakaoLoginDialog?.open ||
       dialog.drawerDialog?.open ||
       dialog.drawerKeyBoardDialog?.open ||
-      dialog.selectDialog?.open
+      dialog.selectDialog?.open ||
+      dialog.openDialog?.open
     ) {
       backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
@@ -157,6 +158,7 @@ export default function Router() {
     dialog.drawerDialog?.open,
     dialog.drawerKeyBoardDialog?.open,
     dialog.selectDialog?.open,
+    dialog.openDialog?.open,
   ]);
 
   return (

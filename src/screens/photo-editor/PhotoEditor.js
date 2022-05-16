@@ -335,7 +335,7 @@ export default function PhotoEditor({route, navigation}) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProLight}
                       style={styles.customElement}>
-                      *엔터, 콤마, #를 눌러 해시태그를 등록해주세요.
+                      *엔터를 눌러 해시태그를 등록해주세요.
                     </TextWrap>
                   }
                 />
@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: 'row',
     paddingBottom: 16,
-    height: heightPercentage(160),
+    height: heightPercentage(100),
     marginTop: heightPercentage(12),
   },
   avator: {
@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
   },
   customElement2: {
     width: screenWidth,
-    paddingLeft: widthPercentage(10),
+    paddingLeft: screenWidth / 35,
     color: colors.blue,
     fontSize: fontPercentage(10),
   },

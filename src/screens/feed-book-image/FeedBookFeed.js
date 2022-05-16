@@ -28,7 +28,13 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Topbar from '../../components/topbar/Topbar';
 import Avatar from '../../components/avatar/Avatar';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
+import {
+  dialogOpenMore,
+  dialogOpenSelect,
+  dialogError,
+  dialogOpenAction,
+  dialogOpenMessage,
+} from '../../redux/dialog/DialogActions';
 import {getFeedUser, getFeedAll} from '../../redux/book/BookActions';
 import {FeedBookFeedItem} from './FeedBookFeedItem';
 import {useIsFocused} from '@react-navigation/core';
@@ -131,7 +137,7 @@ export default function FeedBookFeed({route, navigation}) {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          Alert.alert('삭제되었습니다.');
+          dispatch(dialogError('삭제되었습니다.'));
           const newTime = new Date(+new Date() + 3240 * 10000)
             .toISOString()
             .replace('T', ' ')
@@ -161,7 +167,7 @@ export default function FeedBookFeed({route, navigation}) {
 
   const editOnPress = feedIdx => {
     dispatch(
-      dialogOpenSelect({
+      dialogOpenMore({
         item: [
           {
             name: '수정',
@@ -169,7 +175,19 @@ export default function FeedBookFeed({route, navigation}) {
           },
           {
             name: '삭제',
-            onPress: () => feedDelete(feedIdx),
+            onPress: () =>
+              dispatch(
+                dialogOpenAction({
+                  titleColor: '#005aff',
+                  cancelTitle: '취소',
+                  message: '피드를 삭제하시겠습니까?',
+                  onPress: a => {
+                    if (a) {
+                      feedDelete(feedIdx);
+                    }
+                  },
+                }),
+              ),
           },
         ],
       }),

@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import {
+  Image,
   View,
   FlatList,
   StyleSheet,
@@ -167,7 +168,12 @@ export default function FeedBookUserImage({route, navigation}) {
     userErrorMessage === '검색 결과가 없습니다.' ? (
     <View style={styles.root}>
       {userErrorMessage ? (
-        <TextWrap>{userErrorMessage}</TextWrap>
+        <View style={styles.root}>
+          <Image source={images.nodata} style={styles.nodata} />
+          <TextWrap style={styles.text} font={fonts.barlowMedium}>
+            표지를 촬영하여 내 피드에 올려보세요.
+          </TextWrap>
+        </View>
       ) : (
         <ActivityIndicator
           size="large"
@@ -206,6 +212,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  nodata: {
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  text: {
+    fontSize: fontPercentage(14),
+    lineHeight: fontPercentage(21),
+    color: '#999',
   },
   infoContainer: {
     justifyContent: 'space-between',

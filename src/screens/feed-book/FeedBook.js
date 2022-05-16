@@ -25,7 +25,7 @@ import {
 } from '../../services/util';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
+import {dialogOpenMore, dialogError} from '../../redux/dialog/DialogActions';
 import {getFeedHome} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 import Topbar from '../../components/topbar/Topbar';
@@ -78,7 +78,7 @@ export default function FeedBook({route, navigation}) {
 
   const editOnPress = feedIdx => {
     dispatch(
-      dialogOpenSelect({
+      dialogOpenMore({
         item: [
           {
             name: '수정',
