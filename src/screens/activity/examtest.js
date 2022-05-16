@@ -79,9 +79,8 @@ export default function Examtest({route, navigation}) {
             selectedButtonColor={'#0077ff'}
             labelStyle={{
               fontSize: fontPercentage(12),
-              textAlignVertical: 'center',
               height: screenHeight / 22,
-              bottom: screenHeight / 110,
+              bottom:heightPercentage(3),
             }}
             onPress={value => {
               setAnswer(value);
