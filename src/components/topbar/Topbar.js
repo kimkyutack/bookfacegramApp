@@ -72,7 +72,7 @@ export default function Topbar({
       <View
         style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
         onLayout={handleOptionLayout}>
-        {(title === '공지사항' || title === '이벤트') && (
+        {/*(title === '공지사항' || title === '이벤트') && (
           <TextWrap
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -155,33 +155,28 @@ export default function Topbar({
             style={styles.profiles}>
             {title}
           </TextWrap>
+          )*/}
+        {title !== 'TOAPING' && (
+          <TextWrap
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            font={fonts.kopubWorldDotumProBold}
+            onPress={
+              title === 'TOAPING'
+                ? () =>
+                    navigation.navigate(routes.home, {
+                      screen: routes.topNewBooks,
+                      params: {
+                        type: 'main',
+                        key: Date.now(),
+                      },
+                    })
+                : null
+            }
+            style={styles.title}>
+            {title}
+          </TextWrap>
         )}
-        {title !== 'TOAPING' &&
-          title !== '도움말(FAQ)' &&
-          title !== '공지사항' &&
-          title !== '이벤트' &&
-          title !== '앱설정' &&
-          title !== '개인정보수정' && (
-            <TextWrap
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              font={fonts.kopubWorldDotumProBold}
-              onPress={
-                title === 'TOAPING'
-                  ? () =>
-                      navigation.navigate(routes.home, {
-                        screen: routes.topNewBooks,
-                        params: {
-                          type: 'main',
-                          key: Date.now(),
-                        },
-                      })
-                  : null
-              }
-              style={styles.title}>
-              {title}
-            </TextWrap>
-          )}
         {title === 'TOAPING' && (
           <TouchableWithoutFeedback
             onPress={() =>

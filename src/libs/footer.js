@@ -23,7 +23,7 @@ export function Footer(page) {
   const dispatch = useDispatch();
   const scrollRef = useRef();
   return (
-    <View style={styles.footer}>
+    <View style={styles.mainfooter}>
       <TouchableWithoutFeedback
         onPress={() =>
           navigate(routes.home, {
@@ -186,6 +186,20 @@ export function Footer(page) {
 
 const styles = StyleSheet.create({
   footer: {
+    position: 'relative',
+    top: 0,
+    bottom: heightPercentage(10),
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: heightPercentage(60),
+    flexDirection: 'row',
+    padding: widthPercentage(23),
+    borderWidth: 0,
+  },
+  mainfooter: {
     position: 'relative',
     top: 0,
     bottom: heightPercentage(10),
