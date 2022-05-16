@@ -77,7 +77,8 @@ export default function BookListItem({
           </View>
         )
       ) : null}
-      {max === 30 || index < max ? (
+      {(max === 30 || index < max) &&
+      (item.grade === undefined || item.grade === grade) ? (
         <View style={styles.root}>
           <TouchableOpacity
             style={styles.main}
