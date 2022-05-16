@@ -129,6 +129,7 @@ export default function ActivityMain({route}) {
 
 const styles = StyleSheet.create({
   root: {
+    top: 10,
     flex: 10,
     backgroundColor: '#ffffff',
     alignItems: 'center',
