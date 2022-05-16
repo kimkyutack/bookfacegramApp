@@ -43,6 +43,8 @@ export default function Examtest({route, navigation}) {
     {label: '③ 얼굴에 화색이 돌다.', value: 3},
     {label: '④ 얼굴이 빨개지다.', value: 4},
   ];
+
+  console.log(answer);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={styles.root}>
@@ -69,7 +71,7 @@ export default function Examtest({route, navigation}) {
             top: heightPercentage(50),
             left: widthPercentage(17),
           }}>
-          <RadioForm
+          {/* <RadioForm
             radio_props={radio_props}
             initial={0}
             buttonSize={screenWidth / 70}
@@ -86,7 +88,45 @@ export default function Examtest({route, navigation}) {
             onPress={value => {
               setAnswer(value);
             }}
-          />
+          /> */}
+          <RadioForm animation={true}>
+            {/* To create radio buttons, loop through your array of options */}
+            {radio_props.map((obj, i) => (
+              <RadioButton labelHorizontal={true} key={i}>
+                {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                <RadioButtonInput
+                  obj={obj}
+                  index={i}
+                  isSelected={answer}
+                  onPress={value => {
+                    setAnswer(value);
+                  }}
+                  borderWidth={widthPercentage(0.3)}
+                  buttonInnerColor={answer === i + 1 ? '#000' : '#fff'}
+                  buttonOuterColor={'#000'}
+                  buttonSize={screenWidth / 70}
+                  buttonOuterSize={screenWidth / 30}
+                  buttonStyle={{}}
+                  buttonWrapStyle={{}}
+                />
+                <RadioButtonLabel
+                  obj={obj}
+                  index={i}
+                  labelHorizontal={true}
+                  onPress={value => {
+                    setAnswer(value);
+                  }}
+                  labelStyle={{
+                    fontSize: fontPercentage(12),
+                    height: screenHeight / 22,
+                    bottom: heightPercentage(3),
+                    lineHeight: screenHeight / 39,
+                  }}
+                  labelWrapStyle={{}}
+                />
+              </RadioButton>
+            ))}
+          </RadioForm>
         </View>
         <View style={styles.button}>
           <Button
