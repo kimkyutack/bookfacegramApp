@@ -52,7 +52,6 @@ export default function BookContest({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    top: heightPercentage(10),
     flex: 1,
     backgroundColor: '#ffffff',
   },
@@ -62,14 +61,16 @@ const styles = StyleSheet.create({
     bottom: '1%',
   },
   root2: {
+    top: heightPercentage(10),
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     flexDirection: 'row',
-    height: screenHeight * 1.8,
+    height: screenHeight * 2,
   },
   font: {
     left: widthPercentage(20),
+    top: heightPercentage(15),
     fontSize: fontPercentage(13),
     fontWeight: 'bold',
   },

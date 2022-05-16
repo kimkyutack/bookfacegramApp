@@ -66,7 +66,7 @@ export default function Examtest({route, navigation}) {
         <View
           style={{
             height: screenHeight / 4,
-            top: heightPercentage(35),
+            top: heightPercentage(50),
             left: widthPercentage(17),
           }}>
           <RadioForm
@@ -75,12 +75,12 @@ export default function Examtest({route, navigation}) {
             buttonSize={screenWidth / 70}
             buttonOuterSize={screenWidth / 30}
             borderWidth={0}
-            buttonColor={'black'}
-            selectedButtonColor={'black'}
+            buttonColor={'#c8c8c8'}
+            selectedButtonColor={'#0077ff'}
             labelStyle={{
               fontSize: fontPercentage(12),
               textAlignVertical: 'center',
-              height: screenHeight / 28,
+              height: screenHeight / 22,
               bottom: screenHeight / 110,
             }}
             onPress={value => {
@@ -124,15 +124,18 @@ const styles = StyleSheet.create({
   },
   button: {
     left: '5%',
-    width: '90%',
-    bottom: '1%',
+    width: screenWidth * 0.9,
+    top: heightPercentage(20),
+    height: screenHeight / 11,
   },
   fonta: {
-    fontSize: fontPercentage(12),
+    top: heightPercentage(10),
+    fontSize: fontPercentage(13),
     fontWeight: 'bold',
     textAlign: 'left',
   },
   root2: {
+    top: heightPercentage(5),
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
   font: {
     marginRight: widthPercentage(30),
     left: widthPercentage(17),
-    top: heightPercentage(15),
+    top: heightPercentage(30),
     fontSize: fontPercentage(12),
     fontWeight: 'bold',
   },

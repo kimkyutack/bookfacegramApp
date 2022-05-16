@@ -45,11 +45,13 @@ export default function Examright({route, navigation}) {
       style={{
         flex: 1,
         backgroundColor: colors.white,
-        alignItems: 'center',
-        justifyContent: 'center',
       }}>
       <ScrollView style={styles.root}>
-        <View style={{width: screenWidth * 0.9, top: heightPercentage(10)}}>
+        <View
+          style={{
+            width: '90%',
+            left: widthPercentage(17),
+          }}>
           <TextWrap style={styles.font3}>
             문해고사를 통해 문해력 UP 시키기!
           </TextWrap>
@@ -112,23 +114,22 @@ export default function Examright({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
+    marginTop: 10,
     flex: 1,
-    width: '90%',
     backgroundColor: '#ffffff',
   },
   button: {
     left: '5%',
-    width: '90%',
+    width: screenWidth * 0.9,
     top: heightPercentage(20),
     height: screenHeight / 11,
   },
   root2: {
-    top: heightPercentage(10),
+    top: heightPercentage(25),
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: screenHeight,
   },
   font: {
     marginRight: widthPercentage(30),
@@ -144,7 +145,8 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   font3: {
-    fontSize: fontPercentage(12),
+    top: heightPercentage(10),
+    fontSize: fontPercentage(13),
     fontWeight: 'bold',
     textAlign: 'left',
   },
@@ -155,14 +157,14 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(11),
   },
   img1: {
-    width: screenWidth,
+    width: '90%',
     height: screenHeight / 4,
     bottom: heightPercentage(8),
     resizeMode: 'stretch',
   },
   img2: {
     height: screenHeight / 2,
-    width: screenWidth,
+    width: '90%',
     resizeMode: 'stretch',
   },
   img3: {
