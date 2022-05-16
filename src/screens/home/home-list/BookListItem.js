@@ -173,7 +173,6 @@ export default function BookListItem({
               <Image style={styles.button2} source={images.talk} />
             </TouchableOpacity>
           </View>
-          <View style={styles.divider} />
         </View>
       ) : null}
     </>
