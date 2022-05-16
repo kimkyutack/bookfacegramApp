@@ -25,7 +25,11 @@ import {
 } from '../../services/util';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
-import {dialogOpenMore, dialogError} from '../../redux/dialog/DialogActions';
+import {
+  dialogOpenSelect,
+  dialogOpenMore,
+  dialogError,
+} from '../../redux/dialog/DialogActions';
 import {getFeedHome} from '../../redux/book/BookActions';
 import {FeedItem} from './FeedItem';
 import Topbar from '../../components/topbar/Topbar';
