@@ -114,7 +114,7 @@ export default function Examright({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
-    marginTop: 10,
+    top: 10,
     flex: 1,
     backgroundColor: '#ffffff',
   },
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     height: screenHeight / 11,
   },
   root2: {
-    top: heightPercentage(25),
+    top: heightPercentage(30),
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   font3: {
-    top: heightPercentage(10),
+    top: heightPercentage(15),
     fontSize: fontPercentage(13),
     fontWeight: 'bold',
     textAlign: 'left',

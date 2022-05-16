@@ -129,13 +129,13 @@ const styles = StyleSheet.create({
     height: screenHeight / 11,
   },
   fonta: {
-    top: heightPercentage(10),
+    top: heightPercentage(15),
     fontSize: fontPercentage(13),
     fontWeight: 'bold',
     textAlign: 'left',
   },
   root2: {
-    top: heightPercentage(5),
+    top: heightPercentage(7),
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   img1: {
     width: '90%',
     height: screenHeight / 1.5,
-    top: heightPercentage(12),
+    top: heightPercentage(15),
     resizeMode: 'stretch',
   },
   searchBar: {

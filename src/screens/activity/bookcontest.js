@@ -54,6 +54,7 @@ export default function BookContest({route, navigation}) {
 
 const styles = StyleSheet.create({
   root: {
+    top: 10,
     flex: 1,
     backgroundColor: '#ffffff',
   },
