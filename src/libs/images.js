@@ -16,6 +16,7 @@ export default {
   submit_btn: require('../assets/images/submit_btn.png'),
   next_btn: require('../assets/images/next_btn.png'),
   prev_btn: require('../assets/images/prev_btn.png'),
+  cancel_btn: require('../assets/images/cancel_btn.png'),
   publicIcon: require('../assets/images/public_icon.png'),
   footerHome1: require('../assets/images/footer_home.png'),
   footerHome2: require('../assets/images/footer_home2.png'),

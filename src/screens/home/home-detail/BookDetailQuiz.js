@@ -45,6 +45,7 @@ export default function BookDetailQuiz({isbn}) {
   const [subjm, setsubjm] = useState();
   const [subtype, setsubType] = useState(1);
   const [Answerno, setAnswerno] = useState(1);
+  const [answer, setAnswer] = useState('');
   const [subanswer, setsubanswer] = useState();
   const [examnum, setExamnum] = useState(0);
   const [titlenum, setTitlenum] = useState(1);
@@ -325,11 +326,28 @@ export default function BookDetailQuiz({isbn}) {
         {bookQuiz[examnum].exam}
       </TextWrap>
       {bookQuiz[examnum].subjYn === 'S' ? (
-        <HTMLView
-          stylesheet={styles.onData}
-          value={bookQuiz[examnum].subJimun}
-        />
+        <View style={styles.onData}>
+          <HTMLView
+            stylesheet={styles.onData}
+            value={bookQuiz[examnum].subJimun}
+          />
+        </View>
       ) : null}
+      <View style={styles.answerview}>
+        <TextWrap style={styles.answertab} font={fonts.kopubWorldDotumProLight}>
+          정답 :
+        </TextWrap>
+        <TextInput
+          style={styles.inputStyle3}
+          inputStyle={styles.inputValue3}
+          value={answer}
+          onChangeText={eve => {
+            setAnswer(eve);
+          }}
+          multiline={false}
+          maxLength={30}
+        />
+      </View>
       <View
         style={{
           width: screenWidth,
@@ -340,16 +358,23 @@ export default function BookDetailQuiz({isbn}) {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            examnum !== 0 ? setExamnum(examnum - 1) : null;
+            examnum !== 0 ? setExamnum(examnum - 1) : setQuizstart(0);
             examnum !== 0 ? setTitlenum(titlenum - 1) : null;
+            examnum !== 0 ? setAnswer('') : null;
           }}>
-          <Image source={images.prev_btn} style={styles.img} />
+          <Image
+            source={titlenum !== 1 ? images.prev_btn : images.cancel_btn}
+            style={styles.img}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            setExamnum(examnum + 1);
-            setTitlenum(titlenum + 1);
+            titlenum !== bookQuiz.length
+              ? setExamnum(examnum + 1)
+              : alert('마지막 문제입니다.');
+            titlenum !== bookQuiz.length ? setTitlenum(titlenum + 1) : null;
+            titlenum !== bookQuiz.length ? setAnswer('') : null;
           }}>
           <Image source={images.next_btn} style={styles.img} />
         </TouchableOpacity>
@@ -373,6 +398,18 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(30),
     textAlign: 'center',
   },
+  answerview: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    marginTop: heightPercentage(30),
+    textAlign: 'center',
+  },
+  answertab: {
+    fontSize: fontPercentage(13),
+    textAlign: 'center',
+    marginTop: heightPercentage(5),
+    marginRight: heightPercentage(5),
+  },
   extitle: {
     width: screenWidth * 0.9,
     marginTop: heightPercentage(30),
@@ -389,7 +426,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   onData: {
-    marginTop: heightPercentage(30),
+    marginTop: heightPercentage(20),
     textAlign: 'center',
     height: 'auto',
     borderWidth: 1,
@@ -397,6 +434,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: fontPercentage(12),
     textAlignVertical: 'center',
+    alignItems: 'center',
   },
   noDatabtn: {
     marginTop: heightPercentage(30),
@@ -469,5 +507,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'black',
     width: '90%',
+  },
+  inputStyle3: {
+    color: colors.black,
+    fontSize: fontPercentage(14),
+    textAlign: 'left',
+    justifyContent: 'center',
+    marginBottom: heightPercentage(20),
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    width: screenWidth / 2,
+    marginRight: widthPercentage(18),
+    fontWeight: '300',
+    height: heightPercentage(30),
+  },
+  inputValue3: {
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    color: colors.black,
+    fontSize: fontPercentage(13),
+    textAlign: 'left',
+    lineHeight: heightPercentage(8),
+    fontWeight: '300',
   },
 });
