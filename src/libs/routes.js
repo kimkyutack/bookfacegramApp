@@ -58,4 +58,7 @@ export default {
   cameraRollPicker: 'cameraRollPicker',
   photoEditor: 'photoEditor',
   feedBookEditor: 'feedBookEditor',
+  policyHome: 'policyHome',
+  provision: 'provision',
+  teenager: 'teenager',
 };

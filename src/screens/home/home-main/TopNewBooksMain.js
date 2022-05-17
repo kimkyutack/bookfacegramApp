@@ -7,9 +7,20 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import colors from '../../../libs/colors';
+import TextButton from '../../../components/text-button/TextButton';
+import TextWrap from '../../../components/text-wrap/TextWrap';
 import images from '../../../libs/images';
-import {screenWidth, widthPercentage, chunk} from '../../../services/util';
+import fonts from '../../../libs/fonts';
+import {
+  screenWidth,
+  widthPercentage,
+  chunk,
+  fontPercentage,
+} from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
+import {ScrollView} from 'react-native-gesture-handler';
+import {navigate} from '../../../services/navigation';
+import routes from '../../../libs/routes';
 
 export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   const [arrayGrade, setArrayGrade] = useState([
@@ -76,6 +87,20 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     }
   }, [th, newBookList, bannerList, kbsBookList1, kbsBookList2]);
 
+  const handleFAQ = () => {
+    navigate(routes.faq);
+  };
+
+  const handlePolicyHome = () => {
+    navigate(routes.policyHome);
+  };
+  const handleProvision = () => {
+    navigate(routes.provision);
+  };
+  const handleTeenager = () => {
+    navigate(routes.teenager);
+  };
+
   return (
     <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>
       {loading ? (
@@ -96,6 +121,49 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
           renderItem={({item, index}) => {
             return <BookMainCarousel {...item} />;
           }}
+          ListFooterComponent={
+            <View style={styles.infoRow}>
+              <TextWrap
+                style={styles.infoHeader}
+                font={fonts.kopubWorldDotumProMedium}>
+                (주)피씨엔씨
+              </TextWrap>
+              <View style={styles.row1}>
+                <TextButton
+                  onPress={handlePolicyHome}
+                  styleTitle={styles.t}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  이용약관
+                </TextButton>
+                <TextWrap style={styles.t2}>|</TextWrap>
+                <TextButton
+                  onPress={handleProvision}
+                  styleTitle={styles.t}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  개인정보처리방침
+                </TextButton>
+                <TextWrap style={styles.t2}>|</TextWrap>
+                <TextButton
+                  onPress={handleTeenager}
+                  styleTitle={styles.t}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  청소년보호정책
+                </TextButton>
+                <TextWrap style={styles.t2}>|</TextWrap>
+                <TextButton
+                  onPress={handleFAQ}
+                  styleTitle={styles.t}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  고객센터
+                </TextButton>
+              </View>
+              <TextWrap
+                style={styles.infoFooter}
+                font={fonts.kopubWorldDotumProMedium}>
+                Copyright 2022. PCNC All rights reserved.
+              </TextWrap>
+            </View>
+          }
         />
       )}
     </View>
@@ -105,5 +173,53 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  row1: {
+    width: widthPercentage(344),
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 10,
+    display: 'flex',
+    alignSelf: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  infoRow: {
+    top: 15,
+    marginBottom: 40,
+    paddingLeft: 20,
+  },
+  t: {
+    fontSize: fontPercentage(12),
+    lineHeight: fontPercentage(18),
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    color: '#000',
+    display: 'flex',
+    marginTop: 9,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  t2: {
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(18),
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    color: '#000',
+    marginTop: 10,
+    display: 'flex',
+    paddingHorizontal: 8,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  infoFooter: {
+    fontSize: fontPercentage(10.5),
+    lineHeight: fontPercentage(18),
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    color: '#aaa',
+  },
+  infoHeader: {
+    fontSize: fontPercentage(13.5),
+    lineHeight: fontPercentage(20),
+    color: '#000',
+    fontWeight: 'bold',
   },
 });

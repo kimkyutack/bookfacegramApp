@@ -60,6 +60,10 @@ import CameraRollPicker from './screens/cameraroll-picker/CameraRollPicker';
 import PhotoEditor from './screens/photo-editor/PhotoEditor';
 import FeedBookEditor from './screens/feed-book/FeedBookEditor';
 
+import PolicyHome from './screens/terms-of-service/PolicyHome';
+import Teenager from './screens/terms-of-service/Teenager';
+import Provision from './screens/terms-of-service/Provision';
+
 import RNExitApp from 'react-native-exit-app';
 import {widthPercentage} from './services/util';
 import colors from './libs/colors';
@@ -612,6 +616,33 @@ export default function Router() {
             <Drawer.Screen
               name={routes.intro3}
               component={Intro3}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.policyHome}
+              component={PolicyHome}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.teenager}
+              component={Teenager}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.provision}
+              component={Provision}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

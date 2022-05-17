@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     alignItems: 'center',
-    height: heightPercentage(190),
+    height: heightPercentage(200),
   },
   cardHeader: {
     flexDirection: 'row',
