@@ -57,11 +57,13 @@ export default function TopNewBooksDetail({route}) {
   const isFocused = useIsFocused();
   const [bookDetail, setBookDetail] = useState([]);
   const [tabs, setTabs] = useState(0);
+  const [isbn, setIsbn] = useState(0);
   const [bookThumbnail, setBookThumbnail] = useState('');
   const [selectedBook, setSelectedBook] = useState('');
   const [selectType, setSelectType] = useState('detail');
   const [drawerList, setDrawerList] = useState([]);
-  //alert(detailTab.detailTab.selectType);
+  //console.log(JSON.stringify(route));
+
   const fetchRequested = async () => {
     try {
       setLoading(true);
@@ -73,6 +75,11 @@ export default function TopNewBooksDetail({route}) {
         },
       });
       if (status === 'SUCCESS') {
+        if (detailTab.detailTab?.viewType === 'kbs') {
+          setIsbn(data.bookDetail[0]?.img_nm.substr(0, 13));
+        } else {
+          setIsbn(data.bookDetail[0]?.img_nm.substr(0, 10));
+        }
         setBookThumbnail(data.bookDetail[0]?.img_nm);
         setBookDetail(data.bookDetail[0]);
         setLoading(false);
@@ -81,6 +88,7 @@ export default function TopNewBooksDetail({route}) {
       setLoading(false);
       dispatch(dialogError(error));
     }
+    console.log(isbn);
   };
 
   const getDrawerList = () => {
@@ -349,7 +357,7 @@ export default function TopNewBooksDetail({route}) {
             />
             <Tab title="토핑톡" id={2} isSelected={tabs === 2 ? true : false} />
           </View>
-          <BookDetailQuiz />
+          <BookDetailQuiz isbn={isbn} />
         </>
       ) : (
         <>

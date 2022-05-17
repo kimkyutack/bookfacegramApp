@@ -8,7 +8,9 @@ import {
   ActivityIndicator,
   Animated,
   Easing,
+  Button,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -22,6 +24,8 @@ import {
   widthPercentage,
   heightPercentage,
   cameraItem,
+  screenWidth,
+  screenHeight,
 } from '../../services/util';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
@@ -46,7 +50,7 @@ export default function FeedBook({route, navigation}) {
   const dispatch = useDispatch();
   const listRef = useRef();
   const isFocused = useIsFocused();
-
+  const [currentScroll, setCurrentScroll] = useState(1);
   const limit = 12;
   const [page, setPage] = useState(1);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -337,6 +341,13 @@ export default function FeedBook({route, navigation}) {
           ListFooterComponent={renderFooter}
         />
       )}
+      <TouchableOpacity
+        onPress={() => {
+          listRef.current.scrollToOffset({animated: true, offset: 0});
+        }}
+        style={styles.button}>
+        <Image source={images.scrollTop} style={styles.scrolltotop} />
+      </TouchableOpacity>
       <Footer page="feed" />
     </SafeAreaView>
   );
@@ -352,5 +363,18 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
+  },
+  scrolltotop: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    resizeMode: 'contain',
+  },
+  button: {
+    alignItems: 'center',
+    width: widthPercentage(30),
+    height: heightPercentage(30),
+    position: 'absolute',
+    top: screenHeight / 1.16,
+    left: screenWidth / 2.16,
   },
 });
