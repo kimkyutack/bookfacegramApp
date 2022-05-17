@@ -30,6 +30,7 @@ import TextWrap from '../../../components/text-wrap/TextWrap';
 import CardWrap from '../../../components/card-wrap/CardWrap';
 import {setTab} from '../../../redux/tab/TabAction';
 import BookMainCarouselImage from './BookMainCarouselImage';
+import {dialogError} from '../../../redux/dialog/DialogActions';
 
 export default function BookMainCarousel({
   name,
@@ -49,7 +50,7 @@ export default function BookMainCarousel({
         <TouchableWithoutFeedback
           key={index}
           onPress={() => {
-            alert(item.bannerLink);
+            dispatch(dialogError({message: item.bannerLink}));
           }}>
           <View style={styles.bannerContainer}>
             <FastImage

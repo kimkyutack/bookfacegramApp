@@ -134,7 +134,7 @@ export default function DialogDrawerKeyBoardWD({}) {
                   </TextWrap>
                 </View>
               </View>
-              <TouchableOpacity
+              <TouchableWithoutFeedback
                 onPress={() => {
                   if (value === 1) {
                     SetValue(2);
@@ -142,22 +142,24 @@ export default function DialogDrawerKeyBoardWD({}) {
                     SetValue(1);
                   }
                 }}>
-                <TextWrap style={styles.input}>
-                  <Image
-                    style={styles.radio}
-                    source={
-                      value === 1
-                        ? images.deleteMemberNo
-                        : images.deleteMemberOk
-                    }
-                  />
-                  &nbsp;&nbsp;&nbsp;회원 탈퇴에 관한 모든 안내사항을
-                  숙지하였으며,
-                </TextWrap>
-                <TextWrap style={styles.input2}>
-                  &nbsp;&nbsp;&nbsp;회원 탈퇴에 동의합니다.
-                </TextWrap>
-              </TouchableOpacity>
+                <View>
+                  <TextWrap style={styles.input}>
+                    <Image
+                      style={styles.radio}
+                      source={
+                        value === 1
+                          ? images.deleteMemberNo
+                          : images.deleteMemberOk
+                      }
+                    />
+                    &nbsp;&nbsp;&nbsp;회원 탈퇴에 관한 모든 안내사항을
+                    숙지하였으며,
+                  </TextWrap>
+                  <TextWrap style={styles.input2}>
+                    &nbsp;&nbsp;&nbsp;회원 탈퇴에 동의합니다.
+                  </TextWrap>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
             <View style={styles.ButtonWrap}>
               <TouchableOpacity
