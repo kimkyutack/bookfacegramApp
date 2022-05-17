@@ -321,11 +321,14 @@ export default function BookDetailQuiz({isbn}) {
       <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
         Q{titlenum}.
       </TextWrap>
-      <HTMLView stylesheet={styles.excontents} value={bookQuiz[examnum].exam} />
+      <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
+        {bookQuiz[examnum].exam}
+      </TextWrap>
       {bookQuiz[examnum].subjYn === 'S' ? (
-        <TextWrap style={styles.onData} font={fonts.kopubWorldDotumProLight}>
-          {bookQuiz[examnum].subJimun}
-        </TextWrap>
+        <HTMLView
+          stylesheet={styles.onData}
+          value={bookQuiz[examnum].subJimun}
+        />
       ) : null}
       <View
         style={{
@@ -384,7 +387,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: fontPercentage(11),
     alignSelf: 'center',
-    fontFamily: fonts.kopubWorldDotumProLight,
   },
   onData: {
     marginTop: heightPercentage(30),
