@@ -521,6 +521,7 @@ const styles = StyleSheet.create({
     marginRight: widthPercentage(18),
     fontWeight: '300',
     height: heightPercentage(30),
+    paddingVertical: 0,
   },
   inputValue3: {
     fontFamily: fonts.kopubWorldDotumProMedium,
