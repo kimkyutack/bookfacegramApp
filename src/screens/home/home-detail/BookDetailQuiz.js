@@ -13,6 +13,7 @@ import consts from '../../../libs/consts';
 import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
 import InputWrap2 from '../../../components/input-wrap/InputWrap';
+import HTMLView from 'react-native-htmlview';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
@@ -32,7 +33,6 @@ import {
   dialogOpenDrawerSelect,
 } from '../../../redux/dialog/DialogActions';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import HTMLView from 'react-native-htmlview';
 import {createIconSetFromFontello} from 'react-native-vector-icons';
 
 export default function BookDetailQuiz({isbn}) {
@@ -321,9 +321,7 @@ export default function BookDetailQuiz({isbn}) {
       <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
         Q{titlenum}.
       </TextWrap>
-      <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
-        {bookQuiz[examnum].exam}
-      </TextWrap>
+      <HTMLView stylesheet={styles.excontents} value={bookQuiz[examnum].exam} />
       {bookQuiz[examnum].subjYn === 'S' ? (
         <TextWrap style={styles.onData} font={fonts.kopubWorldDotumProLight}>
           {bookQuiz[examnum].subJimun}
@@ -386,6 +384,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: fontPercentage(11),
     alignSelf: 'center',
+    fontStyle: fonts.kopubWorldDotumProLight,
   },
   onData: {
     marginTop: heightPercentage(30),
