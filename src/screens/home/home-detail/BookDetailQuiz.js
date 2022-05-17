@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: fontPercentage(11),
     alignSelf: 'center',
-    fontStyle: fonts.kopubWorldDotumProLight,
+    fontFamily: fonts.kopubWorldDotumProLight,
   },
   onData: {
     marginTop: heightPercentage(30),
