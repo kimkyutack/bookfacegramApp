@@ -62,7 +62,7 @@ export default function Profile({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
-  const {params, setParams} = useRoute();
+  const {params} = useRoute();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');

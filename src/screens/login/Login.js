@@ -161,8 +161,8 @@ export default function Login({route}) {
     navigate(routes.registerForm);
   };
 
-  const handleFindIdPassword = () => {
-    // navigate(routes.findIdPassword);
+  const handleFindPassword = () => {
+    navigate(routes.findPw);
   };
 
   const signInWithApp = async () => {
@@ -662,10 +662,10 @@ export default function Login({route}) {
       </View>
       <View style={styles.row1}>
         <TextButton
-          // onPress={() => {
-          //   navigate(routes.registerPhoneVerify);
-          // }}
-          onPress={handleFindIdPassword}
+          onPress={() => {
+            navigate(routes.findId);
+          }}
+          //onPress={handleFindIdPassword}
           styleTitle={styles.t}
           font={fonts.kopubWorldDotumProMedium}>
           아이디 찾기
@@ -675,7 +675,7 @@ export default function Login({route}) {
           // onPress={() => {
           //   navigate(routes.registerPhoneVerify);
           // }}
-          onPress={handleFindIdPassword}
+          onPress={handleFindPassword}
           styleTitle={styles.t}
           font={fonts.kopubWorldDotumProMedium}>
           비밀번호 찾기

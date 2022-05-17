@@ -52,6 +52,10 @@ import Intro1 from './screens/register-form/Intro1';
 import Intro2 from './screens/register-form/Intro2';
 import Intro3 from './screens/register-form/Intro3';
 import ToapingLogin from './screens/login/ToapingLogin';
+import FindId from './screens/login/FindId';
+import FindIdOk from './screens/login/FindIdOk';
+import FindPw from './screens/login/FindPw';
+import PasswordUpdate from './screens/login/PasswordUpdate';
 import CameraRollPicker from './screens/cameraroll-picker/CameraRollPicker';
 import PhotoEditor from './screens/photo-editor/PhotoEditor';
 import FeedBookEditor from './screens/feed-book/FeedBookEditor';
@@ -216,6 +220,42 @@ export default function Router() {
             <Drawer.Screen
               name={routes.toapingLogin}
               component={ToapingLogin}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.findId}
+              component={FindId}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.findIdOk}
+              component={FindIdOk}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.findPw}
+              component={FindPw}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.passwordUpdate}
+              component={PasswordUpdate}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,

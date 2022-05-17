@@ -58,7 +58,7 @@ export default function DialogMessage({}) {
             onPress={() => {
               dispatch(dialogClose());
               if (messageDialog.onPress) {
-                messageDialog.onPress();
+                messageDialog.onPress(true);
               }
             }}>
             <TextWrap
