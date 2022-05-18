@@ -40,6 +40,7 @@ export default function BookDetailQuiz({isbn}) {
   const dispatch = useDispatch();
   const [bookQuiz, setBookQuiz] = useState([]);
   const [quizcreate, setQuizcreate] = useState(0);
+  const [quizEnd, setQuizEnd] = useState(0);
   const [quizstart, setQuizstart] = useState(0);
   const [contents, setContents] = useState();
   const [subjm, setsubjm] = useState();
@@ -48,7 +49,10 @@ export default function BookDetailQuiz({isbn}) {
   const [answer, setAnswer] = useState('');
   const [subanswer, setsubanswer] = useState();
   const [examnum, setExamnum] = useState(0);
+  const [quizRecord, setQuizRecord] = useState([]);
+  const [quizScore, setQuizScore] = useState([]);
   const [titlenum, setTitlenum] = useState(1);
+  const [totAnswer, setTotAnswer] = useState([]);
   const [ans1, setans1] = useState();
   const [ans2, setans2] = useState();
   const [ans3, setans3] = useState();
@@ -86,8 +90,66 @@ export default function BookDetailQuiz({isbn}) {
       setLoading(false);
       dispatch(dialogError(error));
     }
-    console.log(bookQuiz);
   };
+
+  const quizRequested = async () => {
+    try {
+      setLoading(true);
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/book/quiz/',
+        body: {
+          answerList: totAnswer,
+          isbn: isbn,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setQuizScore(data.quizRecord);
+        setQuizRecord(data.quizRecord[0].recordDetail);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      dispatch(dialogError(error));
+    }
+  };
+
+  const next = () => {
+    //console.log(totAnswer);
+    if (titlenum !== bookQuiz.length) {
+      if (totAnswer.length !== 0) {
+        if (
+          totAnswer[examnum] &&
+          totAnswer[examnum] !== answer &&
+          answer === ''
+        ) {
+        } else {
+          totAnswer[examnum] = answer;
+        }
+      } else {
+        setTotAnswer([answer]);
+      }
+
+      setExamnum(examnum + 1);
+      setTitlenum(titlenum + 1);
+      setAnswer('');
+    } else {
+      setTotAnswer(totAnswer => [...totAnswer, answer]);
+      setQuizEnd(1);
+      //quizRequested();
+    }
+  };
+
+  const prev = () => {
+    if (examnum !== 0) {
+      setExamnum(examnum - 1);
+      setTitlenum(titlenum - 1);
+      setAnswer('');
+    } else {
+      setTotAnswer([]);
+      setQuizstart(0);
+    }
+  };
+
   useEffect(() => {
     let mount = true;
     if (mount && isbn) {
@@ -99,7 +161,14 @@ export default function BookDetailQuiz({isbn}) {
   }, [isbn, isbn !== 0]);
 
   useEffect(() => {
-    console.log(examnum);
+    if (totAnswer.length === bookQuiz.length && bookQuiz.length !== 0) {
+      quizRequested();
+    }
+    return () => {};
+  }, [totAnswer]);
+
+  useEffect(() => {
+    //console.log(examnum);
   }, [examnum]);
 
   return loading ? (
@@ -233,7 +302,6 @@ export default function BookDetailQuiz({isbn}) {
             객관식 보기
           </TextWrap>
           {paths.map((path, index) => {
-            console.log(path.path);
             return (
               <TextInput
                 style={styles.inputStyle}
@@ -317,7 +385,7 @@ export default function BookDetailQuiz({isbn}) {
         <Image source={images.submit_btn} style={styles.img} />
       </TouchableOpacity>
     </View>
-  ) : bookQuiz.length !== 0 && quizstart === 1 ? (
+  ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 0 ? (
     <View>
       <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
         Q{titlenum}.
@@ -333,20 +401,133 @@ export default function BookDetailQuiz({isbn}) {
           />
         </View>
       ) : null}
-      <View style={styles.answerview}>
-        <TextWrap style={styles.answertab} font={fonts.kopubWorldDotumProLight}>
-          정답 :
-        </TextWrap>
-        <TextInput
-          style={styles.inputStyle3}
-          inputStyle={styles.inputValue3}
-          value={answer}
-          onChangeText={eve => {
-            setAnswer(eve);
-          }}
-          multiline={false}
-          maxLength={30}
-        />
+      {bookQuiz[examnum].subjYn === 'S' ? (
+        <View style={styles.answerview}>
+          <TextWrap
+            style={styles.answertab}
+            font={fonts.kopubWorldDotumProLight}>
+            정답 :
+          </TextWrap>
+          <TextInput
+            style={styles.inputStyle3}
+            inputStyle={styles.inputValue3}
+            value={answer}
+            onChangeText={eve => {
+              setAnswer(eve);
+            }}
+            multiline={false}
+            maxLength={30}
+          />
+        </View>
+      ) : (
+        bookQuiz[examnum].instances.map(quiz => {
+          return (
+            <View key={quiz.instance} style={styles.subanswerview}>
+              <TouchableOpacity
+                onPress={() => {
+                  setAnswer(quiz.instanceNum);
+                }}>
+                <TextWrap
+                  style={
+                    answer === quiz.instanceNum
+                      ? styles.selecttab
+                      : totAnswer.length >= titlenum &&
+                        totAnswer[examnum] === quiz.instanceNum &&
+                        answer.length === 0
+                      ? styles.selecttab
+                      : styles.answertab
+                  }
+                  font={fonts.kopubWorldDotumProLight}>
+                  {quiz.instanceNum}) {quiz.instance}
+                </TextWrap>
+              </TouchableOpacity>
+            </View>
+          );
+        })
+      )}
+      <View
+        style={{
+          width: screenWidth,
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+        }}>
+        <TouchableOpacity style={styles.btn} onPress={prev}>
+          <Image
+            source={titlenum !== 1 ? images.prev_btn : images.cancel_btn}
+            style={styles.img}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={next}>
+          <Image source={images.next_btn} style={styles.img} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 1 ? (
+    <View>
+      <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+        도전결과
+      </TextWrap>
+      {quizScore.length !== 0 ? (
+        <View style={styles.quizdata}>
+          <TextWrap
+            style={styles.quizdata2}
+            font={fonts.kopubWorldDotumProLight}>
+            {quizScore[0].avgScore}점
+          </TextWrap>
+          <TextWrap
+            style={styles.quizdata3}
+            font={fonts.kopubWorldDotumProLight}>
+            {quizScore[0].avgScore < 70 ? '한번 더 도전' : '성공'}
+          </TextWrap>
+          <TextWrap
+            style={styles.quizdata4}
+            font={fonts.kopubWorldDotumProLight}>
+            {quizScore[0].quizExamDate.substring(0, 10)}
+          </TextWrap>
+        </View>
+      ) : null}
+      <View
+        style={{
+          marginTop: heightPercentage(20),
+          width: screenWidth * 0.9,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          alignSelf: 'center',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}>
+        {quizRecord.length !== 0
+          ? quizRecord.map(data => {
+              return data.examNum % 5 === 0 ? (
+                <View key={data.examNum}>
+                  <TextWrap
+                    style={styles.answernum}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {data.examNum}
+                  </TextWrap>
+                  <TextWrap
+                    style={styles.answer}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {data.answerYn === 1 ? 'O' : 'X'}
+                  </TextWrap>
+                </View>
+              ) : (
+                <View key={data.examNum}>
+                  <TextWrap
+                    style={styles.answernum}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {data.examNum}
+                  </TextWrap>
+                  <TextWrap
+                    style={styles.answer}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {data.answerYn === 1 ? 'O' : 'X'}
+                  </TextWrap>
+                </View>
+              );
+            })
+          : null}
       </View>
       <View
         style={{
@@ -358,25 +539,24 @@ export default function BookDetailQuiz({isbn}) {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            examnum !== 0 ? setExamnum(examnum - 1) : setQuizstart(0);
-            examnum !== 0 ? setTitlenum(titlenum - 1) : null;
-            examnum !== 0 ? setAnswer('') : null;
+            setQuizstart(0);
+            setQuizEnd(0);
+            setTotAnswer([]);
+            setTitlenum(1);
+            setExamnum(0);
           }}>
-          <Image
-            source={titlenum !== 1 ? images.prev_btn : images.cancel_btn}
-            style={styles.img}
-          />
+          <Image source={images.check} style={styles.img} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            titlenum !== bookQuiz.length
-              ? setExamnum(examnum + 1)
-              : alert('마지막 문제입니다.');
-            titlenum !== bookQuiz.length ? setTitlenum(titlenum + 1) : null;
-            titlenum !== bookQuiz.length ? setAnswer('') : null;
+            setQuizstart(1);
+            setQuizEnd(0);
+            setTotAnswer([]);
+            setTitlenum(1);
+            setExamnum(0);
           }}>
-          <Image source={images.next_btn} style={styles.img} />
+          <Image source={images.retry} style={styles.img} />
         </TouchableOpacity>
       </View>
     </View>
@@ -404,11 +584,26 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(30),
     textAlign: 'center',
   },
+  subanswerview: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginTop: heightPercentage(10),
+    textAlign: 'center',
+    width: screenWidth * 0.9,
+  },
   answertab: {
     fontSize: fontPercentage(13),
     textAlign: 'center',
     marginTop: heightPercentage(5),
     marginRight: heightPercentage(5),
+    color: '#000',
+  },
+  selecttab: {
+    fontSize: fontPercentage(13),
+    textAlign: 'center',
+    marginTop: heightPercentage(5),
+    marginRight: heightPercentage(5),
+    color: '#0066ff',
   },
   extitle: {
     width: screenWidth * 0.9,
@@ -424,6 +619,64 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: fontPercentage(11),
     alignSelf: 'center',
+    marginBottom: heightPercentage(30),
+  },
+  quizdata: {
+    flexDirection: 'row',
+    width: screenWidth * 0.9,
+    marginTop: heightPercentage(20),
+    fontSize: fontPercentage(11),
+    alignSelf: 'center',
+  },
+  quizdata2: {
+    backgroundColor: '#f2f2f2',
+    flex: 1,
+    textAlign: 'left',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    borderRightWidth: 1,
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
+  },
+  quizdata3: {
+    backgroundColor: '#f2f2f2',
+    flex: 3,
+    textAlign: 'left',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
+  },
+  quizdata4: {
+    backgroundColor: '#f2f2f2',
+    flex: 2,
+    textAlign: 'center',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
+  },
+  answernum: {
+    backgroundColor: '#cdde95',
+    width: (screenWidth * 0.9) / 5,
+    textAlign: 'center',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
+  },
+  answer: {
+    backgroundColor: '#f2f2f2',
+    width: (screenWidth * 0.9) / 5,
+    textAlign: 'center',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
   },
   onData: {
     marginTop: heightPercentage(20),
