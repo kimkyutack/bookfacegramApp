@@ -14,6 +14,8 @@ export default {
   que_btn: require('../assets/images/que_btn.png'),
   quiz_btn: require('../assets/images/quiz_btn.png'),
   submit_btn: require('../assets/images/submit_btn.png'),
+  check: require('../assets/images/check.png'),
+  retry: require('../assets/images/retry.png'),
   next_btn: require('../assets/images/next_btn.png'),
   prev_btn: require('../assets/images/prev_btn.png'),
   cancel_btn: require('../assets/images/cancel_btn.png'),
