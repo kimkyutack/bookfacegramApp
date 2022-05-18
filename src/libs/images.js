@@ -99,4 +99,5 @@ export default {
   drawerAdd: require('../assets/images/drawer_add.png'),
   deleteMemberNo: require('../assets/images/withdraw_check1.png'),
   deleteMemberOk: require('../assets/images/withdraw_check2.png'),
+  noMybooks: require('../assets/images/no_mybooks.gif'),
 };

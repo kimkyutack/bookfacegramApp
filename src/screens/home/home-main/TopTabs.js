@@ -35,6 +35,7 @@ export default function TopTabs({grade, type}) {
       <Tab.Screen
         name={routes.topMyBooks}
         component={TopMyBooks}
+        initialParams={{type: type}}
         options={{tabBarLabel: 'MY BOOKS'}}
       />
       <Tab.Screen
