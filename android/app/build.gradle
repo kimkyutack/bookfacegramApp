@@ -143,6 +143,8 @@ dependencies {
     implementation "com.kakao.sdk:v2-story:2.5.2" // 카카오스토리
     implementation "com.kakao.sdk:v2-link:2.5.2" // 메시지(카카오링크)
     implementation "com.kakao.sdk:v2-navi:2.5.2" // 카카오내비
+    implementation 'com.facebook.fresco:animated-gif:2.5.0' //GIF사용을위한 라이브러리
+    implementation 'com.facebook.fresco:fresco:2.5.0' //GIF사용을위한 라이브러리
 
     // debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
     //   exclude group:'com.facebook.fbjni'
