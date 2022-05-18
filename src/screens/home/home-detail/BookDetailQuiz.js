@@ -53,6 +53,8 @@ export default function BookDetailQuiz({isbn}) {
   const [quizScore, setQuizScore] = useState([]);
   const [titlenum, setTitlenum] = useState(1);
   const [totAnswer, setTotAnswer] = useState([]);
+  const [totRecord, setTotRecord] = useState([]);
+  const [openRecord, setOpenRecord] = useState();
   const [ans1, setans1] = useState();
   const [ans2, setans2] = useState();
   const [ans3, setans3] = useState();
@@ -84,6 +86,7 @@ export default function BookDetailQuiz({isbn}) {
       });
       if (status === 'SUCCESS') {
         setBookQuiz(data.bookQuiz);
+        setTotRecord(data.quizRecords);
         setLoading(false);
       }
     } catch (error) {
@@ -154,6 +157,7 @@ export default function BookDetailQuiz({isbn}) {
     let mount = true;
     if (mount && isbn) {
       fetchRequested();
+      setOpenRecord();
     }
     return () => {
       mount = false;
@@ -569,6 +573,92 @@ export default function BookDetailQuiz({isbn}) {
         }}>
         <Image source={images.quiz_btn} style={styles.img} />
       </TouchableOpacity>
+      <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+        도전결과
+      </TextWrap>
+      <View
+        style={{
+          marginTop: heightPercentage(20),
+          width: screenWidth * 0.9,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          alignSelf: 'center',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}>
+        {totRecord.length !== 0
+          ? totRecord.map((data, index) => {
+              return (
+                <View style={styles.quizdata}>
+                  <TouchableOpacity
+                    style={styles.recordopen}
+                    onPress={() => {
+                      openRecord === index
+                        ? setOpenRecord()
+                        : setOpenRecord(index);
+                    }}>
+                    <TextWrap
+                      style={styles.quizdata2}
+                      font={fonts.kopubWorldDotumProLight}>
+                      {totRecord[index].avgScore}점
+                    </TextWrap>
+                    <TextWrap
+                      style={styles.quizdata3}
+                      font={fonts.kopubWorldDotumProLight}>
+                      {totRecord[index].avgScore < 70 ? '한번 더 도전' : '성공'}
+                    </TextWrap>
+                    <TextWrap
+                      style={styles.quizdata4}
+                      font={fonts.kopubWorldDotumProLight}>
+                      {totRecord[index].quizExamDate.substring(0, 10)}
+                    </TextWrap>
+                  </TouchableOpacity>
+                  <View
+                    style={
+                      openRecord === index
+                        ? {
+                            marginTop: heightPercentage(20),
+                            width: screenWidth * 0.9,
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            display: 'flex',
+                          }
+                        : {
+                            marginTop: heightPercentage(20),
+                            width: screenWidth * 0.9,
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            display: 'none',
+                          }
+                    }>
+                    {totRecord[index].recordDetail.map((eve, cnt) => {
+                      return (
+                        <View key={eve.examNum + 130}>
+                          <TextWrap
+                            style={styles.answernum}
+                            font={fonts.kopubWorldDotumProLight}>
+                            {eve.examNum}
+                          </TextWrap>
+                          <TextWrap
+                            style={styles.answer}
+                            font={fonts.kopubWorldDotumProLight}>
+                            {eve.answerYn === 1 ? 'O' : 'X'}
+                          </TextWrap>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
+              );
+            })
+          : null}
+      </View>
     </View>
   );
 }
@@ -627,6 +717,26 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(20),
     fontSize: fontPercentage(11),
     alignSelf: 'center',
+    flexWrap: 'wrap',
+  },
+  recordopen: {
+    flexDirection: 'row',
+    width: screenWidth * 0.9,
+    fontSize: fontPercentage(11),
+    alignSelf: 'center',
+    flexWrap: 'wrap',
+  },
+  quizdatasss: {
+    backgroundColor: '#f2f2f2',
+    width: screenWidth * 0.9,
+    textAlign: 'left',
+    fontSize: fontPercentage(12),
+    alignSelf: 'center',
+    borderRightWidth: 1,
+    height: heightPercentage(30),
+    textAlignVertical: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   quizdata2: {
     backgroundColor: '#f2f2f2',
