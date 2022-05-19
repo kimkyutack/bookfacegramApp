@@ -98,7 +98,7 @@ export default function QuizMain({
   }, []);
 
   const renderFooter = () => {
-    if (kbsBook?.length === 0 || !loading) {
+    if (kbsBook?.length === 0 || !loading || kbsBook?.length < 20) {
       return <></>;
     } else {
       return (
@@ -115,7 +115,9 @@ export default function QuizMain({
   };
 
   const loadMore = () => {
-    fetchRequested(start);
+    if(kbsBook.length >= 20){
+      fetchRequested(start);
+    }
     return () => {};
   };
 

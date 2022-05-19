@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: heightPercentage(1000),
+    height: heightPercentage(2000),
     resizeMode: 'stretch',
   },
   button: {

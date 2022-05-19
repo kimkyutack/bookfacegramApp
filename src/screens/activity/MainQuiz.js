@@ -138,7 +138,7 @@ export default function MainQuiz({route}, start) {
             zIndex: 1, // works on ios
             elevation: 1,
           }}>
-          <View>
+          <View style={{width:'100%'}}>
             <TextWrap style={styles.selectfont}>{'학년별'}</TextWrap>
             <Image source={images.selectbox} style={styles.select} />
           </View>
@@ -159,14 +159,14 @@ export default function MainQuiz({route}, start) {
           onPress={() => {
             dispatch(dialogOpenGrade({message: '준비중.', grade: Rank}));
           }}>
-          <View>
+          <View style={{width:'100%'}}>
             <TextWrap style={styles.selectfont}>{grade}</TextWrap>
             <Image source={images.selectbox} style={styles.select} />
           </View>
         </TouchableOpacity>
       </View>
       {loading ? (
-        <View style={[styles.root]}>
+        <View style={[styles.loading]}>
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
       ) : !loading ? (
@@ -187,18 +187,27 @@ const styles = StyleSheet.create({
     //flex: 1,
     width: screenWidth,
     height: screenHeight / 1.5,
-    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.white,
+  },
+
+  loading: {
+    //flex: 1,
+    justifyContent:'center',
+    width: screenWidth,
+    height: screenHeight,
+    alignItems: 'center',
+    bottom: screenHeight /5,
     backgroundColor: colors.white,
   },
 
   row: {
     top: 10,
     width: screenWidth * 0.9,
-    alignItems: 'center',
-    justifyContent: 'center',
     height: screenHeight / 15,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'center',
   },
   cameraIcon: {
     width: widthPercentage(24),
