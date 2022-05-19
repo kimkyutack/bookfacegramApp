@@ -44,13 +44,32 @@ export default function BookMainCarousel({
   th,
 }) {
   const dispatch = useDispatch();
+  const hello = (bookCd) => {
+      dispatch(
+            setTab({
+              tab: 'detail',
+              selectedBook: bookCd,
+              viewType: 'kbs',
+            }),
+        );
+        navigate(routes.homeDetail, {
+            type: 'detail',
+        });
+
+  }
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
         <TouchableWithoutFeedback
           key={index}
           onPress={() => {
-            dispatch(dialogError({message: item.bannerLink}));
+            item.bannerType === 'detail' 
+            ? hello(item.bookCd) 
+            : item.bannerType === 'event' 
+            ? navigate(routes.event)
+            : item.bannerType === 'notice' 
+            ? navigate(routes.notice)
+            : (dispatch(dialogError({message: item.bannerType})));
           }}>
           <View style={styles.bannerContainer}>
             <FastImage

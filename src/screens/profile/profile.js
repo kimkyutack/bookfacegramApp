@@ -80,7 +80,7 @@ export default function Profile({route, navigation}) {
         setGrades(user?.grade ? user?.grade : '');
         setEmail(user?.email ? user?.email : '');
       } else {
-        console.log(123);
+
         setSaveButtonDisabled(true);
       }
 
@@ -98,7 +98,6 @@ export default function Profile({route, navigation}) {
   ]);
 
   useEffect(() => {
-    console.log(JSON.stringify(user));
     setSaveButtonDisabled(false);
     setPhone(user?.handphone ? user?.handphone : '');
     setGrades(user?.grade ? user?.grade : '');
@@ -107,8 +106,6 @@ export default function Profile({route, navigation}) {
 
   useEffect(() => {
     setGrades(route.params?.grade ? route.params?.grade : user?.grade);
-    console.log('route.params?.grade ::', route.params?.grade);
-    console.log('user?.grade ::', user?.grade);
 
     if (route.params?.grade * 1 === user?.grade * 1) {
       setSaveButtonDisabled(false);
@@ -124,8 +121,6 @@ export default function Profile({route, navigation}) {
   // if (params?.image !== undefined) {
   //   console.log(params?.image);
   // }
-
-  console.log('params', params);
   switch (infograde) {
     case 2:
       grade = '유치';

@@ -122,7 +122,7 @@ export default function FeedBookEditor({route, navigation}) {
           // android file write on phone
           if (params?.name === 'gallery') {
             // 여러장
-            console.log('1');
+        
             const formData = new FormData();
             const file = [];
             if (params.image !== undefined) {
@@ -148,7 +148,6 @@ export default function FeedBookEditor({route, navigation}) {
               },
               formData,
             );
-            console.log(data);
             if (status === 'SUCCESS') {
               setSaveButtonDisabled(false);
               navigate(routes.feedBookImage, {

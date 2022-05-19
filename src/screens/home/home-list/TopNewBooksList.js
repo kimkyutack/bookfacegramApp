@@ -63,7 +63,6 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
     }
   };
   useEffect(() => {
-    console.log(listTab.listTab.grade);
     setNewBook(listTab.listTab.grade === null ? newBook : kbsBook);
     let mount = true;
     if (mount) {

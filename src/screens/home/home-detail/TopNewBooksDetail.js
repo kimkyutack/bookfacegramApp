@@ -62,7 +62,7 @@ export default function TopNewBooksDetail({route}) {
   const [selectedBook, setSelectedBook] = useState('');
   const [selectType, setSelectType] = useState('detail');
   const [drawerList, setDrawerList] = useState([]);
-  //console.log(JSON.stringify(route));
+
 
   const fetchRequested = async () => {
     try {
@@ -88,7 +88,7 @@ export default function TopNewBooksDetail({route}) {
       setLoading(false);
       dispatch(dialogError(error));
     }
-    console.log(isbn);
+    
   };
 
   const getDrawerList = () => {
