@@ -28,6 +28,7 @@ import {navigate} from '../../services/navigation';
 import Avatar from '../../components/avatar/Avatar';
 import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
+import Swiper from 'react-native-swiper';
 
 const renderItem = ({
   feedIdx,
@@ -52,6 +53,7 @@ const renderItem = ({
   opacity,
   toggleIndex,
 }) => {
+  //console.log(feedImgName)
   const replacecontents = contents.replace(/&nbsp/g, ' ');
   const idx = likeMemberList.indexOf(login_idx);
   return (
@@ -99,18 +101,35 @@ const renderItem = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableWithoutFeedback onPress={() => handleDoubleTap(feedIdx)}>
-          <FastImage
-            source={{
-              uri: feedImgName?.length
-                ? consts.imgUrl + '/feedBook/' + feedImgName[0]
-                : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
+        <Swiper
+          style={styles.wrapper}
+          showsButtons={false}
+          width={widthPercentage(360)}
+          height={heightPercentage(360)}
+          removeClippedSubviews={false}
+          dotColor={colors.border}
+          activeDotColor={colors.blue}
+          dotStyle={{top: 10}}
+          activeDotStyle={{top: 10}}
+          nextButton={<Text />}
+          prevButton={<Text />}>
+          {feedImgName?.map((url, index) => {
+            return (
+              <TouchableWithoutFeedback onPress={() => handleDoubleTap(feedIdx)} key={index?.toString()}>
+                <FastImage
+                  source={{
+                    uri: feedImgName?.length
+                      ? consts.imgUrl + '/feedBook/' + url
+                      : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+                    priority: FastImage.priority.normal,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                  style={styles.image}
+                />
+              </TouchableWithoutFeedback>
+            );
+          })}
+        </Swiper>
         {feedIdx === toggleIndex &&
           (idx !== -1 ? (
             <Animated.View style={{position: 'absolute', opacity: opacity}}>
@@ -351,5 +370,10 @@ const styles = StyleSheet.create({
     width: widthPercentage(17),
     height: widthPercentage(17),
     resizeMode: 'contain',
+  },
+  wrapper: {
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
