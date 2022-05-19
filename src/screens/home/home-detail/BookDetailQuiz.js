@@ -52,6 +52,7 @@ export default function BookDetailQuiz({isbn}) {
   const [quizRecord, setQuizRecord] = useState([]);
   const [quizScore, setQuizScore] = useState([]);
   const [titlenum, setTitlenum] = useState(1);
+  const [page, setPage] = useState(1);
   const [totAnswer, setTotAnswer] = useState([]);
   const [totRecord, setTotRecord] = useState([]);
   const [openRecord, setOpenRecord] = useState();
@@ -87,6 +88,7 @@ export default function BookDetailQuiz({isbn}) {
       if (status === 'SUCCESS') {
         setBookQuiz(data.bookQuiz);
         setTotRecord(data.quizRecords);
+        setPage(page + 1);
         setLoading(false);
       }
     } catch (error) {
@@ -128,13 +130,18 @@ export default function BookDetailQuiz({isbn}) {
         } else {
           totAnswer[examnum] = answer;
         }
+        setAnswer('');
+        if(totAnswer.length > examnum){
+          setAnswer(totAnswer[examnum+1]);
+        }
       } else {
         setTotAnswer([answer]);
+        setAnswer('');
       }
 
       setExamnum(examnum + 1);
       setTitlenum(titlenum + 1);
-      setAnswer('');
+      
     } else {
       setTotAnswer(totAnswer => [...totAnswer, answer]);
       setQuizEnd(1);
@@ -144,10 +151,17 @@ export default function BookDetailQuiz({isbn}) {
 
   const prev = () => {
     if (examnum !== 0) {
+      if(totAnswer[examnum-1]){
+        setAnswer(totAnswer[examnum-1]);
+      }else{
+        setAnswer('');
+      }
       setExamnum(examnum - 1);
       setTitlenum(titlenum - 1);
-      setAnswer('');
+      
     } else {
+      setAnswer('');
+      fetchRequested();
       setTotAnswer([]);
       setQuizstart(0);
     }
@@ -174,6 +188,10 @@ export default function BookDetailQuiz({isbn}) {
   useEffect(() => {
     //console.log(examnum);
   }, [examnum]);
+
+  useEffect(() => {
+    return () => setLoading(false);
+  }, []);
 
   return loading ? (
     <ActivityIndicator
@@ -397,7 +415,7 @@ export default function BookDetailQuiz({isbn}) {
       <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
         {bookQuiz[examnum].exam}
       </TextWrap>
-      {bookQuiz[examnum].subjYn === 'S' ? (
+      {bookQuiz[examnum].subjYn === 'S' && bookQuiz[examnum].subJimun.length > 1 ? (
         <View style={styles.onData}>
           <HTMLView
             stylesheet={styles.onData}
@@ -424,9 +442,9 @@ export default function BookDetailQuiz({isbn}) {
           />
         </View>
       ) : (
-        bookQuiz[examnum].instances.map(quiz => {
+        bookQuiz[examnum].instances.map((quiz,index) => {
           return (
-            <View key={quiz.instance} style={styles.subanswerview}>
+            <View key={index * page+ 600} style={styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
                   setAnswer(quiz.instanceNum);
@@ -477,12 +495,12 @@ export default function BookDetailQuiz({isbn}) {
           <TextWrap
             style={styles.quizdata2}
             font={fonts.kopubWorldDotumProLight}>
-            {quizScore[0].avgScore}점
+              {quizScore[0].avgScore}점
           </TextWrap>
           <TextWrap
             style={styles.quizdata3}
             font={fonts.kopubWorldDotumProLight}>
-            {quizScore[0].avgScore < 70 ? '한번 더 도전' : '성공'}
+            {quizScore[0].avgScore < 70 ? '  한번 더 도전' : '  성공'}
           </TextWrap>
           <TextWrap
             style={styles.quizdata4}
@@ -502,9 +520,9 @@ export default function BookDetailQuiz({isbn}) {
           flexWrap: 'wrap',
         }}>
         {quizRecord.length !== 0
-          ? quizRecord.map(data => {
+          ? quizRecord.map((data,index) => {
               return data.examNum % 5 === 0 ? (
-                <View key={data.examNum}>
+                <View key={data.examNum + index * page + 1}>
                   <TextWrap
                     style={styles.answernum}
                     font={fonts.kopubWorldDotumProLight}>
@@ -517,7 +535,7 @@ export default function BookDetailQuiz({isbn}) {
                   </TextWrap>
                 </View>
               ) : (
-                <View key={data.examNum}>
+                <View key={data.examNum + index * page + 1}>
                   <TextWrap
                     style={styles.answernum}
                     font={fonts.kopubWorldDotumProLight}>
@@ -542,12 +560,14 @@ export default function BookDetailQuiz({isbn}) {
         }}>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => {
+          onPress={() => {          
             setQuizstart(0);
             setQuizEnd(0);
             setTotAnswer([]);
+            setAnswer();
             setTitlenum(1);
             setExamnum(0);
+            fetchRequested();
           }}>
           <Image source={images.check} style={styles.img} />
         </TouchableOpacity>
@@ -556,6 +576,7 @@ export default function BookDetailQuiz({isbn}) {
           onPress={() => {
             setQuizstart(1);
             setQuizEnd(0);
+            setAnswer();
             setTotAnswer([]);
             setTitlenum(1);
             setExamnum(0);
@@ -573,23 +594,27 @@ export default function BookDetailQuiz({isbn}) {
         }}>
         <Image source={images.quiz_btn} style={styles.img} />
       </TouchableOpacity>
-      <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
-        도전결과
-      </TextWrap>
-      <View
-        style={{
-          marginTop: heightPercentage(20),
-          width: screenWidth * 0.9,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          alignSelf: 'center',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}>
+        {totRecord.length !== 0 ? (
+         
+        <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+          도전결과
+        </TextWrap>
+     
+        ) : null}
+        <View
+          style={{
+            marginTop: heightPercentage(20),
+            width: screenWidth * 0.9,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            alignSelf: 'center',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}>
         {totRecord.length !== 0
           ? totRecord.map((data, index) => {
               return (
-                <View style={styles.quizdata}>
+                <View key={index * page + 2} style={styles.quizdata}>
                   <TouchableOpacity
                     style={styles.recordopen}
                     onPress={() => {
@@ -600,12 +625,12 @@ export default function BookDetailQuiz({isbn}) {
                     <TextWrap
                       style={styles.quizdata2}
                       font={fonts.kopubWorldDotumProLight}>
-                      {totRecord[index].avgScore}점
+                        {totRecord[index].avgScore}점
                     </TextWrap>
                     <TextWrap
                       style={styles.quizdata3}
                       font={fonts.kopubWorldDotumProLight}>
-                      {totRecord[index].avgScore < 70 ? '한번 더 도전' : '성공'}
+                      {totRecord[index].avgScore < 70 ? '  한번 더 도전' : '  성공'}
                     </TextWrap>
                     <TextWrap
                       style={styles.quizdata4}
@@ -639,7 +664,7 @@ export default function BookDetailQuiz({isbn}) {
                     }>
                     {totRecord[index].recordDetail.map((eve, cnt) => {
                       return (
-                        <View key={eve.examNum + 130}>
+                        <View key={cnt * page}>
                           <TextWrap
                             style={styles.answernum}
                             font={fonts.kopubWorldDotumProLight}>
@@ -682,16 +707,14 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
   },
   answertab: {
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(12),
     textAlign: 'center',
-    marginTop: heightPercentage(5),
     marginRight: heightPercentage(5),
     color: '#000',
   },
   selecttab: {
-    fontSize: fontPercentage(13),
+    fontSize: fontPercentage(12),
     textAlign: 'center',
-    marginTop: heightPercentage(5),
     marginRight: heightPercentage(5),
     color: '#0066ff',
   },
@@ -745,6 +768,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(12),
     alignSelf: 'center',
     borderRightWidth: 1,
+    borderRightColor: '#c9c9c9',
     height: heightPercentage(30),
     textAlignVertical: 'center',
   },
@@ -768,7 +792,7 @@ const styles = StyleSheet.create({
   },
   answernum: {
     backgroundColor: '#cdde95',
-    width: (screenWidth * 0.9) / 5,
+    width: (screenWidth * 0.9) / 5.02,
     textAlign: 'center',
     fontSize: fontPercentage(12),
     alignSelf: 'center',
@@ -779,7 +803,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     backgroundColor: '#f2f2f2',
-    width: (screenWidth * 0.9) / 5,
+    width: (screenWidth * 0.9) / 5.02,
     textAlign: 'center',
     fontSize: fontPercentage(12),
     alignSelf: 'center',
@@ -883,7 +907,7 @@ const styles = StyleSheet.create({
     width: screenWidth / 2,
     marginRight: widthPercentage(18),
     fontWeight: '300',
-    height: heightPercentage(30),
+    height: heightPercentage(20),
     paddingVertical: 0,
   },
   inputValue3: {
