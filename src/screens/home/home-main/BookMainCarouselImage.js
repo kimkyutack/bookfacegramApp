@@ -7,7 +7,6 @@ import {heightPercentage, screenWidth} from '../../../services/util';
 import FastImage from 'react-native-fast-image';
 
 export default function BookMainCarouselImage({item, index, style}) {
-  // console.log(item.type, item?.img_nm, item?.imgNm);
   const [bookThumbnail, setBookThumbnail] = useState(
     item?.type === 'new' ? item?.img_nm : item?.imgNm,
   );
@@ -22,7 +21,7 @@ export default function BookMainCarouselImage({item, index, style}) {
     }
   }, [item?.img_nm, item?.imgNm]);
 
-  if (item?.type === 'new' || item?.type === 'crawl') {
+  if (item?.type === 'new' || item?.type === 'crawl' || item?.type === 'app' || item?.type === 'web') {
     return (
       <FastImage
         source={{
