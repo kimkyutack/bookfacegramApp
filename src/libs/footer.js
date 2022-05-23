@@ -17,6 +17,7 @@ import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
+  screenWidth,
 } from '../services/util';
 
 export function Footer(page) {
@@ -186,6 +187,7 @@ export function Footer(page) {
 
 const styles = StyleSheet.create({
   footer: {
+    width:screenWidth / 5,
     position: 'relative',
     top: 0,
     bottom: heightPercentage(10),
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: heightPercentage(60),
     flexDirection: 'row',
-    padding: widthPercentage(23),
+    paddingHorizontal: widthPercentage(10),
     borderWidth: 0,
   },
   mainfooter: {
@@ -205,6 +207,7 @@ const styles = StyleSheet.create({
     bottom: heightPercentage(10),
     left: 0,
     right: 0,
+    borderWidth: 0,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
@@ -223,17 +226,17 @@ const styles = StyleSheet.create({
   homes: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(29),
+    right: widthPercentage(32),
   },
   quizs: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(18),
+    right: widthPercentage(20),
   },
   events: {
     position: 'absolute',
     bottom: heightPercentage(10),
-    right: widthPercentage(21),
+    right: widthPercentage(24),
   },
   scrolltotop: {
     display: 'flex',

@@ -83,11 +83,11 @@ export default function Examright({route, navigation}) {
           {'\n'}
         </TextWrap>
         <TextWrap style={styles.exfont}>
-          [참고예시]]
+          [참고예시]
           {'\n'}
           1. 진영이가 요즘 좋은 일이 많은지, 얼굴이 폈다.
           {'\n'}
-          2.보약을 먹더니 얼굴이 피었다.
+          2. 보약을 먹더니 얼굴이 피었다.
           {'\n'}
           3. 전보다 얼굴이 많이 펴서 보기 좋다.
         </TextWrap>
