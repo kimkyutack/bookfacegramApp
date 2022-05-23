@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   message: {
     lineHeight: 18,
     fontSize: 11,
-    marginTop: 4,
+    marginTop: 2,
     color: '#ababab',
   },
   inputWrap: {

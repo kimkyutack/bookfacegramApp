@@ -141,8 +141,9 @@ export default function DialogDrawerKeyBoardWD({}) {
                   } else {
                     SetValue(1);
                   }
-                }}>
-                <View>
+                }}
+                style={styles.deleteTextInner}>
+                {/* <View>
                   <TextWrap style={styles.input}>
                     <Image
                       style={styles.radio}
@@ -157,6 +158,21 @@ export default function DialogDrawerKeyBoardWD({}) {
                   </TextWrap>
                   <TextWrap style={styles.input2}>
                     &nbsp;&nbsp;&nbsp;회원 탈퇴에 동의합니다.
+                  </TextWrap>
+                </View> */}
+
+                <View style={[styles.deleteTextInner, styles.input]}>
+                  <TextWrap style={styles.numText}><Image
+                      style={styles.radio}
+                      source={
+                        value === 1
+                          ? images.deleteMemberNo
+                          : images.deleteMemberOk
+                      }
+                    /></TextWrap>
+                  <TextWrap style={styles.messageText2}>
+                  회원 탈퇴에 관한 모든 안내사항을
+                    숙지하였으며,{'\n'}회원 탈퇴에 동의합니다.
                   </TextWrap>
                 </View>
               </TouchableWithoutFeedback>
@@ -320,6 +336,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: fontPercentage(14),
     lineHeight: heightPercentage(25),
+  },
+  messageText2: {
+    color: colors.text,
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    lineHeight: heightPercentage(25),
+    fontSize: fontPercentage(15),
+    fontWeight: 'bold',
+    paddingLeft : widthPercentage(5),
   },
   inputContainer: {
     backgroundColor: colors.white,
