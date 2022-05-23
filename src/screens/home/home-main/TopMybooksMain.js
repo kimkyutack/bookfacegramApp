@@ -29,6 +29,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {navigate} from '../../../services/navigation';
 import routes from '../../../libs/routes';
 import { set } from 'react-native-reanimated';
+import RadarCharts from '../../../components/chart/RadarCharts';
 
 export default function TopMyBooksMain({route, genre, rank, topic}) {
   const [loading, setLoading] = useState(true);
@@ -123,13 +124,13 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
   return (
     
     <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>
-      <View style={styles.cardHeader}>
+      {/* <View style={styles.cardHeader}>
         <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
         <TextWrap style={styles.welcome}>
           을 위한 맞춤도서를 확인해보세요!
         </TextWrap>
       </View>
-
+      <RadarCharts></RadarCharts>
       <View style={styles.cardHeader2}>
         
         <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
@@ -142,7 +143,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
         </TouchableOpacity>
               
-      </View>
+      </View> */}
 
       {loading ? (
         <ActivityIndicator
@@ -151,7 +152,35 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           color={colors.blue}
         />
       ) : genre.length < 60 ? (
-          <NoMybooks />
+        <ScrollView>
+          <View style={styles.root2}>
+            <View style={styles.root2}>
+              <View style={styles.cardHeader}>
+                <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
+                <TextWrap style={styles.welcome}>
+                  을 위한 맞춤도서를 확인해보세요!
+                </TextWrap>
+              </View>
+              <RadarCharts></RadarCharts>
+            </View>
+            <View style={styles.root2}>
+              <View style={styles.cardHeader2}>
+                
+                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
+                </TouchableOpacity>
+                      
+              </View>
+              <NoMybooks />
+            </View>
+          </View>
+        </ScrollView>
       ) : genre.length === 60 && select === 'genre' ? (
         <FlatList
           data={listData}
@@ -164,6 +193,30 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           renderItem={({item, index}) => {
             return <MyBookCarousel {...item} />;
           }}
+          ListHeaderComponent= {
+          <View>
+            <View style={styles.cardHeader}>
+              <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
+              <TextWrap style={styles.welcome}>
+                을 위한 맞춤도서를 확인해보세요!
+              </TextWrap>
+            </View>
+            <RadarCharts></RadarCharts>
+            <View style={styles.cardHeader2}>
+              
+              <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+                <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
+              </TouchableOpacity>
+                    
+            </View>
+          </View>
+          }
         />
       ) : genre.length === 60 && select === 'rank' ? (
            <FlatList
@@ -177,6 +230,30 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           renderItem={({item, index}) => {
             return <MyBookCarousel {...item} />;
           }}
+          ListHeaderComponent= {
+            <View>
+              <View style={styles.cardHeader}>
+                <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
+                <TextWrap style={styles.welcome}>
+                  을 위한 맞춤도서를 확인해보세요!
+                </TextWrap>
+              </View>
+              <RadarCharts></RadarCharts>
+              <View style={styles.cardHeader2}>
+                
+                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
+                </TouchableOpacity>
+                      
+              </View>
+            </View>
+            }
         />
       ) : ( 
          <FlatList
@@ -190,6 +267,30 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           renderItem={({item, index}) => {
             return <MyBookCarousel {...item} />;
           }}
+          ListHeaderComponent= {
+            <View>
+              <View style={styles.cardHeader}>
+                <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
+                <TextWrap style={styles.welcome}>
+                  을 위한 맞춤도서를 확인해보세요!
+                </TextWrap>
+              </View>
+              <RadarCharts></RadarCharts>
+              <View style={styles.cardHeader2}>
+                
+                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
+                </TouchableOpacity>
+                      
+              </View>
+            </View>
+            }
         />
       )
       
@@ -206,6 +307,7 @@ const styles = StyleSheet.create({
   },
   root2: {
     flexGrow: 1,
+    marginBottom : heightPercentage(30),
   },
   cardHeader: {
     flexDirection: 'row',

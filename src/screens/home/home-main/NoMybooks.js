@@ -43,12 +43,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   noImageContain: {
-    display: 'flex',
+    flex: 1,
     alignItems: 'center',
   },
   noBooksTitle: {
     fontSize: fontPercentage(25),
-    fontWeight: '900',
+    fontWeight: 'bold',
+    letterSpacing : -0.5,
   },
   noBooksContent: {
     textAlign: 'center',
