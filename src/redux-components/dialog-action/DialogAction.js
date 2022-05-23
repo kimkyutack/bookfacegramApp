@@ -12,6 +12,13 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
+import {
+  screenHeight,
+  fontPercentage,
+  heightPercentage,
+  screenWidth,
+  widthPercentage,
+} from '../../services/util';
 
 export default function DialogAction({}) {
   const dispatch = useDispatch();
@@ -57,7 +64,7 @@ export default function DialogAction({}) {
               </TextWrap>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[actionDialog.title.length > 3  ? styles.button2 : styles.button]}
+              style={[actionDialog.title.length > 3  ? styles.button2 : styles.button4]}
               onPress={() => {
                 dispatch(dialogClose());
                 if (actionDialog.onPress) {
@@ -81,7 +88,7 @@ export default function DialogAction({}) {
 }
 
 const styles = StyleSheet.create({
-  row: {flexDirection: 'row', alignItems: 'center', width: '90%',},
+  row: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
   row2: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
   root: {
     position: 'absolute',
@@ -131,6 +138,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flex: 1,
     justifyContent: 'center',
+  },
+  button4: {
+    paddingVertical: 18,
+    alignItems: 'flex-start',
+    flex: 1,
+    justifyContent: 'center',
+    left:widthPercentage(10),
+
   },
   title3: {
     fontSize: 15,
