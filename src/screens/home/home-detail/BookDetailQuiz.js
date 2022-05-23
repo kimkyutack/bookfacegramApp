@@ -330,7 +330,15 @@ export default function BookDetailQuiz({isbn}) {
                 style={styles.inputStyle}
                 inputStyle={styles.inputValue}
                 key={index}
-                value={subjm}
+                value={index === 1
+                    ? ans1
+                    : index === 2
+                    ? ans2
+                    : index === 3
+                    ? ans3
+                    : index === 4
+                    ? ans4
+                    : ans5}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={eve => {
@@ -617,6 +625,7 @@ export default function BookDetailQuiz({isbn}) {
             alignSelf: 'center',
             flexDirection: 'row',
             flexWrap: 'wrap',
+            marginBottom: heightPercentage(20),
           }}>
         {totRecord.length !== 0
           ? totRecord.map((data, index) => {
@@ -877,9 +886,9 @@ const styles = StyleSheet.create({
   },
   note: {
     width: widthPercentage(13),
-    height: heightPercentage(20),
+    height: heightPercentage(18),
     resizeMode: 'stretch',
-    marginTop: heightPercentage(30),
+    marginTop: heightPercentage(31),
   },
   input: {
     color: colors.black,

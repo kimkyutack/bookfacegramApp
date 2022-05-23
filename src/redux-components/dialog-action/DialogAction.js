@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#222222',
     textAlign: 'left',
-    paddingHorizontal: widthPercentage(15),
+    paddingHorizontal: 30,
   },
   message: {
     lineHeight: 21,
@@ -116,14 +116,16 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 18,
+    paddingHorizontal: 30,
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
   },
   button3: {
     paddingVertical: 18,
+    paddingHorizontal: 30,
     alignItems: 'center',
-    flex: 4,
+    flex: 3,
     justifyContent: 'center',
   },
   button2: {
