@@ -41,10 +41,9 @@ export default function DialogAction({}) {
             알림
           </TextWrap>
           <TextWrap style={styles.message}>{actionDialog.message}</TextWrap>
-          <View style={styles.row}>
-            <TouchableOpacity style={[styles.button3, styles.button2]} />
+          <View style={styles.row2}>
             <TouchableOpacity
-              style={[styles.button, styles.button2]}
+              style={[styles.button]}
               onPress={() => {
                 dispatch(dialogClose());
                 if (actionDialog.onPress) {
@@ -58,7 +57,7 @@ export default function DialogAction({}) {
               </TextWrap>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.button2]}
+              style={[actionDialog.title.length > 3  ? styles.button2 : styles.button]}
               onPress={() => {
                 dispatch(dialogClose());
                 if (actionDialog.onPress) {
@@ -82,7 +81,8 @@ export default function DialogAction({}) {
 }
 
 const styles = StyleSheet.create({
-  row: {flexDirection: 'row', alignItems: 'center', width:'100%'},
+  row: {flexDirection: 'row', alignItems: 'center', width: '90%',},
+  row2: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
   root: {
     position: 'absolute',
     left: 0,
@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
   },
   wrap: {flex: 1, justifyContent: 'center'},
   dialog: {
-    width:'100%',
     backgroundColor: colors.white,
     marginHorizontal: 30,
     borderRadius: 8,
@@ -119,15 +118,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+
   },
   button3: {
     paddingVertical: 18,
     alignItems: 'center',
-    flex: 4,
+    flex:3,
     justifyContent: 'center',
   },
   button2: {
-    // borderRightWidth: 1,
+    paddingVertical: 18,
+    alignItems: 'flex-start',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  title3: {
+    fontSize: 15,
+    lineHeight: 21,
+    color: colors.primary,
+    textAlign : 'left',
   },
   title2: {
     fontSize: 15,
