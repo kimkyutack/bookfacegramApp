@@ -22,7 +22,7 @@ export default function Provision({route, navigation}) {
       <ScrollView style={styles.root}>
         <View style={styles.userInfoContainer}>
           <View>
-            <TextWrap style={styles.title}>
+            <TextWrap style={styles.title2}>
               1. 개인정보의 수집 및 이용 목적
             </TextWrap>
             <TextWrap>
@@ -205,6 +205,11 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: heightPercentage(33),
+    marginBottom: heightPercentage(5),
+    fontWeight: 'bold',
+    fontSize: fontPercentage(15),
+  },
+  title2: {
     marginBottom: heightPercentage(5),
     fontWeight: 'bold',
     fontSize: fontPercentage(15),
