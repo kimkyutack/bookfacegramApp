@@ -61,6 +61,7 @@ const renderItem = ({
         <TouchableOpacity
           style={styles.infoContainerEdit}
           onPress={() => {
+            console.log('1')
             navigate(routes.feedBookImage, {
               screen: routes.feedBookUserImage,
               params: {

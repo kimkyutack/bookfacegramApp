@@ -42,8 +42,8 @@ export default function BookDetailQuiz({isbn}) {
   const [quizcreate, setQuizcreate] = useState(0);
   const [quizEnd, setQuizEnd] = useState(0);
   const [quizstart, setQuizstart] = useState(0);
-  const [contents, setContents] = useState();
-  const [subjm, setsubjm] = useState();
+  const [contents, setContents] = useState('');
+  const [subjm, setsubjm] = useState('');
   const [subtype, setsubType] = useState(1);
   const [Answerno, setAnswerno] = useState(1);
   const [answer, setAnswer] = useState('');
@@ -61,6 +61,7 @@ export default function BookDetailQuiz({isbn}) {
   const [ans3, setans3] = useState();
   const [ans4, setans4] = useState();
   const [ans5, setans5] = useState();
+  console.log(contents.length);
   const radio_props = [
     {label: '단답형', value: 1},
     {label: '객관식', value: 2},
@@ -263,7 +264,7 @@ export default function BookDetailQuiz({isbn}) {
         문제
       </TextWrap>
       <TextInput
-        style={styles.inputStyle}
+        style={contents.length !== 0 ? styles.inputStyle : styles.placeStyle}
         inputStyle={styles.inputValue}
         value={contents}
         multiline={true}
@@ -279,7 +280,7 @@ export default function BookDetailQuiz({isbn}) {
         예문
       </TextWrap>
       <TextInput
-        style={styles.inputStyle}
+        style={subjm.length !== 0 ? styles.inputStyle : styles.placeStyle}
         inputStyle={styles.inputValue}
         value={subjm}
         multiline={true}
@@ -328,6 +329,7 @@ export default function BookDetailQuiz({isbn}) {
               <TextInput
                 style={styles.inputStyle}
                 inputStyle={styles.inputValue}
+                key={index}
                 value={subjm}
                 multiline={false}
                 numberOfLines={1}
@@ -376,7 +378,7 @@ export default function BookDetailQuiz({isbn}) {
                       bottom: heightPercentage(3),
                       lineHeight: screenHeight / 39,
                     }}
-                    labelWrapStyle={{marginRight: 5, marginLeft: 20}}
+                    labelWrapStyle={{marginRight: widthPercentage(8), marginLeft: widthPercentage(10), right:widthPercentage(8)}}
                   />
                   <RadioButtonInput
                     obj={num}
@@ -391,7 +393,7 @@ export default function BookDetailQuiz({isbn}) {
                     buttonSize={screenWidth / 80}
                     buttonOuterSize={screenWidth / 40}
                     buttonStyle={{}}
-                    buttonWrapStyle={{top: heightPercentage(3)}}
+                    buttonWrapStyle={{top: heightPercentage(3), right:widthPercentage(10)}}
                   />
                 </RadioButton>
               ))}
@@ -408,8 +410,8 @@ export default function BookDetailQuiz({isbn}) {
       </TouchableOpacity>
     </View>
   ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 0 ? (
-    <View>
-      <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+    <View style={{width:screenWidth}}>
+      <TextWrap style={styles.extitless} font={fonts.kopubWorldDotumProLight}>
         Q{titlenum}.
       </TextWrap>
       <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
@@ -487,9 +489,12 @@ export default function BookDetailQuiz({isbn}) {
     </View>
   ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 1 ? (
     <View>
+      <View style={styles.extitle2} >
+      <Image source={images.note_icon} style={styles.note} />
       <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
         도전결과
       </TextWrap>
+      </View>
       {quizScore.length !== 0 ? (
         <View style={styles.quizdata}>
           <TextWrap
@@ -511,7 +516,7 @@ export default function BookDetailQuiz({isbn}) {
       ) : null}
       <View
         style={{
-          marginTop: heightPercentage(20),
+          marginTop: heightPercentage(10),
           width: screenWidth * 0.9,
           alignItems: 'center',
           justifyContent: 'flex-start',
@@ -595,15 +600,17 @@ export default function BookDetailQuiz({isbn}) {
         <Image source={images.quiz_btn} style={styles.img} />
       </TouchableOpacity>
         {totRecord.length !== 0 ? (
-         
-        <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
-          도전결과
-        </TextWrap>
+          <View style={styles.extitle2} >
+         <Image source={images.note_icon} style={styles.note} />
+          <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+            도전결과
+          </TextWrap>
+        </View>
      
         ) : null}
         <View
           style={{
-            marginTop: heightPercentage(20),
+            marginTop: heightPercentage(10),
             width: screenWidth * 0.9,
             alignItems: 'center',
             justifyContent: 'flex-start',
@@ -642,7 +649,7 @@ export default function BookDetailQuiz({isbn}) {
                     style={
                       openRecord === index
                         ? {
-                            marginTop: heightPercentage(20),
+                            marginTop: heightPercentage(10),
                             width: screenWidth * 0.9,
                             alignItems: 'center',
                             justifyContent: 'flex-start',
@@ -652,7 +659,7 @@ export default function BookDetailQuiz({isbn}) {
                             display: 'flex',
                           }
                         : {
-                            marginTop: heightPercentage(20),
+                            marginTop: heightPercentage(10),
                             width: screenWidth * 0.9,
                             alignItems: 'center',
                             justifyContent: 'flex-start',
@@ -719,25 +726,42 @@ const styles = StyleSheet.create({
     color: '#0066ff',
   },
   extitle: {
+    width: screenWidth * 0.7,
+    marginTop: heightPercentage(30),
+    left:widthPercentage(4),
+    textAlign: 'left',
+    fontSize: fontPercentage(14),
+    fontWeight: 'bold',
+  },
+  extitless: {
+    width: screenWidth * 0.9,
+    marginTop: heightPercentage(30),
+    textAlign: 'left',
+    fontSize: fontPercentage(14),
+    alignSelf:'center',
+    fontWeight: 'bold',
+  },
+  extitle2: {
     width: screenWidth * 0.9,
     marginTop: heightPercentage(30),
     textAlign: 'left',
     fontSize: fontPercentage(14),
     fontWeight: 'bold',
     alignSelf: 'center',
+    flexDirection:'row',
   },
   excontents: {
     width: screenWidth * 0.9,
     marginTop: heightPercentage(30),
     textAlign: 'left',
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(14),
     alignSelf: 'center',
     marginBottom: heightPercentage(30),
   },
   quizdata: {
     flexDirection: 'row',
     width: screenWidth * 0.9,
-    marginTop: heightPercentage(20),
+    marginTop: heightPercentage(5),
     fontSize: fontPercentage(11),
     alignSelf: 'center',
     flexWrap: 'wrap',
@@ -764,7 +788,7 @@ const styles = StyleSheet.create({
   quizdata2: {
     backgroundColor: '#f2f2f2',
     flex: 1,
-    textAlign: 'left',
+    textAlign: 'center',
     fontSize: fontPercentage(12),
     alignSelf: 'center',
     borderRightWidth: 1,
@@ -851,6 +875,12 @@ const styles = StyleSheet.create({
     height: heightPercentage(40),
     resizeMode: 'contain',
   },
+  note: {
+    width: widthPercentage(13),
+    height: heightPercentage(20),
+    resizeMode: 'stretch',
+    marginTop: heightPercentage(30),
+  },
   input: {
     color: colors.black,
   },
@@ -869,6 +899,22 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   inputStyle: {
+    color: colors.black,
+    fontSize: fontPercentage(12),
+    lineHeight: fontPercentage(24),
+    display: 'flex',
+    flexBasis: 300,
+    flexShrink: 1,
+    textAlign: 'left',
+    textAlignVertical:'top',
+    top: heightPercentage(20),
+    marginBottom: heightPercentage(20),
+    alignSelf: 'center',
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+    width: '90%',
+  },
+  placeStyle: {
     color: colors.black,
     fontSize: fontPercentage(12),
     lineHeight: fontPercentage(24),
