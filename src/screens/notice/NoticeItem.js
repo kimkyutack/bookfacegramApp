@@ -7,6 +7,7 @@ import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import {fontPercentage, formatTime, heightPercentage, screenHeight, screenWidth} from '../../services/util';
 import HTMLView from 'react-native-htmlview';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function NoticeItem({
   register_dt,
@@ -16,12 +17,14 @@ export default function NoticeItem({
   isFocused,
 }) {
   const [open, setOpen] = useState(false);
-
-  const renderNode = (node) => {
+  const renderNode = (node, index) => {
         if (node.name == 'img') {
             const a = node.attribs;
-            return ( <Image style={{width: screenWidth * 0.9, height: heightPercentage(800), resizeMode
-            :'stretch'}} source={{uri: a.src}}/> );
+            return (
+              <View key={index}>
+               <AutoHeightImage width={screenWidth * 0.84} source={{uri: a.src}}/> 
+              </View>
+               );
         }
     };
 

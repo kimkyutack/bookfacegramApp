@@ -18,8 +18,10 @@ import {
   heightPercentage,
   fontPercentage,
   cameraItem,
+  screenWidth,
 } from '../../services/util';
 import {useIsFocused} from '@react-navigation/core';
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function EventDetail({route, navigation}) {
   const dispatch = useDispatch();
@@ -109,11 +111,17 @@ export default function EventDetail({route, navigation}) {
         <View style={styles.root}>
           {/*uri: routeParams.ev_img_f,*/}
           {routeParams && (
-            <Image
+            // <Image
+            //   source={{
+            //     uri: routeParams.ev_img_f,
+            //   }}
+            //   style={styles.image}
+            // />
+            <AutoHeightImage
               source={{
                 uri: routeParams.ev_img_f,
               }}
-              style={styles.image}
+              width= {screenWidth*0.92}
             />
           )}
           {routeParams.ev_btn_active === 1 && (
@@ -198,8 +206,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: heightPercentage(2000),
-    resizeMode: 'stretch',
+    // height: heightPercentage(2000),
+    // resizeMode: 'stretch',
   },
   button: {
     borderRadius: 0,
