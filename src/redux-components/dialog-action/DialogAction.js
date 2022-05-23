@@ -12,6 +12,7 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
+import { widthPercentage } from '../../services/util';
 
 export default function DialogAction({}) {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ export default function DialogAction({}) {
 }
 
 const styles = StyleSheet.create({
-  row: {flexDirection: 'row', alignItems: 'center'},
+  row: {flexDirection: 'row', alignItems: 'center',paddingHorizontal: widthPercentage(15)},
   root: {
     position: 'absolute',
     left: 0,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#222222',
     textAlign: 'left',
-    paddingHorizontal: 30,
+    paddingHorizontal: widthPercentage(15),
   },
   message: {
     lineHeight: 21,

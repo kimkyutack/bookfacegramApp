@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: heightPercentage(28),
+    resizeMode: 'stretch',
   },
   selectfont: {
     fontSize: fontPercentage(9),

@@ -20,7 +20,6 @@ import {fontPercentage} from '../../services/util';
 export default function DialogMore({}) {
   const dispatch = useDispatch();
   const {moreDialog} = useSelector(s => s.dialog, shallowEqual);
-  console.log(moreDialog);
   useEffect(() => {
     if (moreDialog.open) {
       Keyboard.dismiss();
@@ -109,14 +108,14 @@ const styles = StyleSheet.create({
   },
   message: {
     lineHeight: fontPercentage(12),
-    fontSize: fontPercentage(10),
+    fontSize: fontPercentage(11),
     color: '#222222',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   message3: {
     lineHeight: fontPercentage(12),
-    fontSize: fontPercentage(10),
+    fontSize: fontPercentage(11),
     color: 'red',
     fontWeight: 'bold',
     textAlign: 'center',

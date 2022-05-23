@@ -499,8 +499,8 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(10),
   },
   customElement2: {
-    width: screenWidth,
-    paddingLeft: screenWidth / 35,
+    width: screenWidth*0.95,
+    textAlign:'left',
     color: colors.blue,
     fontSize: fontPercentage(10),
   },
