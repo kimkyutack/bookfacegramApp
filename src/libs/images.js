@@ -17,6 +17,7 @@ export default {
   check: require('../assets/images/check.png'),
   retry: require('../assets/images/retry.png'),
   next_btn: require('../assets/images/next_btn.png'),
+  note_icon: require('../assets/images/note_icon.png'),
   prev_btn: require('../assets/images/prev_btn.png'),
   cancel_btn: require('../assets/images/cancel_btn.png'),
   publicIcon: require('../assets/images/public_icon.png'),

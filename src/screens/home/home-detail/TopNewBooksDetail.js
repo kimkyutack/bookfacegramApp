@@ -468,6 +468,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   imageTitle: {
+    width: widthPercentage(170),
     textAlign: 'center',
     fontSize: fontPercentage(16),
   },
