@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import InputWrap from '../../components/input-wrap/InputWrap';
+import InputWrap2 from '../../components/input-wrap/InputWrap2';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
@@ -162,7 +162,7 @@ export default function DialogDrawerKeyBoardPW({}) {
                     : ''}
                 </TextWrap>
               </View>
-              <InputWrap
+              <InputWrap2
                 style={styles.input}
                 inputStyle={styles.inputValue}
                 value={password}
@@ -191,7 +191,7 @@ export default function DialogDrawerKeyBoardPW({}) {
                     : colors.black
                 }
               />
-              <InputWrap
+              <InputWrap2
                 style={styles.input}
                 inputStyle={styles.inputValue}
                 value={passwordConfirm}

@@ -18,7 +18,7 @@ import TagInput from 'react-native-tags-input';
 import Avatar from '../../components/avatar/Avatar';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import Topbar from '../../components/topbar/Topbar';
-import InputWrap2 from '../../components/input-wrap/InputWrap';
+import InputWrap2 from '../../components/input-wrap/InputWrap2';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import {userSignOut} from '../../redux/user/UserActions';
 import fonts from '../../libs/fonts';
@@ -355,8 +355,11 @@ export default function Profile({route, navigation}) {
               dispatch(dialogClose());
               dispatch(dialogOpenGradeProfile({title: '확인'}));
             }}
-            style={styles.inputStyle}>
-            <TextWrap font={fonts.kopubWorldDotumProMedium}>{grade}</TextWrap>
+            style={styles.inputStyle}
+            >
+            <TextWrap font={fonts.kopubWorldDotumProMedium}  style={styles.inputStyle}>
+              {grade}
+            </TextWrap>
           </TouchableOpacity>
         </View>
         <View style={styles.divider} />
@@ -387,7 +390,7 @@ export default function Profile({route, navigation}) {
             이메일
           </TextWrap>
           <InputWrap2
-            style={styles.inputStyle}
+            style={styles.inputStyle2}
             inputStyle={styles.inputValue}
             onChange={emailDuplicatedCheck}
             value={email}
@@ -502,8 +505,12 @@ const styles = StyleSheet.create({
   },
   inputValue: {
     fontFamily: fonts.kopubWorldDotumProMedium,
-    fontSize: fontPercentage(16),
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(24),
     color: colors.black,
+    textAlign : 'left',
+    flexBasis: 300,
+    flexShrink : 1,
   },
   image: {
     width: widthPercentage(30),
@@ -675,11 +682,22 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     color: colors.black,
-    fontSize: fontPercentage(16),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(24),
     display: 'flex',
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
+    
+  },
+  inputStyle2: {
+    color: colors.black,
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(24),
+    display: 'flex',
+    flexBasis: 300,
+    flexShrink: 1,
+    textAlign: 'left',
+    top : heightPercentage(10),
   },
 });
