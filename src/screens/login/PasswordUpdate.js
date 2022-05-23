@@ -136,7 +136,7 @@ export default function PasswordUpdate({route, navigation}) {
   return (
     <RootLayout
       topbar={{
-        title: '비밀번호 찾기',
+        title: '비밀번호 재설정',
         back: true,
       }}>
       <ScrollView
@@ -220,7 +220,7 @@ export default function PasswordUpdate({route, navigation}) {
             disabledBackgroundColor={
               !buttonDisabled && styles.buttonBackground
             }>
-            찾기
+            확인
           </ButtonWrap>
         </View>
         <View style={styles.row1}>

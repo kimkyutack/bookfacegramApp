@@ -44,8 +44,24 @@ export default function MyBookCarousel({
   header,
   th,
 }) {
-  
+  const ref1 = useRef();
+  const ref2 = useRef();
   const dispatch = useDispatch();
+  const [swiper, setSwiper] = useState(null);
+
+  useEffect(() => {
+
+    if(ref1.current !== undefined) {
+      ref1.current.scrollTo(0,true);
+    }
+    if(ref2.current !== undefined) {
+      ref2.current.scrollTo(0,true);
+    }
+  }, [name]);
+  const slideTo = (index) => {
+    if(swiper) 
+    swiper.slideTo(index)};
+
   const newRenderItem = (item, index) => {
     //console.log(item)
     if (item?.length === 1) {
@@ -113,17 +129,25 @@ export default function MyBookCarousel({
       return;
     }
   };
+
+  const _onMomentumScrollEnd = (e , state , context) => {
+    console.log('state',state)
+  }
   return (
    <View style={styles.root}>
       {header &&
       <Swiper
+        ref={ref1}
         showsButtons={false}
         width={slideWidth}
         height={
           heightPercentage(200)
         }
+        onSwiper={setSwiper}
+        index={0}
         showsPagination={pagination}
         removeClippedSubviews={false}
+        
         loop={false}
         autoplay={false}
         autoplayTimeout={3}
@@ -133,7 +157,12 @@ export default function MyBookCarousel({
         activeDotStyle={{top: 15}}
         activeDotColor={colors.blue}
         nextButton={<Text />}
-        prevButton={<Text />}>
+        prevButton={<Text />}
+        // onMomentumScrollEnd={(e, state, context) =>{
+        //   console.log('index:', state.index);
+        // }
+        // }
+        >
         {renderData1?.map((data, index) => {
             return newRenderItem(data, index);
           }
@@ -142,12 +171,15 @@ export default function MyBookCarousel({
       }
       {header &&
       <Swiper
+        ref={ref2}
         style={styles.wrapper}
         showsButtons={false}
         width={slideWidth}
         height={
           heightPercentage(250)
         }
+        onSwiper={setSwiper}
+        index={0}
         showsPagination={pagination}
         removeClippedSubviews={false}
         loop={false}
@@ -159,7 +191,11 @@ export default function MyBookCarousel({
         activeDotStyle={{top: 15}}
         activeDotColor={colors.blue}
         nextButton={<Text />}
-        prevButton={<Text />}>
+        prevButton={<Text />}
+        // onMomentumScrollEnd={(e, state, context) =>
+        //   console.log('index:', state.index)
+        // }
+        >
         {renderData2?.map((data, index) => {
             return newRenderItem(data, index);
           }
