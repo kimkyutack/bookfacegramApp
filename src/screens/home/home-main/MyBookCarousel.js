@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Platform,
   Linking,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import moment from 'moment-timezone';
 import Swiper from 'react-native-swiper';
 
@@ -17,7 +17,7 @@ import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
 import routes from '../../../libs/routes';
 import fonts from '../../../libs/fonts';
-import {navigationRef, navigate} from '../../../services/navigation';
+import { navigationRef, navigate } from '../../../services/navigation';
 import {
   fontPercentage,
   heightPercentage,
@@ -28,9 +28,9 @@ import FastImage from 'react-native-fast-image';
 
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import CardWrap from '../../../components/card-wrap/CardWrap';
-import {setTab} from '../../../redux/tab/TabAction';
+import { setTab } from '../../../redux/tab/TabAction';
 import BookMainCarouselImage from './BookMainCarouselImage';
-import {dialogError} from '../../../redux/dialog/DialogActions';
+import { dialogError } from '../../../redux/dialog/DialogActions';
 
 export default function MyBookCarousel({
   name,
@@ -51,16 +51,17 @@ export default function MyBookCarousel({
 
   useEffect(() => {
 
-    if(ref1.current !== undefined) {
-      ref1.current.scrollTo(0,true);
+    if (ref1.current !== undefined) {
+      ref1.current.scrollTo(0, true);
     }
-    if(ref2.current !== undefined) {
-      ref2.current.scrollTo(0,true);
+    if (ref2.current !== undefined) {
+      ref2.current.scrollTo(0, true);
     }
   }, [name]);
   const slideTo = (index) => {
-    if(swiper) 
-    swiper.slideTo(index)};
+    if (swiper)
+      swiper.slideTo(index)
+  };
 
   const newRenderItem = (item, index) => {
     //console.log(item)
@@ -83,7 +84,7 @@ export default function MyBookCarousel({
               <CardWrap
                 style={[
                   styles.card,
-                  itemWidth && {width: itemWidth},
+                  itemWidth && { width: itemWidth },
                   // index1 === 2
                   //   ? {alignItems: 'flex-end'}
                   //   : index1 === 0
@@ -104,11 +105,11 @@ export default function MyBookCarousel({
                   });
                 }}>
                 {item1?.bookIdx && (
-                  <View style={{width: itemWidth}}>
+                  <View style={{ width: itemWidth }}>
                     <BookMainCarouselImage
                       item={item1}
                       index={index}
-                      style={[{width: itemWidth}, styles.bookShadow]}
+                      style={[{ width: itemWidth }, styles.bookShadow]}
                     />
                     <TextWrap
                       style={styles.info}
@@ -130,77 +131,129 @@ export default function MyBookCarousel({
     }
   };
 
-  const _onMomentumScrollEnd = (e , state , context) => {
-    console.log('state',state)
+  const _onMomentumScrollEnd = (e, state, context) => {
+    console.log('state', state)
   }
+
   return (
-   <View style={styles.root}>
+    <View style={styles.root}>
       {header &&
-      <Swiper
-        ref={ref1}
-        showsButtons={false}
-        width={slideWidth}
-        height={
-          heightPercentage(200)
-        }
-        onSwiper={setSwiper}
-        index={0}
-        showsPagination={pagination}
-        removeClippedSubviews={false}
-        
-        loop={false}
-        autoplay={false}
-        autoplayTimeout={3}
-        pagingEnabled={false}
-        dotStyle={{top: 15}}
-        dotColor={colors.border}
-        activeDotStyle={{top: 15}}
-        activeDotColor={colors.blue}
-        nextButton={<Text />}
-        prevButton={<Text />}
+        <View style={styles.cardHeader}>
+          <TextWrap
+            style={styles.cardHeaderSpread}
+            font={fonts.kopubWorldDotumProMedium}
+            onPress={() => {
+              dispatch(
+                setTab({
+                  tab: 'list',
+                  grade: grade,
+                  gradeStyle:
+                    grade === null
+                      ? null
+                      : grade === '1급'
+                        ? { color: colors.st1 }
+                        : grade === '2급'
+                          ? { color: colors.st2 }
+                          : grade === '3급'
+                            ? { color: colors.st3 }
+                            : grade === '4급'
+                              ? { color: colors.st4 }
+                              : grade === '5급'
+                                ? { color: colors.st5 }
+                                : grade === '준3급'
+                                  ? { color: colors.st3 }
+                                  : grade === '준4급'
+                                    ? { color: colors.st4 }
+                                    : grade === '준5급'
+                                      ? { color: colors.st5 }
+                                      : grade === '누리급'
+                                        ? { color: colors.st6 }
+                                        : null,
+                }),
+              );
+              navigate(routes.homeList, {
+                grade: grade,
+                type: 'detail',
+              });
+              // navigate(routes.home, {
+              //   screen: routes.topNewBooks,
+              //   params: {
+              //     grade: grade,
+              //     type: 'list',
+              //     key: Date.now(),
+              //   },
+              // });
+            }}>
+            &gt; 전체보기
+          </TextWrap>
+        </View>
+      }
+      {header &&
+        <Swiper
+          ref={ref1}
+          showsButtons={false}
+          width={slideWidth}
+          height={
+            heightPercentage(200)
+          }
+          onSwiper={setSwiper}
+          index={0}
+          showsPagination={pagination}
+          removeClippedSubviews={false}
+
+          loop={false}
+          autoplay={false}
+          autoplayTimeout={3}
+          pagingEnabled={false}
+          dotStyle={{ top: 15 }}
+          dotColor={colors.border}
+          activeDotStyle={{ top: 15 }}
+          activeDotColor={colors.blue}
+          nextButton={<Text />}
+          prevButton={<Text />}
         // onMomentumScrollEnd={(e, state, context) =>{
         //   console.log('index:', state.index);
         // }
         // }
         >
-        {renderData1?.map((data, index) => {
+          {renderData1?.map((data, index) => {
             return newRenderItem(data, index);
           }
-        )}
-      </Swiper>
+          )}
+        </Swiper>
       }
       {header &&
-      <Swiper
-        ref={ref2}
-        style={styles.wrapper}
-        showsButtons={false}
-        width={slideWidth}
-        height={
-          heightPercentage(250)
-        }
-        onSwiper={setSwiper}
-        index={0}
-        showsPagination={pagination}
-        removeClippedSubviews={false}
-        loop={false}
-        autoplay={false}
-        autoplayTimeout={3}
-        pagingEnabled={false}
-        dotStyle={{top: 15}}
-        dotColor={colors.border}
-        activeDotStyle={{top: 15}}
-        activeDotColor={colors.blue}
-        nextButton={<Text />}
-        prevButton={<Text />}
+        <Swiper
+          ref={ref2}
+          style={styles.wrapper}
+          showsButtons={false}
+          width={slideWidth}
+          height={
+            heightPercentage(250)
+          }
+          onSwiper={setSwiper}
+          index={0}
+          showsPagination={pagination}
+          removeClippedSubviews={false}
+          loop={false}
+          autoplay={false}
+          autoplayTimeout={3}
+          pagingEnabled={false}
+          dotStyle={{ top: 15 }}
+          dotColor={colors.border}
+          activeDotStyle={{ top: 15 }}
+          activeDotColor={colors.blue}
+          nextButton={<Text />}
+          prevButton={<Text />}
         // onMomentumScrollEnd={(e, state, context) =>
         //   console.log('index:', state.index)
         // }
         >
-        {renderData2?.map((data, index) => {
+          {renderData2?.map((data, index) => {
             return newRenderItem(data, index);
           }
-        )}
-      </Swiper>
+          )}
+        </Swiper>
       }
     </View>
   );
@@ -213,7 +266,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: colors.white,
   },
-  wrapper: {top:20},
+  wrapper: { top: 20 },
   banner: {
     width: widthPercentage(332),
     height: heightPercentage(150),
@@ -268,7 +321,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
       },
       android: {
