@@ -7,19 +7,37 @@ import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
 import RootLayout from '../../layouts/root-layout/RootLayout';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import {clearItem, getItem} from '../../services/preference';
 import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
 
+
+
 export default function Intro1({route, navigation}) {
   const scrollRef = useRef();
   const [pressButtonIdx, setPressButtonIdx] = useState(null);
-
+  const dispatch = useDispatch();
+  const [level,setLevel] = useState(0);
   const age = route.params?.age * 1;
-  const initGrade = route.params?.initGrade * 1;
-  useEffect(() => {
+  let initGrade = route.params?.initGrade * 1;
+  if(level !== 0){
+    initGrade = level * 1;
+  }
+  const userlevelCheck = async () => {
+  try {
+   const platformType =  await getItem('platformType');
+    if(platformType === 'toaping'){
+      setLevel(await getItem('level'));
+    }
+  } catch (error) {
+    console.log('fail')
+  }
+};
+  useEffect(() => { 
     if (age) {
       if (age < 8) {
         setPressButtonIdx(2);
@@ -69,6 +87,10 @@ export default function Intro1({route, navigation}) {
         setPressButtonIdx(12);
       }
     }
+  }, [initGrade]);
+
+  useEffect(() => {
+    userlevelCheck();
   }, []);
 
   return (

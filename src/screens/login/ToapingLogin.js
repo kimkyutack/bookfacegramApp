@@ -54,6 +54,14 @@ export default function ToapingLogin({}) {
             password: password,
             platformType: 'toaping',
           });
+          dispatch(
+          dialogOpenMessage({
+            message: '입력하신 계정의 회원정보가 확인되었습니다.',
+            onPress: () => {
+              dispatch(userCheckToken);
+            },
+          }),
+        );
         } else {
           await setItem('accessToken', data.accessToken);
           await setItem('refreshToken', data.refreshToken);
@@ -62,21 +70,10 @@ export default function ToapingLogin({}) {
           await setItem('toapingPw', password);
           dispatch(userCheckToken);
         }
-        dispatch(
-          dialogOpenMessage({
-            label: '확인',
-            title: '확인',
-            message: '입력하신 계정의 회원정보가 확인되었습니다.',
-            onPress: () => {
-              dispatch(userCheckToken);
-            },
-          }),
-        );
+        
       } else {
         dispatch(
           dialogOpenMessage({
-            label: '오류',
-            title: '확인',
             message:
               '입력하신 이름과 이메일에 해당하는 회원정보를 찾지 못했습니다. 다시 입력해주세요.',
           }),
@@ -90,8 +87,6 @@ export default function ToapingLogin({}) {
       } else {
         dispatch(
           dialogOpenMessage({
-            label: '오류',
-            title: '확인',
             message:
               '입력하신 이름과 이메일에 해당하는 회원정보를 찾지 못했습니다. 다시 입력해주세요.',
           }),

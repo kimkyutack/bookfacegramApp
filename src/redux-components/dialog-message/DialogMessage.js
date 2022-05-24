@@ -12,6 +12,13 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
+import {
+  screenHeight,
+  fontPercentage,
+  heightPercentage,
+  screenWidth,
+  widthPercentage,
+} from '../../services/util';
 
 export default function DialogMessage({}) {
   const dispatch = useDispatch();
@@ -53,6 +60,9 @@ export default function DialogMessage({}) {
             알림
           </TextWrap>
           <TextWrap style={[styles.message]}>{messageDialog.message}</TextWrap>
+          <View style={styles.row2}>
+              <View style={{flex:1}}>
+              </View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -67,6 +77,7 @@ export default function DialogMessage({}) {
               {messageDialog.title}
             </TextWrap>
           </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -83,6 +94,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: consts.dialogZindex,
   },
+  row2: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
   wrap: {flex: 1, justifyContent: 'center'},
   dialog: {
     backgroundColor: colors.white,
@@ -113,10 +125,10 @@ const styles = StyleSheet.create({
   },
   button: {
     // borderTopWidth: 1,
+    flex:1,
     paddingVertical: 18,
-    paddingHorizontal: 18,
     // borderTopColor: colors.prussianBlue,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     // colors: colors.prussianBlue,
     justifyContent: 'center',
   },

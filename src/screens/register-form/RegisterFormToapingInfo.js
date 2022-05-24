@@ -52,6 +52,9 @@ export default function RegisterFormToapingInfo({}) {
   const [email, setEmail] = useState(
     params?.data?.email ? params?.data?.email : '',
   );
+  const [level, setLevel] = useState(
+    params?.data?.level ? params?.data?.level : 0,
+  );
   const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export default function RegisterFormToapingInfo({}) {
       if (user.intro_setting) {
         reset(routes.home);
       } else {
-        navigate(routes.intro1, {age: user.age, initGrade: user.grade});
+        navigate(routes.intro1, {age: user.age, initGrade: level !== 0 ? level : user.grade});
       }
     }
   }, [user.signed]);
@@ -110,6 +113,8 @@ export default function RegisterFormToapingInfo({}) {
         await setItem('accessToken', data.accessToken);
         await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', 'toaping');
+        await setItem('level', '' + level);
+
         dispatch(
           dialogOpenMessage({message: '회원가입이 정상적으로 완료되었습니다.'}),
         );

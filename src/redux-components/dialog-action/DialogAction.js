@@ -141,10 +141,9 @@ const styles = StyleSheet.create({
   },
   button4: {
     paddingVertical: 18,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    left:widthPercentage(10),
 
   },
   title3: {
