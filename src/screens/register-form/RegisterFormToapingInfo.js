@@ -114,6 +114,8 @@ export default function RegisterFormToapingInfo({}) {
         await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', 'toaping');
         await setItem('level', '' + level);
+        await setItem('toapingId', memberId);
+        await setItem('toapingPw', password);
 
         dispatch(
           dialogOpenMessage({message: '회원가입이 정상적으로 완료되었습니다.'}),

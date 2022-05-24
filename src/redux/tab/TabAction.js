@@ -1,6 +1,7 @@
 export const tabActionType = {
   main: 'tab/main',
   list: 'tab/list',
+  mylist: 'tab/mylist',
   detail: 'tab/detail',
   quiz: 'tab/quiz',
 };
@@ -21,6 +22,8 @@ export const setTab =
       dispatch({type: tabActionType.main, tab, grade});
     } else if (tab === 'list') {
       dispatch({type: tabActionType.list, tab, grade, gradeStyle});
+    } else if (tab === 'mylist') {
+      dispatch({type: tabActionType.mylist, tab, selectType});
     } else if (tab === 'quiz') {
       dispatch({
         type: tabActionType.quiz,

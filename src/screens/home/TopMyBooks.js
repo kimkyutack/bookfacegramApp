@@ -23,7 +23,6 @@ export default function TopMyBooks({route}) {
   const [genre, setGenre] = useState([]);
   const [rank, setRank] = useState([]);
   const [topic, setTopic] = useState([]);
-  console.log(route.params.type)
    const fetchRequested = async (selecttype) => {
     try {
       setLoading(true);
@@ -74,12 +73,12 @@ export default function TopMyBooks({route}) {
         <></>
       ) : !loading && route.params.type === 'main' ? (
         <TopMyBooksMain route={route} genre={genre} rank={rank} topic={topic}/>
-      ) : !loading && route.params.type === 'list' ? (
+      ) : !loading && route.params.type === 'mylist' ? (
         <TopMyBooksList
           route={route}
-          newBook={selecttype === 'rank' ? rank : selecttype === 'topic' ? topic : genre}
-          th={th}
-          selectType={selecttype}
+          genre={genre} 
+          rank={rank} 
+          topic={topic}
         />
       ) : !loading && route.params.type === 'detail' ? (
         <TopNewBooksDetail route={route} />

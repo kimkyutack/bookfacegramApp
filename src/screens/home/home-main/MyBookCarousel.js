@@ -145,44 +145,17 @@ export default function MyBookCarousel({
             onPress={() => {
               dispatch(
                 setTab({
-                  tab: 'list',
-                  grade: grade,
-                  gradeStyle:
-                    grade === null
-                      ? null
-                      : grade === '1급'
-                        ? { color: colors.st1 }
-                        : grade === '2급'
-                          ? { color: colors.st2 }
-                          : grade === '3급'
-                            ? { color: colors.st3 }
-                            : grade === '4급'
-                              ? { color: colors.st4 }
-                              : grade === '5급'
-                                ? { color: colors.st5 }
-                                : grade === '준3급'
-                                  ? { color: colors.st3 }
-                                  : grade === '준4급'
-                                    ? { color: colors.st4 }
-                                    : grade === '준5급'
-                                      ? { color: colors.st5 }
-                                      : grade === '누리급'
-                                        ? { color: colors.st6 }
-                                        : null,
+                  tab: 'mylist',
+                  selectType: name,
                 }),
               );
-              navigate(routes.homeList, {
-                grade: grade,
-                type: 'detail',
-              });
-              // navigate(routes.home, {
-              //   screen: routes.topNewBooks,
-              //   params: {
-              //     grade: grade,
-              //     type: 'list',
-              //     key: Date.now(),
-              //   },
-              // });
+               navigate(routes.homeList, {
+                 screen: routes.topMyBooks,
+                 params: {
+                   type: 'mylist',
+                   key: Date.now(),
+                 },
+               });
             }}>
             &gt; 전체보기
           </TextWrap>
@@ -284,7 +257,7 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     marginHorizontal: widthPercentage(6),
     marginBottom: 12,
   },
@@ -298,8 +271,7 @@ const styles = StyleSheet.create({
   },
   cardHeaderSpread: {
     fontSize: fontPercentage(11),
-    position: 'absolute',
-    bottom: 2,
+    bottom: 10,
     right: 0,
   },
   cardHeaderSpreadSt1: {

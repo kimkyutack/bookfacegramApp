@@ -14,6 +14,7 @@ export default {
   topNewBooks: 'topNewBooks',
   topNewBooksMain: 'topNewBooksMain',
   topNewBooksList: 'topNewBooksList',
+  topMyBooksList: 'topMyBooksList',
   mainQuiz: 'mainQuiz',
   QuizMain: 'QuizMain',
   topNewBooksDetail: 'topNewBooksDetail',

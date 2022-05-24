@@ -25,7 +25,7 @@ import {
 } from '../../../services/util';
 import {numFormat} from '../../../services/util';
 import TextWrap from '../../../components/text-wrap/TextWrap';
-import BookMainCarouselImage from '../home-main/BookMainCarouselImage';
+import MyBookListimage from '../home-main/MyBookListImage';
 import {setTab} from '../../../redux/tab/TabAction';
 import {
   dialogError,
@@ -35,7 +35,6 @@ import {
 export default function MyBookListItem({
   item,
   index,
-  th,
   getDrawerList,
   max,
 }) {
@@ -72,14 +71,14 @@ export default function MyBookListItem({
               });
             }}>
             <View style={styles.mainContent}>
-              <BookMainCarouselImage item={item} style={styles.thumbnail} />
+              <MyBookListimage item={item} style={styles.thumbnail} />
               <View style={styles.info}>
                 <TextWrap
                   ellipsizeMode="tail"
                   numberOfLines={1}
                   font={fonts.kopubWorldDotumProMedium}
                   style={styles.title}>
-                  {item.type === 'kbs' ? item.bookNm : item.book_nm}
+                  {item.type === 'kbs' ? item.bookNm : item.title}
                 </TextWrap>
                 <TextWrap
                   style={styles.title}
@@ -93,7 +92,7 @@ export default function MyBookListItem({
                   font={fonts.kopubWorldDotumProLight}
                   numberOfLines={1}
                   style={styles.title}>
-                  "{item.topic}"
+                  "{item.description}"
                 </TextWrap>
 
                 <TextWrap
@@ -101,7 +100,7 @@ export default function MyBookListItem({
                   font={fonts.kopubWorldDotumProMedium}>
                   {item.type === 'kbs'
                     ? numFormat(item?.price)
-                    : numFormat(item?.buy_price)}
+                    : numFormat(item?.price)}
                   원
                 </TextWrap>
               </View>

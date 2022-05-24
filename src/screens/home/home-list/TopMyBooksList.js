@@ -14,7 +14,7 @@ import consts from '../../../libs/consts';
 import colors from '../../../libs/colors';
 import images from '../../../libs/images';
 import routes from '../../../libs/routes';
-import MyBookListItem from './BookListItem';
+import MyBookListItem from './MyBookListitem';
 import TopMyBooks from '../TopNewBooks';
 import {
   screenWidth,
@@ -25,19 +25,19 @@ import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
 import TopMyBooksMain from '../home-main/TopNewBooksMain';
 
-export default function TopMyBooksList({route, newBook, th, selectType}) {
+export default function TopMyBooksList({route, genre, rank, topic}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [type, setType] = useState('new');
+  const [selectType, setselectType] = useState('genre');
   const [start, setStart] = useState(30);
   const [morenewBook, setNewBook] = useState([]);
   const [state, setState] = useState({
-    req: newBook,
+    req: genre,
     page: 1,
   });
-
   const fetchRequested = async startpage => {
     try {
       setLoading(true);
@@ -61,17 +61,18 @@ export default function TopMyBooksList({route, newBook, th, selectType}) {
     }
   };
   useEffect(() => {
-    setNewBook(newBook);
+    setselectType(listTab.listTab.selectType);
+    setNewBook(genre);
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
         setType('new');
-        setState({req: newBook, page: 1});
+        setState({req: morenewBook, page: 1});
     }
     return () => {
       mount = false;
     };
-  }, [selectType]);
+  }, [listTab.listTab.selectType]);
 
   useEffect(() => {
     let mount = true;
@@ -109,7 +110,7 @@ export default function TopMyBooksList({route, newBook, th, selectType}) {
   };
 
   const renderFooter = () => {
-    if (newBook?.length === 0 || !loading) {
+    if (morenewBook?.length === 0 || !loading) {
       return <></>;
     } else {
       return (
@@ -129,9 +130,9 @@ export default function TopMyBooksList({route, newBook, th, selectType}) {
     <View
       style={[
         styles.root,
-        newBook.length === 0 && {flex: 1, justifyContent: 'center'},
+        morenewBook.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      {newBook.length === 0 ? (
+      {morenewBook.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>추천 도서리스트가 없습니다.</TextWrap>
         </View>
@@ -150,9 +151,8 @@ export default function TopMyBooksList({route, newBook, th, selectType}) {
                 item={item}
                 type={type}
                 index={index}
-                th={th}
                 getDrawerList={getDrawerList}
-                max={newBook.length}
+                max={morenewBook.length}
               />
             );
           }}
