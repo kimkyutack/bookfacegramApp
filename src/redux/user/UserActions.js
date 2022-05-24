@@ -3,7 +3,7 @@ import {addons} from 'react-native';
 import Config from 'react-native-config';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {reset} from '../../services/navigation';
+import {navigate,reset} from '../../services/navigation';
 import {
   requestFile,
   requestGet,
@@ -171,6 +171,10 @@ export const userUpdateProfileImage =
           user: {
             profile_path: data,
           },
+        });
+
+        navigate(routes.profile, {
+          type : 'ok'
         });
       } else {
         dispatch(dialogError('fail'));
