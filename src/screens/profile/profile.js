@@ -116,7 +116,7 @@ export default function Profile({route, navigation}) {
   }, [route.params?.grade]);
 
   useEffect(() => {
-    console.log(params?.type);
+    //console.log(params?.type);
     if(params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
       dispatch(
         dialogOpenAction({
