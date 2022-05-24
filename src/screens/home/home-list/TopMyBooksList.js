@@ -62,7 +62,14 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
   };
   useEffect(() => {
     setselectType(listTab.listTab.selectType);
-    setNewBook(genre);
+    if(listTab.listTab.selectType === 'genre'){
+      setNewBook(genre);
+    }else if(listTab.listTab.selectType === 'rank'){
+setNewBook(rank);
+    }else if(listTab.listTab.selectType === 'topic'){
+setNewBook(topic);
+    }
+    
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
