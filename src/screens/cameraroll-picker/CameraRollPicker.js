@@ -119,6 +119,7 @@ export default function CameraRollPicker({navigation}) {
                 })
               : navigation.navigate(routes.profile, {
                   image: convertFileArr,
+                  type : 'gallery',
                 }),
         },
       }}>

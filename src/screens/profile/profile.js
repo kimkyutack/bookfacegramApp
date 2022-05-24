@@ -34,7 +34,7 @@ import {
   cameraProfile,
   widthPercentage,
 } from '../../services/util';
-import {goBack, navigate} from '../../services/navigation';
+import {goBack, navigate, reset} from '../../services/navigation';
 import {
   requestFile,
   requestPost,
@@ -54,6 +54,7 @@ import {
   dialogOpenDrawerKeyBoardPW,
   dialogOpenDrawerKeyBoardWD,
   dialogOpenSelect,
+  dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
 import {userUpdateProfileImage, userUpdate} from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
@@ -62,7 +63,7 @@ export default function Profile({route, navigation}) {
   const user = useSelector(s => s.user, shallowEqual);
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
-  const {params} = useRoute();
+  const {params , setParams} = useRoute();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
@@ -115,8 +116,26 @@ export default function Profile({route, navigation}) {
   }, [route.params?.grade]);
 
   useEffect(() => {
-    setSaveButtonDisabled(true);
-  }, [params.image]);
+    console.log(params?.type);
+    if(params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
+      dispatch(
+        dialogOpenAction({
+          titleColor: '#005aff',
+          cancelTitle: '취소',
+          message: '프로필 사진을 변경하시겠습니까?',
+          onPress: a => {
+            if(a) {
+              dispatch(userUpdateProfileImage(params?.image[0], user.profile_path));
+              
+            }
+          },
+        }),
+      );
+      if(params?.type !== 'ok') {
+        params.type = 'cancel';
+      }
+    }
+  }, [params.type , params.image]);
 
   // if (params?.image !== undefined) {
   //   console.log(params?.image);
@@ -205,7 +224,6 @@ export default function Profile({route, navigation}) {
           setPhone(res.data.handphone);
 
           dispatch(userUpdate);
-          dispatch(userUpdateProfileImage(params?.image[0], user.profile_path));
           dispatch(dialogError('수정되었습니다.'));
           //alert(JSON.stringify(user));
           setSaveButtonDisabled(false);
@@ -293,15 +311,13 @@ export default function Profile({route, navigation}) {
                   item: cameraProfile(user.profile_path),
                 }),
               );
-              setSaveButtonDisabled(true);
+              //setSaveButtonDisabled(true);
             }}>
             <Avatar
               size={84}
               style={styles.avator}
               path={
-                params?.image[0]?.uri
-                  ? params?.image[0]?.uri
-                  : user?.profile_path
+                user?.profile_path
                   ? user?.profile_path
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
@@ -698,6 +714,6 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
-    top : heightPercentage(10),
+    top : heightPercentage(8),
   },
 });

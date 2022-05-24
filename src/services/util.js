@@ -321,7 +321,7 @@ export const cameraProfile = profile_path => {
     {
       name: '카메라',
       source: images.cameraBtn,
-      onPress: async () =>
+      onPress:  async () =>
         getImageFromCamera()
           .then(async file => {
             if (!file) {
@@ -329,7 +329,10 @@ export const cameraProfile = profile_path => {
             }
             navigate(routes.profile, {
               image: file,
+              type : 'camera',
             });
+
+           
           })
           .catch(error => {
             if (
@@ -367,6 +370,7 @@ export const cameraProfile = profile_path => {
             }
             navigate(routes.profile, {
               image: file,
+              type : 'file',
             });
           })
           .catch(error => {
