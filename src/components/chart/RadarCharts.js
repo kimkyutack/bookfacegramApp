@@ -330,26 +330,26 @@ export default function RadarCharts() {
 const styles = StyleSheet.create({
   container: {
     width: widthPercentage(250),
-    height : (screenHeight / 3 ) * 1.2,
+    height : 240,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
   },
   chart: {
     width: '100%',
-    height: screenHeight / 3,
+    height: 200,
   },
   image: {
     flex: 1,
     width: '100%',
-    height: (screenHeight / 3 ) * 1.2,
+    height: 240,
     position: 'absolute',
     resizeMode: 'contain',
   },
   image2: {
     flex: 1,
     width: '65%',
-    height: '75%',
+    height: '80%',
     position: 'absolute',
     resizeMode: 'stretch',
   },
