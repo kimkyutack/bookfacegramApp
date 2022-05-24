@@ -10,6 +10,7 @@ import {
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import TopMyBooksMain from './home-main/TopMybooksMain';
+import TopMyBooksList from './home-list/TopMyBooksList';
 import TopNewBooksDetail from './home-detail/TopNewBooksDetail';
 import {dialogOpenAction, dialogError} from '../../redux/dialog/DialogActions';
 import {requestGet, requestPost} from '../../services/network';
@@ -74,7 +75,12 @@ export default function TopMyBooks({route}) {
       ) : !loading && route.params.type === 'main' ? (
         <TopMyBooksMain route={route} genre={genre} rank={rank} topic={topic}/>
       ) : !loading && route.params.type === 'list' ? (
-        <></>
+        <TopMyBooksList
+          route={route}
+          newBook={selecttype === 'rank' ? rank : selecttype === 'topic' ? topic : genre}
+          th={th}
+          selectType={selecttype}
+        />
       ) : !loading && route.params.type === 'detail' ? (
         <TopNewBooksDetail route={route} />
       ) : (
