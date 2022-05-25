@@ -203,7 +203,6 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            item.type = type;
             return (
               <MyBookListItem
                 item={item}
@@ -227,7 +226,6 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            item.type = type;
             return (
               <MyBookListItem
                 item={item}
@@ -252,7 +250,6 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            item.type = type;
             return (
               <MyBookListItem
                 item={item}

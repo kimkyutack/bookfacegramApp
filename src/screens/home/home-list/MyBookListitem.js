@@ -63,7 +63,7 @@ export default function MyBookListItem({
                   tab: 'detail',
                   selectedBook:
                    item.bookIdx,
-                  viewType: item.type,
+                  viewType: item.type === 'app' ? 'new' : 'kbs',
                 }),
               );
               navigate(routes.homeDetail, {
@@ -137,10 +137,9 @@ export default function MyBookListItem({
                   setTab({
                     tab: 'detail',
                     tabType: 'talk',
-                    selectedBook:
-                      item.type === 'kbs' ? item.bookCd : item.book_cd,
-                    viewType: item.type,
-                  }),
+                    selectedBook: item.bookIdx,
+                    viewType: item.type === 'app' ? 'new' : 'kbs',
+                }),
                 );
                 navigate(routes.homeDetail, {
                   type: 'detail',

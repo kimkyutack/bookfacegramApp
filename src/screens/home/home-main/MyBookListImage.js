@@ -12,7 +12,7 @@ export default function MyBookListimage({item, index, style}) {
       setBookThumbnail(item?.imgNm);
   }, [item?.imgNm]);
 
-  if (item?.type === 'new' || item?.type === 'crawl' || item?.type === 'app' || item?.type === 'web') {
+  if (item?.type === 'new' || item?.type === 'crawl' || item?.type === 'app') {
     return (
       <FastImage
         source={{

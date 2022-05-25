@@ -23,7 +23,6 @@ export default function loading(state = initTab, action) {
         ...state,
         tab: action.tab,
         listTab: {
-          selectType: action.selectType,
           grade: action.grade,
           gradeStyle: action.gradeStyle,
           th: action.th,
