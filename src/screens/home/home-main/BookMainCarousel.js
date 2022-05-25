@@ -352,7 +352,7 @@ export default function BookMainCarousel({
       <Swiper
         style={styles.wrapper}
         showsButtons={false}
-        width={slideWidth}
+        width={name === 'banner' ? screenWidth : slideWidth}
         height={
           name === 'banner' ? heightPercentage(165) : heightPercentage(190)
         }
@@ -397,6 +397,7 @@ const styles = StyleSheet.create({
     height: heightPercentage(150),
   },
   bannerContainer: {
+    alignSelf: 'center',
     marginTop: heightPercentage(15),
   },
   category: {

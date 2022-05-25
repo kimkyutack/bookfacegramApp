@@ -15,7 +15,7 @@ export default function TextButton({
       disabled={disabled}
       onPress={onPress}
       style={[styles.root, style]}>
-      <TextWrap font={font} style={[styles.text, styleTitle]}>
+      <TextWrap font={font} style={[styleTitle]}>
         {children}
       </TextWrap>
     </TouchableOpacity>
@@ -27,5 +27,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {color: '#101113', fontSize: 12, lineHeight: 14},
 });

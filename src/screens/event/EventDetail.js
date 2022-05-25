@@ -13,6 +13,7 @@ import fonts from '../../libs/fonts';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {requestGet, requestPost} from '../../services/network';
 import Footer from '../../libs/footer';
+import HTMLView from 'react-native-htmlview';
 import {
   widthPercentage,
   heightPercentage,
@@ -30,7 +31,6 @@ export default function EventDetail({route, navigation}) {
   const [raplyContent, setReplyContent] = useState('');
   const routeParams = route.params.item;
   const isFocused = useIsFocused();
-
   useEffect(() => {
     if (isFocused) {
       getEventList();
@@ -90,6 +90,18 @@ export default function EventDetail({route, navigation}) {
       });
   };
 
+  const renderNode = (node, index) => {
+      if (node.name == 'img') {
+          const a = node.attribs;
+          return ( 
+          <View key={index.toString()}>
+            <Image style={{width: screenWidth*0.96, height: heightPercentage(1500), resizeMode
+            :'stretch'}} source={{uri: a.src}}/>
+          </View>
+           );
+      }
+  };
+
   return (
     <RootLayout
       topbar={{
@@ -117,12 +129,17 @@ export default function EventDetail({route, navigation}) {
             //   }}
             //   style={styles.image}
             // />
-            <AutoHeightImage
+            /*<AutoHeightImage
               source={{
                 uri: routeParams.ev_img_f,
               }}
               width= {screenWidth*0.92}
-            />
+            />*/
+
+            <View style={styles.root2}>
+              <HTMLView value={routeParams?.ev_contents}  renderNode={renderNode}/>
+            </View>
+
           )}
           {routeParams.ev_btn_active === 1 && (
             <ButtonWrap
@@ -203,6 +220,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginHorizontal: 16,
     marginBottom: 20,
+  },
+  root2: {
+    flex: 1,
   },
   image: {
     width: '100%',

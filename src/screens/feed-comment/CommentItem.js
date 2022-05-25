@@ -1,5 +1,6 @@
 import React from 'react';
 import {FlatList, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { useDispatch } from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import {
@@ -7,11 +8,14 @@ import {
   heightPercentage,
   cameraItem,
   fontPercentage,
+  screenWidth,
 } from '../../services/util';
 import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import Avatar from '../../components/avatar/Avatar';
 import {ReplyItem} from './ReplyItem';
+import TextButton2 from '../../components/text-button/TextButton2';
+
 
 const renderItem = ({
   replyIdx,
@@ -25,6 +29,8 @@ const renderItem = ({
   index,
   replys,
   onChangeReply,
+  loginid,
+  feedIdx,
 }) => {
   return (
     <>
@@ -49,6 +55,7 @@ const renderItem = ({
                 font={fonts.kopubWorldDotumProBold}>
                 {memberId?.split('@')[0]}
               </TextWrap>
+              {memberId === loginid ? <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}><TextButton2 style={styles.replyedit} styleTitle={styles.replyeditfont}>수정</TextButton2><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={replyIdx} feedIdx={feedIdx}>삭제</TextButton2></View> : null}
               <TextWrap style={styles.infoRight} onPress={() => {}}>
                 {contents}
               </TextWrap>
@@ -76,7 +83,7 @@ const renderItem = ({
             return index1.toString();
           }}
           renderItem={({item, index1}) => {
-            return <ReplyItem {...item} index={index1} />;
+            return <ReplyItem {...item} index={index1} loginid={loginid}/>;
           }}
         />
       )}
@@ -97,6 +104,33 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: heightPercentage(14),
+  },
+  replyedit: {
+    
+    width:widthPercentage(25),
+    backgroundColor:'#215bff',
+  },
+  replydelete: {
+    width:widthPercentage(25),
+    backgroundColor:'#fff',
+    borderColor:'#215bff',
+    borderWidth:0.5
+
+  },
+  replyeditfont: {
+    height:heightPercentage(14),
+    fontSize: fontPercentage(8),
+    textAlignVertical:'center',
+    textAlign: 'center',
+    color:'#fff',
+  },
+  replydeletefont: {
+    height:heightPercentage(14),
+    fontSize: fontPercentage(8),
+    textAlign: 'center',
+    textAlignVertical:'center',
+    color:'#215bff'
+
   },
   replyContainer: {
     flexDirection: 'row',

@@ -129,7 +129,6 @@ export default function FaqItem({
           </View>
         </View>
       )}
-      {category === '서비스' && <View style={styles.divider} />}
     </View>
   );
 }
@@ -160,6 +159,8 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     flexDirection: 'row',
     paddingHorizontal: 16,
+    borderBottomColor:'#e5e5e5',
+    borderBottomWidth:1,
   },
   mainContent: {
     flex: 1,
@@ -182,11 +183,5 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: 'contain',
-  },
-  divider: {
-    marginHorizontal: 16,
-    borderRadius: 1,
-    height: 1,
-    backgroundColor: '#e5e5e5',
   },
 });

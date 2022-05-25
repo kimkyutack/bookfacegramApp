@@ -240,6 +240,8 @@ export default function Comment({route, navigation}) {
                     {...item}
                     index={index}
                     onChangeReply={onChangeReply}
+                    loginid={user.member_id}
+                    feedIdx={route.params?.feedIdx}
                   />
                 );
               }}

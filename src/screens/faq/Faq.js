@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     flexDirection: 'row',
     width: screenWidth,
-    height: heightPercentage(36),
+    height: heightPercentage(42),
   },
   tapmenu: {
     width: '100%',
