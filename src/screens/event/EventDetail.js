@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Image, View, ScrollView, StyleSheet, Linking} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Image, View, ScrollView, StyleSheet, Linking } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import EventReplyItem from './EventReplyItem';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
@@ -10,8 +10,8 @@ import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {requestGet, requestPost} from '../../services/network';
+import { dialogOpenSelect, dialogError } from '../../redux/dialog/DialogActions';
+import { requestGet, requestPost } from '../../services/network';
 import Footer from '../../libs/footer';
 import HTMLView from 'react-native-htmlview';
 import {
@@ -21,10 +21,10 @@ import {
   cameraItem,
   screenWidth,
 } from '../../services/util';
-import {useIsFocused} from '@react-navigation/core';
+import { useIsFocused } from '@react-navigation/core';
 import AutoHeightImage from 'react-native-auto-height-image';
 
-export default function EventDetail({route, navigation}) {
+export default function EventDetail({ route, navigation }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -91,15 +91,17 @@ export default function EventDetail({route, navigation}) {
   };
 
   const renderNode = (node, index) => {
-      if (node.name == 'img') {
-          const a = node.attribs;
-          return ( 
-          <View key={index.toString()}>
-            <Image style={{width: screenWidth*0.96, height: heightPercentage(1500), resizeMode
-            :'stretch'}} source={{uri: a.src}}/>
-          </View>
-           );
-      }
+    if (node.name == 'img') {
+      const a = node.attribs;
+      return (
+        <View key={index.toString()}>
+          <Image style={{
+            width: screenWidth * 0.92, height: heightPercentage(1500), resizeMode
+              : 'stretch'
+          }} source={{ uri: a.src }} />
+        </View>
+      );
+    }
   };
 
   return (
@@ -119,7 +121,7 @@ export default function EventDetail({route, navigation}) {
             ),
         },
       }}>
-      <ScrollView contentContainerStyle={{flexGrow: 2}} scrollEnabled>
+      <ScrollView contentContainerStyle={{ flexGrow: 2 }} scrollEnabled>
         <View style={styles.root}>
           {/*uri: routeParams.ev_img_f,*/}
           {routeParams && (
@@ -137,7 +139,7 @@ export default function EventDetail({route, navigation}) {
             />*/
 
             <View style={styles.root2}>
-              <HTMLView value={routeParams?.ev_contents}  renderNode={renderNode}/>
+              <HTMLView value={routeParams?.ev_contents} renderNode={renderNode} />
             </View>
 
           )}
@@ -158,7 +160,7 @@ export default function EventDetail({route, navigation}) {
                 style={styles.reply}
                 font={fonts.kopubWorldDotumProBold}>
                 댓글{' '}
-                <TextWrap style={{color: colors.blue}}>
+                <TextWrap style={{ color: colors.blue }}>
                   {data ? data.length : 0}
                 </TextWrap>
               </TextWrap>
@@ -186,13 +188,13 @@ export default function EventDetail({route, navigation}) {
                   onPress={eventInsert}
                   disabled={loading}
                   disabledBackgroundColor={
-                    loading && {backgroundColor: colors.red}
+                    loading && { backgroundColor: colors.red }
                   }
                   style={styles.buttonAdd}>
                   등록
                 </ButtonWrap>
               </View>
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 {data?.map((u, i) => {
                   return <EventReplyItem {...u} key={i} />;
                 })}
@@ -223,6 +225,7 @@ const styles = StyleSheet.create({
   },
   root2: {
     flex: 1,
+    alignItems: 'center',
   },
   image: {
     width: '100%',
