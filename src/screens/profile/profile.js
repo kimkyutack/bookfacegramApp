@@ -1,8 +1,8 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useState, useRef, useCallback, useMemo, useEffect} from 'react';
+import { useRoute } from '@react-navigation/native';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import CameraRoll from '@react-native-community/cameraroll';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import {
   Image,
   SafeAreaView,
@@ -20,7 +20,7 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import Topbar from '../../components/topbar/Topbar';
 import InputWrap2 from '../../components/input-wrap/InputWrap2';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {userSignOut} from '../../redux/user/UserActions';
+import { userSignOut } from '../../redux/user/UserActions';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
@@ -34,7 +34,7 @@ import {
   cameraProfile,
   widthPercentage,
 } from '../../services/util';
-import {goBack, navigate, reset} from '../../services/navigation';
+import { goBack, navigate, reset } from '../../services/navigation';
 import {
   requestFile,
   requestPost,
@@ -56,14 +56,14 @@ import {
   dialogOpenSelect,
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
-import {userUpdateProfileImage, userUpdate} from '../../redux/user/UserActions';
+import { userUpdateProfileImage, userUpdate } from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
 
-export default function Profile({route, navigation}) {
+export default function Profile({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   //alert(JSON.stringify(user));
   const dispatch = useDispatch();
-  const {params , setParams} = useRoute();
+  const { params, setParams } = useRoute();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [emailLoading, setEmailLoading] = useState(false);
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
@@ -75,15 +75,10 @@ export default function Profile({route, navigation}) {
   useEffect(() => {
     //console.log(JSON.stringify(user));
     const unsubscribe = navigation.addListener('focus', () => {
-      if (params?.image[0]?.uri === undefined) {
-        setSaveButtonDisabled(false);
-        setPhone(user?.handphone ? user?.handphone : '');
-        setGrades(user?.grade ? user?.grade : '');
-        setEmail(user?.email ? user?.email : '');
-      } else {
-
-        setSaveButtonDisabled(true);
-      }
+      setSaveButtonDisabled(false);
+      setPhone(user?.handphone ? user?.handphone : '');
+      setGrades(user?.grade ? user?.grade : '');
+      setEmail(user?.email ? user?.email : '');
 
       //Put your Data loading function here instead of my loadData()
     });
@@ -95,7 +90,6 @@ export default function Profile({route, navigation}) {
     user.email,
     user?.profile_path,
     user?.grade,
-    params.image,
   ]);
 
   useEffect(() => {
@@ -117,25 +111,25 @@ export default function Profile({route, navigation}) {
 
   useEffect(() => {
     //console.log(params?.type);
-    if(params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
+    if (params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
       dispatch(
         dialogOpenAction({
           titleColor: '#005aff',
           cancelTitle: '취소',
           message: '프로필 사진을 변경하시겠습니까?',
           onPress: a => {
-            if(a) {
+            if (a) {
               dispatch(userUpdateProfileImage(params?.image[0], user.profile_path));
-              
+
             }
           },
         }),
       );
-      if(params?.type !== 'ok') {
+      if (params?.type !== 'ok') {
         params.type = 'cancel';
       }
     }
-  }, [params.type , params.image]);
+  }, [params.type, params.image]);
 
   // if (params?.image !== undefined) {
   //   console.log(params?.image);
@@ -251,7 +245,7 @@ export default function Profile({route, navigation}) {
     try {
       if (!emailError) {
         setEmailLoading(true);
-        const {data, status} = await requestGet({
+        const { data, status } = await requestGet({
           url: consts.apiUrl + '/auth/validEmail',
           query: {
             email: e,
@@ -271,8 +265,8 @@ export default function Profile({route, navigation}) {
     } catch (error) {
       setEmailError(
         error?.data?.msg ||
-          error?.message ||
-          (typeof error === 'object' ? JSON.stringify(error) : error),
+        error?.message ||
+        (typeof error === 'object' ? JSON.stringify(error) : error),
       );
       setEmailLoading(false);
       setSaveButtonDisabled(false);
@@ -369,17 +363,17 @@ export default function Profile({route, navigation}) {
           <TouchableOpacity
             onPress={() => {
               dispatch(dialogClose());
-              dispatch(dialogOpenGradeProfile({title: '확인'}));
+              dispatch(dialogOpenGradeProfile({ title: '확인' }));
             }}
             style={styles.inputStyle}
-            >
-            <TextWrap font={fonts.kopubWorldDotumProMedium}  style={styles.inputStyle}>
+          >
+            <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.inputStyle}>
               {grade}
             </TextWrap>
           </TouchableOpacity>
         </View>
         <View style={styles.divider} />
-        <View style={styles.mainSub}>
+        <View style={styles.mainSub2}>
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.userInfo}>
@@ -399,7 +393,7 @@ export default function Profile({route, navigation}) {
           />
         </View>
         <View style={styles.divider} />
-        <View style={styles.mainSub}>
+        <View style={styles.mainSub2}>
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.userInfo}>
@@ -417,8 +411,8 @@ export default function Profile({route, navigation}) {
                 ? emailLoading
                   ? '중복체크 중입니다.'
                   : emailError
-                  ? emailError
-                  : '사용 가능한 이메일입니다.'
+                    ? emailError
+                    : '사용 가능한 이메일입니다.'
                 : 'ex) toaping@naver.com'
             }
             messageColor={
@@ -426,8 +420,8 @@ export default function Profile({route, navigation}) {
                 ? emailLoading
                   ? colors.black
                   : emailError
-                  ? colors.red
-                  : colors.blue
+                    ? colors.red
+                    : colors.blue
                 : colors.black
             }
           />
@@ -524,9 +518,9 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(13),
     lineHeight: fontPercentage(24),
     color: colors.black,
-    textAlign : 'left',
+    textAlign: 'left',
     flexBasis: 300,
-    flexShrink : 1,
+    flexShrink: 1,
   },
   image: {
     width: widthPercentage(30),
@@ -686,6 +680,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexShrink: 1,
   },
+  mainSub2: {
+    paddingVertical: 2,
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    alignContent: 'flex-start',
+    alignSelf: 'stretch',
+    display: 'flex',
+    flexShrink: 1,
+  },
   userInfo: {
     color: colors.black,
     fontSize: fontPercentage(16),
@@ -704,7 +707,7 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
-    
+
   },
   inputStyle2: {
     color: colors.black,
@@ -714,6 +717,6 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
-    top : heightPercentage(8),
+    top: heightPercentage(8),
   },
 });

@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, View, Image, StyleSheet} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, View, Image, StyleSheet, Animated, TouchableWithoutFeedback } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {requestGet, requestPut} from '../../services/network';
+import { dialogOpenSelect, dialogError } from '../../redux/dialog/DialogActions';
+import { requestGet, requestPut } from '../../services/network';
 import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -21,7 +21,7 @@ import {
   screenHeight,
 } from '../../services/util';
 
-export default function Setting({route, navigation}) {
+export default function Setting({ route, navigation }) {
   const [notice, setNotice] = useState();
   const [push, setPush] = useState();
   const [event, setEvent] = useState();
@@ -30,6 +30,58 @@ export default function Setting({route, navigation}) {
   const [eventcheck, setEventcheck] = useState();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const moveX1 = useRef(new Animated.Value(4)).current;
+  const moveX2 = useRef(new Animated.Value(4)).current;
+  const moveX3 = useRef(new Animated.Value(4)).current;
+
+  const moveRight1 = () => {
+    Animated.timing(moveX1, {
+      toValue: 26,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const moveLeft1 = () => {
+    Animated.timing(moveX1, {
+      toValue: 4,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const moveRight2 = () => {
+    Animated.timing(moveX2, {
+      toValue: 26,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const moveLeft2 = () => {
+    Animated.timing(moveX2, {
+      toValue: 4,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const moveRight3 = () => {
+    Animated.timing(moveX3, {
+      toValue: 26,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
+  const moveLeft3 = () => {
+    Animated.timing(moveX3, {
+      toValue: 4,
+      duration: 300,
+      useNativeDriver: false
+    }).start();
+  };
+
 
   // useEffect(() => {
   //   requestGet({url: consts.apiUrl + '/mypage/setting'})
@@ -45,7 +97,7 @@ export default function Setting({route, navigation}) {
   // });
 
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/mypage/setting'})
+    requestGet({ url: consts.apiUrl + '/mypage/setting' })
       .then(x => {
         setNotice(x.data.agreeNotice);
         setPush(x.data.agreeAppPush);
@@ -53,19 +105,25 @@ export default function Setting({route, navigation}) {
 
         if (x.data.agreeNotice === 0) {
           setNoticecheck(false);
+          moveLeft1()
         } else {
           setNoticecheck(true);
+          moveRight1()
         }
 
         if (x.data.agreeEvent === 0) {
           setEventcheck(false);
+          moveLeft2()
         } else {
           setEventcheck(true);
+          moveRight2()
         }
         if (x.data.agreeAppPush === 0) {
           setPushcheck(false);
+          moveLeft3()
         } else {
           setPushcheck(true);
+          moveRight3()
         }
       })
       .catch(e => {
@@ -85,6 +143,13 @@ export default function Setting({route, navigation}) {
       .then(res => {
         if (res.status === 'SUCCESS') {
           setNoticecheck(!noticecheck);
+          if (noticecheck === true) {
+            moveLeft1()
+          } else {
+            moveRight1()
+          }
+
+
         } else {
         }
       })
@@ -104,6 +169,11 @@ export default function Setting({route, navigation}) {
       .then(res => {
         if (res.status === 'SUCCESS') {
           setEventcheck(!eventcheck);
+          if (eventcheck === true) {
+            moveLeft2()
+          } else {
+            moveRight2()
+          }
         } else {
         }
       })
@@ -123,6 +193,11 @@ export default function Setting({route, navigation}) {
       .then(res => {
         if (res.status === 'SUCCESS') {
           setPushcheck(!pushcheck);
+          if (pushcheck === true) {
+            moveLeft3()
+          } else {
+            moveRight3()
+          }
         } else {
         }
       })
@@ -138,7 +213,7 @@ export default function Setting({route, navigation}) {
         navigation: navigation,
         back: true,
       }}>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View style={styles.main}>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title2}>
             알림
@@ -149,39 +224,71 @@ export default function Setting({route, navigation}) {
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             토핑 공지사항 알림
           </TextWrap>
-          <View>
-            <CheckBox
-              value={noticecheck}
-              onValueChange={() => noticeChange(notice)}
-            />
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() => noticeChange(notice)}>
+            <View style={styles.flexView}>
+              <View style={!noticecheck ? styles.switchOff : styles.switchOn}>
+                <Animated.View
+                  style={[
+                    !noticecheck ? styles.switchSliderOff : styles.switchSliderOn,
+                    {
+                      left: moveX1
+                    }
+                  ]}
+                ></Animated.View>
+                {/* <View style={!noticecheck ? styles.switchSliderOff : styles.switchSliderOn}></View> */}
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.divider} />
         <View style={styles.main}>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             토핑 이벤트 알림
           </TextWrap>
-          <View>
-            <CheckBox
-              value={eventcheck}
-              onValueChange={() => eventChange(event)}
-            />
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() => eventChange(event)}>
+            <View style={styles.flexView}>
+              <View style={!eventcheck ? styles.switchOff : styles.switchOn}>
+                <Animated.View
+                  style={[
+                    !eventcheck ? styles.switchSliderOff : styles.switchSliderOn,
+                    {
+                      left: moveX2
+                    }
+                  ]}
+                ></Animated.View>
+                {/* <View style={!eventcheck ? styles.switchSliderOff : styles.switchSliderOn}></View> */}
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.divider} />
         <View style={styles.main}>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title}>
             광고 PUSH 알림
           </TextWrap>
-          <View style={styles.flexView}>
-            <CheckBox value={pushcheck} onValueChange={() => appChange(push)} />
-          </View>
+          <TouchableWithoutFeedback
+            onPress={() => appChange(push)}>
+            <View style={styles.flexView}>
+              <View style={!pushcheck ? styles.switchOff : styles.switchOn}>
+                <Animated.View
+                  style={[
+                    !pushcheck ? styles.switchSliderOff : styles.switchSliderOn,
+                    {
+                      left: moveX3
+                    }
+                  ]}
+                ></Animated.View>
+                {/* <View style={!pushcheck ? styles.switchSliderOff : styles.switchSliderOn}></View> */}
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.divider} />
-        <View style={styles.bottom}>
-          <Footer page="notice" />
-        </View>
+
       </View>
+      <Footer page="notice" />
     </RootLayout>
   );
 }
@@ -217,9 +324,35 @@ const styles = StyleSheet.create({
   flexView: {
     display: 'flex',
   },
-  bottom: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
+  switchOn: {
+    width: 52,
+    height: 30,
+    position: 'relative',
+    backgroundColor: '#FFAA2B',
+    borderRadius: 30,
   },
+  switchOff: {
+    width: 52,
+    height: 30,
+    position: 'relative',
+    backgroundColor: '#ccc',
+    borderRadius: 30,
+  },
+  switchSliderOff: {
+    width: 22,
+    height: 22,
+    position: 'absolute',
+    bottom: 4,
+    borderRadius: 300,
+    backgroundColor: 'white',
+
+  },
+  switchSliderOn: {
+    width: 22,
+    height: 22,
+    position: 'absolute',
+    bottom: 4,
+    borderRadius: 300,
+    backgroundColor: 'white',
+  }
 });

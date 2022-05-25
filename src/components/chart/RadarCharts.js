@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { shallowEqual, useSelector} from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
 import {
   Image,
   StyleSheet,
@@ -17,11 +17,11 @@ import {
   screenHeight,
 } from '../../services/util';
 import images from '../../libs/images';
-import {requestGet} from '../../services/network';
+import { requestGet } from '../../services/network';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 
-import {RadarChart} from 'react-native-charts-wrapper';
+import { RadarChart } from 'react-native-charts-wrapper';
 
 export default function RadarCharts() {
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function RadarCharts() {
     },
   });
 
-  const user = useSelector(s => s.user , shallowEqual);
+  const user = useSelector(s => s.user, shallowEqual);
   const [aScore, setAScore] = useState('');
   const [bScore, setBScore] = useState('');
   const [cScore, setCScore] = useState('');
@@ -50,7 +50,7 @@ export default function RadarCharts() {
 
   useEffect(async () => {
     setLoading(true);
-    await requestGet({url: consts.apiUrl + '/mybooks/graph'})
+    await requestGet({ url: consts.apiUrl + '/mybooks/graph' })
       .then(res => {
         let chartData = [];
         setAScore(res.data.a);
@@ -84,13 +84,13 @@ export default function RadarCharts() {
           },
           xAxis: {
             valueFormatter: ['A', 'B', 'C', 'D', 'E'],
-            textSize: fontPercentage(16),
+            textSize: fontPercentage(20),
           },
           yAxis: {
             axisMinimum: 0,
             axisMaximum: 100,
             labelCount: 6,
-            labelCountForce : true,
+            labelCountForce: true,
           },
           legend: {
             enabled: false,
@@ -120,15 +120,15 @@ export default function RadarCharts() {
   }, []);
 
   return (
-    
-    <View style={{flex: 1, alignItems: 'center' , marginBottom : heightPercentage(30),}}>
-{loading ? (
+
+    <View style={{ flex: 1, alignItems: 'center', marginBottom: heightPercentage(30), }}>
+      {loading ? (
         <ActivityIndicator
           size="large"
-          style={{alignSelf: 'center', marginBottom: 60}}
+          style={{ alignSelf: 'center', marginBottom: 60 }}
           color={colors.blue}
         />
-      ) :( <View style={styles.container}>
+      ) : (<View style={styles.container}>
         <Image
           source={images.image_a1}
           borderRadius={100}
@@ -307,7 +307,7 @@ export default function RadarCharts() {
           data={data.data}
           xAxis={data.xAxis}
           yAxis={data.yAxis}
-          chartDescription={{text: ''}}
+          chartDescription={{ text: '' }}
           legend={data.legend}
           drawWeb={true}
           webLineWidth={1}
@@ -318,11 +318,11 @@ export default function RadarCharts() {
           skipWebLineCount={0}
           rotationEnabled={false}
           touchEnabled={false}
-          marker = {data.marker}
+          marker={data.marker}
         />
       </View>)}
-      
-     
+
+
     </View>
   );
 }
@@ -330,7 +330,7 @@ export default function RadarCharts() {
 const styles = StyleSheet.create({
   container: {
     width: widthPercentage(250),
-    height : 240,
+    height: 240,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',

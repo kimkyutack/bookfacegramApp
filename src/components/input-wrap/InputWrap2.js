@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, TextInput, View} from 'react-native';
+import { Image, StyleSheet, TextInput, View } from 'react-native';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import TextWrap from '../text-wrap/TextWrap';
@@ -51,7 +51,7 @@ export default function InputWrap2({
 
   return (
     <View style={[styles.root, style]}>
-      <View style={[styles.toolbar, {marginBottom: label ? 8 : 0}]}>
+      <View style={[styles.toolbar, { marginBottom: label ? 8 : 0 }]}>
         {Boolean(label) && (
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.label}>
             {label}
@@ -82,15 +82,15 @@ export default function InputWrap2({
           underlineColorAndroid="transparent"
           style={[
             inputStyle ? inputStyle : styles.input,
-            disabled && {color: '#999999'},
-            !value && placeholderSize && {fontSize: placeholderSize},
+            disabled && { color: '#999999' },
+            !value && placeholderSize && { fontSize: placeholderSize },
           ]}
         />
         {optionComponent && optionComponent}
       </View>
 
       {Boolean(message) && (
-        <TextWrap style={[styles.message, {color: messageColor}]}>
+        <TextWrap style={[styles.message, { color: messageColor }]}>
           {message}
         </TextWrap>
       )}
