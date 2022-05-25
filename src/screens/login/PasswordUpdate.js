@@ -1,19 +1,19 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {Image, Keyboard, ScrollView, StyleSheet, View} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { Image, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import InputPhone from '../../components/input-phone/InputPhone';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import TextButton from '../../components/text-button/TextButton';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {navigate, reset} from '../../services/navigation';
-import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
-import {requestPost} from '../../services/network';
-import {getItem, setItem} from '../../services/preference';
-import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
-import {requestGet} from '../../services/network';
+import { navigate, reset } from '../../services/navigation';
+import { dialogOpenMessage, dialogError } from '../../redux/dialog/DialogActions';
+import { requestPost } from '../../services/network';
+import { getItem, setItem } from '../../services/preference';
+import { userCheckToken, userSignOut } from '../../redux/user/UserActions';
+import { requestGet } from '../../services/network';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
@@ -26,10 +26,10 @@ import {
   fontPercentage,
   screenWidth,
 } from '../../services/util';
-export default function PasswordUpdate({route, navigation}) {
+export default function PasswordUpdate({ route, navigation }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
-  const {params} = useRoute();
+  const { params } = useRoute();
   const user = useSelector(s => s.user, shallowEqual);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -145,7 +145,7 @@ export default function PasswordUpdate({route, navigation}) {
         showsVerticalScrollIndicator={false}
         style={styles.root}>
         <TextWrap style={styles.subTitle}>
-          가입 시 입력한 정보로 새 비밀번호를를 설정 할 수 있습니다.
+          가입 시 입력한 정보로 새 비밀번호를 설정 할 수 있습니다.
         </TextWrap>
         {/* <InputWrap
           // icon={image.idIcon}
@@ -174,14 +174,14 @@ export default function PasswordUpdate({route, navigation}) {
           onChange={setPassword}
           secure
           maxLength={20}
-          placeholder="비밀번호(필수)"
+          placeholder="새 비밀번호(필수)"
           placeholderTextColor="#acacac"
           message={
             passwordError
               ? passwordError
               : !password
-              ? '8~20자리 영문+숫자+특수문자 조합'
-              : '정상입력입니다.'
+                ? '8~20자리 영문+숫자+특수문자 조합'
+                : '정상입력입니다.'
           }
           messageColor={
             password ? (passwordError ? colors.red : colors.blue) : colors.black
@@ -195,13 +195,13 @@ export default function PasswordUpdate({route, navigation}) {
           secure
           maxLength={20}
           placeholderTextColor="#acacac"
-          placeholder="비밀번호 확인(필수)"
+          placeholder="새 비밀번호 확인(필수)"
           message={
             passwordConfirmError
               ? passwordConfirmError
               : !passwordConfirm
-              ? '8~20자리 영문+숫자+특수문자 조합'
-              : '비밀번호가 일치합니다.'
+                ? '8~20자리 영문+숫자+특수문자 조합'
+                : '비밀번호가 일치합니다.'
           }
           messageColor={
             passwordConfirm
