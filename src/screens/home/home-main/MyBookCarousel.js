@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   },
   cardHeaderSpread: {
     fontSize: fontPercentage(11),
-    bottom: 10,
+    bottom: 2,
     right: 0,
   },
   cardHeaderSpreadSt1: {

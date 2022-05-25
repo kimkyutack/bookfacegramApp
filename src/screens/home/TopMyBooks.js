@@ -37,7 +37,6 @@ export default function TopMyBooks({route}) {
       if (status === 'SUCCESS') {
         setLoading(false);
         if(selecttype === 'genre'){
-          
             setGenre([...data]);
         }else if(selecttype === 'rank'){
             setRank([...data]);

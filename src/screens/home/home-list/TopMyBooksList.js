@@ -18,6 +18,7 @@ import MyBookListItem from './MyBookListitem';
 import TopMyBooks from '../TopNewBooks';
 import {
   screenWidth,
+  screenHeight,
   widthPercentage,
   heightPercentage,
 } from '../../../services/util';
@@ -27,30 +28,31 @@ import TopMyBooksMain from '../home-main/TopNewBooksMain';
 
 export default function TopMyBooksList({route, genre, rank, topic}) {
   const scrollRef = useRef();
+  const scrollRef2 = useRef();
+  const scrollRef3 = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [type, setType] = useState('new');
-  const [selectType, setselectType] = useState('genre');
   const [start, setStart] = useState(30);
   const [morenewBook, setNewBook] = useState([]);
   const [state, setState] = useState({
-    req: genre,
+    req: [],
     page: 1,
   });
   const fetchRequested = async startpage => {
+    console.log(startpage);
     try {
-      setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/mybooks',
         query: {
           startPaging: startpage,
           endPaging: 30,
-          type:selectType,
+          type:listTab.listTab.selectType,
         },
       });
-
       if (status === 'SUCCESS') {
+        setLoading(false);
         setStart(start + 30);
         setNewBook([...data]);
       }
@@ -61,27 +63,42 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
     }
   };
   useEffect(() => {
-    setselectType(listTab.listTab.selectType);
+    console.log('1')
+    setLoading(true);
+    setStart(30);
     if(listTab.listTab.selectType === 'genre'){
       setNewBook(genre);
     }else if(listTab.listTab.selectType === 'rank'){
-setNewBook(rank);
+      setNewBook(rank);
     }else if(listTab.listTab.selectType === 'topic'){
-setNewBook(topic);
+      setNewBook(topic);
     }
     
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
+      scrollRef2.current?.scrollToOffset({y: 0.1, animated: false});
+      scrollRef3.current?.scrollToOffset({y: 0.1, animated: false});
         setType('new');
-        setState({req: morenewBook, page: 1});
+        if(listTab.listTab.selectType === 'genre'){
+          setState({req: genre, page: 1});
+        }else if(listTab.listTab.selectType === 'rank'){
+          setState({req: rank, page: 1});
+        }else if(listTab.listTab.selectType === 'topic'){
+          setState({req: topic, page: 1});
+        }
+        
     }
+    
+      setLoading(false);
     return () => {
       mount = false;
     };
   }, [listTab.listTab.selectType]);
 
   useEffect(() => {
+   
+    setLoading(true);
     let mount = true;
     if (mount) {
         setType('new');
@@ -90,15 +107,39 @@ setNewBook(topic);
           page: state.page + 1,
         });
       }
+      
       setLoading(false);
     return () => {
       mount = false;
     };
-  }, [morenewBook]);
+  }, [morenewBook,!listTab.listTab.selectType]);
+
+  useEffect(() => {
+    let mount = true;
+    if(genre.length !== 0){
+      setLoading(true);
+      if (mount) {
+      if(listTab.listTab.selectType === 'genre'){
+        setState({req: genre, page: 1});
+      }else if(listTab.listTab.selectType === 'rank'){
+        setState({req: rank, page: 1});
+      }else if(listTab.listTab.selectType === 'topic'){
+        setState({req: topic, page: 1});
+      }
+      }
+        
+        setLoading(false);
+    }
+    return () => {
+      mount = false;
+    };
+  }, [genre.length]);
 
   const loadMore = () => {
+    if (!loading) {
+    setLoading(true);
     fetchRequested(start);
-
+    }
     return () => {};
   };
 
@@ -137,13 +178,23 @@ setNewBook(topic);
     <View
       style={[
         styles.root,
-        morenewBook.length === 0 && {flex: 1, justifyContent: 'center'},
+        state.req.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      {morenewBook.length === 0 ? (
+      {state.req.length === 0 && !loading ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>추천 도서리스트가 없습니다.</TextWrap>
         </View>
-      ) : (
+      ) : 
+      state.req.length === 0 && loading ? (
+        <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: screenHeight / 3,
+          }}
+          color={colors.blue}
+        />
+      ) :  state.req.length !== 0 && listTab.listTab.selectType === 'genre' ? (
         <FlatList
           ref={scrollRef}
           data={state.req}
@@ -159,15 +210,65 @@ setNewBook(topic);
                 type={type}
                 index={index}
                 getDrawerList={getDrawerList}
-                max={morenewBook.length}
+                max={state.req.length}
               />
             );
           }}
           onEndReached={loadMore}
-          onEndReachedThreshold={1}
+          onEndReachedThreshold={0.8}
           ListFooterComponent={renderFooter}
         />
-      )}
+      ) :  state.req.length !== 0 && listTab.listTab.selectType === 'rank' ? (
+        <FlatList
+          ref={scrollRef2}
+          data={state.req}
+          extraData={state.req}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={({item, index}) => {
+            item.type = type;
+            return (
+              <MyBookListItem
+                item={item}
+                type={type}
+                index={index}
+                getDrawerList={getDrawerList}
+                max={state.req.length}
+              />
+            );
+          }}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.8}
+          ListFooterComponent={renderFooter}
+        />
+      )
+    :  state.req.length !== 0 && listTab.listTab.selectType === 'topic' ? (
+        <FlatList
+          ref={scrollRef3}
+          data={state.req}
+          extraData={state.req}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={({item, index}) => {
+            item.type = type;
+            return (
+              <MyBookListItem
+                item={item}
+                type={type}
+                index={index}
+                getDrawerList={getDrawerList}
+                max={state.req.length}
+              />
+            );
+          }}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.8}
+          ListFooterComponent={renderFooter}
+        />
+      ) : <></>
+    }
     </View>
   );
 }

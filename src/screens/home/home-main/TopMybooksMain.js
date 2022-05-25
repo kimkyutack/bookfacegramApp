@@ -151,7 +151,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           style={{alignSelf: 'center', marginBottom: 60}}
           color={colors.blue}
         />
-      ) : genre.length < 60 ? (
+      ) : genre.length < 20 ? (
         <ScrollView>
           <View style={styles.root2}>
             <View style={styles.root2}>
@@ -181,7 +181,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
             </View>
           </View>
         </ScrollView>
-      ) : genre.length === 60 && select === 'genre' ? (
+      ) : genre.length === 20 && select === 'genre' ? (
         <FlatList
           data={listData}
           extraData={listData}
@@ -218,7 +218,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           </View>
           }
         />
-      ) : genre.length === 60 && select === 'rank' ? (
+      ) : genre.length === 20 && select === 'rank' ? (
            <FlatList
           data={listData}
           extraData={listData}
