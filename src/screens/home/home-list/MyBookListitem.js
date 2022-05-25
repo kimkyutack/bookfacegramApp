@@ -62,7 +62,7 @@ export default function MyBookListItem({
                 setTab({
                   tab: 'detail',
                   selectedBook:
-                    item.type === 'kbs' ? item.bookCd : item.book_cd,
+                   item.bookIdx,
                   viewType: item.type,
                 }),
               );

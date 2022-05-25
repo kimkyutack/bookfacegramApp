@@ -268,10 +268,16 @@ export default function BookMainCarousel({
                           : null,
                     }),
                   );
+
                   navigate(routes.homeList, {
-                    grade: null,
-                    type: 'detail',
+                    screen: routes.topNewBooks,
+                    params: {
+                      grade: null,
+                      type: 'list',
+                      key: Date.now(),
+                    },
                   });
+                  
                 }}>
                 &gt; 전체보기
               </TextWrap>
@@ -331,9 +337,13 @@ export default function BookMainCarousel({
                       }),
                     );
                     navigate(routes.homeList, {
+                    screen: routes.topNewBooks,
+                    params: {
                       grade: grade,
-                      type: 'detail',
-                    });
+                      type: 'list',
+                      key: Date.now(),
+                    },
+                  });
                     // navigate(routes.home, {
                     //   screen: routes.topNewBooks,
                     //   params: {

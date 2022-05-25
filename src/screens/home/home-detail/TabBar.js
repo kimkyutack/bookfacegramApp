@@ -54,7 +54,7 @@ export default function TabBar({state, descriptors, navigation}) {
               });
             } else if (route.name === routes.topMyBooks) {
               navigation.navigate(routes.home, {
-                screen: routes.topNewBooks,
+                screen: routes.topMyBooks,
                 params: {
                   type: 'main',
                   key: Date.now(),
