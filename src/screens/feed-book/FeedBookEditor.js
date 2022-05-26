@@ -570,9 +570,8 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(10),
   },
   customElement2: {
-    width: screenWidth,
-    paddingLeft: screenWidth / 35,
-    color: colors.blue,
-    fontSize: fontPercentage(10),
-  },
+      color: colors.blue,
+      fontSize: fontPercentage(10),
+      alignSelf: 'flex-start',
+    },
 });
