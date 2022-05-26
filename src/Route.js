@@ -144,6 +144,21 @@ export default function Router() {
         );
         return () => backHandler.remove();
       }
+    } else if (currentRouteName === 'registerFormInfo') {
+      let backHandler = null;
+      if (!dialog.selectKakaoLoginDialog?.open) {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+        return () => backHandler.remove();
+      } else {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backLogoutAction,
+        );
+        return () => backHandler.remove();
+      }
     } else if (currentRouteName === 'intro1') {
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
