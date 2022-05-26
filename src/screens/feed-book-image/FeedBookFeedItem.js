@@ -30,6 +30,23 @@ import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
 import FeedBookFeedItemCarousel from './FeedBookFeedItemCarousel';
 
+const leftPad = (value) => {
+   if (value >= 10)
+    {
+       return value;
+       } return `0${value}`;
+       }
+
+
+const toStringByFormatting = (source) => {
+   const year = source.substring(0,4); 
+   const month = source.substring(5,7); 
+   const day = source.substring(8,10); 
+   return year + '.' + month +'.' + day; 
+  }
+
+
+  
 const renderItem = ({
   feedIdx,
   memberId,
@@ -41,7 +58,7 @@ const renderItem = ({
   likeMemberList,
   replyCnt,
   contents,
-  joinDate,
+  regDate,
   index,
   feedHashtag,
   login_id,
@@ -223,7 +240,7 @@ const renderItem = ({
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.joinDate}>
-            {joinDate ? joinDate : ''}
+            {regDate ? toStringByFormatting(regDate.substring(0,10)) : ''}
           </TextWrap>
         </View>
       </View>

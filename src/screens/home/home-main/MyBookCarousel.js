@@ -29,7 +29,7 @@ import FastImage from 'react-native-fast-image';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import CardWrap from '../../../components/card-wrap/CardWrap';
 import { setTab } from '../../../redux/tab/TabAction';
-import BookMainCarouselImage from './BookMainCarouselImage';
+import MyBookListImage from './MyBookListImage';
 import { dialogError } from '../../../redux/dialog/DialogActions';
 
 export default function MyBookCarousel({
@@ -96,8 +96,9 @@ export default function MyBookCarousel({
                   dispatch(
                     setTab({
                       tab: 'detail',
-                      selectedBook: item1?.bookIdx,
-                      viewType: 'new',
+                      selectedBook:
+                      item1.bookIdx,
+                      viewType: item1.type === 'app' ? 'new' : 'kbs',
                     }),
                   );
                   navigate(routes.homeDetail, {
@@ -106,7 +107,7 @@ export default function MyBookCarousel({
                 }}>
                 {item1?.bookIdx && (
                   <View style={{ width: itemWidth }}>
-                    <BookMainCarouselImage
+                    <MyBookListImage
                       item={item1}
                       index={index}
                       style={[{ width: itemWidth }, styles.bookShadow]}

@@ -146,22 +146,20 @@ export default function BookDetailTalk({selectedBook, wait}) {
           value={raplyContent}
           onChange={setReplyContent}
           borderColor={colors.border}
-          maxLength={300}
-          inputStyle={styles.textInput}
+          placeholder="자유롭게 토핑톡을 남겨주세요.
+          (최대 200자, #해시태그 최대 10개 가능)"
+          placeholderTextColor="#acacac"
+          maxLength={200}
+          inputStyle={raplyContent.length === 0 ? styles.placeInput : styles.textInput}
           multiline
-          optionComponent={
-            <TextWrap
-              style={styles.contentCount}
-              font={fonts.kopubWorldDotumProLight}>
-              ({raplyContent.length} / 300)
-            </TextWrap>
-          }
+
         />
         <View style={styles.hashTagContianer}>
           <TagInput
             updateState={setTagHandle}
             tags={tags}
-            placeholder="#책제목"
+            placeholder="태그입력"
+            placeholderTextColor="#acacac"
             containerStyle={{
               width: screenWidth,
               paddingHorizontal: 16,
@@ -232,6 +230,11 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top', //android-only
     fontFamily: fonts.kopubWorldDotumProMedium,
   },
+  placeInput: {
+    height: heightPercentage(100),
+    textAlign: 'center', //android-only
+    fontFamily: fonts.kopubWorldDotumProMedium,
+  },
   buttonContainer: {
     alignSelf: 'flex-end',
   },
@@ -258,7 +261,7 @@ const styles = StyleSheet.create({
   hashTagInput: {
     borderBottomWidth: 0.5,
     borderBottomColor: '#333333',
-    height: 35,
+    height: 60,
     marginTop: 10,
     flexDirection: 'row',
   },

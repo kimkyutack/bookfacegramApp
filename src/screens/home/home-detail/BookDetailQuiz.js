@@ -453,8 +453,9 @@ export default function BookDetailQuiz({isbn}) {
         </View>
       ) : (
         bookQuiz[examnum].instances.map((quiz,index) => {
+          console.log(index)
           return (
-            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun.length > 1 ? styles.subanswerview2 : styles.subanswerview}>
+            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
                   setAnswer(quiz.instanceNum);

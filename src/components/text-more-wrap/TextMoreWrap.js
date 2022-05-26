@@ -44,7 +44,6 @@ export default function TextMoreWrap(props) {
             left: startWidth ? startWidth : widthPercentage(296),
             bottom: 0,
             color: '#727272',
-            position: 'absolute',
           }}
           onPress={toggleNumberOfLines}>
           {textShown ? '...줄이기' : '...더보기'}

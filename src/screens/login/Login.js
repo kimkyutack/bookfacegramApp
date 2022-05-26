@@ -554,12 +554,15 @@ export default function Login({route}) {
         // if (appleemail != null) {
         //  appleemail = result.email;
         // }
-        await axios({
-          method: 'GET',
-          url: `https://toaping.me:8811/bookApp/auth/apple?email=${appleemail}`,
-        })
+        await requestGet({
+          url: 'https://toaping.me:8811/bookApp/auth/apple',
+          query: {
+            email: appleemail,
+          },
+       })
           .then(async function (res) {
-            if (res.data.status === 'SUCCESS') {
+            console.log(res)
+            if (res.status === 'SUCCESS') {
               const {data, status} = await requestPost({
                 url: consts.apiUrl + '/auth/appleLogin',
                 body: {
@@ -576,7 +579,9 @@ export default function Login({route}) {
               } else {
                 setPasswordError('애플 로그인 에러');
               }
-            } else {
+            }
+          })
+          .catch(async function (error) {
               const applename = response.user.name.lastName;
               const applename2 = response.user.name.firstName;
               const fullName = applename + applename2;
@@ -597,10 +602,6 @@ export default function Login({route}) {
               } else {
                 setPasswordError('애플 로그인 에러');
               }
-            }
-          })
-          .catch(function (error) {
-            dispatch(dialogError(error));
           });
       }
     } catch (error) {
