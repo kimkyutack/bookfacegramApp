@@ -79,6 +79,7 @@ export default function Profile({ route, navigation }) {
       setPhone(user?.handphone ? user?.handphone : '');
       setGrades(user?.grade ? user?.grade : '');
       setEmail(user?.email ? user?.email : '');
+      setEmailError('');
 
       //Put your Data loading function here instead of my loadData()
     });

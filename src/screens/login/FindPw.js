@@ -1,19 +1,19 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {Image, Keyboard, ScrollView, StyleSheet, View} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { Image, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import InputPhone from '../../components/input-phone/InputPhone';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import TextButton from '../../components/text-button/TextButton';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {navigate, reset} from '../../services/navigation';
-import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
-import {requestPost} from '../../services/network';
-import {getItem, setItem} from '../../services/preference';
-import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
-import {requestGet} from '../../services/network';
+import { navigate, reset } from '../../services/navigation';
+import { dialogOpenMessage, dialogError } from '../../redux/dialog/DialogActions';
+import { requestPost } from '../../services/network';
+import { getItem, setItem } from '../../services/preference';
+import { userCheckToken, userSignOut } from '../../redux/user/UserActions';
+import { requestGet } from '../../services/network';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
@@ -26,7 +26,7 @@ import {
   fontPercentage,
   screenWidth,
 } from '../../services/util';
-export default function FindPw({navigation}) {
+export default function FindPw({ navigation }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
@@ -100,7 +100,7 @@ export default function FindPw({navigation}) {
         showsVerticalScrollIndicator={false}
         style={styles.root}>
         <TextWrap style={styles.subTitle}>
-          가입 시 입력한 정보로 새 비밀번호를를 설정 할 수 있습니다.
+          가입 시 입력한 정보로 새 비밀번호를 설정 할 수 있습니다.
         </TextWrap>
         <InputWrap
           // icon={image.idIcon}
