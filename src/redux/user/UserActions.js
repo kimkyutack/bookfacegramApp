@@ -1,32 +1,32 @@
-import {useCallback} from 'react';
-import {addons} from 'react-native';
+import { useCallback } from 'react';
+import { addons } from 'react-native';
 import Config from 'react-native-config';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {navigate,reset} from '../../services/navigation';
+import { navigate, reset } from '../../services/navigation';
 import {
   requestFile,
   requestGet,
   requestPost,
   requestPut,
 } from '../../services/network';
-import {getImageFromGallery, getImageFromCamera} from '../../services/picker';
-import {clearItem, getItem} from '../../services/preference';
+import { getImageFromGallery, getImageFromCamera } from '../../services/picker';
+import { clearItem, getItem } from '../../services/preference';
 import {
   dialogOpenMessage,
   dialogError,
   dialogOpenSelect,
 } from '../dialog/DialogActions';
-import {logout, unlink} from '@react-native-seoul/kakao-login';
-import {cameraProfile} from '../../services/util';
-import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
+import { logout, unlink } from '@react-native-seoul/kakao-login';
+import { cameraProfile } from '../../services/util';
+import { NaverLogin, getProfile } from '@react-native-seoul/naver-login';
 // import {
 //   LoginManager,
 //   AccessToken,
 //   GraphRequest,
 //   GraphRequestManager,
 // } from 'react-native-fbsdk-next';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 GoogleSignin.configure({
   scopes: [
     'https://www.googleapis.com/auth/userinfo.profile',
@@ -47,7 +47,7 @@ export const userActionType = {
 
 export const userUpdate = async dispatch => {
   try {
-    const {data, status} = await requestGet({
+    const { data, status } = await requestGet({
       url: consts.apiUrl + '/mypage/info',
     });
 
@@ -55,18 +55,18 @@ export const userUpdate = async dispatch => {
     if (status === 'FAIL') {
       throw 'member is null';
     } else if (status === 'SUCCESS') {
-      dispatch({type: userActionType.update, user: data});
+      dispatch({ type: userActionType.update, user: data });
     }
   } catch (error) {
-    dispatch({type: userActionType.init});
+    dispatch({ type: userActionType.init });
   }
 };
 
 export const userUpdate2 =
-  ({user, updated = true}) =>
-  dispatch => {
-    dispatch({type: userActionType.update, user});
-  };
+  ({ user, updated = true }) =>
+    dispatch => {
+      dispatch({ type: userActionType.update, user });
+    };
 
 export const userSignOut = userId => async dispatch => {
   const platformType = await getItem('platformType');
@@ -75,7 +75,7 @@ export const userSignOut = userId => async dispatch => {
   await clearItem('platformType');
   await clearItem('accountLocal');
   await clearItem('hashTagLocal');
-  dispatch({type: 'clear'});
+  dispatch({ type: 'clear' });
   if (platformType === 'kakao') {
     await logout();
     // await unlink();
@@ -154,8 +154,8 @@ export const userUpdateProfileImage =
 
       formData.append('profile', file);
 
-      const {data, status} = await requestFile(
-        {url: consts.apiUrl + '/mypage/info/profile', method: 'put'},
+      const { data, status } = await requestFile(
+        { url: consts.apiUrl + '/mypage/info/profile', method: 'put' },
         formData,
       );
       console.log(data);
@@ -173,9 +173,6 @@ export const userUpdateProfileImage =
           },
         });
 
-        navigate(routes.profile, {
-          type : 'ok'
-        });
       } else {
         dispatch(dialogError('fail'));
       }
@@ -229,16 +226,16 @@ export const userCheckToken = async dispatch => {
       throw 'platformType is null';
     }
 
-    const {data, status} = await requestGet({
+    const { data, status } = await requestGet({
       url: consts.apiUrl + '/auth/checkJwt',
     });
 
     if (status === 'FAIL') {
       throw 'member is null';
     } else if (status === 'SUCCESS') {
-      dispatch({type: userActionType.token, user: data});
+      dispatch({ type: userActionType.token, user: data });
     }
   } catch (error) {
-    dispatch({type: userActionType.init});
+    dispatch({ type: userActionType.init });
   }
 };
