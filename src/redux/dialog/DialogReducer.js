@@ -1,4 +1,4 @@
-import {dialogActionType} from './DialogActions';
+import { dialogActionType } from './DialogActions';
 
 const initDialog = {
   messageDialog: {
@@ -19,6 +19,13 @@ const initDialog = {
     title: '확인',
   },
   actionDialog: {
+    open: false,
+    onPress: null,
+    message: '',
+    title: '',
+    cancelTitle: '',
+  },
+  actionDialog2: {
     open: false,
     onPress: null,
     message: '',
@@ -116,6 +123,18 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         actionDialog: {
+          open: true,
+          onPress: action.onPress,
+          message: action.message,
+          titleColor: action.titleColor,
+          title: action.title,
+          cancelTitle: action.cancelTitle,
+        },
+      };
+    case dialogActionType.openAction2:
+      return {
+        ...state,
+        actionDialog2: {
           open: true,
           onPress: action.onPress,
           message: action.message,

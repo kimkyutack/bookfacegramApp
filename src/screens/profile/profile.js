@@ -55,6 +55,7 @@ import {
   dialogOpenDrawerKeyBoardWD,
   dialogOpenSelect,
   dialogOpenAction,
+  dialogOpenAction2,
 } from '../../redux/dialog/DialogActions';
 import { userUpdateProfileImage, userUpdate } from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
@@ -117,7 +118,7 @@ export default function Profile({ route, navigation }) {
     //console.log(params?.type);
     if (params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
       dispatch(
-        dialogOpenAction({
+        dialogOpenAction2({
           titleColor: '#005aff',
           cancelTitle: '취소',
           message: '프로필 사진을 변경하시겠습니까?',

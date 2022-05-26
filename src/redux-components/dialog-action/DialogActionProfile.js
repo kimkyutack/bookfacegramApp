@@ -20,17 +20,17 @@ import {
   widthPercentage,
 } from '../../services/util';
 
-export default function DialogAction({ }) {
+export default function DialogActionProfile({ }) {
   const dispatch = useDispatch();
-  const { actionDialog } = useSelector(s => s.dialog, shallowEqual);
+  const { actionDialog2 } = useSelector(s => s.dialog, shallowEqual);
 
   useEffect(() => {
-    if (actionDialog.open) {
+    if (actionDialog2.open) {
       Keyboard.dismiss();
     }
-  }, [actionDialog.open]);
+  }, [actionDialog2.open]);
 
-  if (!actionDialog.open) {
+  if (!actionDialog2.open) {
     return null;
   }
   return (
@@ -41,43 +41,42 @@ export default function DialogAction({ }) {
             style={[
               styles.message2,
               {
-                marginTop: actionDialog.label ? 8 : 33,
+                marginTop: actionDialog2.label ? 8 : 33,
                 fontWeight: 'bold',
               },
             ]}>
             알림
           </TextWrap>
-          <TextWrap style={styles.message}>{actionDialog.message}</TextWrap>
+          <TextWrap style={styles.message}>{actionDialog2.message}</TextWrap>
           <View style={styles.row2}>
             <TouchableOpacity
-              style={[actionDialog.title.length > 3 ? styles.button : styles.button5]}
+              style={[actionDialog2.title.length > 3 ? styles.button : styles.button5]}
               onPress={() => {
-                if (actionDialog.onPress) {
-                  actionDialog.onPress(false);
+                if (actionDialog2.onPress) {
+                  actionDialog2.onPress(false);
                 }
                 dispatch(dialogClose());
               }}>
               <TextWrap
                 font={fonts.kopubWorldDotumProMedium}
                 style={styles.title}>
-                {actionDialog.cancelTitle}
+                {actionDialog2.cancelTitle}
               </TextWrap>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[actionDialog.title.length > 3 ? styles.button2 : styles.button4]}
+              style={[actionDialog2.title.length > 3 ? styles.button2 : styles.button4]}
               onPress={() => {
-                if (actionDialog.onPress) {
-                  actionDialog.onPress(true);
+                if (actionDialog2.onPress) {
+                  actionDialog2.onPress(true);
                 }
-                dispatch(dialogClose());
               }}>
               <TextWrap
                 font={fonts.kopubWorldDotumProMedium}
                 style={[
                   styles.title2,
-                  actionDialog.titleColor && { color: actionDialog.titleColor },
+                  actionDialog2.titleColor && { color: actionDialog2.titleColor },
                 ]}>
-                {actionDialog.title}
+                {actionDialog2.title}
               </TextWrap>
             </TouchableOpacity>
           </View>
