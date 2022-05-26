@@ -98,7 +98,7 @@ export default function FeedBookFeed({route, navigation}) {
     if (mount && isFocused) {
       if (route.params?.isNewFeed) {
         listRef.current?.scrollToOffset({y: 0.1, animated: false});
-        const newTime = new Date(+new Date() + 3240 * 10000)
+        const newTime = new Date(+new Date() + 3300 * 10000)
           .toISOString()
           .replace('T', ' ')
           .replace(/\..*/, '');
@@ -138,7 +138,7 @@ export default function FeedBookFeed({route, navigation}) {
       .then(res => {
         if (res.status === 'SUCCESS') {
           dispatch(dialogError('삭제되었습니다.'));
-          const newTime = new Date(+new Date() + 3240 * 10000)
+          const newTime = new Date(+new Date() + 3300 * 10000)
             .toISOString()
             .replace('T', ' ')
             .replace(/\..*/, '');
@@ -355,7 +355,7 @@ export default function FeedBookFeed({route, navigation}) {
   };
 
   const handleRefresh = async () => {
-    const newTime = new Date(+new Date() + 3240 * 10000)
+    const newTime = new Date(+new Date() + 3300 * 10000)
       .toISOString()
       .replace('T', ' ')
       .replace(/\..*/, '');
