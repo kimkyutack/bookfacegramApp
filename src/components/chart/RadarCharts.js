@@ -20,10 +20,12 @@ import images from '../../libs/images';
 import { requestGet } from '../../services/network';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
+import { useRoute } from '@react-navigation/native';
 
 import { RadarChart } from 'react-native-charts-wrapper';
 
 export default function RadarCharts() {
+  const route = useRoute();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     data: {},
@@ -113,7 +115,7 @@ export default function RadarCharts() {
       });
 
 
-  }, []);
+  }, [route]);
 
   useEffect(() => {
     return () => setLoading(false);
