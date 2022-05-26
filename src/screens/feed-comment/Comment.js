@@ -181,7 +181,7 @@ export default function Comment({route, navigation}) {
       <View style={styles.root}>
         <View style={styles.inputContainer}>
           <Avatar
-            size={widthPercentage(31)}
+            size={widthPercentage(20)}
             style={styles.avator}
             path={
               user.profile_path
@@ -265,12 +265,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     justifyContent: 'space-between',
   },
+
   inputContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     position: 'absolute',
     width: '100%',
     bottom: 0,
+    alignItems:'center',
     borderTopColor: '#e6e6e6',
     borderTopWidth: 0.5,
     borderBottomColor: '#e6e6e6',

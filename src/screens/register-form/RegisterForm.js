@@ -17,7 +17,7 @@ import {
   fontPercentage,
 } from '../../services/util';
 
-export default function RegisterForm({route}) {
+export default function RegisterForm({route,navigation}) {
   const scrollRef = useRef();
   const [agree, setAgree] = useState(false);
   const [term, setTerm] = useState(false);
@@ -50,6 +50,18 @@ export default function RegisterForm({route}) {
       });
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setAgree(false);
+      setTerm(false);
+      setPrivacy(false);
+      setAllowEmail(false);
+      setSms(false);
+      setAppPush(false);
+    });
+    return unsubscribe;
+  }, [navigate]);
 
   return (
     <RootLayout

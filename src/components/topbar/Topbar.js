@@ -66,7 +66,7 @@ export default function Topbar({
       ) : exit ? (
         <TouchableWithoutFeedback onPress={() => dispatch(
             dialogOpenAction({
-              titleColor: '#000',
+              titleColor: colors.blue,
               cancelTitle: '취소',
               message: '앱을 종료하시겠습니까??',
               onPress: a => {

@@ -61,7 +61,6 @@ export default function BookDetailQuiz({isbn}) {
   const [ans3, setans3] = useState();
   const [ans4, setans4] = useState();
   const [ans5, setans5] = useState();
-  console.log(contents.length);
   const radio_props = [
     {label: '단답형', value: 1},
     {label: '객관식', value: 2},
@@ -115,6 +114,23 @@ export default function BookDetailQuiz({isbn}) {
       }
     } catch (error) {
       setLoading(false);
+      dispatch(dialogError(error));
+    }
+  };
+
+  const quizGraph = async () => {
+    try {
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/mybooks/graph/quiz/',
+        body: {
+          isbn: isbn,
+          type: 'exam',
+        },
+      });
+      if (status === 'SUCCESS') {
+        setQuizstart(1);
+      }
+    } catch (error) {
       dispatch(dialogError(error));
     }
   };
@@ -604,7 +620,7 @@ export default function BookDetailQuiz({isbn}) {
       <TouchableOpacity
         style={styles.noDatabtn}
         onPress={() => {
-          setQuizstart(1);
+          quizGraph();
         }}>
         <Image source={images.quiz_btn} style={styles.img} />
       </TouchableOpacity>

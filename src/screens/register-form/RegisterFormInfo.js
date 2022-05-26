@@ -26,7 +26,7 @@ import {
   fontPercentage,
 } from '../../services/util';
 
-export default function RegisterFormInfo({}) {
+export default function RegisterFormInfo({navigation}) {
   const scrollRef = useRef();
   const {params} = useRoute();
   const dispatch = useDispatch();
@@ -60,6 +60,21 @@ export default function RegisterFormInfo({}) {
     //   setPhone(params.phone.split(' ')[1]);
     // }
   }, [params]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setMemberId('');
+      setPassword('');
+      setName('');
+      setPasswordConfirm('');
+      setPhone('');
+      setEmail('');
+      setPasswordConfirmError('');
+      setEmailError('');
+      setMemberIdError('');
+    });
+    return unsubscribe;
+  }, [navigate]);
 
   useEffect(() => {
     if (password && passwordConfirm && password === passwordConfirm) {

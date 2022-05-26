@@ -158,7 +158,12 @@ export default function Login({route}) {
   };
 
   const handleRegister = () => {
-    navigate(routes.registerForm);
+    navigate(routes.registerForm, {
+            data: '',
+            userId: '',
+            password:'',
+            platformType: '',
+          });
   };
 
   const handleFindPassword = () => {
@@ -326,14 +331,12 @@ export default function Login({route}) {
         setPasswordError('카카오 로그인 에러');
       }
     } catch (e) {
-      dispatch(dialogError(e));
     }
   };
 
   const signInWithNaver = () => {
     NaverLogin.login(naverInitials, async (err, naverToken) => {
       if (err) {
-        dispatch(dialogError(err));
       } else {
         const profileResult = await getProfile(naverToken.accessToken);
         if (profileResult.resultcode === '024') {
@@ -436,10 +439,8 @@ export default function Login({route}) {
           }
         })
         .catch(function (error) {
-          dispatch(dialogError(error));
         });
     } catch (error) {
-      dispatch(dialogError(error));
     }
   };
 
