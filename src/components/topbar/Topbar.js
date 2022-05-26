@@ -19,6 +19,9 @@ import {
 } from '../../services/util';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
+import RNExitApp from 'react-native-exit-app';
+import { useDispatch } from 'react-redux';
+import { dialogOpenAction } from '../../redux/dialog/DialogActions';
 
 export default function Topbar({
   title,
@@ -28,7 +31,10 @@ export default function Topbar({
   optionsAvator,
   back,
   navigation,
+  exit,
+  none,
 }) {
+  const dispatch = useDispatch();
   const [optionWidth, setOptionWidth] = useState(0);
   const [screenWidth, setScreenWidth] = useState(defaultScreenWidth);
   const handleOptionLayout = e => {
@@ -57,6 +63,25 @@ export default function Topbar({
             <Image style={styles.backIcon} source={images.back} />
           </View>
         </TouchableWithoutFeedback>
+      ) : exit ? (
+        <TouchableWithoutFeedback onPress={() => dispatch(
+            dialogOpenAction({
+              titleColor: '#000',
+              cancelTitle: '취소',
+              message: '앱을 종료하시겠습니까??',
+              onPress: a => {
+                if (a) {
+                  RNExitApp.exitApp();
+                }
+              },
+            }),
+          )}>
+          <View style={styles.back} onLayout={handleOptionLayout}>
+            <Image style={styles.backIcon} source={images.back} />
+          </View>
+        </TouchableWithoutFeedback>
+      ) : none ? (
+        <></>
       ) : (
         <TouchableWithoutFeedback
           onPress={() => {
@@ -70,7 +95,7 @@ export default function Topbar({
       )}
 
       <View
-        style={title === 'TOAPING' ? styles.toapingCenter : styles.center}
+        style={title === 'TOAPING' ? styles.toapingCenter : none ? styles.gaipCenter : styles.center}
         onLayout={handleOptionLayout}>
         {/*(title === '공지사항' || title === '이벤트') && (
           <TextWrap
@@ -262,6 +287,10 @@ const styles = StyleSheet.create({
   center: {
     position: 'absolute',
     left: widthPercentage(60),
+  },
+  gaipCenter: {
+    position: 'absolute',
+    left: widthPercentage(130),
   },
   rightConatiner: {
     flexDirection: 'row',

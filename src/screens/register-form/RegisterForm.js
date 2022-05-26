@@ -55,7 +55,7 @@ export default function RegisterForm({route}) {
     <RootLayout
       topbar={{
         title: '토핑 회원가입',
-        back: true,
+        none: true,
       }}>
       <ScrollView
         ref={scrollRef}

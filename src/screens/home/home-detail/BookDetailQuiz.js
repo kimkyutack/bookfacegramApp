@@ -425,7 +425,7 @@ export default function BookDetailQuiz({isbn}) {
       <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
         {bookQuiz[examnum].exam}
       </TextWrap>
-      {bookQuiz[examnum].subjYn === 'S' && bookQuiz[examnum].subJimun.length > 1 ? (
+      {bookQuiz[examnum].subJimun.length > 1 ? (
         <View style={styles.onData}>
           <HTMLView
             stylesheet={styles.onData}
@@ -454,7 +454,7 @@ export default function BookDetailQuiz({isbn}) {
       ) : (
         bookQuiz[examnum].instances.map((quiz,index) => {
           return (
-            <View key={index * page+ 600} style={styles.subanswerview}>
+            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun.length > 1 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
                   setAnswer(quiz.instanceNum);
@@ -497,7 +497,7 @@ export default function BookDetailQuiz({isbn}) {
     </View>
   ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 1 ? (
     <View>
-      <View style={styles.extitle2} >
+      <View style={styles.extitle3} >
       <Image source={images.note_icon} style={styles.note} />
       <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
         도전결과
@@ -618,7 +618,7 @@ export default function BookDetailQuiz({isbn}) {
         ) : null}
         <View
           style={{
-            marginTop: heightPercentage(10),
+            marginTop: heightPercentage(0),
             width: screenWidth * 0.9,
             alignItems: 'center',
             justifyContent: 'flex-start',
@@ -722,15 +722,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: screenWidth * 0.9,
   },
+  subanswerview2: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginTop: heightPercentage(40),
+    textAlign: 'center',
+    width: screenWidth * 0.9,
+  },
   answertab: {
     fontSize: fontPercentage(12),
-    textAlign: 'center',
+    textAlign: 'left',
     marginRight: heightPercentage(5),
     color: '#000',
   },
   selecttab: {
     fontSize: fontPercentage(12),
-    textAlign: 'center',
+    textAlign: 'left',
     marginRight: heightPercentage(5),
     color: '#0066ff',
   },
@@ -752,8 +759,17 @@ const styles = StyleSheet.create({
   },
   extitle2: {
     width: screenWidth * 0.9,
-    marginTop: heightPercentage(30),
     textAlign: 'left',
+    fontSize: fontPercentage(14),
+    bottom: heightPercentage(10),
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    flexDirection:'row',
+  },
+  extitle3: {
+    width: screenWidth * 0.9,
+    textAlign: 'left',
+    marginTop: heightPercentage(30),
     fontSize: fontPercentage(14),
     fontWeight: 'bold',
     alignSelf: 'center',
@@ -846,7 +862,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   onData: {
-    marginTop: heightPercentage(20),
     textAlign: 'center',
     height: 'auto',
     borderWidth: 1,

@@ -24,7 +24,7 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
-export default function ToapingLogin({}) {
+export default function ToapingLogin({navigation}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
@@ -97,11 +97,19 @@ export default function ToapingLogin({}) {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setUsername('');
+      setPassword('');
+    });
+    return unsubscribe;
+  }, [navigate]);
+
   return (
     <RootLayout
       topbar={{
         title: '토핑 회원가입',
-        back: true,
+        none: true,
       }}>
       <ScrollView
         ref={scrollRef}

@@ -77,7 +77,7 @@ export default function Router() {
   const user = useSelector(s => s.user, shallowEqual);
   const dialog = useSelector(s => s.dialog, shallowEqual);
   const dispatch = useDispatch();
-  //console.log(user);
+  
   useEffect(() => {
     if (user.inited && !user.signed) {
       reset(routes.login);
@@ -115,6 +115,21 @@ export default function Router() {
       );
       return () => backHandler.remove();
     } else if (currentRouteName === 'login') {
+      let backHandler = null;
+      if (!dialog.selectKakaoLoginDialog?.open) {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+        return () => backHandler.remove();
+      } else {
+        backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backLogoutAction,
+        );
+        return () => backHandler.remove();
+      }
+    } else if (currentRouteName === 'RegisterFormToapingInfo') {
       let backHandler = null;
       if (!dialog.selectKakaoLoginDialog?.open) {
         backHandler = BackHandler.addEventListener(

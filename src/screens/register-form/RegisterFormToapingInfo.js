@@ -13,7 +13,7 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
 import routes from '../../libs/routes';
-import {dialogOpenMessage, dialogError} from '../../redux/dialog/DialogActions';
+import {dialogOpenMessage, dialogError, dialogOpenAction} from '../../redux/dialog/DialogActions';
 import {userCheckToken} from '../../redux/user/UserActions';
 import {goBack, reset, navigate} from '../../services/navigation';
 import {requestGet, requestPost} from '../../services/network';
@@ -186,7 +186,7 @@ export default function RegisterFormToapingInfo({}) {
     <RootLayout
       topbar={{
         title: '토핑 회원가입',
-        back: true,
+        none: true,
       }}>
       <ScrollView
         ref={scrollRef}
@@ -287,7 +287,18 @@ export default function RegisterFormToapingInfo({}) {
         <View style={styles.buttonWrap}>
           <ButtonWrap
             // disabled={buttonDisabled}
-            onPress={() => goBack()}
+            onPress={() => dispatch(
+                dialogOpenAction({
+                  titleColor: colors.blue,
+                  cancelTitle: '취소',
+                  message: '회원가입을 취소하시겠습니까??',
+                  onPress: a => {
+                    if (a) {
+                      navigate(routes.login);
+                    }
+                  },
+                }),
+              )}
             style={styles.button}
             outline
             styleTitle={styles.buttonTitle}>
