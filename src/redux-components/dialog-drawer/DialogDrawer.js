@@ -214,6 +214,11 @@ export default function DialogDrawer({}) {
               style={styles.inputTitle}
               font={fonts.kopubWorldDotumProBold}>
               {drawerDialog.title ? drawerDialog.title : '이동 책서랍 선택'}
+              <TextWrap
+              style={styles.inputTitle2}
+              font={fonts.kopubWorldDotumProBold}>
+              {'\n'}{'해당 도서가 보관되어 있는 책서랍은 보여지지 않습니다.'}
+            </TextWrap>
             </TextWrap>
             <View
               style={{
@@ -221,18 +226,18 @@ export default function DialogDrawer({}) {
                 borderBottomColor: '#eeeeee',
                 borderBottomWidth: 1.5,
                 position: 'absolute',
-                top: heightPercentage(61.5),
+                top: heightPercentage(70),
               }}
             />
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
-                marginTop: heightPercentage(30),
+                marginTop: heightPercentage(20),
                 marginBottom: 20,
               }}>
-              {drawerDialog.drawerList?.length > 0 &&
-                drawerDialog?.drawerList?.map((x, index) => {
+              {drawerDialog.drawerList?.length > 0 
+              ? drawerDialog?.drawerList?.map((x, index) => {
                   if (drawerDialog.currentDrawerIndex === x[0].contentsIdx) {
                     return <View key={index} />;
                   } else {
@@ -249,7 +254,13 @@ export default function DialogDrawer({}) {
                       </TouchableOpacity>
                     );
                   }
-                })}
+                }) 
+              : <View style={styles.root2}>
+                  <Image source={images.nodata} style={styles.nodata} />
+                  <TextWrap style={styles.text} font={fonts.barlowMedium}>
+                    {'보관가능한 책서랍이 없습니다.'}
+                  </TextWrap>
+                </View>}
             </ScrollView>
           </View>
         </TouchableWithoutFeedback>
@@ -259,6 +270,26 @@ export default function DialogDrawer({}) {
 }
 
 const styles = StyleSheet.create({
+  root2: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 100,
+    color: '#999',
+    // paddingTop: '40%',
+  },
+  nodata: {
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  text: {
+    fontSize: fontPercentage(14),
+    lineHeight: fontPercentage(21),
+    color: '#999',
+  },
+
   root: {
     position: 'absolute',
     left: 0,
@@ -271,6 +302,12 @@ const styles = StyleSheet.create({
   wrap: {flex: 1, justifyContent: 'flex-end'},
   inputTitle: {
     fontSize: fontPercentage(14),
+    color: 'black',
+    marginTop: heightPercentage(27),
+    textAlign:'center'
+  },
+  inputTitle2: {
+    fontSize: fontPercentage(10),
     color: '#707070',
     marginTop: heightPercentage(27),
   },

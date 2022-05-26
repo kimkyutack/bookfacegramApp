@@ -50,7 +50,7 @@ export default function DialogAction({}) {
           <TextWrap style={styles.message}>{actionDialog.message}</TextWrap>
           <View style={styles.row2}>
             <TouchableOpacity
-              style={[styles.button]}
+              style={[actionDialog.title.length > 3  ?  styles.button  : styles.button5]}
               onPress={() => {
                 dispatch(dialogClose());
                 if (actionDialog.onPress) {
@@ -145,6 +145,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
 
+  },
+  button5: {
+    paddingVertical: 18,
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    left:18,
   },
   title3: {
     fontSize: 15,
