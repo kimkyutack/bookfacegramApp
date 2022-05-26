@@ -147,7 +147,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
           onChange={setReplyContent}
           borderColor={colors.border}
           placeholder="자유롭게 토핑톡을 남겨주세요.
-          (최대 200자, #해시태그 최대 10개 가능)"
+          (최대 200자)"
           placeholderTextColor="#acacac"
           maxLength={200}
           inputStyle={raplyContent.length === 0 ? styles.placeInput : styles.textInput}
@@ -158,7 +158,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
           <TagInput
             updateState={setTagHandle}
             tags={tags}
-            placeholder="태그입력"
+            placeholder="태그입력(최대 10개 가능)"
             placeholderTextColor="#acacac"
             containerStyle={{
               width: screenWidth,
@@ -166,8 +166,8 @@ export default function BookDetailTalk({selectedBook, wait}) {
             }}
             inputContainerStyle={styles.hashTagInput}
             inputStyle={{
-              fontSize: fontPercentage(12),
-              lineHeight: fontPercentage(19),
+              fontSize: fontPercentage(11),
+              lineHeight: fontPercentage(20),
               marginLeft: 3,
               color: '#858585',
               fontFamily: fonts.kopubWorldDotumProBold,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   hashTagInput: {
     borderBottomWidth: 0.5,
     borderBottomColor: '#333333',
-    height: 60,
+    height: heightPercentage(30),
     marginTop: 10,
     flexDirection: 'row',
   },
