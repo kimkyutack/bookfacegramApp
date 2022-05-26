@@ -16,6 +16,7 @@ import {
   dialogOpenMessage,
   dialogError,
   dialogOpenSelect,
+  dialogClose,
 } from '../dialog/DialogActions';
 import { logout, unlink } from '@react-native-seoul/kakao-login';
 import { cameraProfile } from '../../services/util';
@@ -158,13 +159,11 @@ export const userUpdateProfileImage =
         { url: consts.apiUrl + '/mypage/info/profile', method: 'put' },
         formData,
       );
-      console.log(data);
       //const user = await requestPut({
       // url: consts.apiUrl + '/mypage/info/profile',
       //body: {formData: formData},
       //})
       //.then(res => {
-      console.log(status);
       if (status === 'SUCCESS') {
         dispatch({
           type: userActionType.update,
@@ -172,6 +171,8 @@ export const userUpdateProfileImage =
             profile_path: data,
           },
         });
+
+        dispatch(dialogClose());
 
       } else {
         dispatch(dialogError('fail'));
