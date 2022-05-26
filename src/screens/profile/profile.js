@@ -58,6 +58,7 @@ import {
 } from '../../redux/dialog/DialogActions';
 import { userUpdateProfileImage, userUpdate } from '../../redux/user/UserActions';
 import Footer from '../../libs/footer';
+import { color } from 'react-native-reanimated';
 
 export default function Profile({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
@@ -68,6 +69,7 @@ export default function Profile({ route, navigation }) {
   const [emailLoading, setEmailLoading] = useState(false);
   const [phone, setPhone] = useState(user?.handphone ? user?.handphone : '');
   const [email, setEmail] = useState(user?.email ? user?.email : '');
+  const [cmail, setCmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [grades, setGrades] = useState(user?.grade ? user?.grade : '');
   let infograde = grades * 1;
@@ -80,6 +82,7 @@ export default function Profile({ route, navigation }) {
       setGrades(user?.grade ? user?.grade : '');
       setEmail(user?.email ? user?.email : '');
       setEmailError('');
+      setCmail('');
 
       //Put your Data loading function here instead of my loadData()
     });
@@ -238,9 +241,11 @@ export default function Profile({ route, navigation }) {
     let emailFormatReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (emailFormatReg.test(e) === false) {
       setEmail(e.replace(preventKorReg, ''));
+      setCmail(email);
       setEmailError('이메일 형식이 맞지 않습니다. ex) toaping@naver.com');
     } else {
       setEmail(e.replace(preventKorReg, ''));
+      setCmail(email);
       setEmailError('');
     }
     try {
@@ -408,22 +413,14 @@ export default function Profile({ route, navigation }) {
             placeholder="이메일 주소(필수)"
             placeholderTextColor="#acacac"
             message={
-              email
-                ? emailLoading
-                  ? '중복체크 중입니다.'
-                  : emailError
-                    ? emailError
-                    : '사용 가능한 이메일입니다.'
-                : 'ex) toaping@naver.com'
+              email ? emailLoading ? '중복체크 중입니다.' : emailError ? emailError : cmail ? '사용 가능한 이메일입니다.' : 'ex) toaping@naver.com' : 'ex) toaping@naver.com'
             }
             messageColor={
               email
                 ? emailLoading
                   ? colors.black
                   : emailError
-                    ? colors.red
-                    : colors.blue
-                : colors.black
+                    ? colors.red : cmail ? colors.blue : colors.black : colors.black
             }
           />
         </View>
