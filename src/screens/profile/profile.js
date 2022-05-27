@@ -113,7 +113,6 @@ export default function Profile({ route, navigation }) {
       setSaveButtonDisabled(true);
     }
   }, [route.params?.grade]);
-
   useEffect(() => {
     //console.log(params?.type);
     if (params?.type === 'camera' || params?.type === 'file' || params?.type === 'gallery') {
@@ -426,34 +425,39 @@ export default function Profile({ route, navigation }) {
           />
         </View>
         <View style={styles.divider} />
+
         <View style={styles.main}>
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.title2}>
             계정
           </TextWrap>
         </View>
         <View style={styles.divider} />
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(dialogClose());
-            dispatch(
-              dialogOpenDrawerKeyBoardPW({
-                title: '비밀번호변경',
-                buttonTitle: '등록',
-              }),
-            );
-          }}>
-          <View style={styles.mainUser}>
-            <TextWrap
-              font={fonts.kopubWorldDotumProMedium}
-              style={styles.title}>
-              비밀번호변경
-            </TextWrap>
-            <View>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>&gt;</TextWrap>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.divider} />
+        {user.platform_type === 'app' && (
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(dialogClose());
+                dispatch(
+                  dialogOpenDrawerKeyBoardPW({
+                    title: '비밀번호변경',
+                    buttonTitle: '등록',
+                  }),
+                );
+              }}>
+              <View style={styles.mainUser}>
+                <TextWrap
+                  font={fonts.kopubWorldDotumProMedium}
+                  style={styles.title}>
+                  비밀번호변경
+                </TextWrap>
+                <View>
+                  <TextWrap font={fonts.kopubWorldDotumProMedium}>&gt;</TextWrap>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.divider} />
+          </View>)
+        }
         <TouchableOpacity
           onPress={() => {
             try {
