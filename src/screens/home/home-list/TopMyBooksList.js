@@ -97,11 +97,13 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     setLoading(true);
     let mount = true;
     if (mount) {
+      if(state.page !== 0){
         setType('new');
         setState({
           req: state.req.concat([...morenewBook]),
-          page: state.page + 1,
+          page: state.page,
         });
+      }
       }
       
       setLoading(false);
@@ -110,17 +112,17 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     };
   }, [morenewBook,!listTab.listTab.selectType]);
 
-  /*useEffect(() => {
+  useEffect(() => {
     let mount = true;
     if(genre.length !== 0){
       setLoading(true);
       if (mount) {
       if(listTab.listTab.selectType === 'genre'){
-        setState({req: genre, page: 1});
+        setState({req: genre, page: 0});
       }else if(listTab.listTab.selectType === 'rank'){
-        setState({req: rank, page: 1});
+        setState({req: rank, page: 0});
       }else if(listTab.listTab.selectType === 'topic'){
-        setState({req: topic, page: 1});
+        setState({req: topic, page: 0});
       }
       }
         
@@ -129,10 +131,14 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     return () => {
       mount = false;
     };
-  }, [genre.length]);*/
+  }, [genre.length]);
 
   const loadMore = () => {
     if (!loading) {
+    setState({
+         req: state.req,
+        page: state.page + 1,
+      });
     setLoading(true);
     fetchRequested(start);
     }
