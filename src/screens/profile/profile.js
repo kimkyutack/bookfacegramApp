@@ -518,8 +518,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(24),
     color: colors.black,
     textAlign: 'left',
-    flexBasis: 300,
-    flexShrink: 1,
+    paddingHorizontal: 0,
   },
   image: {
     width: widthPercentage(30),
@@ -690,7 +689,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     color: colors.black,
-    fontSize: fontPercentage(16),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(24),
     display: 'flex',
     flexBasis: 100,
@@ -706,6 +705,7 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
+
 
   },
   inputStyle2: {
