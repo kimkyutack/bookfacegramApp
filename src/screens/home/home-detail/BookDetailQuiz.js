@@ -441,7 +441,7 @@ export default function BookDetailQuiz({isbn}) {
       <TextWrap style={styles.excontents} font={fonts.kopubWorldDotumProLight}>
         {bookQuiz[examnum].exam}
       </TextWrap>
-      {bookQuiz[examnum].subJimun.length > 1 ? (
+      {bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 ? (
         <View style={styles.onData}>
           <HTMLView
             stylesheet={styles.onData}
@@ -469,9 +469,8 @@ export default function BookDetailQuiz({isbn}) {
         </View>
       ) : (
         bookQuiz[examnum].instances.map((quiz,index) => {
-          console.log(index)
           return (
-            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
+            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
                   setAnswer(quiz.instanceNum);
