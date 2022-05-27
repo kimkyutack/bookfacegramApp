@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.black,
-    fontSize: fontPercentage(16),
+    fontSize: fontPercentage(15),
     lineHeight: fontPercentage(21),
   },
   up: {

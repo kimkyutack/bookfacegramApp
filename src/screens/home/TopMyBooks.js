@@ -23,7 +23,43 @@ export default function TopMyBooks({route}) {
   const [genre, setGenre] = useState([]);
   const [rank, setRank] = useState([]);
   const [topic, setTopic] = useState([]);
+  const [start, setStart] = useState(15);
    const fetchRequested = async (selecttype) => {
+    try {
+      setLoading(true);
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/mybooks',
+        query: {
+          endPaging: 15,
+          startPaging: 0,
+          type: selecttype,
+        },
+      });
+      if (status === 'SUCCESS') {
+        if(data.length < 30){
+          reMybooks('genre');
+          reMybooks('rank');
+          reMybooks('topic');
+        }else{
+            setLoading(false);
+          if(selecttype === 'genre'){
+              setGenre([...data]);
+          }else if(selecttype === 'rank'){
+              setRank([...data]);
+          }else if(selecttype === 'topic'){
+              setTopic([...data]);
+          }
+        }
+      }
+     
+      return status;
+    } catch (error) {
+       
+      //dispatch(dialogError(error));
+    }
+  };
+
+  const reMybooks = async (selecttype) => {
     try {
       setLoading(true);
       const {data, status} = await requestGet({
@@ -35,14 +71,15 @@ export default function TopMyBooks({route}) {
         },
       });
       if (status === 'SUCCESS') {
-        setLoading(false);
-        if(selecttype === 'genre'){
-            setGenre([...data]);
-        }else if(selecttype === 'rank'){
-            setRank([...data]);
-        }else if(selecttype === 'topic'){
-            setTopic([...data]);
-        }
+          setStart(30);
+          setLoading(false);
+          if(selecttype === 'genre'){
+              setGenre([...data]);
+          }else if(selecttype === 'rank'){
+              setRank([...data]);
+          }else if(selecttype === 'topic'){
+              setTopic([...data]);
+          }
       }
      
       return status;
@@ -78,6 +115,7 @@ export default function TopMyBooks({route}) {
           genre={genre} 
           rank={rank} 
           topic={topic}
+          startPage={start}
         />
       ) : !loading && route.params.type === 'detail' ? (
         <TopNewBooksDetail route={route} />

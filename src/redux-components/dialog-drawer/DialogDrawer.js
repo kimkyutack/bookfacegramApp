@@ -214,11 +214,6 @@ export default function DialogDrawer({}) {
               style={styles.inputTitle}
               font={fonts.kopubWorldDotumProBold}>
               {drawerDialog.title ? drawerDialog.title : '이동 책서랍 선택'}
-              <TextWrap
-              style={styles.inputTitle2}
-              font={fonts.kopubWorldDotumProBold}>
-              {'\n'}{'해당 도서가 보관되어 있는 책서랍은 보여지지 않습니다.'}
-            </TextWrap>
             </TextWrap>
             <View
               style={{

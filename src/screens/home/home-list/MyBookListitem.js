@@ -37,6 +37,7 @@ export default function MyBookListItem({
   index,
   getDrawerList,
   max,
+  select,
 }) {
   const dispatch = useDispatch();
   return (
@@ -46,14 +47,29 @@ export default function MyBookListItem({
             <TextWrap style={styles.header} font={fonts.kopubWorldDotumProBold}>
               추천도서를 확인해보세요!
             </TextWrap>
+            {select === 'genre' ? (
+            <TextWrap
+              style={styles.subHeader}
+              font={fonts.kopubWorldDotumProMedium}>
+              나만을 위한 장르별 도서를 소개합니다.
+            </TextWrap>
+            ) : select === 'rank' ? (
             <TextWrap
               style={styles.subHeader}
               font={fonts.kopubWorldDotumProMedium}>
               나만을 위한 수준별 도서를 소개합니다.
             </TextWrap>
+            ) : select === 'topic' ? (
+            <TextWrap
+              style={styles.subHeader}
+              font={fonts.kopubWorldDotumProMedium}>
+              나만을 위한 주제별 도서를 소개합니다.
+            </TextWrap>
+            ) : null
+            }
           </View>
       ) : null}
-      {(max === 30 || index < max) ? (
+      {(max === 30 || index <= max) ? (
         <View style={styles.root}>
           <TouchableOpacity
             style={styles.main}

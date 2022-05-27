@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    paddingVertical: heightPercentage(10),
     height: heightPercentage(50),
   },
   mainOpend: {paddingVertical: 10},
@@ -175,9 +174,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   title: {
+    textAlignVertical:'center',
     color: colors.black,
-    fontSize: fontPercentage(16),
+    fontSize: fontPercentage(15),
     lineHeight: fontPercentage(21),
+    height:'100%'
   },
   up: {
     width: 20,

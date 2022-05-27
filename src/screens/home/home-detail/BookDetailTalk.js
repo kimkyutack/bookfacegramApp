@@ -146,8 +146,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
           value={raplyContent}
           onChange={setReplyContent}
           borderColor={colors.border}
-          placeholder="자유롭게 토핑톡을 남겨주세요.
-          (최대 200자)"
+          placeholder="자유롭게 토핑톡을 남겨주세요. (최대 200자)"
           placeholderTextColor="#acacac"
           maxLength={200}
           inputStyle={raplyContent.length === 0 ? styles.placeInput : styles.textInput}

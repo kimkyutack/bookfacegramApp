@@ -26,7 +26,7 @@ import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
 import TopMyBooksMain from '../home-main/TopNewBooksMain';
 
-export default function TopMyBooksList({route, genre, rank, topic}) {
+export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
   const scrollRef = useRef();
   const scrollRef2 = useRef();
   const scrollRef3 = useRef();
@@ -34,26 +34,26 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [type, setType] = useState('new');
-  const [start, setStart] = useState(30);
+  const [start, setStart] = useState(startPage);
   const [morenewBook, setNewBook] = useState([]);
   const [state, setState] = useState({
     req: [],
     page: 1,
   });
-  const fetchRequested = async startpage => {
-    console.log(startpage);
+
+  const fetchRequested = async stnum => {
     try {
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/mybooks',
         query: {
-          startPaging: startpage,
-          endPaging: 30,
+          startPaging: stnum,
+          endPaging: startPage,
           type:listTab.listTab.selectType,
         },
       });
       if (status === 'SUCCESS') {
         setLoading(false);
-        setStart(start + 30);
+        setStart(start + startPage);
         setNewBook([...data]);
       }
       return status;
@@ -63,9 +63,12 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
     }
   };
   useEffect(() => {
-    console.log('1')
     setLoading(true);
-    setStart(30);
+    setStart(startPage);
+    setState({
+          req: [],
+          page: 1,
+        });
     if(listTab.listTab.selectType === 'genre'){
       setNewBook(genre);
     }else if(listTab.listTab.selectType === 'rank'){
@@ -80,13 +83,7 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
       scrollRef2.current?.scrollToOffset({y: 0.1, animated: false});
       scrollRef3.current?.scrollToOffset({y: 0.1, animated: false});
         setType('new');
-        if(listTab.listTab.selectType === 'genre'){
-          setState({req: genre, page: 1});
-        }else if(listTab.listTab.selectType === 'rank'){
-          setState({req: rank, page: 1});
-        }else if(listTab.listTab.selectType === 'topic'){
-          setState({req: topic, page: 1});
-        }
+        
         
     }
     
@@ -97,7 +94,6 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
   }, [listTab.listTab.selectType]);
 
   useEffect(() => {
-   
     setLoading(true);
     let mount = true;
     if (mount) {
@@ -114,7 +110,7 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
     };
   }, [morenewBook,!listTab.listTab.selectType]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     let mount = true;
     if(genre.length !== 0){
       setLoading(true);
@@ -133,7 +129,7 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
     return () => {
       mount = false;
     };
-  }, [genre.length]);
+  }, [genre.length]);*/
 
   const loadMore = () => {
     if (!loading) {
@@ -210,11 +206,12 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
                 index={index}
                 getDrawerList={getDrawerList}
                 max={state.req.length}
+                select={listTab.listTab.selectType}
               />
             );
           }}
           onEndReached={loadMore}
-          onEndReachedThreshold={0.8}
+          onEndReachedThreshold={1}
           ListFooterComponent={renderFooter}
         />
       ) :  state.req.length !== 0 && listTab.listTab.selectType === 'rank' ? (
@@ -233,11 +230,12 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
                 index={index}
                 getDrawerList={getDrawerList}
                 max={state.req.length}
+                select={listTab.listTab.selectType}
               />
             );
           }}
           onEndReached={loadMore}
-          onEndReachedThreshold={0.8}
+          onEndReachedThreshold={1}
           ListFooterComponent={renderFooter}
         />
       )
@@ -257,11 +255,12 @@ export default function TopMyBooksList({route, genre, rank, topic}) {
                 index={index}
                 getDrawerList={getDrawerList}
                 max={state.req.length}
+                select={listTab.listTab.selectType}
               />
             );
           }}
           onEndReached={loadMore}
-          onEndReachedThreshold={0.8}
+          onEndReachedThreshold={1}
           ListFooterComponent={renderFooter}
         />
       ) : <></>

@@ -352,7 +352,7 @@ export default function BookDrawerDetail({route, navigation}) {
                         style={styles.header}
                         font={fonts.kopubWorldDotumProMedium}>
                         보관중인 책{' '}
-                        {drawerData?.bookCnt ? drawerData?.bookCnt : 0}건
+                        {drawerData?.bookCnt ? drawerData?.bookCnt : 0}권
                       </TextWrap>
                     </View>
                   );
