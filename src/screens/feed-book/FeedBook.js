@@ -201,12 +201,12 @@ export default function FeedBook({route, navigation}) {
     }
   };
 
-  const scrollHandler = () => {
+  /*const scrollHandler = () => {
       setscrolltop(1);
     setTimeout( () => {
       setscrolltop(0);
     }, 2000);
-  }
+  }*/
   const handleRefresh = async () => {
     const newTime = new Date(+new Date() + 3240 * 10000)
       .toISOString()
@@ -346,8 +346,6 @@ export default function FeedBook({route, navigation}) {
           maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
           windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
           ListFooterComponent={renderFooter}
-          onScrollBeginDrag={()=> {setscrolltop(1)}}
-          onScrollEndDrag={()=> {setscrolltop(0)}}
         />
       )}
       <TouchableOpacity

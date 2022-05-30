@@ -98,7 +98,7 @@ const renderItem = ({
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.info}>
             {/* {memberId} */}
-            {memberId?.split('@')[0]}
+            {memberId}
           </TextWrap>
         </TouchableOpacity>
         <View>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   info: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(17),
     paddingLeft: widthPercentage(5),
     alignSelf: 'center',
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   reply: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
     paddingLeft: widthPercentage(6),
     alignSelf: 'center',
@@ -321,12 +321,12 @@ const styles = StyleSheet.create({
   },
   contents: {
     marginTop: heightPercentage(10),
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
   },
 
   joinDate: {
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     lineHeight: fontPercentage(19),
     color: '#333333',
   },
