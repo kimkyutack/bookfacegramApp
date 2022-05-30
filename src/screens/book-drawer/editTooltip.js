@@ -13,6 +13,7 @@ import {
   dialogOpenAction,
   dialogOpenDrawerKeyBoard,
   dialogError,
+  dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
 import {requestDelete} from '../../services/network';
 export default function EditToolTip({item, index, length, onPress}) {
@@ -71,6 +72,18 @@ export default function EditToolTip({item, index, length, onPress}) {
     };
   }, []);
 
+  const shareDrawer = () => {
+    setToolTipVisible(false);
+    setType('share');
+    dispatch(dialogClose());
+    dispatch(
+      dialogOpenMessage({
+        message: '해당 서비스는 준비중입니다. 곧 만나요!',
+      }),
+    );
+
+  }
+
   return (
     <Tooltip
       isVisible={toolTipVisible}
@@ -114,7 +127,7 @@ export default function EditToolTip({item, index, length, onPress}) {
           <TouchableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => {
-              setType('share');
+              shareDrawer();
             }}>
             <Image source={images.toolTipShare} style={styles.icon} />
             <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>

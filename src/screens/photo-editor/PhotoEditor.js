@@ -51,6 +51,7 @@ export default function PhotoEditor({route, navigation}) {
   const {params} = useRoute();
   const dispatch = useDispatch();
   const listRef = useRef();
+  const tagRef = useRef();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
   useEffect(() => {
@@ -172,7 +173,6 @@ export default function PhotoEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
-    console.log(e)
     if (tags.tagsArray.length > 9) {
       dispatch(
         dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
@@ -186,6 +186,7 @@ export default function PhotoEditor({route, navigation}) {
       setTags(e);
       listRef.current?.scrollToEnd({animated: true});
     }
+    tagRef.current.focus();
   };
 
   return (
@@ -317,6 +318,7 @@ export default function PhotoEditor({route, navigation}) {
                 </TextWrap>
 
                 <TagInput
+                  ref={tagRef}
                   updateState={setTagHandle}
                   tags={tags}
                   placeholder="#"
