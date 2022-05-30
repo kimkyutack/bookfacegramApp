@@ -82,7 +82,7 @@ const renderItem = ({
               <TextWrap
                 style={styles.infoDateRight}
                 onPress={() => onChangeReply(replyIdx)}>
-                답글달기
+                답글 달기
               </TextWrap>
             </View>
           </View>

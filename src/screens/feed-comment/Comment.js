@@ -113,7 +113,7 @@ export default function Comment({route, navigation}) {
           setLoading(false);
           dispatch(
             dialogOpenMessage({
-              message: '수정되었습니다.',
+              message: '댓글이 수정되었습니다.',
             }),
           )
           fetchCommentList();
@@ -135,7 +135,7 @@ export default function Comment({route, navigation}) {
           setLoading(false);
           dispatch(
             dialogOpenMessage({
-              message: '수정되었습니다.',
+              message: '댓글이 수정되었습니다.',
             }),
           )
           fetchCommentList();
@@ -193,7 +193,7 @@ const deleteReply = (onPress) => {
       dialogOpenAction({
         titleColor: '#005aff',
         cancelTitle: '취소',
-        message: '삭제 하시겠습니까?',
+        message: '댓글을 삭제하시겠습니까?',
         onPress: a => {
           if (a) {
             requestDelete({
@@ -203,14 +203,14 @@ const deleteReply = (onPress) => {
                 if (res.status === 'SUCCESS') {
                     dispatch(
                       dialogOpenMessage({
-                        message: '삭제되었습니다.',
+                        message: '댓글이 삭제되었습니다.',
                       }),
                     )
                     fetchCommentList();
                   } else {
                     dispatch(
                       dialogOpenMessage({
-                        message: '삭제에 실패하였습니다.',
+                        message: '댓글 삭제에 실패하였습니다.',
                       }),
                     )
                 }
@@ -232,7 +232,7 @@ const deleteRereply = (onPress) => {
       dialogOpenAction({
         titleColor: '#005aff',
         cancelTitle: '취소',
-        message: '삭제 하시겠습니까?',
+        message: '댓글을 삭제하시겠습니까?',
         onPress: a => {
           if (a) {
             requestDelete({
@@ -242,14 +242,14 @@ const deleteRereply = (onPress) => {
                 if (res.status === 'SUCCESS') {
                     dispatch(
                       dialogOpenMessage({
-                        message: '삭제되었습니다.',
+                        message: '댓글이 삭제되었습니다.',
                       }),
                     )
                     fetchCommentList();
                   } else {
                     dispatch(
                       dialogOpenMessage({
-                        message: '삭제에 실패하였습니다.',
+                        message: '댓글 삭제에 실패하였습니다.',
                       }),
                     )
                 }
