@@ -15,6 +15,7 @@ import colors from '../../libs/colors';
 import Avatar from '../../components/avatar/Avatar';
 import {ReplyItem} from './ReplyItem';
 import TextButton2 from '../../components/text-button/TextButton2';
+import TextButton3 from '../../components/text-button/TextButton3';
 
 
 const renderItem = ({
@@ -31,6 +32,8 @@ const renderItem = ({
   onChangeReply,
   loginid,
   feedIdx,
+  onDeleteReply,
+  onEditReply,
 }) => {
   return (
     <>
@@ -55,7 +58,16 @@ const renderItem = ({
                 font={fonts.kopubWorldDotumProBold}>
                 {memberId?.split('@')[0]}
               </TextWrap>
-              {memberId === loginid ? <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}><TextButton2 style={styles.replyedit} styleTitle={styles.replyeditfont}>수정</TextButton2><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={replyIdx} feedIdx={feedIdx}>삭제</TextButton2></View> : null}
+              {memberId === loginid ? 
+              <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}>
+                <TextButton3 style={styles.replyedit}   onPress={() => onEditReply(replyIdx)} styleTitle={styles.replyeditfont}>
+                  수정
+                </TextButton3>
+                <TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={() => onDeleteReply(replyIdx)} feedIdx={feedIdx}>
+                  삭제
+                </TextButton2>
+              </View>
+              : null}
               <TextWrap style={styles.infoRight} onPress={() => {}}>
                 {contents}
               </TextWrap>

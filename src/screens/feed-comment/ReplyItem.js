@@ -13,6 +13,7 @@ import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import TextButton2 from '../../components/text-button/TextButton2';
 import Avatar from '../../components/avatar/Avatar';
+import TextButton3 from '../../components/text-button/TextButton3';
 
 const renderItem = ({
   reReplyIdx,
@@ -46,7 +47,7 @@ const renderItem = ({
               font={fonts.kopubWorldDotumProBold}>
               {memberId?.split('@')[0]}
             </TextWrap>
-            {memberId === loginid ? <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}><TextButton2 style={styles.replyedit} styleTitle={styles.replyeditfont}>수정</TextButton2><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont}>삭제</TextButton2></View> : null}
+            {memberId === loginid ? <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}><TextButton3 style={styles.replyedit} styleTitle={styles.replyeditfont}>수정</TextButton3><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont}>삭제</TextButton2></View> : null}
             <TextWrap style={styles.infoRight} onPress={() => {}}>
               {contents}
             </TextWrap>

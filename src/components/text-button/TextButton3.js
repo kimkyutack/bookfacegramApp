@@ -3,12 +3,12 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import { useDispatch,useSelector,shallowEqual } from 'react-redux';
 import TextWrap from '../text-wrap/TextWrap';
 import { dialogClose, dialogOpenAction,dialogOpenMessage } from '../../redux/dialog/DialogActions';
-import { requestDelete } from '../../services/network';
+import { requestPut } from '../../services/network';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import { navigate } from '../../services/navigation';
 
-export default function TextButton2({
+export default function TextButton3({
   children,
   onPress,
   style,

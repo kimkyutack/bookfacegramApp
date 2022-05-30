@@ -128,6 +128,87 @@ export default function Comment({route, navigation}) {
     setReReplyIdx(replyIdx);
   };
 
+  const editReply = (onPress) => {
+  dispatch(dialogClose());
+    dispatch(
+      dialogOpenAction({
+        titleColor: '#005aff',
+        cancelTitle: '취소',
+        message: '수정 하시겠습니까?',
+        onPress: a => {
+          if (a) {
+            requestPut({
+              url: consts.apiUrl + '/mypage/feedBook/reply',
+              body: {
+                contents: children,
+                replyIdx: onPress,
+              },
+            })
+              .then(res => {
+                if (res.status === 'SUCCESS') {
+                    dispatch(
+                      dialogOpenMessage({
+                        message: '수정되었습니다.',
+                      }),
+                    )
+                    fetchCommentList();
+                  } else {
+                    dispatch(
+                      dialogOpenMessage({
+                        message: '수정에 실패하였습니다.',
+                      }),
+                    )
+                }
+              })
+              .catch(error => {
+                // error 일때 해야함
+                dispatch(dialogError(error));
+              });
+          }
+        },
+      }),
+    );
+}
+
+const deleteReply = (onPress) => {
+  dispatch(dialogClose());
+    dispatch(
+      dialogOpenAction({
+        titleColor: '#005aff',
+        cancelTitle: '취소',
+        message: '삭제 하시겠습니까?',
+        onPress: a => {
+          if (a) {
+            requestDelete({
+              url: consts.apiUrl + '/mypage/feedBook/reply/'+onPress,
+            })
+              .then(res => {
+                if (res.status === 'SUCCESS') {
+                    dispatch(
+                      dialogOpenMessage({
+                        message: '삭제되었습니다.',
+                      }),
+                    )
+                    fetchCommentList();
+                  } else {
+                    dispatch(
+                      dialogOpenMessage({
+                        message: '삭제에 실패하였습니다.',
+                      }),
+                    )
+                }
+              })
+              .catch(error => {
+                // error 일때 해야함
+                dispatch(dialogError(error));
+              });
+          }
+        },
+      }),
+    );
+}
+
+
   return (
     <RootLayout
       topbar={{
@@ -242,6 +323,8 @@ export default function Comment({route, navigation}) {
                     onChangeReply={onChangeReply}
                     loginid={user.member_id}
                     feedIdx={route.params?.feedIdx}
+                    onDeleteReply={deleteReply}
+                    onEditReply={editReply}
                   />
                 );
               }}
