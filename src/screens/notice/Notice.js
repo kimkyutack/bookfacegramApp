@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, View, Image, StyleSheet} from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { FlatList, View, Image, StyleSheet } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
-import {requestGet} from '../../services/network';
+import { dialogOpenSelect } from '../../redux/dialog/DialogActions';
+import { requestGet } from '../../services/network';
 import NoticeItem from './NoticeItem';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -15,21 +15,27 @@ import {
   heightPercentage,
   cameraItem,
 } from '../../services/util';
+import { navigate } from '../../services/navigation';
 
-export default function Notice({route, navigation}) {
+export default function Notice({ route, navigation }) {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/mypage/noticeList'})
-      .then(x => {
-        setData([...x.data?.noticeList]);
-      })
-      .catch(e => {
-        // console.log(e);
-        // dispatch(dialogError(e));
-      });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      requestGet({ url: consts.apiUrl + '/mypage/noticeList' })
+        .then(x => {
+          setData([...x.data?.noticeList]);
+        })
+        .catch(e => {
+          // console.log(e);
+          // dispatch(dialogError(e));
+        });
+    });
+
+    return unsubscribe;
+  }, [navigate]);
 
   return (
     <RootLayout
@@ -59,7 +65,7 @@ export default function Notice({route, navigation}) {
         keyExtractor={(item, index) => {
           return item.title + index.toString();
         }}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return <NoticeItem {...item} isFocused={isFocused} />;
         }}
       />
