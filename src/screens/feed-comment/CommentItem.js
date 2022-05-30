@@ -43,7 +43,7 @@ const renderItem = ({
         style={index === 0 ? styles.itemContainerFirst : styles.itemContainer}>
         <View style={styles.infoContainer}>
           <Avatar
-            size={widthPercentage(25)}
+            size={widthPercentage(27)}
             style={styles.avator}
             path={
               profile
@@ -157,24 +157,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   info: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
     marginLeft: widthPercentage(7),
     color: '#333333',
   },
   infoRight: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
     marginLeft: widthPercentage(7),
     color: '#333333',
   },
   infoDate: {
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     marginLeft: widthPercentage(7),
     color: '#727272',
   },
   infoDateRight: {
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     marginLeft: widthPercentage(7),
     color: '#727272',
   },
