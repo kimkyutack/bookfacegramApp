@@ -43,6 +43,7 @@ export default function Comment({route, navigation}) {
 
   const [tabIndex, setTabIndex] = useState(0); // 0 댓글 1 답글
   const [reReplyIdx, setReReplyIdx] = useState(null);
+  const [replyIdx, setReplyIdx] = useState(null);
   const [text, setText] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -82,7 +83,7 @@ export default function Comment({route, navigation}) {
           dispatch(dialogError(e));
           setLoading(false);
         });
-    } else {
+    } else if(tabIndex === 1) {
       // 답글달기
       requestPost({
         url: consts.apiUrl + '/mypage/feedBook/reReply',
@@ -93,6 +94,50 @@ export default function Comment({route, navigation}) {
       })
         .then(commentData => {
           setLoading(false);
+          fetchCommentList();
+        })
+        .catch(e => {
+          dispatch(dialogError(e));
+          setLoading(false);
+        });
+    }else if(tabIndex === 3){
+      // 댓글수정
+     requestPut({
+          url: consts.apiUrl + '/mypage/feedBook/reply',
+          body: {
+            contents: text,
+            replyIdx: replyIdx,
+          },
+        })
+        .then(commentData => {
+          setLoading(false);
+          dispatch(
+            dialogOpenMessage({
+              message: '수정되었습니다.',
+            }),
+          )
+          fetchCommentList();
+        })
+        .catch(e => {
+          dispatch(dialogError(e));
+          setLoading(false);
+        });
+    }else{
+      // 댓글수정
+     requestPut({
+          url: consts.apiUrl + '/mypage/feedBook/reReply',
+          body: {
+            contents: text,
+            reReplyIdx: reReplyIdx,
+          },
+        })
+        .then(commentData => {
+          setLoading(false);
+          dispatch(
+            dialogOpenMessage({
+              message: '수정되었습니다.',
+            }),
+          )
           fetchCommentList();
         })
         .catch(e => {
@@ -128,34 +173,44 @@ export default function Comment({route, navigation}) {
     setReReplyIdx(replyIdx);
   };
 
-  const editReply = (onPress) => {
+  const editReply = (replyIdx) => {
+    //댓글 수정
+    inputRef.current?.focus();
+    setTabIndex(2);
+    setReplyIdx(replyIdx);
+  };
+  const editRereply = (reReplyIdx) => {
+    //대댓글 수정
+    inputRef.current?.focus();
+    setTabIndex(3);
+    setReReplyIdx(reReplyIdx);
+  };
+
+const deleteReply = (onPress) => {
+  //댓글 삭제
   dispatch(dialogClose());
     dispatch(
       dialogOpenAction({
         titleColor: '#005aff',
         cancelTitle: '취소',
-        message: '수정 하시겠습니까?',
+        message: '삭제 하시겠습니까?',
         onPress: a => {
           if (a) {
-            requestPut({
-              url: consts.apiUrl + '/mypage/feedBook/reply',
-              body: {
-                contents: children,
-                replyIdx: onPress,
-              },
+            requestDelete({
+              url: consts.apiUrl + '/mypage/feedBook/reply/'+onPress,
             })
               .then(res => {
                 if (res.status === 'SUCCESS') {
                     dispatch(
                       dialogOpenMessage({
-                        message: '수정되었습니다.',
+                        message: '삭제되었습니다.',
                       }),
                     )
                     fetchCommentList();
                   } else {
                     dispatch(
                       dialogOpenMessage({
-                        message: '수정에 실패하였습니다.',
+                        message: '삭제에 실패하였습니다.',
                       }),
                     )
                 }
@@ -170,7 +225,8 @@ export default function Comment({route, navigation}) {
     );
 }
 
-const deleteReply = (onPress) => {
+const deleteRereply = (onPress) => {
+  //대댓글 삭제
   dispatch(dialogClose());
     dispatch(
       dialogOpenAction({
@@ -180,7 +236,7 @@ const deleteReply = (onPress) => {
         onPress: a => {
           if (a) {
             requestDelete({
-              url: consts.apiUrl + '/mypage/feedBook/reply/'+onPress,
+              url: consts.apiUrl + '/mypage/feedBook/reReply/'+onPress,
             })
               .then(res => {
                 if (res.status === 'SUCCESS') {
@@ -325,6 +381,8 @@ const deleteReply = (onPress) => {
                     feedIdx={route.params?.feedIdx}
                     onDeleteReply={deleteReply}
                     onEditReply={editReply}
+                    onEditreReply={editRereply}
+                    onDeleteRereply={deleteRereply}
                   />
                 );
               }}

@@ -34,6 +34,8 @@ const renderItem = ({
   feedIdx,
   onDeleteReply,
   onEditReply,
+  onEditreReply,
+  onDeleteRereply,
 }) => {
   return (
     <>
@@ -95,7 +97,7 @@ const renderItem = ({
             return index1.toString();
           }}
           renderItem={({item, index1}) => {
-            return <ReplyItem {...item} index={index1} loginid={loginid}/>;
+            return <ReplyItem {...item} index={index1} loginid={loginid} onEditreReply={onEditreReply} onDeleteRereply={onDeleteRereply}/>;
           }}
         />
       )}
