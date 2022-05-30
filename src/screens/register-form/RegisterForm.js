@@ -26,6 +26,7 @@ export default function RegisterForm({route,navigation}) {
   const [allowEmail, setAllowEmail] = useState(false);
   const [sms, setSms] = useState(false);
   const [appPush, setAppPush] = useState(false);
+  const [select, setSelect] = useState(0);
 
   const buttonDisabled = !agree;
   const curRouteName = navigationRef.current.getCurrentRoute().name;
@@ -57,6 +58,7 @@ export default function RegisterForm({route,navigation}) {
       setAllowEmail(false);
       setSms(false);
       setAppPush(false);
+      setSelect(select + 1);
   };
 
   const allFalse = () =>{
@@ -66,6 +68,7 @@ export default function RegisterForm({route,navigation}) {
       setAllowEmail(false);
       setSms(false);
       setAppPush(false);
+      setSelect(select + 1);
   };
 
   useEffect(() => {
@@ -84,6 +87,7 @@ export default function RegisterForm({route,navigation}) {
       setAllowEmail(false);
       setSms(false);
       setAppPush(false);
+      setSelect(select + 1);
     });
     return unsubscribe;
   }, [navigate]);
@@ -120,6 +124,7 @@ export default function RegisterForm({route,navigation}) {
           setSms={setSms}
           appPush={appPush}
           setAppPush={setAppPush}
+          select={select}
         />
         <ButtonWrap
           disabled={buttonDisabled}

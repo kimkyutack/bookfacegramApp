@@ -194,12 +194,12 @@ export default function FeedBookFeed({route, navigation}) {
     );
   };
 
-  const onShare = async () => {
+  const onShare = async (idx) => {
     try {
       const result = await Share.share({
-        message: '공유에 보이는 메세지 link',
-        url: 'http://bam.tech',
-        title: 'Wow, did you see that?',
+        message: 'https://toaping.me/bookfacegram/html/feed_share.jsp?feedIdx=' + idx,
+        url: 'https://toaping.me/bookfacegram/html/feed_share.jsp?feedIdx=' + idx,
+        title: '골라보는 맛있는 독서!',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

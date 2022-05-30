@@ -78,7 +78,6 @@ const renderItem = ({
         <TouchableOpacity
           style={styles.infoContainerEdit}
           onPress={() => {
-            console.log('1')
             navigate(routes.feedBookImage, {
               screen: routes.feedBookUserImage,
               params: {
@@ -165,7 +164,7 @@ const renderItem = ({
             {replyCnt ? replyCnt : 0}개
           </TextWrap>
           <TouchableOpacity
-            onPress={onShare}
+            onPress={()=>onShare(feedIdx)}
             style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
             <Image style={styles.icon2} source={images.share} />
           </TouchableOpacity>

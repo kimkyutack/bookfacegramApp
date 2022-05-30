@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import {Image, StyleSheet, TextInput, View} from 'react-native';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
@@ -10,8 +10,10 @@ import {
   preventKor,
   widthPercentage,
 } from '../../services/util';
+import { navigate } from '../../services/navigation';
+import { useState } from 'react';
 
-export default function InputWrap({
+export default function InputWrap3({
   message,
   style,
   inputStyle,
@@ -37,7 +39,14 @@ export default function InputWrap({
   showSoftInputOnFocus,
   messageColor,
   selectionColor,
+  st,
 }) {
+  const [selection, setSelection] = useState({start:0, end: 0});
+
+  useEffect(() => {
+      setSelection({start:0, end: 0});
+  },[st]);
+
   const handleChange = t => {
     if (maxLength && t.length > maxLength) {
       return;
@@ -83,6 +92,8 @@ export default function InputWrap({
           placeholderTextColor={
             placeholderTextColor ? placeholderTextColor : '#ffffff'
           }
+          selection={selection}
+          onSelectionChange={({ nativeEvent: { selection, text } }) => setSelection(selection)}
           autoCapitalize="none"
           value={value}
           autoCorrect={false}

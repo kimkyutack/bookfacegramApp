@@ -12,6 +12,7 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
+import InputWrap3 from '../../components/input-wrap/inputWrap3';
 
 export default function Policy({
   agree,
@@ -26,6 +27,7 @@ export default function Policy({
   setSms,
   appPush,
   setAppPush,
+  select,
 }) {
   useEffect(() => {
     if (term && privacy) {
@@ -76,7 +78,7 @@ export default function Policy({
         checked={term}
         onCheckedChange={handleChange(setTerm)}
       />
-      <InputWrap
+      <InputWrap3
         style={styles.input}
         inputStyle={styles.valueStyle}
         // inputFlex={{flex: 1}}
@@ -87,6 +89,7 @@ export default function Policy({
         multiline
         secure
         showSoftInputOnFocus={false}
+        st={select}
       />
       <CheckBox
         style={styles.cb}
@@ -107,7 +110,7 @@ export default function Policy({
         checked={privacy}
         onCheckedChange={handleChange(setPrivacy)}
       />
-      <InputWrap
+      <InputWrap3
         style={styles.input}
         inputStyle={styles.valueStyle}
         // inputFlex={{flex: 1}}
@@ -117,6 +120,7 @@ export default function Policy({
         multiline
         secure
         showSoftInputOnFocus={false}
+        st={select}
       />
 
       <TextWrap style={styles.label2} font={fonts.kopubWorldDotumProLight}>
