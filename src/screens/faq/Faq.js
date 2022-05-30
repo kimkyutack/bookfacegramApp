@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   View,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
-import {requestGet} from '../../services/network';
+import { dialogOpenSelect } from '../../redux/dialog/DialogActions';
+import { requestGet } from '../../services/network';
 import FaqItem from './FaqItem';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -24,8 +24,9 @@ import {
   fontPercentage,
   screenWidth,
 } from '../../services/util';
+import { navigate } from '../../services/navigation';
 
-export default function Faq({route, navigation}) {
+export default function Faq({ route, navigation }) {
   const [data, setData] = useState([]);
   const [color1, setColor1] = useState('#c9c9c9');
   const [color2, setColor2] = useState('#FED500');
@@ -59,7 +60,7 @@ export default function Faq({route, navigation}) {
     setCategory(type);
   };
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/mypage/help'})
+    requestGet({ url: consts.apiUrl + '/mypage/help' })
       .then(x => {
         setData([...x.data]);
       })
@@ -68,6 +69,21 @@ export default function Faq({route, navigation}) {
         // dispatch(dialogError(e));
       });
   }, []);
+
+
+  useEffect(() => {
+    //console.log(JSON.stringify(user));
+    const unsubscribe = navigation.addListener('focus', () => {
+      setCategory('feed');
+      setColor1('#c9c9c9');
+      setColor2('#FED500');
+      setColor3('#c9c9c9');
+      setColor4('#c9c9c9');
+      //Put your Data loading function here instead of my loadData()
+    });
+
+    return unsubscribe;
+  }, [navigate]);
 
   return (
     <RootLayout
@@ -232,7 +248,7 @@ export default function Faq({route, navigation}) {
         keyExtractor={(item, index) => {
           return item.question + index.toString();
         }}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return (
             <FaqItem {...item} categoryType={category_} isFocused={isFocused} />
           );
