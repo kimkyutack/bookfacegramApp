@@ -187,7 +187,7 @@ export const getFeedUser =
       });
   };
 
-export const getFeedAll = (page, limit, time) => async dispatch => {
+export const getFeedAll = (page, limit, time, memberIdx) => async dispatch => {
   dispatch({type: bookActionType.allLoading});
   requestGet({
     url: consts.apiUrl + '/mypage/feedBook/all',
@@ -195,7 +195,7 @@ export const getFeedAll = (page, limit, time) => async dispatch => {
       startPaging: (page === 1 ? 0 : page - 1) * limit, // limit start
       endPaging: limit, // limit end
       time: time,
-      memberIdx: 1, // 수정 필요
+      memberIdx: memberIdx, // 수정 필요
     },
   })
     .then(data => {

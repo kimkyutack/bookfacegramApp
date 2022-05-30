@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
+  Text,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -79,6 +80,30 @@ export default function BookDetailQuiz({isbn}) {
     {label: '4번:', value: 4},
     {label: '5번:', value: 5},
   ];
+
+  const renderNode = (node, index, parent, siblings, defaultRenderer) => {
+    console.log(node.name)
+    if (node.name == 'img') {
+      const a = node.attribs;
+      return (
+        <View key={index.toString()}>
+          <Image style={{
+            width: screenWidth * 0.84, height: heightPercentage(800), resizeMode
+              : 'stretch'
+          }} source={{ uri: a.src }} />
+        </View>
+      );
+    }
+
+    if (node.name == 'p') {
+      return (
+        <Text key={index.toString()} style={styles.pFont}>
+          {defaultRenderer(node.children, parent)}
+        </Text>
+      )
+    }
+  };
+
   const fetchRequested = async () => {
     try {
       setLoading(true);
@@ -446,6 +471,7 @@ export default function BookDetailQuiz({isbn}) {
           <HTMLView
             stylesheet={styles.onData}
             value={bookQuiz[examnum].subJimun}
+            renderNode={renderNode}
           />
         </View>
       ) : null}
@@ -721,6 +747,9 @@ export default function BookDetailQuiz({isbn}) {
 }
 
 const styles = StyleSheet.create({
+  pFont: {
+    marginBottom: 0,
+  },
   noData: {
     marginTop: heightPercentage(30),
     textAlign: 'center',

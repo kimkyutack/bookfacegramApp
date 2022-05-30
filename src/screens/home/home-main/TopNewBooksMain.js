@@ -30,7 +30,8 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   const [newBookList, setNewBookList] = useState(null);
   const [bannerList, setBannerList] = useState(null);
   const [kbsBookList1, setKbsBookList1] = useState(null); //1급
-  const [kbsBookList2, setKbsBookList2] = useState(null); //2급
+  const [kbsBookList2, setKbsBookList2] = useState(null); //2급 
+  const scrollRef = useRef();
 
   const listData = [
     {
@@ -82,6 +83,12 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   }, []);
 
   useEffect(() => {
+    if(scrollRef.current !== undefined){
+    scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    }
+  },[route]);
+
+  useEffect(() => {
     if (th && newBookList && bannerList && kbsBookList1 && kbsBookList2) {
       setLoading(false);
     }
@@ -113,6 +120,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
         <FlatList
           data={listData}
           extraData={listData}
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {

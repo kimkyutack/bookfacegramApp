@@ -112,9 +112,9 @@ export default function Comment({route, navigation}) {
         })
         .then(commentData => {
           setLoading(false);
-          dispatch(
+         dispatch(
             dialogOpenMessage({
-              message: '댓글이 수정되었습니다.',
+               message: '댓글이 수정되었습니다.',
             }),
           )
           fetchCommentList();
@@ -179,19 +179,22 @@ export default function Comment({route, navigation}) {
         setopenYN({open : 0, replyIdx: 0});
     }
     inputRef.current?.focus();
+    setText('');
     setTabIndex(1);
     setReReplyIdx(replyIdx);
   };
 
-  const editReply = (replyIdx) => {
+  const editReply = (replyIdx,content) => {
     //댓글 수정
     inputRef.current?.focus();
+    setText(content);
     setTabIndex(2);
     setReplyIdx(replyIdx);
   };
-  const editRereply = (reReplyIdx) => {
+  const editRereply = (reReplyIdx,content) => {
     //대댓글 수정
     inputRef.current?.focus();
+    setText(content);
     setTabIndex(3);
     setReReplyIdx(reReplyIdx);
   };
@@ -216,6 +219,10 @@ const deleteReply = (onPress) => {
                         message: '댓글이 삭제되었습니다.',
                       }),
                     )
+                    inputRef.current?.focus();
+                    setTabIndex(0);
+                    listRef.current?.scrollToOffset({y: 0.1, animated: false});
+                    setText('');
                     fetchCommentList();
                   } else {
                     dispatch(
@@ -255,6 +262,10 @@ const deleteRereply = (onPress) => {
                         message: '댓글이 삭제되었습니다.',
                       }),
                     )
+                    inputRef.current?.focus();
+                    setTabIndex(0);
+                    listRef.current?.scrollToOffset({y: 0.1, animated: false});
+                    setText('');
                     fetchCommentList();
                   } else {
                     dispatch(

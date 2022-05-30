@@ -202,7 +202,7 @@ export default function FeedBookImage({route, navigation}) {
                   !myFollowing &&
                   dispatch(
                     dialogOpenAction({
-                      titleColor: '#000',
+                      titleColor: '#2699fb',
                       cancelTitle: '취소',
                       message: `${userCurrentUserId}님을 팔로잉 하시겠습니까?`,
                       onPress: a => {

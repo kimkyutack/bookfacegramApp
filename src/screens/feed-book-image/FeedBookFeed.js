@@ -87,9 +87,9 @@ export default function FeedBookFeed({route, navigation}) {
   const fetchWholeData = (type, newTime) => {
     setRefreshing(false);
     if (type === 'reset') {
-      dispatch(getFeedAll(1, limit, newTime));
+      dispatch(getFeedAll(1, limit, newTime, user.member_idx));
     } else {
-      dispatch(getFeedAll(allPage + 1, limit, time));
+      dispatch(getFeedAll(allPage + 1, limit, time, user.member_idx));
     }
   };
 

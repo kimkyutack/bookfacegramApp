@@ -36,6 +36,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
   const [select , setSelect] = useState('genre');
+  const scrollRef = useRef();
   const [listData, setListData] = useState([
     {
       
@@ -119,6 +120,12 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     },])
   }, [select,genre,rank,topic]);
 
+  useEffect(() => {
+    if(scrollRef.current !== undefined){
+    scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    }
+  },[route]);
+
 
   
   return (
@@ -185,6 +192,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
         <FlatList
           data={listData}
           extraData={listData}
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {
@@ -222,6 +230,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
            <FlatList
           data={listData}
           extraData={listData}
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {
@@ -259,6 +268,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
          <FlatList
           data={listData}
           extraData={listData}
+          ref={scrollRef}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {

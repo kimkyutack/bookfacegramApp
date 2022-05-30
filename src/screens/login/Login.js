@@ -129,7 +129,12 @@ export default function Login({route}) {
           dispatch(userCheckToken);
         }
       } else if (status === 'FAIL') {
-        setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+        dispatch(
+          dialogOpenMessage({
+             message: '존재하지 않는 회원입니다.',
+          }),
+        );
+       // setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
     } catch (error) {
       if (error === 'toapingError') {
@@ -137,9 +142,14 @@ export default function Login({route}) {
         navigate(routes.toapingLogin);
       } else {
         if (type === 'app') {
-          setPasswordError(
-            '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.',
+          dispatch(
+            dialogOpenMessage({
+               message: '존재하지 않는 회원입니다.',
+            }),
           );
+          /*setPasswordError(
+            '가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.',
+          );*/
         } else {
           dispatch(
             dialogOpenMessage({

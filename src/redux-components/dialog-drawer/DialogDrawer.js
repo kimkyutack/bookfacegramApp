@@ -228,7 +228,7 @@ export default function DialogDrawer({}) {
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
-                marginTop: heightPercentage(20),
+                marginTop: heightPercentage(35),
                 marginBottom: 20,
               }}>
               {drawerDialog.drawerList?.length > 0 

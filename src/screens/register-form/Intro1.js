@@ -13,6 +13,7 @@ import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
+  screenWidth,
 } from '../../services/util';
 
 
@@ -293,17 +294,6 @@ export default function Intro1({route, navigation}) {
         </View>
 
         <View style={styles.paginationContainer}>
-          <View>
-            <ButtonBox
-              pressButtonIdx={pressButtonIdx}
-              style={styles.buttonBox2}
-              // onPress={() => setPressButtonIdx(12)}
-              disabled={route.name === 'intro1' ? true : false}
-              disabledStyle={styles.disabledStyle2}
-              fontStyle={styles.buttonBox3}>
-              이전
-            </ButtonBox>
-          </View>
           <View style={styles.paginationRow}>
             <TouchableHighlight
               style={
@@ -384,8 +374,10 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     height: heightPercentage(77),
+    width:screenWidth / 2,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf:'flex-end',
     justifyContent: 'space-between',
     // backgroundColor: 'green',
   },

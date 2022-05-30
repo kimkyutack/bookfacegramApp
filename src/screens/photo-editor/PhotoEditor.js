@@ -172,11 +172,17 @@ export default function PhotoEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
+    console.log(e)
     if (tags.tagsArray.length > 9) {
       dispatch(
         dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
       );
-    } else {
+    } else if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
+      setTags({tag:'',tagsArray:tags.tagsArray});
+      dispatch(
+        dialogOpenMessage({message: '중복된 해시태그입니다.'}),
+      );
+    }else{
       setTags(e);
       listRef.current?.scrollToEnd({animated: true});
     }
@@ -321,7 +327,7 @@ export default function PhotoEditor({route, navigation}) {
                   inputContainerStyle={styles.hashTagInput}
                   inputStyle={{
                     fontSize: fontPercentage(12),
-                    lineHeight: fontPercentage(19),
+                    lineHeight: fontPercentage(23),
                     marginLeft: 3,
                     color: '#858585',
                     fontFamily: fonts.kopubWorldDotumProBold,
@@ -476,6 +482,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   tagText: {
+    height:fontPercentage(22),
     color: '#858585',
     fontFamily: fonts.kopubWorldDotumProBold,
   },

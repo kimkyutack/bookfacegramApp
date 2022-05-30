@@ -32,14 +32,16 @@ export default function FeedBookAllImage({route, navigation}) {
     useSelector(s => s.book);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
+  const user = useSelector(s => s.user, shallowEqual);
+  //console.log(user.member_idx)
 
   const fetchWholeData = (type, newTime) => {
     let mount = true;
     if (mount) {
       if (type === 'reset') {
-        dispatch(getFeedAll(1, limit, newTime));
+        dispatch(getFeedAll(1, limit, newTime,user.member_idx));
       } else {
-        dispatch(getFeedAll(allPage + 1, limit, time));
+        dispatch(getFeedAll(allPage + 1, limit, time,user.member_idx));
       }
     }
     return () => {

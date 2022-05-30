@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(20),
     backgroundColor: '#F9F9F9',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 50,
   },
   main: {
     alignItems: 'center',
@@ -209,6 +209,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   pFont: {
-    marginBottom: 0,
+    marginBottom: -20,
   }
 });

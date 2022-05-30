@@ -10,6 +10,7 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
+import Footer from '../../libs/footer';
 import {
   requestGet,
   requestPut,
@@ -114,7 +115,7 @@ export default function Follow({route, navigation}) {
   const deleteFollwer = (memberId, followerIdx) => {
     dispatch(
       dialogOpenAction({
-        titleColor: '#000',
+        titleColor: '#2699fb',
         cancelTitle: '취소',
         message: `${memberId}님을 팔로워 삭제하시겠습니까?`,
         onPress: a => {
@@ -153,7 +154,7 @@ export default function Follow({route, navigation}) {
   const deleteFollwing = (memberId, followingIdx, memberIdx) => {
     dispatch(
       dialogOpenAction({
-        titleColor: '#000',
+        titleColor: '#2699fb',
         cancelTitle: '취소',
         message: `${memberId}님을 팔로잉 취소하시겠습니까?`,
         onPress: a => {
@@ -310,6 +311,7 @@ export default function Follow({route, navigation}) {
           }}
         />
       </View>
+      <Footer />
     </RootLayout>
   );
 }

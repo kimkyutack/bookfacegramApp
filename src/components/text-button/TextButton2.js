@@ -13,18 +13,19 @@ export default function TextButton2({
   onPress,
   style,
   disabled,
+  contents,
   styleTitle,
   font,
   replyIdx,
 }) {
 const user = useSelector(s => s.user, shallowEqual);
 const dispatch = useDispatch();
-
+console.log(onPress)
 
   return (
     <TouchableOpacity
       disabled={disabled}
-      onPress={() => {onPress(replyIdx)}}
+      onPress={() => {onPress(replyIdx,contents)}}
       style={[styles.root, style]}>
       <TextWrap font={font} style={[styleTitle]}>
         {children}
