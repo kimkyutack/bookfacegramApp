@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, ScrollView, StyleSheet, Linking } from 'react-native';
+import { Image, View, ScrollView, StyleSheet, Linking, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import EventReplyItem from './EventReplyItem';
@@ -90,7 +90,7 @@ export default function EventDetail({ route, navigation }) {
       });
   };
 
-  const renderNode = (node, index) => {
+  const renderNode = (node, index, parent, siblings, defaultRenderer) => {
     if (node.name == 'img') {
       const a = node.attribs;
       return (
@@ -102,8 +102,16 @@ export default function EventDetail({ route, navigation }) {
         </View>
       );
     }
-  };
 
+    if (node.name == 'p') {
+      return (
+        <Text key={index.toString()} style={styles.pFont}>
+          {defaultRenderer(node.children, parent)}
+        </Text>
+      )
+    }
+  };
+  const regex = /<br>|\n|\r\s*\\?>/gm;
   return (
     <RootLayout
       topbar={{
@@ -139,7 +147,7 @@ export default function EventDetail({ route, navigation }) {
             />*/
 
             <View style={styles.root2}>
-              <HTMLView value={routeParams?.ev_contents} renderNode={renderNode} />
+              <HTMLView value={routeParams?.ev_contents.trim().replace(regex, '')} renderNode={renderNode} />
             </View>
 
           )}
