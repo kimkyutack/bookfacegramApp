@@ -10,6 +10,7 @@ import {
   preventKor,
   widthPercentage,
 } from '../../services/util';
+import { useState } from 'react';
 
 export default function InputWrap({
   message,
@@ -38,6 +39,8 @@ export default function InputWrap({
   messageColor,
   selectionColor,
 }) {
+  const [selection, setSelection] = useState({start:0, end: 0})
+
   const handleChange = t => {
     if (maxLength && t.length > maxLength) {
       return;
@@ -83,6 +86,8 @@ export default function InputWrap({
           placeholderTextColor={
             placeholderTextColor ? placeholderTextColor : '#ffffff'
           }
+          selection={selection}
+          onSelectionChange={({ nativeEvent: { selection, text } }) => setSelection(selection)}
           autoCapitalize="none"
           value={value}
           autoCorrect={false}

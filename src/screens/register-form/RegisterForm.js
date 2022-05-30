@@ -6,11 +6,12 @@ import InputPhone from '../../components/input-phone/InputPhone';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
-import {navigate} from '../../services/navigation';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
+import { BackHandler } from 'react-native';
 import Policy from './Policy';
+import { navigationRef, navigate } from '../../services/navigation';
 import {
   widthPercentage,
   heightPercentage,
@@ -27,6 +28,7 @@ export default function RegisterForm({route,navigation}) {
   const [appPush, setAppPush] = useState(false);
 
   const buttonDisabled = !agree;
+  const curRouteName = navigationRef.current.getCurrentRoute().name;
 
   const handleGoRegister = () => {
     if (route.params?.platformType === 'toaping') {
@@ -49,7 +51,30 @@ export default function RegisterForm({route,navigation}) {
         appPush: appPush,
       });
     }
+      setAgree(false);
+      setTerm(false);
+      setPrivacy(false);
+      setAllowEmail(false);
+      setSms(false);
+      setAppPush(false);
   };
+
+  const allFalse = () =>{
+      setAgree(false);
+      setTerm(false);
+      setPrivacy(false);
+      setAllowEmail(false);
+      setSms(false);
+      setAppPush(false);
+  };
+
+  useEffect(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        allFalse,
+      );
+      return false;
+  }, [curRouteName]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
