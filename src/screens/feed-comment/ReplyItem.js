@@ -31,7 +31,7 @@ const renderItem = ({
     <View style={styles.replyContainer}>
       <View style={styles.infoContainer}>
         <Avatar
-          size={widthPercentage(27)}
+          size={widthPercentage(30)}
           style={styles.avator}
           path={
             profile
@@ -43,13 +43,13 @@ const renderItem = ({
         <View style={{flexDirection: 'column'}}>
           <View style={{flexDirection: 'column'}}>
             <TextWrap
-              numberOfLines={2}
-              ellipsizeMode="tail"
+              numberOfLines={1}
               style={styles.info}
+              ellipsizeMode="tail"
               font={fonts.kopubWorldDotumProBold}>
-              {memberId?.split('@')[0]}
+              {memberId}
             </TextWrap>
-            {memberId === loginid ? <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 3.15, position:'absolute',flexDirection:'row'}}><TextButton2 style={styles.replyedit} onPress={onEditreReply} replyIdx={reReplyIdx} styleTitle={styles.replyeditfont}>수정</TextButton2><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={onDeleteRereply} replyIdx={reReplyIdx}>삭제</TextButton2></View> : null}
+            {memberId === loginid ? <View style={{width:widthPercentage(65),justifyContent:'space-between', left:screenWidth / 2.3, position:'absolute',flexDirection:'row'}}><TextButton2 style={styles.replyedit} onPress={onEditreReply} replyIdx={reReplyIdx} styleTitle={styles.replyeditfont}>수정</TextButton2><TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={onDeleteRereply} replyIdx={reReplyIdx}>삭제</TextButton2></View> : null}
             <TextWrap style={styles.infoRight} onPress={() => {}}>
               {contents}
             </TextWrap>
@@ -87,27 +87,28 @@ const styles = StyleSheet.create({
     marginLeft: widthPercentage(30),
   },
   replyedit: {
-    
-    width:widthPercentage(25),
-    backgroundColor:'#215bff',
-  },
-  replydelete: {
-    width:widthPercentage(25),
-    backgroundColor:'#fff',
-    borderColor:'#215bff',
-    borderWidth:0.5
+      height: heightPercentage(18),
+      width:widthPercentage(30),
+      backgroundColor:'#215bff',
+    },
+    replydelete: {
+      height: heightPercentage(18),
+      width:widthPercentage(30),
+      backgroundColor:'#fff',
+      borderColor:'#215bff',
+      borderWidth:0.5
 
-  },
+    },
   replyeditfont: {
     height:heightPercentage(14),
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     textAlignVertical:'center',
     textAlign: 'center',
     color:'#fff',
   },
   replydeletefont: {
     height:heightPercentage(14),
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     textAlign: 'center',
     textAlignVertical:'center',
     color:'#215bff'
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(19),
     marginLeft: widthPercentage(7),
     color: '#333333',
+    width:screenWidth / 3,
   },
   infoRight: {
     fontSize: fontPercentage(13),

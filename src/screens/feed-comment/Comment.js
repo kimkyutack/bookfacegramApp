@@ -41,7 +41,8 @@ export default function Comment({route, navigation}) {
   const inputRef = useRef();
   const listRef = useRef();
 
-  const [tabIndex, setTabIndex] = useState(0); // 0 댓글 1 답글
+  const [tabIndex, setTabIndex] = useState(0); // 0 댓글 1 답글 2 댓글 수정 3 대댓글 수정
+  const [openYN, setopenYN] = useState({open : 0, replyIdx: 0}); // 0 대댓글 닫기 1 열기
   const [reReplyIdx, setReReplyIdx] = useState(null);
   const [replyIdx, setReplyIdx] = useState(null);
   const [text, setText] = useState('');
@@ -168,6 +169,15 @@ export default function Comment({route, navigation}) {
   };
 
   const onChangeReply = replyIdx => {
+    if(openYN.open === 0 && openYN.replyIdx === 0){
+        setopenYN({open : 1, replyIdx: replyIdx});
+    }else if(openYN.open === 1 && openYN.replyIdx !== replyIdx){
+        setopenYN({open : 1, replyIdx: replyIdx});
+    }else if(openYN.open === 1 && openYN.replyIdx === replyIdx){
+        setopenYN({open : 0, replyIdx: 0});
+    }else{
+        setopenYN({open : 0, replyIdx: 0});
+    }
     inputRef.current?.focus();
     setTabIndex(1);
     setReReplyIdx(replyIdx);
@@ -383,6 +393,7 @@ const deleteRereply = (onPress) => {
                     onEditReply={editReply}
                     onEditreReply={editRereply}
                     onDeleteRereply={deleteRereply}
+                    openRereply={openYN}
                   />
                 );
               }}
