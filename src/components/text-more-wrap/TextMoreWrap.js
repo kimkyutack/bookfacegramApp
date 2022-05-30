@@ -38,7 +38,7 @@ export default function TextMoreWrap(props) {
       {lengthMore ? (
         <Text
           style={{
-            fontSize: fontPercentage(11),
+            fontSize: fontPercentage(13),
             lineHeight: fontPercentage(19),
             fontFamily: props.font || fonts.kopubWorldDotumProLight,
             left: startWidth ? startWidth : widthPercentage(296),
