@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {FlatList, View, Image, StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
+import { FlatList, View, Image, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import consts from '../../libs/consts';
-import {requestGet} from '../../services/network';
+import { requestGet } from '../../services/network';
 import EventItem from './EventItem';
 import images from '../../libs/images';
 import Footer from '../../libs/footer';
@@ -12,20 +12,25 @@ import {
   heightPercentage,
   cameraItem,
 } from '../../services/util';
-import {dialogOpenSelect} from '../../redux/dialog/DialogActions';
-export default function Event({navigation}) {
+import { dialogOpenSelect } from '../../redux/dialog/DialogActions';
+import { navigate } from '../../services/navigation';
+export default function Event({ navigation }) {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    requestGet({url: consts.apiUrl + '/mypage/eventList'})
-      .then(x => {
-        setData([...x.data?.event]);
-      })
-      .catch(e => {
-        // dispatch(dialogError(e));
-      });
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      requestGet({ url: consts.apiUrl + '/mypage/eventList' })
+        .then(x => {
+          setData([...x.data?.event]);
+        })
+        .catch(e => {
+          // dispatch(dialogError(e));
+        });
+    });
+
+    return unsubscribe;
+  }, [navigate]);
 
   return (
     <RootLayout
@@ -56,7 +61,7 @@ export default function Event({navigation}) {
         keyExtractor={(item, index) => {
           return index.toString();
         }}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return <EventItem item={item} navigation={navigation} />;
         }}
       />
