@@ -15,18 +15,16 @@ export default function TextButton2({
   disabled,
   styleTitle,
   font,
-  feedIdx,
+  replyIdx,
 }) {
 const user = useSelector(s => s.user, shallowEqual);
 const dispatch = useDispatch();
-const deleteReply = (onPress) => {
-  console.log(onPress)
-}
+
 
   return (
     <TouchableOpacity
       disabled={disabled}
-      onPress={() => {deleteReply(onPress)}}
+      onPress={() => {onPress(replyIdx)}}
       style={[styles.root, style]}>
       <TextWrap font={font} style={[styleTitle]}>
         {children}

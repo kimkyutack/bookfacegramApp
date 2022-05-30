@@ -17,7 +17,7 @@ import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';
-import {requestGet, requestPost} from '../../services/network';
+import {requestGet, requestPost,requestDelete, requestPut} from '../../services/network';
 import Footer from '../../libs/footer';
 import {
   widthPercentage,
@@ -29,7 +29,7 @@ import {
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Avatar from '../../components/avatar/Avatar';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
+import {dialogOpenSelect, dialogError, dialogOpenAction, dialogClose, dialogOpenMessage} from '../../redux/dialog/DialogActions';
 import {CommentItem} from './CommentItem';
 import TextWrap from '../../components/text-wrap/TextWrap';
 

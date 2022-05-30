@@ -17,16 +17,11 @@ export default function TextButton3({
   font,
   feedIdx,
 }) {
-const user = useSelector(s => s.user, shallowEqual);
-const dispatch = useDispatch();
-const editReply = (onPress) => {
-  console.log(onPress)
-}
+
 
   return (
     <TouchableOpacity
       disabled={disabled}
-      onPress={() => {editReply(onPress)}}
       style={[styles.root, style]}>
       <TextWrap font={font} style={[styleTitle]}>
         {children}

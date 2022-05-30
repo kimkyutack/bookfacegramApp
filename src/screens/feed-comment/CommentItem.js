@@ -60,10 +60,10 @@ const renderItem = ({
               </TextWrap>
               {memberId === loginid ? 
               <View style={{width:widthPercentage(55),justifyContent:'space-between', left:screenWidth / 2.5, position:'absolute',flexDirection:'row'}}>
-                <TextButton2 style={styles.replyedit}   onPress={() => onEditReply(replyIdx)} styleTitle={styles.replyeditfont}>
+                <TextButton2 style={styles.replyedit}   onPress={onEditReply} replyIdx={replyIdx} styleTitle={styles.replyeditfont}>
                   수정
                 </TextButton2>
-                <TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={() => onDeleteReply(replyIdx)} feedIdx={feedIdx}>
+                <TextButton2 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={onDeleteReply} replyIdx={replyIdx}>
                   삭제
                 </TextButton2>
               </View>
