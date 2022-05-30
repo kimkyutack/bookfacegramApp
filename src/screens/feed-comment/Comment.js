@@ -100,7 +100,7 @@ export default function Comment({route, navigation}) {
           dispatch(dialogError(e));
           setLoading(false);
         });
-    }else if(tabIndex === 3){
+    }else if(tabIndex === 2){
       // 댓글수정
      requestPut({
           url: consts.apiUrl + '/mypage/feedBook/reply',
