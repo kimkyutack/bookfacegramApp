@@ -72,6 +72,7 @@ const renderItem = ({
 }) => {
   const replacecontents = contents.replace(/&nbsp/g, ' ');
   const idx = likeMemberList.indexOf(login_idx);
+  console.log(feedHashtag)
   return (
     <View style={styles.itemContainer}>
       <View style={styles.infoContainer}>
@@ -306,6 +307,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(17),
     paddingLeft: widthPercentage(5),
     alignSelf: 'center',
+    width:screenWidth/2,
   },
   infoRight: {
     fontSize: fontPercentage(11),

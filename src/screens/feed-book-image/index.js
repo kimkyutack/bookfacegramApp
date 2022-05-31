@@ -57,7 +57,6 @@ export default function FeedBookImage({route, navigation}) {
   const [totalCount, setTotalCount] = useState(totalCnt);
   const [userProfilePath, setUserProfilePath] = useState(profilePath);
   const [userCurrentUserId, setUserCurrentUserId] = useState(currentUserId);
-
   useEffect(() => {
     if (route.params?.params?.memberIdx === user.member_idx || official === 1) {
       setMyInfo(true);
@@ -65,6 +64,7 @@ export default function FeedBookImage({route, navigation}) {
       setMyInfo(false);
     }
   }, [route.params?.params?.key, official]);
+  console.log(route.params.params.noname)
 
   useEffect(() => {
     let mount = true;
@@ -128,10 +128,10 @@ export default function FeedBookImage({route, navigation}) {
     <SafeAreaView style={styles.safeView}>
       <Topbar
         title={
-          userCurrentUserId
-            ? userCurrentUserId?.split('@')[0]?.length > 10
-              ? userCurrentUserId?.split('@')[0]?.substring(0, 10) + '...'
-              : userCurrentUserId?.split('@')[0]
+          (userCurrentUserId && route.params.params.noname === undefined)
+            ? userCurrentUserId.length > 12
+              ? userCurrentUserId.substring(0, 12) + '...'
+              : userCurrentUserId
             : '피드북'
         }
         navigation={navigation}

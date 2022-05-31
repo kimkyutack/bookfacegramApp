@@ -13,7 +13,7 @@ import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
 import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
-import InputWrap2 from '../../../components/input-wrap/InputWrap';
+import InputWrap2 from '../../../components/input-wrap/InputWrap2';
 import HTMLView from 'react-native-htmlview';
 import RadioForm, {
   RadioButton,
@@ -239,7 +239,7 @@ export default function BookDetailQuiz({ isbn }) {
         if (status === 'SUCCESS') {
           dispatch(
             dialogOpenMessage({
-              message: '문제가 출제되었습니다.',
+              message: `문제 출제가 완료되었습니다.${'\n'}관리자 확인 후 처리됩니다.`,
             }),
           );
           setQuizcreate(0);
@@ -270,7 +270,7 @@ export default function BookDetailQuiz({ isbn }) {
         if (status === 'SUCCESS') {
           dispatch(
             dialogOpenMessage({
-              message: '문제가 출제되었습니다.',
+              message: `문제 출제가 완료되었습니다.${'\n'}관리자 확인 후 처리됩니다.`,
             }),
           );
           setQuizcreate(0);
@@ -1154,8 +1154,10 @@ const styles = StyleSheet.create({
   inputValue2: {
     fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: fontPercentage(12),
+    height:heightPercentage(55),
     color: colors.black,
     textAlign: 'left',
+    borderBottomWidth:0,
   },
   inputStyle: {
     color: colors.black,
@@ -1193,6 +1195,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(12),
     lineHeight: fontPercentage(24),
     display: 'flex',
+    height:heightPercentage(40),
     textAlign: 'left',
     marginBottom: heightPercentage(20),
     alignSelf: 'center',

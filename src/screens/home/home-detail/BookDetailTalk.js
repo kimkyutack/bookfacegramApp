@@ -45,7 +45,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
-      // talkReplyList();
+      talkReplyList();
     }
     return () => {
       mount = false;

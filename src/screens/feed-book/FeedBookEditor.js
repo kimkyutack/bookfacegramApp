@@ -56,6 +56,7 @@ export default function FeedBookEditor({route, navigation}) {
   const {params} = useRoute();
   const dispatch = useDispatch();
   const listRef = useRef();
+  const tagRef = useRef();
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
   useEffect(() => {
@@ -158,6 +159,7 @@ export default function FeedBookEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
+                  noname:'name',
                 },
               });
             }
@@ -204,6 +206,7 @@ export default function FeedBookEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
+                  noname:'name',
                 },
               });
             }
@@ -219,14 +222,28 @@ export default function FeedBookEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
+    if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
+      setTags({tag:'',tagsArray:tags.tagsArray});
+      dispatch(
+        dialogOpenMessage({message: '중복된 해시태그입니다.'}),
+      );
+    }else{
+      setTags(e);
+      listRef.current?.scrollToEnd({animated: true});
+    }
+    tagRef.current.focus();
+  };
+
+  const setTagHandle2 = e => {
     if (tags.tagsArray.length > 9) {
       dispatch(
         dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
       );
-    } else {
+    } else{
       setTags(e);
       listRef.current?.scrollToEnd({animated: true});
     }
+    tagRef.current.focus();
   };
 
   return (
@@ -374,9 +391,13 @@ export default function FeedBookEditor({route, navigation}) {
                 </TextWrap>
 
                 <TagInput
-                  updateState={setTagHandle}
+                  ref={tagRef}
+                  updateState={setTagHandle2}
+                  endState={setTagHandle}
                   tags={tags}
                   placeholder="#"
+                  placeholderTextColor="#acacac"
+                  placeholderSize={fontPercentage(12)}
                   containerStyle={{
                     width: screenWidth,
                     paddingHorizontal: 10,
@@ -384,8 +405,7 @@ export default function FeedBookEditor({route, navigation}) {
                   inputContainerStyle={styles.hashTagInput}
                   inputStyle={{
                     fontSize: fontPercentage(12),
-                    lineHeight: fontPercentage(19),
-                    marginLeft: 3,
+                    lineHeight: fontPercentage(23),
                     color: '#858585',
                     fontFamily: fonts.kopubWorldDotumProBold,
                   }}
@@ -547,6 +567,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   tagText: {
+    height:fontPercentage(22),
     color: '#858585',
     fontFamily: fonts.kopubWorldDotumProBold,
   },
