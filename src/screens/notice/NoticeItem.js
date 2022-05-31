@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(20),
     backgroundColor: '#F9F9F9',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: heightPercentage(10),
   },
   main: {
     alignItems: 'center',

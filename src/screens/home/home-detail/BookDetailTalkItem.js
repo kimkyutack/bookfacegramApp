@@ -18,6 +18,7 @@ import {
   formatTime,
   screenWidth,
   widthPercentage,
+  heightPercentage
 } from '../../../services/util';
 import HTMLView from 'react-native-htmlview';
 
@@ -29,7 +30,7 @@ export default function BookDetailTalkItem({
   starRate,
   bookHashtag,
   talkdelete,
-  talkedit
+  talkEdit,
 }) {
   const user = useSelector(s => s.user, shallowEqual);
   return (
@@ -56,8 +57,8 @@ export default function BookDetailTalkItem({
           // selectedStar={rating => onStarRatingPress(rating)}
         />
         {memberId === user.member_id ? 
-              <View style={{width:widthPercentage(65),justifyContent:'space-between', left:screenWidth / 1.4, position:'absolute',flexDirection:'row'}}>
-                <TextButton4 style={styles.replyedit}   onPress={talkedit} contents={contents} replyIdx={replyIdx} styleTitle={styles.replyeditfont}>
+              <View style={{width:widthPercentage(65),justifyContent:'space-between', left:screenWidth / 1.35, position:'absolute',flexDirection:'row'}}>
+                <TextButton4 style={styles.replyedit}   onPress={talkEdit} contents={contents} replyIdx={replyIdx} styleTitle={styles.replyeditfont} bookHashtag={bookHashtag} starRate={starRate}>
                   수정
                 </TextButton4>
                 <TextButton4 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={talkdelete} replyIdx={replyIdx}>
@@ -124,6 +125,34 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     flexDirection: 'row',
     paddingHorizontal: 16,
+  },
+  replyedit: {
+    height: heightPercentage(18),
+    width:widthPercentage(30),
+    backgroundColor:'#215bff',
+  },
+  replydelete: {
+    height: heightPercentage(18),
+    width:widthPercentage(30),
+    backgroundColor:'#fff',
+    borderColor:'#215bff',
+    borderWidth:0.5
+
+  },
+  replyeditfont: {
+    height:heightPercentage(14),
+    fontSize: fontPercentage(10),
+    textAlignVertical:'center',
+    textAlign: 'center',
+    color:'#fff',
+  },
+  replydeletefont: {
+    height:heightPercentage(14),
+    fontSize: fontPercentage(10),
+    textAlign: 'center',
+    textAlignVertical:'center',
+    color:'#215bff'
+
   },
   mainContent: {flex: 1, marginTop: 10},
   titleContainer: {

@@ -163,6 +163,8 @@ const styles = StyleSheet.create({
     color: '#777777',
     marginTop: 12,
   },
+
+
   desc: {
     padding: 16,
     paddingBottom: 0,
@@ -174,8 +176,10 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(20),
     backgroundColor: '#F9F9F9',
     paddingHorizontal: 16,
-    paddingVertical: 50,
+    paddingVertical: heightPercentage(20),
   },
+
+
   main: {
     alignItems: 'center',
     alignSelf: 'stretch',

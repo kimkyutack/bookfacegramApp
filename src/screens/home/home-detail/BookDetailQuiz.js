@@ -242,6 +242,10 @@ export default function BookDetailQuiz({ isbn }) {
               message: '문제가 출제되었습니다.',
             }),
           );
+          setQuizcreate(0);
+          setContents('');
+          setsubjm('');
+          setsubanswer('');
         }
       } else {
         formData.append('OAnswer', Answerno);
@@ -269,6 +273,16 @@ export default function BookDetailQuiz({ isbn }) {
               message: '문제가 출제되었습니다.',
             }),
           );
+          setQuizcreate(0);
+          setContents('');
+          setsubjm('');
+          setAnswerno(1);
+          setans1();
+          setans2();
+          setans3();
+          setans4();
+          setans5();
+
         }
       }
       

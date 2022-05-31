@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Image,
   StyleSheet,
@@ -24,7 +24,7 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../../services/util';
-import {requestGet, requestPost, requestDelete} from '../../../services/network';
+import {requestGet, requestPost, requestDelete,requestPut} from '../../../services/network';
 import BookDetailTalkItem from './BookDetailTalkItem';
 import {
   dialogOpenMessage,
@@ -35,9 +35,12 @@ export default function BookDetailTalk({selectedBook, wait}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [raplyContent, setReplyContent] = useState('');
+  const [nowEditing, setNowEditing] = useState(0);
+  const [Editidx, setEditidx] = useState();
   const [starRate, setStarRate] = useState(5);
   const [tags, setTags] = useState({tag: '', tagsArray: []});
   const dispatch = useDispatch();
+  const tagRef = useRef();
 
   useEffect(() => {
     let mount = true;
@@ -75,20 +78,22 @@ export default function BookDetailTalk({selectedBook, wait}) {
               dispatch(error);
               // error 일때 해야함
             });
-          },
-        }),
-      );
+        },
+      }),
+    );
  };
 
-  const talkEdit = feedIdx => {
-    navigation.navigate(routes.feedBookEditor, {
-      image: undefined,
-      isNewFeed: false,
-      key: Date.now(),
-      name: 'gallery',
-      idx: feedIdx,
-    });
-    //dispatch(dialogError('수정 페이지 제작중...'));
+  const talkEdit = (replyIdx,contents,bookHashtag,startRate) => {
+    setEditidx(replyIdx);
+    setNowEditing(1);
+    setReplyContent(contents);
+    setStarRate(startRate);
+    console.log(bookHashtag[0].length)
+    if(bookHashtag[0].length !== 0){
+      setTags({tag:'',tagsArray:bookHashtag});
+    }else{
+      setTags({tag:'',tagsArray:[]});
+    }
   };
 
 
@@ -120,48 +125,91 @@ export default function BookDetailTalk({selectedBook, wait}) {
 
   const talkReplyInsert = () => {
     setLoading(true);
-    requestPost({
-      url: consts.apiUrl + '/book/bookPingTalk',
-      body: {
-        bookHashtag: tags.tagsArray,
-        book_cd: selectedBook,
-        contents: raplyContent,
-        starRate: starRate,
-      },
-    })
-      .then(res => {
-        if (res.status === 'SUCCESS') {
-          setTags({tag: '', tagsArray: []});
-          setStarRate(5);
-          setReplyContent('');
-          talkReplyList();
-        } else if (res.status === 'FAIL') {
-          // error 일때 해야함
-          dispatch(dialogError('fail'));
-        } else {
-          dispatch(dialogError('fail'));
-        }
-        setLoading(false);
+    if(nowEditing === 1){
+      requestPut({
+        url: consts.apiUrl + '/book/bookPingTalk',
+        body: {
+          bookHashtag: tags.tagsArray,
+          replyIdx: Editidx,
+          contents: raplyContent,
+          starRate: starRate,
+        },
       })
-      .catch(error => {
-        // error 일때 해야함
-        dispatch(dialogError(error));
-        setLoading(false);
-      });
+        .then(res => {
+          if (res.status === 'SUCCESS') {
+            setTags({tag: '', tagsArray: []});
+            setStarRate(5);
+            setReplyContent('');
+            talkReplyList();
+          } else if (res.status === 'FAIL') {
+            // error 일때 해야함
+            dispatch(dialogError('fail'));
+          } else {
+            dispatch(dialogError('fail'));
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          // error 일때 해야함
+          dispatch(dialogError(error));
+          setLoading(false);
+        });
+      }else{
+        requestPost({
+          url: consts.apiUrl + '/book/bookPingTalk',
+          body: {
+            bookHashtag: tags.tagsArray,
+            book_cd: selectedBook,
+            contents: raplyContent,
+            starRate: starRate,
+          },
+        })
+          .then(res => {
+            if (res.status === 'SUCCESS') {
+              setTags({tag: '', tagsArray: []});
+              setStarRate(5);
+              setReplyContent('');
+              talkReplyList();
+            } else if (res.status === 'FAIL') {
+              // error 일때 해야함
+              dispatch(dialogError('fail'));
+            } else {
+              dispatch(dialogError('fail'));
+            }
+            setLoading(false);
+          })
+          .catch(error => {
+            // error 일때 해야함
+            dispatch(dialogError(error));
+            setLoading(false);
+          });
+      }
   };
 
   const onStarRatingPress = rating => {
     setStarRate(rating);
   };
-
   const setTagHandle = e => {
+    if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
+      setTags({tag:'',tagsArray:tags.tagsArray});
+      dispatch(
+        dialogOpenMessage({message: '중복된 해시태그입니다.'}),
+      );
+    }else{
+      setTags(e);
+    }
+    tagRef.current.focus();
+  };
+
+  const setTagHandle2 = e => {
     if (tags.tagsArray.length > 9) {
       dispatch(
         dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
       );
-    } else {
+    } else{
       setTags(e);
     }
+    tagRef.current.focus();
   };
 
   if (loading) {
@@ -199,7 +247,9 @@ export default function BookDetailTalk({selectedBook, wait}) {
         />
         <View style={styles.hashTagContianer}>
           <TagInput
-            updateState={setTagHandle}
+            ref={tagRef}
+            updateState={setTagHandle2}
+            endState={setTagHandle}
             tags={tags}
             placeholder="태그입력(최대 10개 가능)"
             placeholderTextColor="#acacac"
@@ -239,7 +289,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
         </View>
         <View style={{flex: 1}}>
           {data.map((u, i) => {
-            return <BookDetailTalkItem {...u} key={i} talkdelete={talkDelete} />;
+            return <BookDetailTalkItem {...u} key={i} talkdelete={talkDelete} talkEdit={talkEdit}/>;
           })}
         </View>
       </View>
