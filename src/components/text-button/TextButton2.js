@@ -20,7 +20,6 @@ export default function TextButton2({
 }) {
 const user = useSelector(s => s.user, shallowEqual);
 const dispatch = useDispatch();
-console.log(onPress)
 
   return (
     <TouchableOpacity

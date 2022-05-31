@@ -44,6 +44,7 @@ export default function MyBookCarousel({
   header,
   th,
 }) {
+  //console.log('ddddd' , renderData2.slice(1,12))
   const ref1 = useRef();
   const ref2 = useRef();
   const dispatch = useDispatch();
@@ -223,7 +224,7 @@ export default function MyBookCarousel({
         //   console.log('index:', state.index)
         // }
         >
-          {renderData2?.map((data, index) => {
+          {renderData2.slice(0,5)?.map((data, index) => {
             return newRenderItem(data, index);
           }
           )}

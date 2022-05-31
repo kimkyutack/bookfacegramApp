@@ -76,16 +76,28 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   ];
 
   useEffect(() => {
+    let isMounted = true;
+    if(isMounted ){
     setNewBookList([...newBook]);
     setKbsBookList1([...kbsBook?.filter(x => x.grade === arrayGrade[0])]);
     setKbsBookList2([...kbsBook?.filter(x => x.grade === arrayGrade[1])]);
     setBannerList([...banner]);
+    }
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    if(scrollRef.current !== undefined){
-    scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    let isMounted = true;
+    if(isMounted ){
+      if(scrollRef.current !== undefined){
+      scrollRef.current.scrollToOffset({animated: false, offset: 0});
+      }
     }
+    return () => {
+      isMounted = false;
+    };
   },[route]);
 
   useEffect(() => {

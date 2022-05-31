@@ -209,6 +209,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   pFont: {
-    marginBottom: -20,
+    marginBottom: 0,
   }
 });

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { shallowEqual } from 'react-redux';
 import moment from 'moment';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TextWrap from '../../../components/text-wrap/TextWrap';
@@ -9,6 +10,9 @@ import consts from '../../../libs/consts';
 import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
 import routes from '../../../libs/routes';
+import { useSelector } from 'react-redux';
+import TextButton2 from '../../../components/text-button/TextButton2';
+import TextButton4 from '../../../components/text-button/TextButton4';
 import {
   fontPercentage,
   formatTime,
@@ -21,9 +25,13 @@ export default function BookDetailTalkItem({
   regDate,
   contents,
   memberId,
+  replyIdx,
   starRate,
   bookHashtag,
+  talkdelete,
+  talkedit
 }) {
+  const user = useSelector(s => s.user, shallowEqual);
   return (
     <View style={styles.mainContent}>
       <View style={styles.titleContainer}>
@@ -47,6 +55,16 @@ export default function BookDetailTalkItem({
           rating={starRate}
           // selectedStar={rating => onStarRatingPress(rating)}
         />
+        {memberId === user.member_id ? 
+              <View style={{width:widthPercentage(65),justifyContent:'space-between', left:screenWidth / 1.4, position:'absolute',flexDirection:'row'}}>
+                <TextButton4 style={styles.replyedit}   onPress={talkedit} contents={contents} replyIdx={replyIdx} styleTitle={styles.replyeditfont}>
+                  수정
+                </TextButton4>
+                <TextButton4 style={styles.replydelete} styleTitle={styles.replydeletefont} onPress={talkdelete} replyIdx={replyIdx}>
+                  삭제
+                </TextButton4>
+              </View>
+        : null}
       </View>
       <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.descText}>
         {contents}

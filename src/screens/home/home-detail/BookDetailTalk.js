@@ -24,11 +24,12 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../../services/util';
-import {requestGet, requestPost} from '../../../services/network';
+import {requestGet, requestPost, requestDelete} from '../../../services/network';
 import BookDetailTalkItem from './BookDetailTalkItem';
 import {
   dialogOpenMessage,
   dialogError,
+  dialogOpenAction
 } from '../../../redux/dialog/DialogActions';
 export default function BookDetailTalk({selectedBook, wait}) {
   const [data, setData] = useState([]);
@@ -47,6 +48,49 @@ export default function BookDetailTalk({selectedBook, wait}) {
       mount = false;
     };
   }, []);
+
+  const talkDelete = replyIdx => {
+    dispatch(
+      dialogOpenAction({
+        titleColor: '#2699fb',
+        cancelTitle: '취소',
+        title: '확인',
+        message: `토핑톡을 삭제하시겠습니까?`,
+        onPress: a => {
+          requestDelete({
+            url: consts.apiUrl + `/book/bookPingTalk/${replyIdx}`,
+          })
+            .then(res => {
+              if (res.status === 'SUCCESS') {
+                dispatch(dialogError('삭제되었습니다.'));
+                setTags({tag: '', tagsArray: []});
+                setStarRate(5);
+                setReplyContent('');
+                talkReplyList();
+              } else {
+                dispatch(dialogError('fail'));
+              }
+            })
+            .catch(error => {
+              dispatch(error);
+              // error 일때 해야함
+            });
+          },
+        }),
+      );
+ };
+
+  const talkEdit = feedIdx => {
+    navigation.navigate(routes.feedBookEditor, {
+      image: undefined,
+      isNewFeed: false,
+      key: Date.now(),
+      name: 'gallery',
+      idx: feedIdx,
+    });
+    //dispatch(dialogError('수정 페이지 제작중...'));
+  };
+
 
   const talkReplyList = () => {
     setLoading(true);
@@ -195,7 +239,7 @@ export default function BookDetailTalk({selectedBook, wait}) {
         </View>
         <View style={{flex: 1}}>
           {data.map((u, i) => {
-            return <BookDetailTalkItem {...u} key={i} />;
+            return <BookDetailTalkItem {...u} key={i} talkdelete={talkDelete} />;
           })}
         </View>
       </View>

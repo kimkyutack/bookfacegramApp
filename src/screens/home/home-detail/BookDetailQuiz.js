@@ -20,7 +20,7 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import { requestGet, requestPost } from '../../../services/network';
+import { requestGet, requestPost,  requestFile } from '../../../services/network';
 import {
   formatTime,
   screenWidth,
@@ -204,7 +204,9 @@ export default function BookDetailQuiz({ isbn }) {
   }
   const createQuiz = async () => {
     //독서퀴즈 회원 출제
-    let totAns = [];
+    var formData = new FormData();
+    
+    /*let totAns = [];
     if (ans1 !== undefined) {
       totAns.push(ans1);
     }
@@ -219,39 +221,57 @@ export default function BookDetailQuiz({ isbn }) {
     }
     if (ans5 !== undefined) {
       totAns.push(ans5);
-    }
+    }*/
     try {
       if (subtype === 1) {
-        const { data, status } = await requestPost({
-          url: consts.apiUrl + '/book/quiz/chul/',
-          body: {
-            VPexam: contents, //문제
-            answer: subanswer,
-            bookCd: isbn,
-            subJimun: subjm,
-            subjYn: 'S',
+        formData.append('VPexam', contents);
+        formData.append('answer', subanswer);
+        formData.append('bookCd', isbn);
+        formData.append('subJimun', subjm);
+        formData.append('subjYn', 'S');
+        const {data, status} = await requestFile(
+          {
+            url: consts.apiUrl + '/book/quiz/chul',
+            method: 'post',
           },
-        });
-      } else {
-        const { data, status } = await requestPost({
-          url: consts.apiUrl + '/book/quiz/chul/',
-          body: {
-            OAnswer: Answerno, //int 객관식 정답
-            'OTypeList[0].instanceJimun': totAns, //배열 형식으로 문제 순서에 맞게 보내야함
-            VPexam: contents, //문제
-            bookCd: isbn,
-            subJimun: subjm,
-            subjYn: 'O',
-          },
-        });
-      }
-      if (status === 'SUCCESS') {
-        dispatch(
-          dialogOpenMessage({
-            message: '문제가 출제되었습니다.',
-          }),
+          formData,
         );
+        if (status === 'SUCCESS') {
+          dispatch(
+            dialogOpenMessage({
+              message: '문제가 출제되었습니다.',
+            }),
+          );
+        }
+      } else {
+        formData.append('OAnswer', Answerno);
+        formData.append('instanceJimun1', ans1);
+        formData.append('instanceJimun2', ans2);
+        formData.append('instanceJimun3', ans3);
+        formData.append('instanceJimun4', ans4);
+        if(ans5 !== undefined){
+          formData.append('instanceJimun5', ans5);
+        }
+        formData.append('VPexam', contents);
+        formData.append('bookCd', isbn);
+        formData.append('subJimun', subjm);
+        formData.append('subjYn', 'O');
+        const {data, status} = await requestFile(
+          {
+            url: consts.apiUrl + '/book/quiz/chul',
+            method: 'post',
+          },
+          formData,
+        );
+        if (status === 'SUCCESS') {
+          dispatch(
+            dialogOpenMessage({
+              message: '문제가 출제되었습니다.',
+            }),
+          );
+        }
       }
+      
     } catch (error) {
 
       if (subtype !== 1 && Answerno > totAns.length) {

@@ -312,7 +312,13 @@ export default function BookDrawerDetail({route, navigation}) {
               <ButtonWrap
                 style={styles.input}
                 onPress={() => {
-                  dispatch(dialogError('준비중 입니다.'));
+                  navigation.navigate(routes.home, {
+                    screen: routes.topMyBooks,
+                    params: {
+                      type: 'main',
+                      key: Date.now(),
+                    },
+                  });
                 }}>
                 <TextWrap
                   style={styles.inputTitle}

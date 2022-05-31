@@ -72,15 +72,24 @@ export default function RegisterForm({route,navigation}) {
   };
 
   useEffect(() => {
+    let isMounted = true;
+    if(isMounted ){
       const backHandler = BackHandler.addEventListener(
         'hardwareBackPress',
         allFalse,
       );
-      return false;
+    }
+    return () => {
+      isMounted = false;
+      false;
+      };
   }, [curRouteName]);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const unsubscribe = navigation.addListener('focus', () => {
+      if(isMounted ){
       setAgree(false);
       setTerm(false);
       setPrivacy(false);
@@ -88,8 +97,12 @@ export default function RegisterForm({route,navigation}) {
       setSms(false);
       setAppPush(false);
       setSelect(select + 1);
+      }
     });
-    return unsubscribe;
+    return () => {
+      isMounted = false;
+      unsubscribe;
+      };
   }, [navigate]);
 
   return (

@@ -215,6 +215,13 @@ export default function DialogDrawer({}) {
               font={fonts.kopubWorldDotumProBold}>
               {drawerDialog.title ? drawerDialog.title : '이동 책서랍 선택'}
             </TextWrap>
+            {drawerDialog.title === '보관 책서랍 선택' ? (
+            <TextWrap
+              style={styles.inputTitle2}
+              font={fonts.kopubWorldDotumProBold}>
+              {'해당 도서가 보관되어 있는 책서랍은 보여지지 않습니다.'}
+            </TextWrap>
+            ): null}
             <View
               style={{
                 width: screenWidth,
@@ -228,7 +235,7 @@ export default function DialogDrawer({}) {
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
-                marginTop: heightPercentage(35),
+                marginTop: heightPercentage(20),
                 marginBottom: 20,
               }}>
               {drawerDialog.drawerList?.length > 0 
@@ -304,7 +311,6 @@ const styles = StyleSheet.create({
   inputTitle2: {
     fontSize: fontPercentage(10),
     color: '#707070',
-    marginTop: heightPercentage(27),
   },
   message: {
     fontSize: fontPercentage(14),

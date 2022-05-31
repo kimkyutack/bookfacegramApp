@@ -45,6 +45,7 @@ export default function Policy({
       animated: true,
     });
   }
+  BackHandler.addEventListener('hardwareBackPress', allFalse);
 
   /*useEffect(() => {
     console.log('1')
@@ -57,6 +58,11 @@ useEffect(() => {
   allFalse();
   return false;
 }, [curRouteName]);
+
+useEffect(() => {
+    allFalse();
+  return false;
+}, []);
 
 
   useEffect(() => {
@@ -205,8 +211,10 @@ const styles = StyleSheet.create({
     color: colors.red,
   },
   input: {
+    borderWidth:0.5,
+    borderColor:'#e6e6e6',
     marginVertical: 8,
-    height: heightPercentage(70),
+    height: heightPercentage(80),
   },
   valueStyle: {
     lineHeight: 14,

@@ -121,9 +121,15 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
   }, [select,genre,rank,topic]);
 
   useEffect(() => {
-    if(scrollRef.current !== undefined){
-    scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    let isMounted = true;
+    if(isMounted ){
+      if(scrollRef.current !== undefined){
+      scrollRef.current.scrollToOffset({animated: false, offset: 0});
+      }
     }
+    return () => {
+      isMounted = false;
+    };
   },[route]);
 
 

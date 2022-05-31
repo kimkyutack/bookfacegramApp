@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Image, View, ScrollView, StyleSheet, Linking, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
@@ -31,11 +31,24 @@ export default function EventDetail({ route, navigation }) {
   const [raplyContent, setReplyContent] = useState('');
   const routeParams = route.params.item;
   const isFocused = useIsFocused();
+  const scrollRef = useRef();
   useEffect(() => {
     if (isFocused) {
       getEventList();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    let isMounted = true;
+    if(isMounted ){
+      if(scrollRef.current !== undefined){
+      scrollRef.current.scrollTo({animated: false, offset: 0});
+      }
+    }
+    return () => {
+      isMounted = false;
+    };
+  },[route]);
 
   const getEventList = () => {
     setLoading(true);
@@ -129,7 +142,7 @@ export default function EventDetail({ route, navigation }) {
             ),
         },
       }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 2 }} scrollEnabled>
+      <ScrollView contentContainerStyle={{ flexGrow: 2 }} ref={scrollRef} scrollEnabled>
         <View style={styles.root}>
           {/*uri: routeParams.ev_img_f,*/}
           {routeParams && (

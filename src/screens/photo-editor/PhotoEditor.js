@@ -173,16 +173,24 @@ export default function PhotoEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
-    if (tags.tagsArray.length > 9) {
-      dispatch(
-        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
-      );
-    } else if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
+    if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
       setTags({tag:'',tagsArray:tags.tagsArray});
       dispatch(
         dialogOpenMessage({message: '중복된 해시태그입니다.'}),
       );
     }else{
+      setTags(e);
+      listRef.current?.scrollToEnd({animated: true});
+    }
+    tagRef.current.focus();
+  };
+
+  const setTagHandle2 = e => {
+    if (tags.tagsArray.length > 9) {
+      dispatch(
+        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
+      );
+    } else{
       setTags(e);
       listRef.current?.scrollToEnd({animated: true});
     }
@@ -319,9 +327,12 @@ export default function PhotoEditor({route, navigation}) {
 
                 <TagInput
                   ref={tagRef}
-                  updateState={setTagHandle}
+                  updateState={setTagHandle2}
+                  endState={setTagHandle}
                   tags={tags}
                   placeholder="#"
+                  placeholderTextColor="#acacac"
+                  placeholderSize={fontPercentage(12)}
                   containerStyle={{
                     width: screenWidth,
                     paddingHorizontal: 10,
@@ -330,7 +341,6 @@ export default function PhotoEditor({route, navigation}) {
                   inputStyle={{
                     fontSize: fontPercentage(12),
                     lineHeight: fontPercentage(23),
-                    marginLeft: 3,
                     color: '#858585',
                     fontFamily: fonts.kopubWorldDotumProBold,
                   }}
@@ -497,6 +507,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.kopubWorldDotumProLight,
   },
   hashTagInput: {
+    height: heightPercentage(35),
     borderBottomWidth: 0.5,
     borderBottomColor: '#333333',
     marginTop: 10,
