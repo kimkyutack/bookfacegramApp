@@ -25,11 +25,12 @@ import { useIsFocused } from '@react-navigation/core';
 import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function EventDetail({ route, navigation }) {
+  
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [raplyContent, setReplyContent] = useState('');
-  const routeParams = route.params.item;
+  const routeParams = route.params.item !== undefined ? route.params.item : route.params.data.eventDetail[0];
   const isFocused = useIsFocused();
   const scrollRef = useRef();
   useEffect(() => {

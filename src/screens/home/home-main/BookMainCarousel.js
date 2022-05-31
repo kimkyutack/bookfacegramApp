@@ -25,7 +25,7 @@ import {
   widthPercentage,
 } from '../../../services/util';
 import FastImage from 'react-native-fast-image';
-
+import { requestGet } from '../../../services/network';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import CardWrap from '../../../components/card-wrap/CardWrap';
 import {setTab} from '../../../redux/tab/TabAction';
@@ -57,6 +57,37 @@ export default function BookMainCarousel({
         });
 
   }
+  const eventBanner = async (idx) => {
+    requestGet({
+      url: consts.apiUrl + '/mypage/eventDetail',
+      query: {
+        ev_idx: idx,
+      },
+    })
+      .then(data => {
+        if (data.status === 'SUCCESS') {
+        navigate(routes.eventDetail, data);
+        } else {
+          dispatch({
+            type: bookActionType.allFailure,
+            data: `error code : ${data?.code}`,
+            allPage: page,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: bookActionType.allFailure,
+          data:
+            error?.data?.msg ||
+            error?.message ||
+            (typeof error === 'object' ? JSON.stringify(error) : error),
+          allPage: page,
+        });
+      });
+    
+
+}
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
@@ -66,7 +97,7 @@ export default function BookMainCarousel({
             item.bannerType === 'detail' 
             ? hello(item.bookCd) 
             : item.bannerType === 'event' 
-            ? navigate(routes.event)
+            ? eventBanner(item.idx)
             : item.bannerType === 'notice' 
             ? navigate(routes.notice)
             : (dispatch(dialogError({message: item.bannerType})));
