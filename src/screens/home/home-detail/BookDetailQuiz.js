@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   Image,
@@ -20,7 +20,7 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import {requestGet, requestPost} from '../../../services/network';
+import { requestGet, requestPost } from '../../../services/network';
 import {
   formatTime,
   screenWidth,
@@ -36,10 +36,10 @@ import {
   dialogOpenDrawerSelect,
   dialogOpenAction,
 } from '../../../redux/dialog/DialogActions';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {createIconSetFromFontello} from 'react-native-vector-icons';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
-export default function BookDetailQuiz({isbn}) {
+export default function BookDetailQuiz({ isbn }) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [bookQuiz, setBookQuiz] = useState([]);
@@ -66,22 +66,22 @@ export default function BookDetailQuiz({isbn}) {
   const [ans4, setans4] = useState();
   const [ans5, setans5] = useState();
   const radio_props = [
-    {label: '단답형', value: 1},
-    {label: '객관식', value: 2},
+    { label: '단답형', value: 1 },
+    { label: '객관식', value: 2 },
   ];
   const paths = [
-    {path: '1번 정답의 보기를 입력해주세요.'},
-    {path: '2번 정답의 보기를 입력해주세요.'},
-    {path: '3번 정답의 보기를 입력해주세요.'},
-    {path: '4번 정답의 보기를 입력해주세요.'},
-    {path: '5번 정답의 보기를 입력해주세요.'},
+    { path: '1번 정답의 보기를 입력해주세요.' },
+    { path: '2번 정답의 보기를 입력해주세요.' },
+    { path: '3번 정답의 보기를 입력해주세요.' },
+    { path: '4번 정답의 보기를 입력해주세요.' },
+    { path: '5번 정답의 보기를 입력해주세요.' },
   ];
   const subnum = [
-    {label: '1번:', value: 1},
-    {label: '2번:', value: 2},
-    {label: '3번:', value: 3},
-    {label: '4번:', value: 4},
-    {label: '5번:', value: 5},
+    { label: '1번:', value: 1 },
+    { label: '2번:', value: 2 },
+    { label: '3번:', value: 3 },
+    { label: '4번:', value: 4 },
+    { label: '5번:', value: 5 },
   ];
 
   const renderNode = (node, index, parent, siblings, defaultRenderer) => {
@@ -110,7 +110,7 @@ export default function BookDetailQuiz({isbn}) {
   const fetchRequested = async () => {
     try {
       setLoading(true);
-      const {data, status} = await requestGet({
+      const { data, status } = await requestGet({
         url: consts.apiUrl + '/book/quiz/' + isbn,
       });
       if (status === 'SUCCESS') {
@@ -128,7 +128,7 @@ export default function BookDetailQuiz({isbn}) {
   const quizRequested = async () => {
     try {
       setLoading(true);
-      const {data, status} = await requestPost({
+      const { data, status } = await requestPost({
         url: consts.apiUrl + '/book/quiz/',
         body: {
           answerList: totAnswer,
@@ -147,126 +147,128 @@ export default function BookDetailQuiz({isbn}) {
   };
 
   const answerSelect = (value) => {
-    if(value === 1){
-      if(ans1 === undefined || ans1.length === 0){
-        
-          dispatch(
-            dialogOpenMessage({
-              message: '1번 정답의 보기를 입력해주세요.',
-            }),
-          );
-      }else{
+    if (value === 1) {
+      if (ans1 === undefined || ans1.length === 0) {
+
+        dispatch(
+          dialogOpenMessage({
+            message: '1번 정답의 보기를 입력해주세요.',
+          }),
+        );
+      } else {
         setAnswerno(value);
       }
-    }else if(value === 2){
-      if(ans2 === undefined || ans2.length === 0){
-          dispatch(
-            dialogOpenMessage({
-              message: '2번 정답의 보기를 입력해주세요.',
-            }),
-          );
-      }else{
+    } else if (value === 2) {
+      if (ans2 === undefined || ans2.length === 0) {
+        dispatch(
+          dialogOpenMessage({
+            message: '2번 정답의 보기를 입력해주세요.',
+          }),
+        );
+      } else {
         setAnswerno(value);
       }
-    }else if(value === 3){
-      if(ans3 === undefined || ans3.length === 0){
-          dispatch(
-            dialogOpenMessage({
-              message: '3번 정답의 보기를 입력해주세요.',
-            }),
-          );
-      }else{
+    } else if (value === 3) {
+      if (ans3 === undefined || ans3.length === 0) {
+        dispatch(
+          dialogOpenMessage({
+            message: '3번 정답의 보기를 입력해주세요.',
+          }),
+        );
+      } else {
         setAnswerno(value);
       }
-    }else if(value === 4){
-      if(ans4 === undefined || ans4.length === 0){
-          dispatch(
-            dialogOpenMessage({
-              message: '4번 정답의 보기를 입력해주세요.',
-            }),
-          );
-      }else{
+    } else if (value === 4) {
+      if (ans4 === undefined || ans4.length === 0) {
+        dispatch(
+          dialogOpenMessage({
+            message: '4번 정답의 보기를 입력해주세요.',
+          }),
+        );
+      } else {
         setAnswerno(value);
       }
-    }else if(value === 5){
-      if(ans5 === undefined || ans5.length === 0){
-          dispatch(
-            dialogOpenMessage({
-              message: '5번 정답의 보기를 입력해주세요.',
-            }),
-          );
-      }else{
+    } else if (value === 5) {
+      if (ans5 === undefined || ans5.length === 0) {
+        dispatch(
+          dialogOpenMessage({
+            message: '5번 정답의 보기를 입력해주세요.',
+          }),
+        );
+      } else {
         setAnswerno(value);
       }
     }
-    
+
 
   }
   const createQuiz = async () => {
     //독서퀴즈 회원 출제
     let totAns = [];
-    if(ans1 !== undefined){
+    if (ans1 !== undefined) {
       totAns.push(ans1);
     }
-    if(ans2 !== undefined){
+    if (ans2 !== undefined) {
       totAns.push(ans2);
     }
-    if(ans3 !== undefined){
+    if (ans3 !== undefined) {
       totAns.push(ans3);
     }
-    if(ans4 !== undefined){
+    if (ans4 !== undefined) {
       totAns.push(ans4);
     }
-    if(ans5 !== undefined){
+    if (ans5 !== undefined) {
       totAns.push(ans5);
     }
-    if(subtype !== 1 && Answerno > totAns.length){
+    try {
+      if (subtype === 1) {
+        const { data, status } = await requestPost({
+          url: consts.apiUrl + '/book/quiz/chul/',
+          body: {
+            VPexam: contents, //문제
+            answer: subanswer,
+            bookCd: isbn,
+            subJimun: subjm,
+            subjYn: 'S',
+          },
+        });
+      } else {
+        const { data, status } = await requestPost({
+          url: consts.apiUrl + '/book/quiz/chul/',
+          body: {
+            OAnswer: Answerno, //int 객관식 정답
+            'OTypeList[0].instanceJimun': totAns, //배열 형식으로 문제 순서에 맞게 보내야함
+            VPexam: contents, //문제
+            bookCd: isbn,
+            subJimun: subjm,
+            subjYn: 'O',
+          },
+        });
+      }
+      if (status === 'SUCCESS') {
+        dispatch(
+          dialogOpenMessage({
+            message: '문제가 출제되었습니다.',
+          }),
+        );
+      }
+    } catch (error) {
+
+      if (subtype !== 1 && Answerno > totAns.length) {
         dispatch(
           dialogOpenMessage({
             message: '문제가 잘못되었습니다. 다시 출제해주세요.',
           }),
         );
-    }else{
-        try {
-          if(subtype === 1){
-            const {data, status} = await requestPost({
-              url: consts.apiUrl + '/book/quiz/chul/',
-              body: {
-                VPexam: contents, //문제
-                answer:subanswer,
-                bookCd:isbn,
-                subJimun:subjm,
-                subjYn:'S',
-              },
-            });
-          }else{
-            const {data, status} = await requestPost({
-              url: consts.apiUrl + '/book/quiz/chul/',
-              body: {
-                OAnswer: Answerno, //int 객관식 정답
-                'OTypeList[0].instanceJimun': totAns, //배열 형식으로 문제 순서에 맞게 보내야함
-                VPexam: contents, //문제
-                bookCd:isbn,
-                subJimun:subjm,
-                subjYn:'O',
-              },
-            });
-          }
-          if (status === 'SUCCESS') {
-              dispatch(
-                dialogOpenMessage({
-                  message: '문제가 출제되었습니다.',
-                }),
-              );
-          }
-        } catch (error) {
-          dispatch(dialogError(error));
-        }
+      } else {
+        dispatch(dialogError(error));
       }
     }
+
+  }
   const quizGraph = async () => {
     try {
-      const {data, status} = await requestPost({
+      const { data, status } = await requestPost({
         url: consts.apiUrl + '/mybooks/graph/quiz/',
         body: {
           isbn: isbn,
@@ -294,8 +296,8 @@ export default function BookDetailQuiz({isbn}) {
           totAnswer[examnum] = answer;
         }
         setAnswer('');
-        if(totAnswer.length > examnum){
-          setAnswer(totAnswer[examnum+1]);
+        if (totAnswer.length > examnum) {
+          setAnswer(totAnswer[examnum + 1]);
         }
       } else {
         setTotAnswer([answer]);
@@ -304,7 +306,7 @@ export default function BookDetailQuiz({isbn}) {
 
       setExamnum(examnum + 1);
       setTitlenum(titlenum + 1);
-      
+
     } else {
       setTotAnswer(totAnswer => [...totAnswer, answer]);
       setQuizEnd(1);
@@ -314,14 +316,14 @@ export default function BookDetailQuiz({isbn}) {
 
   const prev = () => {
     if (examnum !== 0) {
-      if(totAnswer[examnum-1]){
-        setAnswer(totAnswer[examnum-1]);
-      }else{
+      if (totAnswer[examnum - 1]) {
+        setAnswer(totAnswer[examnum - 1]);
+      } else {
         setAnswer('');
       }
       setExamnum(examnum - 1);
       setTitlenum(titlenum - 1);
-      
+
     } else {
       setAnswer('');
       fetchRequested();
@@ -345,7 +347,7 @@ export default function BookDetailQuiz({isbn}) {
     if (totAnswer.length === bookQuiz.length && bookQuiz.length !== 0) {
       quizRequested();
     }
-    return () => {};
+    return () => { };
   }, [totAnswer]);
 
   useEffect(() => {
@@ -359,7 +361,7 @@ export default function BookDetailQuiz({isbn}) {
   return loading ? (
     <ActivityIndicator
       size="large"
-      style={{alignSelf: 'center', marginTop: 60}}
+      style={{ alignSelf: 'center', marginTop: 60 }}
       color={colors.blue}
     />
   ) : bookQuiz.length === 0 && quizcreate === 0 ? (
@@ -417,7 +419,7 @@ export default function BookDetailQuiz({isbn}) {
                 bottom: heightPercentage(3),
                 lineHeight: screenHeight / 39,
               }}
-              labelWrapStyle={{marginRight: 20}}
+              labelWrapStyle={{ marginRight: 20 }}
             />
           </RadioButton>
         ))}
@@ -493,26 +495,26 @@ export default function BookDetailQuiz({isbn}) {
                 inputStyle={styles.inputValue}
                 key={index}
                 value={index === 0
-                    ? ans1
-                    : index === 1
+                  ? ans1
+                  : index === 1
                     ? ans2
                     : index === 2
-                    ? ans3
-                    : index === 3
-                    ? ans4
-                    : ans5}
+                      ? ans3
+                      : index === 3
+                        ? ans4
+                        : ans5}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={eve => {
                   index === 0
                     ? setans1(eve)
                     : index === 1
-                    ? setans2(eve)
-                    : index === 2
-                    ? setans3(eve)
-                    : index === 3
-                    ? setans4(eve)
-                    : setans5(eve);
+                      ? setans2(eve)
+                      : index === 2
+                        ? setans3(eve)
+                        : index === 3
+                          ? setans4(eve)
+                          : setans5(eve);
                 }}
                 maxLength={20}
                 placeholder={path.path}
@@ -528,20 +530,20 @@ export default function BookDetailQuiz({isbn}) {
               top: 40,
             }}>
             <View
-            style={{
-              width: screenWidth,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection:'row',
-              bottom: 20,
-            }}>
-          <TextWrap style={styles.noData} font={fonts.kopubWorldDotumProLight}>
-            객관식 정답
-          </TextWrap>
-          <TextWrap style={styles.grayfont} font={fonts.kopubWorldDotumProLight}>
-            &nbsp;(선택한 번호가 정답이 됩니다.)
-          </TextWrap>
-          </View>
+              style={{
+                width: screenWidth,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+                bottom: 20,
+              }}>
+              <TextWrap style={styles.noData} font={fonts.kopubWorldDotumProLight}>
+                객관식 정답
+              </TextWrap>
+              <TextWrap style={styles.grayfont} font={fonts.kopubWorldDotumProLight}>
+                &nbsp;(선택한 번호가 정답이 됩니다.)
+              </TextWrap>
+            </View>
             <RadioForm
               animation={true}
               formHorizontal={true}
@@ -563,7 +565,7 @@ export default function BookDetailQuiz({isbn}) {
                       bottom: heightPercentage(3),
                       lineHeight: screenHeight / 39,
                     }}
-                    labelWrapStyle={{marginRight: widthPercentage(8), marginLeft: widthPercentage(10), right:widthPercentage(8)}}
+                    labelWrapStyle={{ marginRight: widthPercentage(8), marginLeft: widthPercentage(10), right: widthPercentage(8) }}
                   />
                   <RadioButtonInput
                     obj={num}
@@ -578,7 +580,7 @@ export default function BookDetailQuiz({isbn}) {
                     buttonSize={screenWidth / 80}
                     buttonOuterSize={screenWidth / 40}
                     buttonStyle={{}}
-                    buttonWrapStyle={{top: heightPercentage(3), right:widthPercentage(10)}}
+                    buttonWrapStyle={{ top: heightPercentage(3), right: widthPercentage(10) }}
                   />
                 </RadioButton>
               ))}
@@ -607,7 +609,7 @@ export default function BookDetailQuiz({isbn}) {
       </TouchableOpacity>
     </View>
   ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 0 ? (
-    <View style={{width:screenWidth}}>
+    <View style={{ width: screenWidth }}>
       <TextWrap style={styles.extitless} font={fonts.kopubWorldDotumProLight}>
         Q{titlenum}.
       </TextWrap>
@@ -642,9 +644,9 @@ export default function BookDetailQuiz({isbn}) {
           />
         </View>
       ) : (
-        bookQuiz[examnum].instances.map((quiz,index) => {
+        bookQuiz[examnum].instances.map((quiz, index) => {
           return (
-            <View key={index * page+ 600} style={bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
+            <View key={index * page + 600} style={bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
                   setAnswer(quiz.instanceNum);
@@ -656,8 +658,8 @@ export default function BookDetailQuiz({isbn}) {
                       : totAnswer.length >= titlenum &&
                         totAnswer[examnum] === quiz.instanceNum &&
                         answer.length === 0
-                      ? styles.selecttab
-                      : styles.answertab
+                        ? styles.selecttab
+                        : styles.answertab
                   }
                   font={fonts.kopubWorldDotumProLight}>
                   {quiz.instanceNum}) {quiz.instance}
@@ -688,17 +690,17 @@ export default function BookDetailQuiz({isbn}) {
   ) : bookQuiz.length !== 0 && quizstart === 1 && quizEnd === 1 ? (
     <View>
       <View style={styles.extitle3} >
-      <Image source={images.note_icon} style={styles.note} />
-      <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
-        도전결과
-      </TextWrap>
+        <Image source={images.note_icon} style={styles.note} />
+        <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
+          도전결과
+        </TextWrap>
       </View>
       {quizScore.length !== 0 ? (
         <View style={styles.quizdata}>
           <TextWrap
             style={styles.quizdata2}
             font={fonts.kopubWorldDotumProLight}>
-              {quizScore[0].avgScore}점
+            {quizScore[0].avgScore}점
           </TextWrap>
           <TextWrap
             style={styles.quizdata3}
@@ -723,35 +725,35 @@ export default function BookDetailQuiz({isbn}) {
           flexWrap: 'wrap',
         }}>
         {quizRecord.length !== 0
-          ? quizRecord.map((data,index) => {
-              return data.examNum % 5 === 0 ? (
-                <View key={data.examNum + index * page + 1}>
-                  <TextWrap
-                    style={styles.answernum}
-                    font={fonts.kopubWorldDotumProLight}>
-                    {data.examNum}
-                  </TextWrap>
-                  <TextWrap
-                    style={styles.answer}
-                    font={fonts.kopubWorldDotumProLight}>
-                    {data.answerYn === 1 ? 'O' : 'X'}
-                  </TextWrap>
-                </View>
-              ) : (
-                <View key={data.examNum + index * page + 1}>
-                  <TextWrap
-                    style={styles.answernum}
-                    font={fonts.kopubWorldDotumProLight}>
-                    {data.examNum}
-                  </TextWrap>
-                  <TextWrap
-                    style={styles.answer}
-                    font={fonts.kopubWorldDotumProLight}>
-                    {data.answerYn === 1 ? 'O' : 'X'}
-                  </TextWrap>
-                </View>
-              );
-            })
+          ? quizRecord.map((data, index) => {
+            return data.examNum % 5 === 0 ? (
+              <View key={data.examNum + index * page + 1}>
+                <TextWrap
+                  style={styles.answernum}
+                  font={fonts.kopubWorldDotumProLight}>
+                  {data.examNum}
+                </TextWrap>
+                <TextWrap
+                  style={styles.answer}
+                  font={fonts.kopubWorldDotumProLight}>
+                  {data.answerYn === 1 ? 'O' : 'X'}
+                </TextWrap>
+              </View>
+            ) : (
+              <View key={data.examNum + index * page + 1}>
+                <TextWrap
+                  style={styles.answernum}
+                  font={fonts.kopubWorldDotumProLight}>
+                  {data.examNum}
+                </TextWrap>
+                <TextWrap
+                  style={styles.answer}
+                  font={fonts.kopubWorldDotumProLight}>
+                  {data.answerYn === 1 ? 'O' : 'X'}
+                </TextWrap>
+              </View>
+            );
+          })
           : null}
       </View>
       <View
@@ -763,7 +765,7 @@ export default function BookDetailQuiz({isbn}) {
         }}>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => {          
+          onPress={() => {
             setQuizstart(0);
             setQuizEnd(0);
             setTotAnswer([]);
@@ -797,97 +799,97 @@ export default function BookDetailQuiz({isbn}) {
         }}>
         <Image source={images.quiz_btn} style={styles.img} />
       </TouchableOpacity>
-        {totRecord.length !== 0 ? (
-          <View style={styles.extitle2} >
-         <Image source={images.note_icon} style={styles.note} />
+      {totRecord.length !== 0 ? (
+        <View style={styles.extitle2} >
+          <Image source={images.note_icon} style={styles.note} />
           <TextWrap style={styles.extitle} font={fonts.kopubWorldDotumProLight}>
             도전결과
           </TextWrap>
         </View>
-     
-        ) : null}
-        <View
-          style={{
-            marginTop: heightPercentage(0),
-            width: screenWidth * 0.9,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            alignSelf: 'center',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            marginBottom: heightPercentage(20),
-          }}>
+
+      ) : null}
+      <View
+        style={{
+          marginTop: heightPercentage(0),
+          width: screenWidth * 0.9,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          alignSelf: 'center',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          marginBottom: heightPercentage(20),
+        }}>
         {totRecord.length !== 0
           ? totRecord.map((data, index) => {
-              return (
-                <View key={index * page + 2} style={styles.quizdata}>
-                  <TouchableOpacity
-                    style={styles.recordopen}
-                    onPress={() => {
-                      openRecord === index
-                        ? setOpenRecord()
-                        : setOpenRecord(index);
-                    }}>
-                    <TextWrap
-                      style={styles.quizdata2}
-                      font={fonts.kopubWorldDotumProLight}>
-                        {totRecord[index].avgScore}점
-                    </TextWrap>
-                    <TextWrap
-                      style={styles.quizdata3}
-                      font={fonts.kopubWorldDotumProLight}>
-                      {totRecord[index].avgScore < 70 ? '  한번 더 도전' : '  성공'}
-                    </TextWrap>
-                    <TextWrap
-                      style={styles.quizdata4}
-                      font={fonts.kopubWorldDotumProLight}>
-                      {totRecord[index].quizExamDate.substring(0, 10)}
-                    </TextWrap>
-                  </TouchableOpacity>
-                  <View
-                    style={
-                      openRecord === index
-                        ? {
-                            marginTop: heightPercentage(10),
-                            width: screenWidth * 0.9,
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            alignSelf: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            display: 'flex',
-                          }
-                        : {
-                            marginTop: heightPercentage(10),
-                            width: screenWidth * 0.9,
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            alignSelf: 'center',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            display: 'none',
-                          }
-                    }>
-                    {totRecord[index].recordDetail.map((eve, cnt) => {
-                      return (
-                        <View key={cnt * page}>
-                          <TextWrap
-                            style={styles.answernum}
-                            font={fonts.kopubWorldDotumProLight}>
-                            {eve.examNum}
-                          </TextWrap>
-                          <TextWrap
-                            style={styles.answer}
-                            font={fonts.kopubWorldDotumProLight}>
-                            {eve.answerYn === 1 ? 'O' : 'X'}
-                          </TextWrap>
-                        </View>
-                      );
-                    })}
-                  </View>
+            return (
+              <View key={index * page + 2} style={styles.quizdata}>
+                <TouchableOpacity
+                  style={styles.recordopen}
+                  onPress={() => {
+                    openRecord === index
+                      ? setOpenRecord()
+                      : setOpenRecord(index);
+                  }}>
+                  <TextWrap
+                    style={styles.quizdata2}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {totRecord[index].avgScore}점
+                  </TextWrap>
+                  <TextWrap
+                    style={styles.quizdata3}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {totRecord[index].avgScore < 70 ? '  한번 더 도전' : '  성공'}
+                  </TextWrap>
+                  <TextWrap
+                    style={styles.quizdata4}
+                    font={fonts.kopubWorldDotumProLight}>
+                    {totRecord[index].quizExamDate.substring(0, 10)}
+                  </TextWrap>
+                </TouchableOpacity>
+                <View
+                  style={
+                    openRecord === index
+                      ? {
+                        marginTop: heightPercentage(10),
+                        width: screenWidth * 0.9,
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        display: 'flex',
+                      }
+                      : {
+                        marginTop: heightPercentage(10),
+                        width: screenWidth * 0.9,
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        display: 'none',
+                      }
+                  }>
+                  {totRecord[index].recordDetail.map((eve, cnt) => {
+                    return (
+                      <View key={cnt * page}>
+                        <TextWrap
+                          style={styles.answernum}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {eve.examNum}
+                        </TextWrap>
+                        <TextWrap
+                          style={styles.answer}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {eve.answerYn === 1 ? 'O' : 'X'}
+                        </TextWrap>
+                      </View>
+                    );
+                  })}
                 </View>
-              );
-            })
+              </View>
+            );
+          })
           : null}
       </View>
     </View>
@@ -905,8 +907,8 @@ const styles = StyleSheet.create({
   grayfont: {
     marginTop: heightPercentage(30),
     textAlign: 'center',
-    fontSize:fontPercentage(10),
-    color:'#999',
+    fontSize: fontPercentage(10),
+    color: '#999',
   },
   answerview: {
     alignSelf: 'flex-end',
@@ -943,7 +945,7 @@ const styles = StyleSheet.create({
   extitle: {
     width: screenWidth * 0.7,
     marginTop: heightPercentage(30),
-    left:widthPercentage(4),
+    left: widthPercentage(4),
     textAlign: 'left',
     fontSize: fontPercentage(14),
     fontWeight: 'bold',
@@ -953,7 +955,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(30),
     textAlign: 'left',
     fontSize: fontPercentage(14),
-    alignSelf:'center',
+    alignSelf: 'center',
     fontWeight: 'bold',
   },
   extitle2: {
@@ -963,7 +965,7 @@ const styles = StyleSheet.create({
     bottom: heightPercentage(10),
     fontWeight: 'bold',
     alignSelf: 'center',
-    flexDirection:'row',
+    flexDirection: 'row',
   },
   extitle3: {
     width: screenWidth * 0.9,
@@ -972,7 +974,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(14),
     fontWeight: 'bold',
     alignSelf: 'center',
-    flexDirection:'row',
+    flexDirection: 'row',
   },
   excontents: {
     width: screenWidth * 0.9,
@@ -1129,7 +1131,7 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
-    textAlignVertical:'top',
+    textAlignVertical: 'top',
     top: heightPercentage(20),
     marginBottom: heightPercentage(20),
     alignSelf: 'center',
