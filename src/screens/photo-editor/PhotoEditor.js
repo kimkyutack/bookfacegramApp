@@ -117,6 +117,7 @@ export default function PhotoEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
+                  noname:'name',
                 },
               });
             }
@@ -158,6 +159,7 @@ export default function PhotoEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
+                  noname:'name',
                 },
               });
             }

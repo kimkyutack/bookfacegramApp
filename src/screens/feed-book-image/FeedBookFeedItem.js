@@ -72,7 +72,6 @@ const renderItem = ({
 }) => {
   const replacecontents = contents.replace(/&nbsp/g, ' ');
   const idx = likeMemberList.indexOf(login_idx);
-  console.log(feedHashtag)
   return (
     <View style={styles.itemContainer}>
       <View style={styles.infoContainer}>
@@ -182,16 +181,17 @@ const renderItem = ({
               : ''}
           </TextMoreWrap>
         </View>
-        <View>
+        <View style={{flexDirection:'row'}}>
           {feedHashtag && (
-            <TextWrap>
+            <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {feedHashtag.map((data, hashIndex) => {
+                console.log(data)
                 if (!data) {
                   return;
                 }
                 return (
                   <TouchableOpacity
-                    key={hashIndex}
+                    key={hashIndex + 1}
                     onPress={() =>
                       navigate(routes.hashTagImage, {
                         screen: routes.hashTagPopularImage,
@@ -201,6 +201,11 @@ const renderItem = ({
                           key: Date.now(),
                         },
                       })
+                    }
+                    style={
+                      {
+                        padding: 0,
+                      }
                     }>
                     <TextWrap
                       font={fonts.kopubWorldDotumProLight}
@@ -210,7 +215,7 @@ const renderItem = ({
                   </TouchableOpacity>
                 );
               })}
-            </TextWrap>
+            </View>
           )}
         </View>
         <TouchableOpacity

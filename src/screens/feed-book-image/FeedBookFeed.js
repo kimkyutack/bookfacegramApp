@@ -98,7 +98,7 @@ export default function FeedBookFeed({route, navigation}) {
     let mount = true;
     if (mount && isFocused) {
       if (route.params?.isNewFeed) {
-        //listRef.current?.scrollToOffset({y: 0.1, animated: false});
+        listRef.current?.scrollToOffset({y: 0.1, animated: false});
         const newTime = new Date(+new Date() + 3300 * 10000)
           .toISOString()
           .replace('T', ' ')
@@ -107,7 +107,7 @@ export default function FeedBookFeed({route, navigation}) {
         fetchUserFeed('reset', newTime);
       } else {
         if (route.params?.index === 0) {
-          listRef.current?.scrollToOffset({y: 0.1, animated: false});
+          listRef.current?.scrollToOffset({y: 0, animated: false});
         } else {
           listRef.current?.scrollToIndex({
             animated: false,
