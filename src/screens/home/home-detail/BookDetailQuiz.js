@@ -30,8 +30,11 @@ import {
   fontPercentage,
 } from '../../../services/util';
 import {
+  dialogClose,
   dialogError,
+  dialogOpenMessage,
   dialogOpenDrawerSelect,
+  dialogOpenAction,
 } from '../../../redux/dialog/DialogActions';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {createIconSetFromFontello} from 'react-native-vector-icons';
@@ -143,6 +146,124 @@ export default function BookDetailQuiz({isbn}) {
     }
   };
 
+  const answerSelect = (value) => {
+    if(value === 1){
+      if(ans1 === undefined || ans1.length === 0){
+        
+          dispatch(
+            dialogOpenMessage({
+              message: '1번 정답의 보기를 입력해주세요.',
+            }),
+          );
+      }else{
+        setAnswerno(value);
+      }
+    }else if(value === 2){
+      if(ans2 === undefined || ans2.length === 0){
+          dispatch(
+            dialogOpenMessage({
+              message: '2번 정답의 보기를 입력해주세요.',
+            }),
+          );
+      }else{
+        setAnswerno(value);
+      }
+    }else if(value === 3){
+      if(ans3 === undefined || ans3.length === 0){
+          dispatch(
+            dialogOpenMessage({
+              message: '3번 정답의 보기를 입력해주세요.',
+            }),
+          );
+      }else{
+        setAnswerno(value);
+      }
+    }else if(value === 4){
+      if(ans4 === undefined || ans4.length === 0){
+          dispatch(
+            dialogOpenMessage({
+              message: '4번 정답의 보기를 입력해주세요.',
+            }),
+          );
+      }else{
+        setAnswerno(value);
+      }
+    }else if(value === 5){
+      if(ans5 === undefined || ans5.length === 0){
+          dispatch(
+            dialogOpenMessage({
+              message: '5번 정답의 보기를 입력해주세요.',
+            }),
+          );
+      }else{
+        setAnswerno(value);
+      }
+    }
+    
+
+  }
+  const createQuiz = async () => {
+    //독서퀴즈 회원 출제
+    let totAns = [];
+    if(ans1 !== undefined){
+      totAns.push(ans1);
+    }
+    if(ans2 !== undefined){
+      totAns.push(ans2);
+    }
+    if(ans3 !== undefined){
+      totAns.push(ans3);
+    }
+    if(ans4 !== undefined){
+      totAns.push(ans4);
+    }
+    if(ans5 !== undefined){
+      totAns.push(ans5);
+    }
+    if(subtype !== 1 && Answerno > totAns.length){
+        dispatch(
+          dialogOpenMessage({
+            message: '문제가 잘못되었습니다. 다시 출제해주세요.',
+          }),
+        );
+    }else{
+        try {
+          if(subtype === 1){
+            const {data, status} = await requestPost({
+              url: consts.apiUrl + '/book/quiz/chul/',
+              body: {
+                VPexam: contents, //문제
+                answer:subanswer,
+                bookCd:isbn,
+                subJimun:subjm,
+                subjYn:'S',
+              },
+            });
+          }else{
+            const {data, status} = await requestPost({
+              url: consts.apiUrl + '/book/quiz/chul/',
+              body: {
+                OAnswer: Answerno, //int 객관식 정답
+                'OTypeList[0].instanceJimun': totAns, //배열 형식으로 문제 순서에 맞게 보내야함
+                VPexam: contents, //문제
+                bookCd:isbn,
+                subJimun:subjm,
+                subjYn:'O',
+              },
+            });
+          }
+          if (status === 'SUCCESS') {
+              dispatch(
+                dialogOpenMessage({
+                  message: '문제가 출제되었습니다.',
+                }),
+              );
+          }
+        } catch (error) {
+          dispatch(dialogError(error));
+        }
+      }
+    }
   const quizGraph = async () => {
     try {
       const {data, status} = await requestPost({
@@ -371,25 +492,25 @@ export default function BookDetailQuiz({isbn}) {
                 style={styles.inputStyle}
                 inputStyle={styles.inputValue}
                 key={index}
-                value={index === 1
+                value={index === 0
                     ? ans1
-                    : index === 2
+                    : index === 1
                     ? ans2
-                    : index === 3
+                    : index === 2
                     ? ans3
-                    : index === 4
+                    : index === 3
                     ? ans4
                     : ans5}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={eve => {
-                  index === 1
+                  index === 0
                     ? setans1(eve)
-                    : index === 2
+                    : index === 1
                     ? setans2(eve)
-                    : index === 3
+                    : index === 2
                     ? setans3(eve)
-                    : index === 4
+                    : index === 3
                     ? setans4(eve)
                     : setans5(eve);
                 }}
@@ -406,6 +527,21 @@ export default function BookDetailQuiz({isbn}) {
               justifyContent: 'center',
               top: 40,
             }}>
+            <View
+            style={{
+              width: screenWidth,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection:'row',
+              bottom: 20,
+            }}>
+          <TextWrap style={styles.noData} font={fonts.kopubWorldDotumProLight}>
+            객관식 정답
+          </TextWrap>
+          <TextWrap style={styles.grayfont} font={fonts.kopubWorldDotumProLight}>
+            &nbsp;(선택한 번호가 정답이 됩니다.)
+          </TextWrap>
+          </View>
             <RadioForm
               animation={true}
               formHorizontal={true}
@@ -419,7 +555,7 @@ export default function BookDetailQuiz({isbn}) {
                     index={i}
                     labelHorizontal={true}
                     onPress={value => {
-                      setAnswerno(value);
+                      answerSelect(value);
                     }}
                     labelStyle={{
                       fontSize: fontPercentage(12),
@@ -434,7 +570,7 @@ export default function BookDetailQuiz({isbn}) {
                     index={i}
                     isSelected={Answerno}
                     onPress={value => {
-                      setAnswerno(value);
+                      answerSelect(value);
                     }}
                     borderWidth={widthPercentage(0.3)}
                     buttonInnerColor={Answerno === i + 1 ? '#0077ff' : '#fff'}
@@ -453,7 +589,19 @@ export default function BookDetailQuiz({isbn}) {
       <TouchableOpacity
         style={styles.noDatabtn2}
         onPress={() => {
-          alert('제작중');
+          dispatch(dialogClose());
+          dispatch(
+            dialogOpenAction({
+              titleColor: colors.blue,
+              cancelTitle: '취소',
+              message: '퀴즈를 등록하시겠습니까?',
+              onPress: a => {
+                if (a) {
+                  createQuiz();
+                }
+              },
+            }),
+          )
         }}>
         <Image source={images.submit_btn} style={styles.img} />
       </TouchableOpacity>
@@ -753,6 +901,12 @@ const styles = StyleSheet.create({
   noData: {
     marginTop: heightPercentage(30),
     textAlign: 'center',
+  },
+  grayfont: {
+    marginTop: heightPercentage(30),
+    textAlign: 'center',
+    fontSize:fontPercentage(10),
+    color:'#999',
   },
   answerview: {
     alignSelf: 'flex-end',
