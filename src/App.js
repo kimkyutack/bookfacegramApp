@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router from './Route';
 import { Provider, useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { Text, StyleSheet, View, Button } from 'react-native';
 import store from './redux/store';
 import { Keyboard, StatusBar, Dimensions, LogBox, Alert } from 'react-native';
 import { keyboardActionType } from './redux/keyboard/KeyboardActions';
@@ -16,19 +17,27 @@ import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
 import DialogDrawerKeyBoard from './redux-components/dialog-drawer-keyboard/DialogDrawerKeyBoard';
 import DialogDrawerKeyBoardPW from './redux-components/dialog-drawer-keyboardPW/DialogDrawerKeyboardPW';
 import DialogDrawerKeyBoardWD from './redux-components/dialog-drawer-keyboardWD/DialogDrawerKeyBoardWD';
-// import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
+import { requestUserPermission, NotificationLister } from './components/FCMContainer/pushnotification_helper';
+import { dialogError } from './redux/dialog/DialogActions';
+
 
 function App({ }) {
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     console.log('123');
-  //     Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  //   });
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      dispatch(dialogError(remoteMessage.notification.body));
+    });
 
-  //   return unsubscribe;
-  // }, []);
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    requestUserPermission();
+    //NotificationLister();
+  }, []);
+
 
   useEffect(() => {
     const hideListenr = () => {
@@ -50,7 +59,7 @@ function App({ }) {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='light-content' />
       <Router />
       <DialogMessage />
       <DialogGrade />

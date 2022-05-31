@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 import com.android.build.OutputFile
 
 project.ext.react = [
@@ -134,6 +135,7 @@ dependencies {
     //     exclude group: 'com.facebook.yoga', module: 'proguard-annotations'
     // }
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    //implementation platform('com.google.firebase:firebase-bom:30.0.2')
     implementation project(':react-native-config')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.android.support:multidex:1.0.3'
@@ -145,6 +147,12 @@ dependencies {
     implementation "com.kakao.sdk:v2-navi:2.5.2" // 카카오내비
     implementation 'com.facebook.fresco:animated-gif:2.5.0' //GIF사용을위한 라이브러리
     implementation 'com.facebook.fresco:fresco:2.5.0' //GIF사용을위한 라이브러리
+
+    // Declare the dependency for the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Add the SDK for Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging'
 
     // debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
     //   exclude group:'com.facebook.fbjni'
@@ -184,4 +192,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply plugin: 'com.google.gms.google-services'
+
