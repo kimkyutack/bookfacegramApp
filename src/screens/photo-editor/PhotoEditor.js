@@ -71,6 +71,7 @@ export default function PhotoEditor({ route, navigation }) {
       if (ps !== 'granted') {
         ps = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
         if (ps !== 'granted') {
+          console.log('123455677889');
           dispatch(
             dialogOpenAction({
               title: '설정',
@@ -85,8 +86,98 @@ export default function PhotoEditor({ route, navigation }) {
               },
             }),
           );
+        } else {
+          console.log('여기 탔다');
+          try {
+            // android file write on phone
+            if (params?.name === 'gallery') {
+              // 여러장
+              const formData = new FormData();
+              const file = [];
+              for (let i = 0; i < params.image.length; i++) {
+                file.push({
+                  uri: params.image[i].uri,
+                  type: params.image[i].type,
+                  name: params.image[i].name,
+                });
+                formData.append('file', file[i]);
+              }
+              formData.append('contents', contents);
+              formData.append('bookNm', title);
+              formData.append('author', writer);
+              formData.append('hashTags', tags.tagsArray?.toString());
+              const { data, status } = await requestFile(
+                {
+                  url: consts.apiUrl + '/mypage/feedBook/my/upload',
+                  method: 'post',
+                },
+                formData,
+              );
+              if (status === 'SUCCESS') {
+                setSaveButtonDisabled(false);
+                navigate(routes.feedBookImage, {
+                  screen: routes.feedBookFeed,
+                  params: {
+                    memberId: user.member_id,
+                    memberIdx: user.member_idx,
+                    infoType: 'user',
+                    isNewFeed: true,
+                    key: Date.now(),
+                    noname: 'name',
+                  },
+                });
+              }
+            } else {
+              // 한장
+              var formData = new FormData();
+              var file = [];
+              file.push({
+                uri: params.image[0].uri,
+                type: params.image[0].type,
+                name: params.image[0].name,
+              });
+
+              formData.append('file', file[0]);
+              formData.append('contents', contents);
+              formData.append('bookNm', title);
+              formData.append('author', writer);
+              formData.append('hashTags', tags.tagsArray?.toString());
+
+              const { data, status } = await requestFile(
+                {
+                  url: consts.apiUrl + '/mypage/feedBook/my/upload',
+                  method: 'post',
+                },
+                formData,
+              );
+              if (status === 'SUCCESS') {
+                setSaveButtonDisabled(false);
+                if (params?.name === 'camera') {
+                  const saveResult = await CameraRoll.save(params.image[0].uri, {
+                    type: 'photo',
+                    album: 'toaping',
+                  });
+                }
+                navigate(routes.feedBookImage, {
+                  screen: routes.feedBookFeed,
+                  params: {
+                    memberId: user.member_id,
+                    memberIdx: user.member_idx,
+                    infoType: 'user',
+                    isNewFeed: true,
+                    key: Date.now(),
+                    noname: 'name',
+                  },
+                });
+              }
+            }
+          } catch (e) {
+            setSaveButtonDisabled(false);
+            dispatch(dialogError(e));
+          }
         }
       } else {
+        console.log('보통은여기탐');
         try {
           // android file write on phone
           if (params?.name === 'gallery') {
@@ -105,7 +196,6 @@ export default function PhotoEditor({ route, navigation }) {
             formData.append('bookNm', title);
             formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
-
             const { data, status } = await requestFile(
               {
                 url: consts.apiUrl + '/mypage/feedBook/my/upload',
@@ -129,7 +219,6 @@ export default function PhotoEditor({ route, navigation }) {
             }
           } else {
             // 한장
-
             var formData = new FormData();
             var file = [];
             file.push({
