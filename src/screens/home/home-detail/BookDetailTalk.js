@@ -60,24 +60,26 @@ export default function BookDetailTalk({ selectedBook, wait }) {
         title: '확인',
         message: `토핑톡을 삭제하시겠습니까?`,
         onPress: a => {
-          requestDelete({
-            url: consts.apiUrl + `/book/bookPingTalk/${replyIdx}`,
-          })
-            .then(res => {
-              if (res.status === 'SUCCESS') {
-                dispatch(dialogError('삭제되었습니다.'));
-                setTags({ tag: '', tagsArray: [] });
-                setStarRate(5);
-                setReplyContent('');
-                talkReplyList();
-              } else {
-                dispatch(dialogError('fail'));
-              }
+          if (a) {
+            requestDelete({
+              url: consts.apiUrl + `/book/bookPingTalk/${replyIdx}`,
             })
-            .catch(error => {
-              dispatch(error);
-              // error 일때 해야함
-            });
+              .then(res => {
+                if (res.status === 'SUCCESS') {
+                  dispatch(dialogError('삭제되었습니다.'));
+                  setTags({ tag: '', tagsArray: [] });
+                  setStarRate(5);
+                  setReplyContent('');
+                  talkReplyList();
+                } else {
+                  dispatch(dialogError('fail'));
+                }
+              })
+              .catch(error => {
+                dispatch(error);
+                // error 일때 해야함
+              });
+          }
         },
       }),
     );
