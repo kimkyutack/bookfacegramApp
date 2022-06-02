@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FlatList, View, Image, StyleSheet } from 'react-native';
+import { FlatList, View, Image, StyleSheet, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import consts from '../../libs/consts';
@@ -55,22 +55,30 @@ export default function Event({ navigation }) {
           borderBottomWidth: 1,
         }}
       /> */}
-      <FlatList
-        data={data}
-        disableVirtualization={false}
-        keyExtractor={(item, index) => {
-          return index.toString();
-        }}
-        renderItem={({ item, index }) => {
-          return <EventItem item={item} navigation={navigation} />;
-        }}
-      />
+      {data.length === 0 ? (<View style={styles.root}>
+        <Text style={{ marginTop: 10 }}>현재 진행중인 이벤트가 없습니다.</Text>
+      </View>) :
+        <FlatList
+          data={data}
+          disableVirtualization={false}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={({ item, index }) => {
+            return <EventItem item={item} navigation={navigation} />;
+          }}
+        />
+      }
       <Footer page="event" />
-    </RootLayout>
+    </RootLayout >
   );
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    alignItems: 'center',
+  },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),
