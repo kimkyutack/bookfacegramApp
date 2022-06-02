@@ -1,7 +1,7 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useState, useRef, useCallback, useMemo, useEffect} from 'react';
+import { useRoute } from '@react-navigation/native';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import CameraRoll from '@react-native-community/cameraroll';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   Image,
   SafeAreaView,
@@ -30,8 +30,8 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../services/util';
-import {goBack, navigate} from '../../services/navigation';
-import {requestFile, requestPost} from '../../services/network';
+import { goBack, navigate } from '../../services/navigation';
+import { requestFile, requestPost } from '../../services/network';
 import {
   openSettings,
   PERMISSIONS,
@@ -44,11 +44,13 @@ import {
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
 
-export default function PhotoEditor({route, navigation}) {
+export default function PhotoEditor({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   const [contents, setContents] = useState('');
-  const [tags, setTags] = useState({tag: '', tagsArray: []});
-  const {params} = useRoute();
+  const [tags, setTags] = useState({ tag: '', tagsArray: [] });
+  const [title, setTitle] = useState('');
+  const [writer, setWriter] = useState('');
+  const { params } = useRoute();
   const dispatch = useDispatch();
   const listRef = useRef();
   const tagRef = useRef();
@@ -56,7 +58,9 @@ export default function PhotoEditor({route, navigation}) {
 
   useEffect(() => {
     setContents('');
-    setTags({tag: '', tagsArray: []});
+    setTitle('');
+    setWriter('');
+    setTags({ tag: '', tagsArray: [] });
   }, [params.key]);
 
   const save = async () => {
@@ -98,9 +102,11 @@ export default function PhotoEditor({route, navigation}) {
               formData.append('file', file[i]);
             }
             formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
-            const {data, status} = await requestFile(
+            const { data, status } = await requestFile(
               {
                 url: consts.apiUrl + '/mypage/feedBook/my/upload',
                 method: 'post',
@@ -117,7 +123,7 @@ export default function PhotoEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
-                  noname:'name',
+                  noname: 'name',
                 },
               });
             }
@@ -134,9 +140,11 @@ export default function PhotoEditor({route, navigation}) {
 
             formData.append('file', file[0]);
             formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
-            const {data, status} = await requestFile(
+            const { data, status } = await requestFile(
               {
                 url: consts.apiUrl + '/mypage/feedBook/my/upload',
                 method: 'post',
@@ -159,7 +167,7 @@ export default function PhotoEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
-                  noname:'name',
+                  noname: 'name',
                 },
               });
             }
@@ -175,14 +183,14 @@ export default function PhotoEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
-    if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
-      setTags({tag:'',tagsArray:tags.tagsArray});
+    if (tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0) {
+      setTags({ tag: '', tagsArray: tags.tagsArray });
       dispatch(
-        dialogOpenMessage({message: '중복된 해시태그입니다.'}),
+        dialogOpenMessage({ message: '중복된 해시태그입니다.' }),
       );
-    }else{
+    } else {
       setTags(e);
-      listRef.current?.scrollToEnd({animated: true});
+      listRef.current?.scrollToEnd({ animated: true });
     }
     tagRef.current.focus();
   };
@@ -190,23 +198,23 @@ export default function PhotoEditor({route, navigation}) {
   const setTagHandle2 = e => {
     if (tags.tagsArray.length > 9) {
       dispatch(
-        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
+        dialogOpenMessage({ message: '해시태그는 10개까지 등록할 수 있습니다.' }),
       );
-    } else{
+    } else {
       setTags(e);
-      listRef.current?.scrollToEnd({animated: true});
+      listRef.current?.scrollToEnd({ animated: true });
     }
     tagRef.current.focus();
   };
 
   return (
     <RootLayout
-      style={{paddingHorizontal: 16}}
+      style={{ paddingHorizontal: 16 }}
       topbar={{
         title:
-          user.member_id?.split('@')[0]?.length > 10
-            ? user.member_id?.split('@')[0]?.substring(0, 10) + '...'
-            : user.member_id?.split('@')[0],
+          user.member_id?.length > 20
+            ? user.member_id?.substring(0, 20) + '...'
+            : user.member_id,
         back: true,
         navigation: navigation,
         options: {
@@ -263,7 +271,7 @@ export default function PhotoEditor({route, navigation}) {
                   <InputWrap
                     style={styles.input}
                     selectionColor="#acacac"
-                    inputFlex={{borderColor: colors.white}}
+                    inputFlex={{ borderColor: colors.white }}
                     inputStyle={styles.textInput}
                     maxLength={2000}
                     value={contents}
@@ -273,11 +281,11 @@ export default function PhotoEditor({route, navigation}) {
                     placeholderSize={fontPercentage(11)}
                     multiline
                     numberOfLines={10}
-                    // optionComponent={
-                    //   <TextWrap style={styles.contentCount}>
-                    //     ({contents.length} / 2000)
-                    //   </TextWrap>
-                    // }
+                  // optionComponent={
+                  //   <TextWrap style={styles.contentCount}>
+                  //     ({contents.length} / 2000)
+                  //   </TextWrap>
+                  // }
                   />
                 </View>
               </View>
@@ -296,6 +304,8 @@ export default function PhotoEditor({route, navigation}) {
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#333333',
                   }}
+                  value={title}
+                  onChange={setTitle}
                   placeholder="#책제목"
                   placeholderTextColor="#acacac"
                   placeholderSize={fontPercentage(12)}
@@ -309,6 +319,8 @@ export default function PhotoEditor({route, navigation}) {
                     borderBottomWidth: 0.5,
                     borderBottomColor: '#333333',
                   }}
+                  value={writer}
+                  onChange={setWriter}
                   placeholder="#저자명"
                   placeholderTextColor="#acacac"
                   placeholderSize={fontPercentage(12)}
@@ -349,7 +361,7 @@ export default function PhotoEditor({route, navigation}) {
                   autoCorrect={false}
                   tagStyle={styles.tag}
                   tagTextStyle={styles.tagText}
-                  tagsViewStyle={{paddingHorizontal: 5}}
+                  tagsViewStyle={{ paddingHorizontal: 5 }}
                   keysForTagsArray={['#', ',']}
                   customElement={
                     <TextWrap
@@ -362,7 +374,7 @@ export default function PhotoEditor({route, navigation}) {
               </View>
             </>
           }
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             let ext = item.name.split('.').pop().toLowerCase();
             if (ext === 'jpg') {
               ext = 'jpeg';
@@ -383,8 +395,8 @@ export default function PhotoEditor({route, navigation}) {
                 }}>
                 <View>
                   <Image
-                    source={{uri: item.uri}}
-                    style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+                    source={{ uri: item.uri }}
+                    style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
                   />
                 </View>
               </View>
@@ -496,7 +508,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   tagText: {
-    height:fontPercentage(22),
+    height: fontPercentage(22),
     color: '#858585',
     fontFamily: fonts.kopubWorldDotumProBold,
   },

@@ -1,7 +1,7 @@
-import {useRoute} from '@react-navigation/native';
-import React, {useState, useRef, useCallback, useMemo, useEffect} from 'react';
+import { useRoute } from '@react-navigation/native';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import CameraRoll from '@react-native-community/cameraroll';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   Image,
   SafeAreaView,
@@ -31,8 +31,8 @@ import {
   widthPercentage,
   cameraEditItem,
 } from '../../services/util';
-import {goBack, navigate} from '../../services/navigation';
-import {requestGet, requestFile, requestPost} from '../../services/network';
+import { goBack, navigate } from '../../services/navigation';
+import { requestGet, requestFile, requestPost } from '../../services/network';
 import {
   openSettings,
   PERMISSIONS,
@@ -46,14 +46,14 @@ import {
   dialogOpenSelect,
 } from '../../redux/dialog/DialogActions';
 
-export default function FeedBookEditor({route, navigation}) {
+export default function FeedBookEditor({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState('');
   const [writer, setWriter] = useState('');
-  const [Feedimage, setImage] = useState([{name: '', uri: ''}]);
-  const [tags, setTags] = useState({tag: '', tagsArray: []});
-  const {params} = useRoute();
+  const [Feedimage, setImage] = useState([{ name: '', uri: '' }]);
+  const [tags, setTags] = useState({ tag: '', tagsArray: [] });
+  const { params } = useRoute();
   const dispatch = useDispatch();
   const listRef = useRef();
   const tagRef = useRef();
@@ -80,7 +80,7 @@ export default function FeedBookEditor({route, navigation}) {
             '\r\n',
           );
           setContents(contentReplace.replace(/&nbsp/g, ' '));
-          setTags({tag: '', tagsArray: res.data.feedHashtag});
+          setTags({ tag: '', tagsArray: res.data.feedHashtag });
           if (res.data.title != null) {
             setTitle(res.data.title);
           }
@@ -91,7 +91,7 @@ export default function FeedBookEditor({route, navigation}) {
       })
       .catch(error => {
         setContents('');
-        setTags({tag: '', tagsArray: []});
+        setTags({ tag: '', tagsArray: [] });
       });
   }, [params.key]);
 
@@ -123,7 +123,7 @@ export default function FeedBookEditor({route, navigation}) {
           // android file write on phone
           if (params?.name === 'gallery') {
             // 여러장
-        
+
             const formData = new FormData();
             const file = [];
             if (params.image !== undefined) {
@@ -142,7 +142,7 @@ export default function FeedBookEditor({route, navigation}) {
             formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
-            const {data, status} = await requestFile(
+            const { data, status } = await requestFile(
               {
                 url: consts.apiUrl + '/mypage/feedBook/my',
                 method: 'put',
@@ -159,7 +159,7 @@ export default function FeedBookEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
-                  noname:'name',
+                  noname: 'name',
                 },
               });
             }
@@ -183,7 +183,7 @@ export default function FeedBookEditor({route, navigation}) {
             formData.append('author', writer);
             formData.append('hashTags', tags.tagsArray?.toString());
 
-            const {data, status} = await requestFile(
+            const { data, status } = await requestFile(
               {
                 url: consts.apiUrl + '/mypage/feedBook/my',
                 method: 'put',
@@ -206,7 +206,7 @@ export default function FeedBookEditor({route, navigation}) {
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
-                  noname:'name',
+                  noname: 'name',
                 },
               });
             }
@@ -222,14 +222,14 @@ export default function FeedBookEditor({route, navigation}) {
   };
 
   const setTagHandle = e => {
-    if(tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0){
-      setTags({tag:'',tagsArray:tags.tagsArray});
+    if (tags.tagsArray.includes(tags.tag) && tags.tag.length !== 0) {
+      setTags({ tag: '', tagsArray: tags.tagsArray });
       dispatch(
-        dialogOpenMessage({message: '중복된 해시태그입니다.'}),
+        dialogOpenMessage({ message: '중복된 해시태그입니다.' }),
       );
-    }else{
+    } else {
       setTags(e);
-      listRef.current?.scrollToEnd({animated: true});
+      listRef.current?.scrollToEnd({ animated: true });
     }
     tagRef.current.focus();
   };
@@ -237,29 +237,29 @@ export default function FeedBookEditor({route, navigation}) {
   const setTagHandle2 = e => {
     if (tags.tagsArray.length > 9) {
       dispatch(
-        dialogOpenMessage({message: '해시태그는 10개까지 등록할 수 있습니다.'}),
+        dialogOpenMessage({ message: '해시태그는 10개까지 등록할 수 있습니다.' }),
       );
-    } else{
+    } else {
       setTags(e);
-      listRef.current?.scrollToEnd({animated: true});
+      listRef.current?.scrollToEnd({ animated: true });
     }
     tagRef.current.focus();
   };
 
   return (
     <RootLayout
-      style={{paddingHorizontal: 16}}
+      style={{ paddingHorizontal: 16 }}
       topbar={{
         title:
-          user.member_id?.split('@')[0]?.length > 10
-            ? user.member_id?.split('@')[0]?.substring(0, 10) + '...'
-            : user.member_id?.split('@')[0],
+          user.member_id?.length > 20
+            ? user.member_id?.substring(0, 20) + '...'
+            : user.member_id,
         back: true,
         navigation: navigation,
         options: {
           name: 'complete',
           component: (
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
                 onPress={() =>
                   dispatch(
@@ -322,7 +322,7 @@ export default function FeedBookEditor({route, navigation}) {
                   <InputWrap
                     style={styles.input}
                     selectionColor="#acacac"
-                    inputFlex={{borderColor: colors.white}}
+                    inputFlex={{ borderColor: colors.white }}
                     inputStyle={styles.textInput}
                     maxLength={2000}
                     value={contents}
@@ -332,11 +332,11 @@ export default function FeedBookEditor({route, navigation}) {
                     placeholderSize={fontPercentage(11)}
                     multiline
                     numberOfLines={10}
-                    // optionComponent={
-                    //   <TextWrap style={styles.contentCount}>
-                    //     ({contents.length} / 2000)
-                    //   </TextWrap>
-                    // }
+                  // optionComponent={
+                  //   <TextWrap style={styles.contentCount}>
+                  //     ({contents.length} / 2000)
+                  //   </TextWrap>
+                  // }
                   />
                 </View>
               </View>
@@ -412,7 +412,7 @@ export default function FeedBookEditor({route, navigation}) {
                   autoCorrect={false}
                   tagStyle={styles.tag}
                   tagTextStyle={styles.tagText}
-                  tagsViewStyle={{paddingHorizontal: 5}}
+                  tagsViewStyle={{ paddingHorizontal: 5 }}
                   keysForTagsArray={['#', ',']}
                   customElement={
                     <TextWrap
@@ -425,7 +425,7 @@ export default function FeedBookEditor({route, navigation}) {
               </View>
             </>
           }
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <View
                 style={{
@@ -440,13 +440,13 @@ export default function FeedBookEditor({route, navigation}) {
                     source={
                       params.image === undefined
                         ? {
-                            uri:
-                              'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/books/feedBook/' +
-                              item.uri,
-                          }
-                        : {uri: item.uri}
+                          uri:
+                            'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/books/feedBook/' +
+                            item.uri,
+                        }
+                        : { uri: item.uri }
                     }
-                    style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+                    style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
                   />
                 </View>
               </View>
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   tagText: {
-    height:fontPercentage(22),
+    height: fontPercentage(22),
     color: '#858585',
     fontFamily: fonts.kopubWorldDotumProBold,
   },
@@ -591,8 +591,8 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(10),
   },
   customElement2: {
-      color: colors.blue,
-      fontSize: fontPercentage(10),
-      alignSelf: 'flex-start',
-    },
+    color: colors.blue,
+    fontSize: fontPercentage(10),
+    alignSelf: 'flex-start',
+  },
 });
