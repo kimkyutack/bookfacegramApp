@@ -144,6 +144,7 @@ export default function BookDetailTalk({ selectedBook, wait }) {
             setStarRate(5);
             setReplyContent('');
             talkReplyList();
+            setNowEditing(0);
 
           } else if (res.status === 'FAIL') {
             // error 일때 해야함
