@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import {
   FlatList,
   View,
@@ -11,15 +11,16 @@ import {
   Button,
   SafeAreaView,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestGet, requestPost} from '../../services/network';
+import { requestGet, requestPost } from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -34,15 +35,15 @@ import {
   dialogOpenMore,
   dialogError,
 } from '../../redux/dialog/DialogActions';
-import {getFeedHome} from '../../redux/book/BookActions';
-import {FeedItem} from './FeedItem';
+import { getFeedHome } from '../../redux/book/BookActions';
+import { FeedItem } from './FeedItem';
 import Topbar from '../../components/topbar/Topbar';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import Footer from '../../libs/footer';
 
-export default function FeedBook({route, navigation}) {
+export default function FeedBook({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
-  const {isFollowLoading, followBooks, followErrorMessage} = useSelector(
+  const { isFollowLoading, followBooks, followErrorMessage } = useSelector(
     s => s.book,
   );
   const [likeLoading, setLikeLoading] = useState(false);
@@ -59,6 +60,15 @@ export default function FeedBook({route, navigation}) {
   const [refreshing, setRefreshing] = useState(false);
   const [scrolltop, setscrolltop] = useState(0);
   const opacity = useRef(new Animated.Value(0)).current;
+
+  // const getInitialURL = async () => {
+  //   const url = await Linking.getInitialURL();
+  //   console.log('url is :', url);
+  //   if (url != null) {
+  //     console.log('url is :', url);
+  //   }
+
+  // };
 
   const fetchFeedData = (reset, newTime) => {
     setRefreshing(false);
@@ -85,6 +95,7 @@ export default function FeedBook({route, navigation}) {
     };
   }, []);
 
+  //getInitialURL();
   const editOnPress = feedIdx => {
     dispatch(
       dialogOpenMore({
@@ -224,7 +235,7 @@ export default function FeedBook({route, navigation}) {
     }
   };
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <FeedItem
       {...item}
       index={index}
@@ -263,7 +274,7 @@ export default function FeedBook({route, navigation}) {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <Topbar
         title="피드북"
         navigation={navigation}
@@ -350,7 +361,7 @@ export default function FeedBook({route, navigation}) {
       )}
       <TouchableOpacity
         onPress={() => {
-          listRef.current.scrollToOffset({animated: true, offset: 0});
+          listRef.current.scrollToOffset({ animated: true, offset: 0 });
         }}
         style={scrolltop === 1 ? styles.button : styles.none_button}>
         <Image source={images.scrollTop} style={styles.scrolltotop} />
@@ -383,9 +394,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: screenHeight / 1.16,
     left: screenWidth / 2.16,
-    display:'flex',
+    display: 'flex',
   },
   none_button: {
-    display:'none',
+    display: 'none',
   },
 });
