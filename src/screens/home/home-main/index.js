@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   FlatList,
   Image,
@@ -14,10 +14,11 @@ import SearchBar from '../../../components/search-bar/SearchBar';
 import TopTabs from './TopTabs';
 import images from '../../../libs/images';
 import colors from '../../../libs/colors';
-import {navigate} from '../../../services/navigation';
+import { navigate } from '../../../services/navigation';
 import routes from '../../../libs/routes';
 import Footer from '../../../libs/footer';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 import {
   widthPercentage,
   heightPercentage,
@@ -29,12 +30,39 @@ import {
   dialogOpenMessage,
 } from '../../../redux/dialog/DialogActions';
 
-export default function HomeMain({route, navigation}) {
+export default function HomeMain({ route, navigation }) {
   const [keyword, setKeyword] = useState('');
   const dispatch = useDispatch();
   const inputRef = useRef();
+  const user = useSelector(s => s.user, shallowEqual);
+
+  const getData = async () => {
+    try {
+
+      let fcmtoken = await AsyncStorage.getItem('fcmtoken');
+      saveTokenToDatabase(fcmtoken);
+      if (fcmtoken !== null) {
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  }
+  const saveTokenToDatabase = async (token) => {
+    // Assume user is already signed in
+    const userId = user.member_id;
+    // Add the token to the users datastore
+    await firestore()
+      .collection('users')
+      .doc(userId)
+      .set({
+        tokens: firestore.FieldValue.arrayUnion(token),
+      });
+  }
 
   useEffect(() => {
+
+    getData();
     return () => {
       setKeyword('');
     };
@@ -42,15 +70,15 @@ export default function HomeMain({route, navigation}) {
 
   const handleSearch = () => {
     if (keyword?.length < 2) {
-      dispatch(dialogOpenMessage({message: '두글자 이상 입력해주세요.'}));
+      dispatch(dialogOpenMessage({ message: '두글자 이상 입력해주세요.' }));
     } else {
       setKeyword('');
-      navigation.navigate(routes.searchBook, {keyword: keyword});
+      navigation.navigate(routes.searchBook, { keyword: keyword });
     }
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
       <Topbar
         title="TOAPING"
         navigation={navigation}
@@ -100,7 +128,7 @@ export default function HomeMain({route, navigation}) {
       <Footer
         page={
           route.params?.params?.type !== 'main' &&
-          route.params?.params?.type !== undefined
+            route.params?.params?.type !== undefined
             ? route.params?.params?.type
             : 'home'
         }
