@@ -202,7 +202,7 @@ export default function BookDetailTalk({ selectedBook, wait }) {
     } else {
       setTags(e);
     }
-    tagRef.current.focus();
+    //setTimeout(() => tagRef.current.focus(), 400);
   };
 
   const setTagHandle2 = e => {
@@ -213,8 +213,14 @@ export default function BookDetailTalk({ selectedBook, wait }) {
     } else {
       setTags(e);
     }
-    tagRef.current.focus();
   };
+
+  const handleKeyPress = e => {
+    console.log(e);
+    if (e.key === 'Enter') {
+      setTimeout(() => tagRef.current.focus(), 400);
+    }
+  }
 
   if (loading) {
     return <></>;
@@ -281,6 +287,7 @@ export default function BookDetailTalk({ selectedBook, wait }) {
                 *엔터를 눌러 해시태그를 등록해주세요.
               </TextWrap>
             }
+            onKeyPress={handleKeyPress}
           />
         </View>
         <View style={styles.buttonContainer}>

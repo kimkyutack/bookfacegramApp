@@ -328,7 +328,7 @@ export default function FeedBookEditor({ route, navigation }) {
       setTags(e);
       listRef.current?.scrollToEnd({ animated: true });
     }
-    tagRef.current.focus();
+    //tagRef.current.focus();
   };
 
   const setTagHandle2 = e => {
@@ -340,7 +340,7 @@ export default function FeedBookEditor({ route, navigation }) {
       setTags(e);
       listRef.current?.scrollToEnd({ animated: true });
     }
-    tagRef.current.focus();
+    //tagRef.current.focus();
   };
 
   return (

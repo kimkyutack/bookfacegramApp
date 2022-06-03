@@ -281,7 +281,6 @@ export default function PhotoEditor({ route, navigation }) {
       setTags(e);
       listRef.current?.scrollToEnd({ animated: true });
     }
-    tagRef.current.focus();
   };
 
   const setTagHandle2 = e => {
@@ -293,7 +292,6 @@ export default function PhotoEditor({ route, navigation }) {
       setTags(e);
       listRef.current?.scrollToEnd({ animated: true });
     }
-    tagRef.current.focus();
   };
 
   return (
