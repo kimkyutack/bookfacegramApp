@@ -353,8 +353,12 @@ export default function FeedBook({ route, navigation }) {
           onEndReached={onEndReached}
           onEndReachedThreshold={0.6}
           refreshing={refreshing}
-          onScroll={() => setscrolltop(1)}
-          onScrollEndDrag={() => setscrolltop(0)}
+          onScroll={() => {
+            setscrolltop(1);
+            setTimeout(() => {
+              setscrolltop(0);
+            }, 2000);
+          }}
           onRefresh={handleRefresh}
           maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
           windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5

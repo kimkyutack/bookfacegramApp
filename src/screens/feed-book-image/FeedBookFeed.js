@@ -436,8 +436,12 @@ export default function FeedBookFeed({route, navigation}) {
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor} // arrow 함수 자제
         renderItem={memoizedRenderItem} // arrow 함수 자제
-        onScroll={() => setscrolltop(1)}
-        onScrollEndDrag={() => setscrolltop(0)}
+        onScroll={() => {
+            setscrolltop(1);
+            setTimeout(() => {
+              setscrolltop(0);
+            }, 2000);
+          }}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
         refreshing={refreshing}
