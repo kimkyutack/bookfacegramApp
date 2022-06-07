@@ -63,11 +63,30 @@ export const userUpdate = async dispatch => {
   }
 };
 
+
+
 export const userUpdate2 =
   ({ user, updated = true }) =>
     dispatch => {
       dispatch({ type: userActionType.update, user });
     };
+
+export const userUpdate3 = async dispatch => {
+  try {
+    const { data, status } = await requestGet({
+      url: consts.apiUrl + '/mypage/setting',
+    });
+
+    //console.log(data);
+    if (status === 'FAIL') {
+      throw 'member is null';
+    } else if (status === 'SUCCESS') {
+      dispatch({ type: userActionType.update, user: data });
+    }
+  } catch (error) {
+    dispatch({ type: userActionType.init });
+  }
+};
 
 export const userSignOut = userId => async dispatch => {
   const platformType = await getItem('platformType');
