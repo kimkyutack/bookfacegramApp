@@ -356,8 +356,8 @@ export default function FeedBook({ route, navigation }) {
           onEndReachedThreshold={0.6}
           refreshing={refreshing}
           onScroll={event => {
-          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
-        }}
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           onRefresh={handleRefresh}
           maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
           windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
@@ -369,10 +369,10 @@ export default function FeedBook({ route, navigation }) {
           onPress={() => {
             listRef.current.scrollToOffset({ animated: true, offset: 0 });
           }}
-          style={styles.button}>
+          style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-      )}   
+      )}
       <Footer page="feed" />
     </SafeAreaView>
   );
@@ -394,12 +394,12 @@ const styles = StyleSheet.create({
     height: heightPercentage(24),
     resizeMode: 'contain',
   },
-  button: {
+  topButton: {
     alignItems: 'center',
     width: widthPercentage(30),
     height: heightPercentage(30),
     position: 'absolute',
-    top: screenHeight / 1.16,
+    bottom: heightPercentage(60),
     left: screenWidth / 2.16,
     display: 'flex',
   },
