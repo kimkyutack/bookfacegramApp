@@ -4,12 +4,13 @@ import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import propType from 'prop-types';
 import {fontPercentage, widthPercentage} from '../../services/util';
+import { navigationRef } from '../../services/navigation';
 
 export default function TextMoreWrap(props) {
+  const curRouteName = navigationRef.current.getCurrentRoute().name;
   const [textShown, setTextShown] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
   const [startWidth, setStartWidth] = useState(0);
-
   const toggleNumberOfLines = () => {
     setTextShown(!textShown);
   };
@@ -20,7 +21,8 @@ export default function TextMoreWrap(props) {
 
   useEffect(() => {
     setTextShown(false);
-  }, [props?.timeKey]);
+  }, [curRouteName]);
+  //  }, [props?.timeKey]);  scrollTop 설정시 작동해버려서 제거
 
   return (
     <View>

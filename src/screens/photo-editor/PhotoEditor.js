@@ -71,7 +71,6 @@ export default function PhotoEditor({ route, navigation }) {
       if (ps !== 'granted') {
         ps = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
         if (ps !== 'granted') {
-          console.log('123455677889');
           dispatch(
             dialogOpenAction({
               title: '설정',
@@ -87,7 +86,6 @@ export default function PhotoEditor({ route, navigation }) {
             }),
           );
         } else {
-          console.log('여기 탔다');
           try {
             // android file write on phone
             if (params?.name === 'gallery') {
@@ -177,7 +175,6 @@ export default function PhotoEditor({ route, navigation }) {
           }
         }
       } else {
-        console.log('보통은여기탐');
         try {
           // android file write on phone
           if (params?.name === 'gallery') {

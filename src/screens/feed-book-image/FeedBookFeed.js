@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Share,
   ActivityIndicator,
+  TouchableOpacity,
   Animated,
   Easing,
 } from 'react-native';
@@ -24,6 +25,8 @@ import {
   heightPercentage,
   fontPercentage,
   cameraItem,
+  screenHeight,
+  screenWidth
 } from '../../services/util';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import Topbar from '../../components/topbar/Topbar';
@@ -54,6 +57,7 @@ export default function FeedBookFeed({route, navigation}) {
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
   const [refreshing, setRefreshing] = useState(false);
+  const [scrolltop, setscrolltop] = useState(0);
 
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
@@ -62,7 +66,6 @@ export default function FeedBookFeed({route, navigation}) {
   const fetchUserFeed = (type, newTime) => {
     setRefreshing(false);
     if (type === 'reset') {
-      console.log(newTime)
       dispatch(
         getFeedUser(
           route.params?.memberId,
@@ -433,6 +436,8 @@ export default function FeedBookFeed({route, navigation}) {
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor} // arrow 함수 자제
         renderItem={memoizedRenderItem} // arrow 함수 자제
+        onScroll={() => setscrolltop(1)}
+        onScrollEndDrag={() => setscrolltop(0)}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
         refreshing={refreshing}
@@ -441,6 +446,13 @@ export default function FeedBookFeed({route, navigation}) {
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}
       />
+      <TouchableOpacity
+        onPress={() => {
+          listRef.current.scrollToOffset({ animated: true, offset: 0 });
+        }}
+        style={scrolltop === 1 ? styles.button : styles.none_button}>
+        <Image source={images.scrollTop} style={styles.scrolltotop} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -449,5 +461,22 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  button: {
+    alignItems: 'center',
+    width: widthPercentage(30),
+    height: heightPercentage(30),
+    position: 'absolute',
+    top: screenHeight / 1.3,
+    left: screenWidth / 2.16,
+    display: 'flex',
+  },
+  scrolltotop: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    resizeMode: 'contain',
+  },
+  none_button: {
+    display: 'none',
   },
 });

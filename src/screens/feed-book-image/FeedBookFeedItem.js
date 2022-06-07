@@ -185,7 +185,6 @@ const renderItem = ({
           {feedHashtag && (
             <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {feedHashtag.map((data, hashIndex) => {
-                console.log(data)
                 if (!data) {
                   return;
                 }
