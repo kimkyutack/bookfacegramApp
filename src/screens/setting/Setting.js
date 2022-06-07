@@ -118,38 +118,6 @@ export default function Setting({ route, navigation }) {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (user.agree_notice === 1) {
-      messaging()
-        .subscribeToTopic('toapingNotice')
-        .then(() => console.log('Subscribed to toapingNotice!'));
-    } else if (user.agree_notice === 0) {
-      messaging()
-        .unsubscribeFromTopic('toapingNotice')
-        .then(() => console.log('Unsubscribed fom the toapingNotice!'));
-    }
-
-    if (user.agree_app_push === 1) {
-      messaging()
-        .subscribeToTopic('toapingAppPush')
-        .then(() => console.log('Subscribed to toapingAppPush!'));
-    } else if (user.agree_app_push === 0) {
-      messaging()
-        .unsubscribeFromTopic('toapingAppPush')
-        .then(() => console.log('Unsubscribed fom the toapingAppPush!'));
-    }
-
-    if (user.agree_event === 1) {
-      messaging()
-        .subscribeToTopic('toapingEvent')
-        .then(() => console.log('Subscribed to toapingEvent!'));
-    } else if (user.agree_event === 0) {
-      messaging()
-        .unsubscribeFromTopic('toapingEvent')
-        .then(() => console.log('Unsubscribed fom the toapingEvent!'));
-    }
-  }, []);
-
   // useEffect(() => {
   //   requestGet({url: consts.apiUrl + '/mypage/setting'})
   //     .then(x => {
