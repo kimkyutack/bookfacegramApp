@@ -71,6 +71,7 @@ export default function BookDetailTalk({ selectedBook, wait }) {
                   setStarRate(5);
                   setReplyContent('');
                   talkReplyList();
+                  setNowEditing(0);
                 } else {
                   dispatch(dialogError('fail'));
                 }
