@@ -59,6 +59,8 @@ export default function FeedBook({ route, navigation }) {
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const [refreshing, setRefreshing] = useState(false);
   const [scrolltop, setscrolltop] = useState(0);
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
   const opacity = useRef(new Animated.Value(0)).current;
 
   // const getInitialURL = async () => {
@@ -353,25 +355,24 @@ export default function FeedBook({ route, navigation }) {
           onEndReached={onEndReached}
           onEndReachedThreshold={0.6}
           refreshing={refreshing}
-          onScroll={() => {
-            setscrolltop(1);
-            setTimeout(() => {
-              setscrolltop(0);
-            }, 2000);
-          }}
+          onScroll={event => {
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
           onRefresh={handleRefresh}
           maxToRenderPerBatch={3} // 보통 2개 항목이 화면을 체울경우 3~5 , 5개 항목이 체울경우 8
           windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
           ListFooterComponent={renderFooter}
         />
       )}
-      <TouchableOpacity
-        onPress={() => {
-          listRef.current.scrollToOffset({ animated: true, offset: 0 });
-        }}
-        style={scrolltop === 1 ? styles.button : styles.none_button}>
-        <Image source={images.scrollTop} style={styles.scrolltotop} />
-      </TouchableOpacity>
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.button}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+      )}   
       <Footer page="feed" />
     </SafeAreaView>
   );
