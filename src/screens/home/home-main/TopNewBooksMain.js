@@ -101,6 +101,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     }
     return () => {
       isMounted = false;
+      setContentVerticalOffset(0);
     };
   },[route]);
 

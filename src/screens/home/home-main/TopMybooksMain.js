@@ -131,6 +131,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     }
     return () => {
       isMounted = false;
+      setContentVerticalOffset(0);
     };
   },[route]);
 
