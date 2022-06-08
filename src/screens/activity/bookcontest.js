@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     flexDirection: 'row',
-    height: screenHeight * 2,
+    height: screenHeight * 1.95,
     marginBottom: heightPercentage(60),
     top:heightPercentage(25),
   },
