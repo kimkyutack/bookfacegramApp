@@ -20,6 +20,7 @@ export default function EditToolTip({item, index, length, onPress}) {
   const dispatch = useDispatch();
   const [toolTipVisible, setToolTipVisible] = useState(false);
   const [type, setType] = useState('');
+  const [value, setValue] = useState('checking value...');
 
   const removeDrawer = drawIdx => {
     requestDelete({
@@ -66,9 +67,14 @@ export default function EditToolTip({item, index, length, onPress}) {
   }, [toolTipVisible]);
 
   useEffect(() => {
+    let isMounted = true;
+     if(isMounted ){
+      setValue("done!"); // no more error
+      } 
     return () => {
       setToolTipVisible(false);
       setType('');
+      isMounted = false;
     };
   }, []);
 
