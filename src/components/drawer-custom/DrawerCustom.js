@@ -51,7 +51,7 @@ export default function DrawerCustom(props) {
               label="ㆍ공지사항"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate(routes.notice);
+                props.navigation.navigate(routes.notice, {idx: 0});
               }}
             />
           </View>

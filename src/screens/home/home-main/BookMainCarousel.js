@@ -99,7 +99,7 @@ export default function BookMainCarousel({
             : item.bannerType === 'event' 
             ? eventBanner(item.idx)
             : item.bannerType === 'notice' 
-            ? navigate(routes.notice)
+            ? navigate(routes.notice, {idx: item.idx})
             : (dispatch(dialogError({message: item.bannerType})));
           }}>
           <View style={styles.bannerContainer}>

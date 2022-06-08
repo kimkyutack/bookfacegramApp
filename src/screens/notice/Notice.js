@@ -25,7 +25,6 @@ export default function Notice({ route, navigation }) {
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   const listRef = useRef();
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       requestGet({ url: consts.apiUrl + '/mypage/noticeList' })
@@ -71,7 +70,7 @@ export default function Notice({ route, navigation }) {
           return item.title + index.toString();
         }}
         renderItem={({ item, index }) => {
-          return <NoticeItem {...item} isFocused={isFocused} />;
+          return <NoticeItem {...item} isFocused={isFocused} bannerYn={route?.params ? route.params.idx : 0}/>;
         }}
         onScroll={event => {
           setContentVerticalOffset(event.nativeEvent.contentOffset.y);

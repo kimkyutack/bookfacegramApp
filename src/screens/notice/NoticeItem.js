@@ -10,12 +10,15 @@ import HTMLView from 'react-native-htmlview';
 import AutoHeightImage from 'react-native-auto-height-image';
 
 export default function NoticeItem({
+  no_idxs,
   register_dt,
   title,
   contents,
   filePath,
   isFocused,
+  bannerYn
 }) {
+  
   const [open, setOpen] = useState(false);
   // const renderNode = (node, index) => {
 
@@ -53,8 +56,15 @@ export default function NoticeItem({
   const regex = /<br>|\n|\r\s*\\?>/gm;
 
   useEffect(() => {
-    setOpen(false);
+    if(bannerYn !== 0){
+      if(bannerYn == no_idxs){
+        setOpen(true);
+      }
+    }else{
+      setOpen(false);
+    }
   }, [isFocused]);
+  
   return (
     <View>
       <TouchableOpacity
