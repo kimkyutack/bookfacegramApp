@@ -79,6 +79,7 @@ export default function BookDrawer({ route, navigation }) {
         });
     }
     return () => {
+      setContentVerticalOffset(0);
       mount = false;
     };
   }, [isFocused]);
