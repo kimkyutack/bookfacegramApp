@@ -96,6 +96,9 @@ export default function Setting({ route, navigation }) {
         .unsubscribeFromTopic('toapingNotice')
         .then(() => console.log('Unsubscribed fom the toapingNotice!'));
     }
+  }, [user.agree_notice]);
+
+  useEffect(() => {
 
     if (user.agree_app_push === 1) {
       messaging()
@@ -106,6 +109,10 @@ export default function Setting({ route, navigation }) {
         .unsubscribeFromTopic('toapingAppPush')
         .then(() => console.log('Unsubscribed fom the toapingAppPush!'));
     }
+  }, [user.agree_app_push]);
+
+  useEffect(() => {
+
 
     if (user.agree_event === 1) {
       messaging()
@@ -116,7 +123,7 @@ export default function Setting({ route, navigation }) {
         .unsubscribeFromTopic('toapingEvent')
         .then(() => console.log('Unsubscribed fom the toapingEvent!'));
     }
-  }, [user]);
+  }, [user.agree_event]);
 
   // useEffect(() => {
   //   requestGet({url: consts.apiUrl + '/mypage/setting'})
@@ -138,26 +145,31 @@ export default function Setting({ route, navigation }) {
         setEvent(x.data.agree_event);
 
         if (x.data.agree_notice === 0) {
+
+          moveLeft1();
           setNoticecheck(false);
-          moveLeft1()
         } else {
+          moveRight1();
+
           setNoticecheck(true);
-          moveRight1()
         }
 
         if (x.data.agree_event === 0) {
+
+          moveLeft2();
           setEventcheck(false);
-          moveLeft2()
         } else {
+          moveRight2();
           setEventcheck(true);
-          moveRight2()
+
         }
         if (x.data.agree_app_push === 0) {
+
+          moveLeft3();
           setPushcheck(false);
-          moveLeft3()
         } else {
+          moveRight3();
           setPushcheck(true);
-          moveRight3()
         }
       })
       .catch(e => {
@@ -176,13 +188,18 @@ export default function Setting({ route, navigation }) {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          dispatch(userUpdate3);
-          setNoticecheck(!noticecheck);
           if (noticecheck === true) {
             moveLeft1()
           } else {
             moveRight1()
           }
+
+          setTimeout(() => {
+
+            dispatch(userUpdate3);
+          }, 500);
+          setNoticecheck(!noticecheck);
+
 
 
         } else {
@@ -203,13 +220,17 @@ export default function Setting({ route, navigation }) {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          dispatch(userUpdate3);
-          setEventcheck(!eventcheck);
           if (eventcheck === true) {
             moveLeft2()
           } else {
             moveRight2()
           }
+          setTimeout(() => {
+
+            dispatch(userUpdate3);
+          }, 500);
+          setEventcheck(!eventcheck);
+
         } else {
         }
       })
@@ -228,13 +249,17 @@ export default function Setting({ route, navigation }) {
     })
       .then(res => {
         if (res.status === 'SUCCESS') {
-          dispatch(userUpdate3);
-          setPushcheck(!pushcheck);
           if (pushcheck === true) {
             moveLeft3()
           } else {
             moveRight3()
           }
+          setTimeout(() => {
+
+            dispatch(userUpdate3);
+          }, 500);
+          setPushcheck(!pushcheck);
+
         } else {
         }
       })
