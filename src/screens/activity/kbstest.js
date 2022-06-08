@@ -1,35 +1,26 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import React from 'react';
+import {useDispatch} from 'react-redux';
 import {
   ScrollView,
   Image,
   StyleSheet,
   View,
   SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
-  Alert,
   Button,
 } from 'react-native';
 import colors from '../../libs/colors';
-import SearchBar from '../../components/search-bar/SearchBar';
-import Topbar from '../../components/topbar/Topbar';
 import images from '../../libs/images';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import {
   dialogError,
-  dialogOpenSelect,
-  dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
-import Footer from '../../libs/footer';
 import {
   screenHeight,
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
 } from '../../services/util';
-import routes from '../../libs/routes';
+import FastImage from 'react-native-fast-image';
 
 export default function Kbstest({route, navigation}) {
   const dispatch = useDispatch();
@@ -40,7 +31,12 @@ export default function Kbstest({route, navigation}) {
           책과함께, KBS한국어능력시험 대비하기!
         </TextWrap>
         <View style={styles.root2}>
-          <Image style={styles.img1} source={images.title_img} />
+          <FastImage
+                      source={images.title_img}
+                      resizeMode="cover"
+                      style={styles.img1}
+                    />
+
         </View>
         <View style={styles.button}>
           <Button
@@ -69,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: screenHeight * 1.9,
+    height: screenHeight * 2,
     flexDirection: 'row',
     bottom: heightPercentage(25),
   },
@@ -80,7 +76,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   img1: {
-    resizeMode: 'stretch',
     width: '90%',
     height: '100%',
   },

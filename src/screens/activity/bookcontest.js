@@ -30,15 +30,22 @@ import {
   cameraItem,
 } from '../../services/util';
 import routes from '../../libs/routes';
+import FastImage from 'react-native-fast-image';
 
 export default function BookContest({route, navigation}) {
   const dispatch = useDispatch();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={styles.root}>
-        <TextWrap style={styles.font}>자유로운 형식의 독후감대회!</TextWrap>
+        <TextWrap style={styles.font}>
+          자유로운 형식의 독후감대회!
+        </TextWrap>
         <View style={styles.root2}>
-          <Image style={styles.img1} source={images.competition_1} />
+          <FastImage
+                      source={images.competition_1}
+                      resizeMode="cover"
+                      style={styles.img1}
+                    />
         </View>
         <View style={styles.button}>
           <Button
@@ -55,7 +62,6 @@ export default function BookContest({route, navigation}) {
 const styles = StyleSheet.create({
   root: {
     top: 10,
-    flex: 1,
     backgroundColor: '#ffffff',
   },
   button: {
@@ -64,12 +70,13 @@ const styles = StyleSheet.create({
     bottom: '1%',
   },
   root2: {
-    top: heightPercentage(10),
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     flexDirection: 'row',
     height: screenHeight * 2,
+    marginBottom: heightPercentage(60),
+    top:heightPercentage(25),
   },
   font: {
     left: widthPercentage(20),
@@ -79,9 +86,7 @@ const styles = StyleSheet.create({
   },
   img1: {
     width: '90%',
-    height: '97%',
-    bottom: heightPercentage(10),
-    resizeMode: 'stretch',
+    height: '100%',
   },
   searchBar: {
     marginHorizontal: 18,
