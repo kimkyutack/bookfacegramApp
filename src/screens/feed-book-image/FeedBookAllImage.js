@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import {
   View,
   FlatList,
+  Image,
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
@@ -28,6 +29,8 @@ export default function FeedBookAllImage({route, navigation}) {
   const limit = 24;
   const dispatch = useDispatch();
   const listRef = useRef();
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 150;
   const {isAllLoading, allBooks, allPage, allErrorMessage, totalCnt} =
     useSelector(s => s.book);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
@@ -166,12 +169,16 @@ export default function FeedBookAllImage({route, navigation}) {
       )}
     </View>
   ) : (
+    <View>
     <PinchGestureHandler onGestureEvent={handleGesture}>
       <FlatList
         key={String(numColumns)}
         numColumns={numColumns}
         initialNumToRender={limit}
         ref={listRef}
+        onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
         data={allBooks}
         extraData={allBooks}
         removeClippedSubviews={true}
@@ -183,8 +190,20 @@ export default function FeedBookAllImage({route, navigation}) {
         onEndReachedThreshold={0.6}
         ListFooterComponent={renderFooter}
       />
+      
     </PinchGestureHandler>
+     {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
+    </View>
   );
+ 
 }
 
 const styles = StyleSheet.create({
@@ -206,7 +225,20 @@ const styles = StyleSheet.create({
   tabs: {
     marginTop: 10,
   },
-
+scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: 0,
+    left: screenWidth / 2.2,
+    display: 'flex',
+  },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),

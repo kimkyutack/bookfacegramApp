@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   FlatList,
   View,
@@ -33,6 +33,9 @@ export default function Faq({ route, navigation }) {
   const [color3, setColor3] = useState('#c9c9c9');
   const [color4, setColor4] = useState('#c9c9c9');
   const [category_, setCategory] = useState('feed');
+  const listRef = useRef();
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 50;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const changeStyle = type => {
@@ -245,6 +248,10 @@ export default function Faq({ route, navigation }) {
       />
       <FlatList
         data={data}
+        ref={listRef}
+        onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
         keyExtractor={(item, index) => {
           return item.question + index.toString();
         }}
@@ -254,6 +261,16 @@ export default function Faq({ route, navigation }) {
           );
         }}
       />
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
+
       <Footer page="faq" />
     </RootLayout>
   );
@@ -287,5 +304,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: '8.5%',
     borderBottomWidth: 4,
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });

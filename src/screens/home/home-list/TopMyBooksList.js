@@ -35,6 +35,8 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [type, setType] = useState('new');
   const [start, setStart] = useState(startPage);
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
   const [morenewBook, setNewBook] = useState([]);
   const [state, setState] = useState({
     req: [],
@@ -201,6 +203,9 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
           ref={scrollRef}
           data={state.req}
           extraData={state.req}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -225,6 +230,9 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
           ref={scrollRef2}
           data={state.req}
           extraData={state.req}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -250,6 +258,9 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
           ref={scrollRef3}
           data={state.req}
           extraData={state.req}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -271,6 +282,19 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
         />
       ) : <></>
     }
+    {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listTab.listTab.selectType === 'genre' ? 
+            scrollRef.current.scrollToOffset({ animated: true, offset: 0 })
+            : listTab.listTab.selectType === 'rank' ? 
+            scrollRef2.current.scrollToOffset({ animated: true, offset: 0 })
+            : scrollRef3.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
     </View>
   );
 }
@@ -284,5 +308,19 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: 0,
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });

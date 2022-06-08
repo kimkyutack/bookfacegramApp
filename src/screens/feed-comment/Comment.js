@@ -48,6 +48,8 @@ export default function Comment({route, navigation}) {
   const [text, setText] = useState('');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 150;
 
   const fetchCommentList = () => {
     setLoading(true);
@@ -360,6 +362,15 @@ const deleteRereply = (onPress) => {
             value={text}
           />
         </View>
+        {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
         <View style={styles.buttonContainer}>
           <ButtonWrap
             style={styles.button}
@@ -375,6 +386,9 @@ const deleteRereply = (onPress) => {
               ref={listRef}
               data={data}
               extraData={data}
+              onScroll={event => {
+                setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+              }}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, index) => {
                 return index.toString();
@@ -428,7 +442,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     justifyContent: 'space-between',
   },
-
+scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(35),
+    left: screenWidth / 2.2,
+    display: 'flex',
+  },
   inputContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
