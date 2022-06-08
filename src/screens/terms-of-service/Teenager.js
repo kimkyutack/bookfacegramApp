@@ -1,17 +1,24 @@
-import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
+import images from '../../libs/images';
 import {
   fontPercentage,
   heightPercentage,
   widthPercentage,
+  screenWidth
 } from '../../services/util';
 import Footer from '../../libs/footer';
 import TextWrap from '../../components/text-wrap/TextWrap';
 
-export default function Teenager({route, navigation}) {
+export default function Teenager({ route, navigation }) {
+
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
+  const listRef = useRef();
+
   return (
     <RootLayout
       topbar={{
@@ -19,7 +26,13 @@ export default function Teenager({route, navigation}) {
         back: true,
         navigation: navigation,
       }}>
-      <ScrollView style={styles.root}>
+      <ScrollView
+        ref={listRef}
+        style={styles.root}
+        onScroll={event => {
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
+      >
         <View style={styles.userInfoContainer}>
           <View>
             <TextWrap>
@@ -68,6 +81,15 @@ export default function Teenager({route, navigation}) {
           </View>
         </View>
       </ScrollView>
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollTo({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+      )}
       <Footer page={'home'} />
     </RootLayout>
   );
@@ -90,5 +112,19 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(5),
     fontWeight: 'bold',
     fontSize: fontPercentage(15),
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });

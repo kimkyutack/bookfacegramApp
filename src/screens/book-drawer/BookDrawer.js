@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, useMemo, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import consts from '../../libs/consts';
@@ -34,18 +34,22 @@ import {
   fontPercentage,
   screenWidth,
 } from '../../services/util';
-import {requestGet, requestPost} from '../../services/network';
+import { requestGet, requestPost } from '../../services/network';
 import EditToolTip from './editTooltip';
 import Footer from '../../libs/footer';
-import {useIsFocused} from '@react-navigation/core';
+import { useIsFocused } from '@react-navigation/core';
 
-export default function BookDrawer({route, navigation}) {
+export default function BookDrawer({ route, navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const listRef = useRef();
 
   const [loading, setLoading] = useState(true);
   const [drawerData, setDrawerData] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
+
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
 
   useEffect(() => {
     let mount = true;
@@ -58,7 +62,7 @@ export default function BookDrawer({route, navigation}) {
           if (res.status === 'SUCCESS') {
             setDrawerData(res.data);
             setDrawerList(
-              res.data?.map(x => [{name: x.name, contentsIdx: x.drawIdx}]),
+              res.data?.map(x => [{ name: x.name, contentsIdx: x.drawIdx }]),
             );
           } else if (res.status === 'FAIL') {
             // error 일때 해야함
@@ -88,7 +92,7 @@ export default function BookDrawer({route, navigation}) {
         if (res.status === 'SUCCESS') {
           setDrawerData(res.data);
           setDrawerList(
-            res.data?.map(x => [{name: x.name, contentsIdx: x.drawIdx}]),
+            res.data?.map(x => [{ name: x.name, contentsIdx: x.drawIdx }]),
           );
         } else if (res.status === 'FAIL') {
           // error 일때 해야함
@@ -105,7 +109,7 @@ export default function BookDrawer({route, navigation}) {
       });
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     if (item?.bookDrawerContents?.length > 0) {
       if (item?.bookDrawerContents?.length >= 4) {
         // 최신 4개
@@ -127,26 +131,26 @@ export default function BookDrawer({route, navigation}) {
                   source={
                     item.bookDrawerContents[0]?.type === 'kbs'
                       ? {
-                          uri:
-                            item.bookDrawerContents[0].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[0].imgNm !== '' &&
                             item.bookDrawerContents[0].imgNm !== undefined &&
                             item.bookDrawerContents[0].imgNm !== 'bookDefault'
-                              ? consts.toapingUrl +
-                                '/book/book_img/' +
-                                item.bookDrawerContents[0].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.toapingUrl +
+                            '/book/book_img/' +
+                            item.bookDrawerContents[0].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                       : {
-                          uri:
-                            item.bookDrawerContents[0].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[0].imgNm !== '' &&
                             item.bookDrawerContents[0].imgNm !== undefined
-                              ? consts.imgUrl +
-                                '/thumbnail/' +
-                                item.bookDrawerContents[0].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.imgUrl +
+                            '/thumbnail/' +
+                            item.bookDrawerContents[0].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                   }
                   style={styles.quarterImage1}
                 />
@@ -155,26 +159,26 @@ export default function BookDrawer({route, navigation}) {
                   source={
                     item.bookDrawerContents[1]?.type === 'kbs'
                       ? {
-                          uri:
-                            item.bookDrawerContents[1].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[1].imgNm !== '' &&
                             item.bookDrawerContents[1].imgNm !== undefined &&
                             item.bookDrawerContents[1].imgNm !== 'bookDefault'
-                              ? consts.toapingUrl +
-                                '/book/book_img/' +
-                                item.bookDrawerContents[1].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.toapingUrl +
+                            '/book/book_img/' +
+                            item.bookDrawerContents[1].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                       : {
-                          uri:
-                            item.bookDrawerContents[1].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[1].imgNm !== '' &&
                             item.bookDrawerContents[1].imgNm !== undefined
-                              ? consts.imgUrl +
-                                '/thumbnail/' +
-                                item.bookDrawerContents[1].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.imgUrl +
+                            '/thumbnail/' +
+                            item.bookDrawerContents[1].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                   }
                   resizeMode="cover"
                   style={styles.quarterImage2}
@@ -186,26 +190,26 @@ export default function BookDrawer({route, navigation}) {
                   source={
                     item.bookDrawerContents[2]?.type === 'kbs'
                       ? {
-                          uri:
-                            item.bookDrawerContents[2].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[2].imgNm !== '' &&
                             item.bookDrawerContents[2].imgNm !== undefined &&
                             item.bookDrawerContents[2].imgNm !== 'bookDefault'
-                              ? consts.toapingUrl +
-                                '/book/book_img/' +
-                                item.bookDrawerContents[2].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.toapingUrl +
+                            '/book/book_img/' +
+                            item.bookDrawerContents[2].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                       : {
-                          uri:
-                            item.bookDrawerContents[2].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[2].imgNm !== '' &&
                             item.bookDrawerContents[2].imgNm !== undefined
-                              ? consts.imgUrl +
-                                '/thumbnail/' +
-                                item.bookDrawerContents[2].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.imgUrl +
+                            '/thumbnail/' +
+                            item.bookDrawerContents[2].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                   }
                   resizeMode="cover"
                   style={styles.quarterImage3}
@@ -215,26 +219,26 @@ export default function BookDrawer({route, navigation}) {
                   source={
                     item.bookDrawerContents[3]?.type === 'kbs'
                       ? {
-                          uri:
-                            item.bookDrawerContents[3].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[3].imgNm !== '' &&
                             item.bookDrawerContents[3].imgNm !== undefined &&
                             item.bookDrawerContents[3].imgNm !== 'bookDefault'
-                              ? consts.toapingUrl +
-                                '/book/book_img/' +
-                                item.bookDrawerContents[3].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.toapingUrl +
+                            '/book/book_img/' +
+                            item.bookDrawerContents[3].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                       : {
-                          uri:
-                            item.bookDrawerContents[3].imgNm !== '' &&
+                        uri:
+                          item.bookDrawerContents[3].imgNm !== '' &&
                             item.bookDrawerContents[3].imgNm !== undefined
-                              ? consts.imgUrl +
-                                '/thumbnail/' +
-                                item.bookDrawerContents[3].imgNm +
-                                '.gif'
-                              : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                        }
+                            ? consts.imgUrl +
+                            '/thumbnail/' +
+                            item.bookDrawerContents[3].imgNm +
+                            '.gif'
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      }
                   }
                   resizeMode="cover"
                   style={styles.quarterImage4}
@@ -287,12 +291,12 @@ export default function BookDrawer({route, navigation}) {
                       : 0
                   ]?.type === 'kbs'
                     ? {
-                        uri:
-                          item.bookDrawerContents[
-                            item?.bookDrawerContents?.length !== 0
-                              ? item?.bookDrawerContents?.length - 1
-                              : 0
-                          ].imgNm !== '' &&
+                      uri:
+                        item.bookDrawerContents[
+                          item?.bookDrawerContents?.length !== 0
+                            ? item?.bookDrawerContents?.length - 1
+                            : 0
+                        ].imgNm !== '' &&
                           item.bookDrawerContents[
                             item?.bookDrawerContents?.length !== 0
                               ? item?.bookDrawerContents?.length - 1
@@ -303,41 +307,41 @@ export default function BookDrawer({route, navigation}) {
                               ? item?.bookDrawerContents?.length - 1
                               : 0
                           ].imgNm !== 'bookDefault'
-                            ? consts.toapingUrl +
-                              '/book/book_img/' +
-                              item.bookDrawerContents[
-                                item?.bookDrawerContents?.length !== 0
-                                  ? item?.bookDrawerContents?.length - 1
-                                  : 0
-                              ].imgNm +
-                              '.gif'
-                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                      }
-                    : {
-                        uri:
+                          ? consts.toapingUrl +
+                          '/book/book_img/' +
                           item.bookDrawerContents[
                             item?.bookDrawerContents?.length !== 0
                               ? item?.bookDrawerContents?.length - 1
                               : 0
-                          ].imgNm !== '' &&
+                          ].imgNm +
+                          '.gif'
+                          : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                    }
+                    : {
+                      uri:
+                        item.bookDrawerContents[
+                          item?.bookDrawerContents?.length !== 0
+                            ? item?.bookDrawerContents?.length - 1
+                            : 0
+                        ].imgNm !== '' &&
                           item.bookDrawerContents[
                             item?.bookDrawerContents?.length !== 0
                               ? item?.bookDrawerContents?.length - 1
                               : 0
                           ].imgNm !== undefined
-                            ? consts.imgUrl +
-                              '/thumbnail/' +
-                              item.bookDrawerContents[
-                                item?.bookDrawerContents?.length !== 0
-                                  ? item?.bookDrawerContents?.length - 1
-                                  : 0
-                              ].imgNm +
-                              '.gif'
-                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                      }
+                          ? consts.imgUrl +
+                          '/thumbnail/' +
+                          item.bookDrawerContents[
+                            item?.bookDrawerContents?.length !== 0
+                              ? item?.bookDrawerContents?.length - 1
+                              : 0
+                          ].imgNm +
+                          '.gif'
+                          : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                    }
                 }
                 resizeMode="cover"
-                imageStyle={{borderRadius: 5}}
+                imageStyle={{ borderRadius: 5 }}
                 style={styles.fullImage}
               />
             </TouchableOpacity>
@@ -435,7 +439,7 @@ export default function BookDrawer({route, navigation}) {
         },
       }}>
       {loading ? (
-        <View style={[styles.root, {justifyContent: 'center'}]}>
+        <View style={[styles.root, { justifyContent: 'center' }]}>
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
       ) : (
@@ -480,6 +484,7 @@ export default function BookDrawer({route, navigation}) {
             </TouchableWithoutFeedback>
             <View style={styles.listContainer}>
               <FlatList
+                ref={listRef}
                 numColumns={2}
                 data={drawerData}
                 extraData={drawerData}
@@ -488,10 +493,22 @@ export default function BookDrawer({route, navigation}) {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={keyExtractor} // arrow 함수 자제
                 renderItem={memoizedRenderItem} // arrow 함수 자제
+                onScroll={event => {
+                  setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+                }}
               />
             </View>
           </View>
         </TouchableWithoutFeedback>
+      )}
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
       )}
       <Footer page="draw" />
     </RootLayout>
@@ -519,7 +536,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
       },
       android: {
@@ -686,5 +703,19 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     opacity: 0.8,
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });

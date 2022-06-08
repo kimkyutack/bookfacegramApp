@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, View, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
@@ -14,6 +14,7 @@ import {
   widthPercentage,
   heightPercentage,
   cameraItem,
+  screenWidth,
 } from '../../services/util';
 import { navigate } from '../../services/navigation';
 
@@ -21,6 +22,9 @@ export default function Notice({ route, navigation }) {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
+  const listRef = useRef();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -61,6 +65,7 @@ export default function Notice({ route, navigation }) {
         }}
       />
       <FlatList
+        ref={listRef}
         data={data}
         keyExtractor={(item, index) => {
           return item.title + index.toString();
@@ -68,7 +73,19 @@ export default function Notice({ route, navigation }) {
         renderItem={({ item, index }) => {
           return <NoticeItem {...item} isFocused={isFocused} />;
         }}
+        onScroll={event => {
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
       />
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+      )}
       <Footer page="notice" />
     </RootLayout>
   );
@@ -79,5 +96,19 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });
