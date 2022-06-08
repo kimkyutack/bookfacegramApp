@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import images from '../../libs/images';
-import {heightPercentage, widthPercentage} from '../../services/util';
+import { heightPercentage, widthPercentage } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import fonts from '../../libs/fonts';
 import {
@@ -15,8 +15,8 @@ import {
   dialogError,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
-import {requestDelete} from '../../services/network';
-export default function EditToolTip({item, index, length, onPress}) {
+import { requestDelete } from '../../services/network';
+export default function EditToolTip({ item, index, length, onPress }) {
   const dispatch = useDispatch();
   const [toolTipVisible, setToolTipVisible] = useState(false);
   const [type, setType] = useState('');
@@ -67,10 +67,10 @@ export default function EditToolTip({item, index, length, onPress}) {
 
   useEffect(() => {
     let isMounted = true;
-     if(isMounted ){
+    if (isMounted) {
       setToolTipVisible(false);
       setType('');
-      } 
+    }
     return () => {
       isMounted = false;
     };
@@ -92,53 +92,57 @@ export default function EditToolTip({item, index, length, onPress}) {
     <Tooltip
       isVisible={toolTipVisible}
       content={
-        <View style={styles.root}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => {
-              setToolTipVisible(false);
-              setType('rename');
-            }}>
-            <Image source={images.toolTipRename} style={styles.icon} />
-            <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
-              책서랍 이름 변경
-            </TextWrap>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => {
-              setToolTipVisible(false);
-              setType('delete');
-              dispatch(
-                dialogOpenAction({
-                  title: '삭제',
-                  titleColor: '#2699fb',
-                  cancelTitle: '취소',
-                  message: `선택한 책서랍을 삭제하시겠습니까?${'\n'}삭제된 책서랍은 복구가 불가능하며, 해당 책서랍에${'\n'}보관중인 책도 함께 삭제됩니다.`,
-                  onPress: a => {
-                    if (a) {
-                      removeDrawer(item.drawIdx);
-                    }
-                  },
-                }),
-              );
-            }}>
-            <Image source={images.toolTipDelete} style={styles.icon} />
-            <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
-              책서랍 삭제
-            </TextWrap>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{flexDirection: 'row'}}
-            onPress={() => {
-              shareDrawer();
-            }}>
-            <Image source={images.toolTipShare} style={styles.icon} />
-            <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
-              책서랍 공유
-            </TextWrap>
-          </TouchableOpacity>
-        </View>
+        toolTipVisible ? (
+          <View style={styles.root}>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => {
+                setToolTipVisible(false);
+                setType('rename');
+              }}>
+              <Image source={images.toolTipRename} style={styles.icon} />
+              <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
+                책서랍 이름 변경
+              </TextWrap>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => {
+                setToolTipVisible(false);
+                setType('delete');
+                dispatch(
+                  dialogOpenAction({
+                    title: '삭제',
+                    titleColor: '#2699fb',
+                    cancelTitle: '취소',
+                    message: `선택한 책서랍을 삭제하시겠습니까?${'\n'}삭제된 책서랍은 복구가 불가능하며, 해당 책서랍에${'\n'}보관중인 책도 함께 삭제됩니다.`,
+                    onPress: a => {
+                      if (a) {
+                        removeDrawer(item.drawIdx);
+                      }
+                    },
+                  }),
+                );
+              }}>
+              <Image source={images.toolTipDelete} style={styles.icon} />
+              <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
+                책서랍 삭제
+              </TextWrap>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={() => {
+                shareDrawer();
+              }}>
+              <Image source={images.toolTipShare} style={styles.icon} />
+              <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.text}>
+                책서랍 공유
+              </TextWrap>
+            </TouchableOpacity>
+          </View>
+        )
+          :
+          (<></>)
       }
       placement={
         length - 1 === index || length - 2 === index
@@ -147,14 +151,14 @@ export default function EditToolTip({item, index, length, onPress}) {
             : 'top'
           : 'bottom'
       }
-      arrowSize={{width: 0, height: 0}}
+      arrowSize={{ width: 0, height: 0 }}
       backgroundColor="rgba(0,0,0,0)"
       contentStyle={{
         elevation: 4,
         width: widthPercentage(308.8) / 2,
         height: heightPercentage(103),
       }}
-      tooltipStyle={index % 2 === 0 ? {left: 18} : {left: widthPercentage(190)}}
+      tooltipStyle={index % 2 === 0 ? { left: 18 } : { left: widthPercentage(190) }}
       showChildInTooltip={false}
       onClose={() => setToolTipVisible(false)}>
       <TouchableOpacity
