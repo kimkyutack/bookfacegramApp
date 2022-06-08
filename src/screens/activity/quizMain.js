@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    bottom: heightPercentage(65),
+    bottom: heightPercentage(20),
     left: screenWidth / 2.2,
     display: 'flex',
   },
