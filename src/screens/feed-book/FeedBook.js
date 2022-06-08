@@ -390,17 +390,17 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   scrolltotop: {
-    width: widthPercentage(24),
-    height: heightPercentage(24),
+    width: widthPercentage(35),
+    height: heightPercentage(35),
     resizeMode: 'contain',
   },
   topButton: {
     alignItems: 'center',
-    width: widthPercentage(30),
-    height: heightPercentage(30),
+    width: widthPercentage(35),
+    height: heightPercentage(35),
     position: 'absolute',
-    bottom: heightPercentage(60),
-    left: screenWidth / 2.16,
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
     display: 'flex',
   },
   none_button: {
