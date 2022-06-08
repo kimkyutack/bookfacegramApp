@@ -4,9 +4,9 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import { fontPercentage, heightPercentage } from '../../services/util';
+import { fontPercentage, heightPercentage, screenWidth } from '../../services/util';
 import HTMLView from 'react-native-htmlview';
-
+import RenderHtml from 'react-native-render-html';
 export default function FaqItem({
   registerDt,
   question,
@@ -17,28 +17,31 @@ export default function FaqItem({
 }) {
   const [open, setOpen] = useState(false);
   const regex = /<br>|\n|\r\s*\\?>/gm;
-
-  const renderNode = (node, index, parent, siblings, defaultRenderer) => {
-    if (node.name == 'img') {
-      const a = node.attribs;
-      return (
-        <View key={index.toString()}>
-          <Image style={{
-            width: screenWidth * 0.84, height: heightPercentage(800), resizeMode
-              : 'stretch'
-          }} source={{ uri: a.src }} />
-        </View>
-      );
-    }
-
-    if (node.name == 'p') {
-      return (
-        <Text key={index.toString()} style={styles.pFont}>
-          {defaultRenderer(node.children, parent)}
-        </Text>
-      )
-    }
+  const source = {
+    html: answer.replace(/font/gi, 'span').trim().replace(regex, '')
   };
+
+  // const renderNode = (node, index, parent, siblings, defaultRenderer) => {
+  //   if (node.name == 'img') {
+  //     const a = node.attribs;
+  //     return (
+  //       <View key={index.toString()}>
+  //         <Image style={{
+  //           width: screenWidth * 0.84, height: heightPercentage(800), resizeMode
+  //             : 'stretch'
+  //         }} source={{ uri: a.src }} />
+  //       </View>
+  //     );
+  //   }
+
+  //   if (node.name == 'p') {
+  //     return (
+  //       <Text key={index.toString()} style={styles.pFont}>
+  //         {defaultRenderer(node.children, parent)}
+  //       </Text>
+  //     )
+  //   }
+  // };
   //alert(JSON.stringify(category));
 
   useEffect(() => {
@@ -148,7 +151,11 @@ export default function FaqItem({
       {open && (
         <View style={styles.desc}>
           <View style={styles.descText}>
-            <HTMLView value={answer.trim().replace(regex, '')} renderNode={renderNode} />
+            {/* <HTMLView value={answer.trim().replace(regex, '')} renderNode={renderNode} /> */}
+            <RenderHtml
+              contentWidth={screenWidth * 0.92}
+              source={source}
+            />
           </View>
         </View>
       )}

@@ -8,6 +8,7 @@ import images from '../../libs/images';
 import { fontPercentage, formatTime, heightPercentage, screenHeight, screenWidth } from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 import AutoHeightImage from 'react-native-auto-height-image';
+import RenderHtml from 'react-native-render-html';
 
 export default function NoticeItem({
   no_idxs,
@@ -18,53 +19,23 @@ export default function NoticeItem({
   isFocused,
   bannerYn
 }) {
-  
-  const [open, setOpen] = useState(false);
-  // const renderNode = (node, index) => {
 
-  //       if (node.name == 'img') {
-  //           const a = node.attribs;
-  //           return (
-  //             <View key={index.toString()}>
-  //              <AutoHeightImage width={screenWidth * 0.84} source={{uri: a.src}}/> 
-  //             </View>
-  //              );
-  //       }
-  //   };
-
-  const renderNode = (node, index, parent, siblings, defaultRenderer) => {
-    if (node.name == 'img') {
-      const a = node.attribs;
-      return (
-        <View key={index.toString()}>
-          <Image style={{
-            width: screenWidth * 0.84, height: heightPercentage(800), resizeMode
-              : 'stretch'
-          }} source={{ uri: a.src }} />
-        </View>
-      );
-    }
-
-    if (node.name == 'p') {
-      return (
-        <Text key={index.toString()} style={styles.pFont}>
-          {defaultRenderer(node.children, parent)}
-        </Text>
-      )
-    }
-  };
   const regex = /<br>|\n|\r\s*\\?>/gm;
+  const source = {
+    html: contents.replace(/font/gi, 'span').trim().replace(regex, '')
+  };
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if(bannerYn !== 0){
-      if(bannerYn == no_idxs){
+    if (bannerYn !== 0) {
+      if (bannerYn == no_idxs) {
         setOpen(true);
       }
-    }else{
+    } else {
       setOpen(false);
     }
   }, [isFocused]);
-  
+
   return (
     <View>
       <TouchableOpacity
@@ -105,7 +76,11 @@ export default function NoticeItem({
           )} */}
           {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
           <View style={styles.descText}>
-            <HTMLView value={contents.trim().replace(regex, '')} renderNode={renderNode} />
+            {/* <HTMLView value={contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
+            <RenderHtml
+              contentWidth={screenWidth * 0.92}
+              source={source}
+            />
           </View>
         </View>
       )}

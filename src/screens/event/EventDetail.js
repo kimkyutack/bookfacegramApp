@@ -23,9 +23,10 @@ import {
 } from '../../services/util';
 import { useIsFocused } from '@react-navigation/core';
 import AutoHeightImage from 'react-native-auto-height-image';
+import RenderHtml from 'react-native-render-html';
 
 export default function EventDetail({ route, navigation }) {
-  
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -33,6 +34,11 @@ export default function EventDetail({ route, navigation }) {
   const routeParams = route.params.item !== undefined ? route.params.item : route.params.data.eventDetail[0];
   const isFocused = useIsFocused();
   const scrollRef = useRef();
+
+  const regex = /<br>|\n|\r\s*\\?>/gm;
+  const source = {
+    html: routeParams?.ev_contents.replace(/font/gi, 'span').trim().replace(regex, '')
+  };
   useEffect(() => {
     if (isFocused) {
       getEventList();
@@ -41,15 +47,15 @@ export default function EventDetail({ route, navigation }) {
 
   useEffect(() => {
     let isMounted = true;
-    if(isMounted ){
-      if(scrollRef.current !== undefined){
-      scrollRef.current.scrollTo({animated: false, offset: 0});
+    if (isMounted) {
+      if (scrollRef.current !== undefined) {
+        scrollRef.current.scrollTo({ animated: false, offset: 0 });
       }
     }
     return () => {
       isMounted = false;
     };
-  },[route]);
+  }, [route]);
 
   const getEventList = () => {
     setLoading(true);
@@ -104,28 +110,28 @@ export default function EventDetail({ route, navigation }) {
       });
   };
 
-  const renderNode = (node, index, parent, siblings, defaultRenderer) => {
-    if (node.name == 'img') {
-      const a = node.attribs;
-      return (
-        <View key={index.toString()}>
-          <Image style={{
-            width: screenWidth * 0.92, height: heightPercentage(1500), resizeMode
-              : 'stretch'
-          }} source={{ uri: a.src }} />
-        </View>
-      );
-    }
+  // const renderNode = (node, index, parent, siblings, defaultRenderer) => {
+  //   if (node.name == 'img') {
+  //     const a = node.attribs;
+  //     return (
+  //       <View key={index.toString()}>
+  //         <Image style={{
+  //           width: screenWidth * 0.92, height: heightPercentage(1500), resizeMode
+  //             : 'stretch'
+  //         }} source={{ uri: a.src }} />
+  //       </View>
+  //     );
+  //   }
 
-    if (node.name == 'p') {
-      return (
-        <Text key={index.toString()} style={styles.pFont}>
-          {defaultRenderer(node.children, parent)}
-        </Text>
-      )
-    }
-  };
-  const regex = /<br>|\n|\r\s*\\?>/gm;
+  //   if (node.name == 'p') {
+  //     return (
+  //       <Text key={index.toString()} style={styles.pFont}>
+  //         {defaultRenderer(node.children, parent)}
+  //       </Text>
+  //     )
+  //   }
+  // };
+
   return (
     <RootLayout
       topbar={{
@@ -161,7 +167,11 @@ export default function EventDetail({ route, navigation }) {
             />*/
 
             <View style={styles.root2}>
-              <HTMLView value={routeParams?.ev_contents.trim().replace(regex, '')} renderNode={renderNode} />
+              {/* <HTMLView value={routeParams?.ev_contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
+              <RenderHtml
+                contentWidth={screenWidth * 0.92}
+                source={source}
+              />
             </View>
 
           )}
