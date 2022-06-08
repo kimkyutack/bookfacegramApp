@@ -33,7 +33,7 @@ export default function Kbstest({route, navigation}) {
         <View style={styles.root2}>
           <FastImage
                       source={images.title_img}
-                      resizeMode="cover"
+                      resizeMode="stretch"
                       style={styles.img1}
                     />
 

@@ -43,7 +43,7 @@ export default function BookContest({route, navigation}) {
         <View style={styles.root2}>
           <FastImage
                       source={images.competition_1}
-                      resizeMode="cover"
+                      resizeMode="stretch"
                       style={styles.img1}
                     />
         </View>
