@@ -33,6 +33,7 @@ import {
   heightPercentage,
   fontPercentage,
   chunk,
+  screenWidth
 } from '../../services/util';
 import {requestGet, requestDelete, requestPost} from '../../services/network';
 
@@ -40,10 +41,12 @@ export default function BookDrawerDetail({route, navigation}) {
   const dispatch = useDispatch();
   const [editActive, setEditActive] = useState(false);
   const [selectedArr, setSelectedArr] = useState([]);
-
+  const scrollRef = useRef();
   const [loading, setLoading] = useState(true);
   const [drawerData, setDrawerData] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 150;
 
   useEffect(() => {
     let mount = true;
@@ -334,6 +337,7 @@ export default function BookDrawerDetail({route, navigation}) {
                 flexDirection: 'column',
               }}>
               <FlatList
+                ref={scrollRef}
                 data={
                   drawerData?.bookDrawerContents
                     ? chunk(drawerData?.bookDrawerContents, 3)
@@ -344,6 +348,9 @@ export default function BookDrawerDetail({route, navigation}) {
                     ? chunk(drawerData?.bookDrawerContents, 3)
                     : []
                 }
+                onScroll={event => {
+                  setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+                }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={keyExtractor}
@@ -399,6 +406,15 @@ export default function BookDrawerDetail({route, navigation}) {
           )}
         </View>
       )}
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            scrollRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
       <Footer page="draw" />
     </RootLayout>
   );
@@ -450,6 +466,20 @@ const styles = StyleSheet.create({
   activeButtonTitle: {
     color: colors.black,
     fontSize: fontPercentage(15),
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
   bookShadow: {
     ...Platform.select({
