@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Animated,
   Easing,
+  TouchableOpacity
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
@@ -23,6 +24,7 @@ import {
   heightPercentage,
   fontPercentage,
   cameraItem,
+  screenWidth
 } from '../../services/util';
 import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
 import {getNewestHashTag, getPopularHashTag} from '../../redux/tag/TagAction';
@@ -51,6 +53,8 @@ export default function HashTagFeed({route, navigation}) {
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const opacity = useRef(new Animated.Value(0)).current;
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
 
   const fetchPopularFeed = (type, newTime) => {
     if (type === 'reset') {
@@ -379,6 +383,9 @@ export default function HashTagFeed({route, navigation}) {
             ? popularHashTags
             : newestHashTags
         }
+        onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
         removeClippedSubviews={true}
         getItemLayout={(data, index) => ({
           length: heightPercentage(543.4),
@@ -395,6 +402,16 @@ export default function HashTagFeed({route, navigation}) {
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}
       />
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
+
     </SafeAreaView>
   );
 }
@@ -403,5 +420,19 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: 0,
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
 });
