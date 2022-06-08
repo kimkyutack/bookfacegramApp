@@ -37,6 +37,8 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
   const dispatch = useDispatch();
   const [select , setSelect] = useState('genre');
   const scrollRef = useRef();
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 150;
   const [listData, setListData] = useState([
     {
       
@@ -199,6 +201,9 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           data={listData}
           extraData={listData}
           ref={scrollRef}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {
@@ -237,6 +242,9 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           data={listData}
           extraData={listData}
           ref={scrollRef}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {
@@ -275,6 +283,9 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           data={listData}
           extraData={listData}
           ref={scrollRef}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => {
@@ -312,6 +323,16 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
       
       
       }
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            scrollRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
+
     </View>
   );
 }
@@ -381,5 +402,19 @@ buttonText2: {
   textAlign:'center',
   textAlignVertical:'center', 
  
-}
+},
+scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: 0,
+    left: screenWidth / 2.2,
+    display: 'flex',
+  },
 });

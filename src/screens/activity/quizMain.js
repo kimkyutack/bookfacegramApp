@@ -21,7 +21,7 @@ import TopTabs from '../activity/TopTabs';
 import QuizBookitem from '../activity/QuizBookitem';
 import Footer from '../../libs/footer';
 import TextButton from '../../components/text-button/TextButton';
-import {navigate} from '../../services/navigation';
+import {navigate, navigationRef} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
 import {
   screenWidth,
@@ -49,6 +49,7 @@ export default function QuizMain({
 }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
+  const [scrolltop, setscrolltop] = useState(0);
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
   const [render, setRender] = useState([]);
@@ -58,6 +59,8 @@ export default function QuizMain({
   const [morenotBook, setNotBook] = useState([]);
   const [morekbsBook, setKbsBook] = useState(kbsBook);
   const [state, setState] = useState({req: kbsBook, page: 1});
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
 
   const fetchRequested = async startpage => {
     try {
@@ -132,6 +135,7 @@ export default function QuizMain({
           <TextWrap>QuizList가 없습니다.</TextWrap>
         </View>
       ) : (
+        <View>
         <FlatList
           ref={scrollRef}
           data={state.req} //morekbsbook
@@ -146,7 +150,20 @@ export default function QuizMain({
           onEndReachedThreshold={0.8}
           numColumns={2}
           ListFooterComponent={renderFooter}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
         />
+        {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+        onPress={() => {
+          scrollRef.current.scrollToOffset({ animated: true, offset: 0 });
+        }}
+        style={styles.topButton}>
+        <Image source={images.scrollTop} style={styles.scrolltotop} />
+      </TouchableOpacity>
+        )}
+      </View>
       )}
     </View>
   );
@@ -179,5 +196,22 @@ const styles = StyleSheet.create({
     top: heightPercentage(8),
     zIndex: 10, // works on ios
     elevation: 10,
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
+    display: 'flex',
+  },
+  none_button: {
+    display: 'none',
   },
 });

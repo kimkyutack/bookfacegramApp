@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import colors from '../../../libs/colors';
 import TextButton from '../../../components/text-button/TextButton';
@@ -16,6 +17,7 @@ import {
   widthPercentage,
   chunk,
   fontPercentage,
+  heightPercentage
 } from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -32,6 +34,8 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   const [kbsBookList1, setKbsBookList1] = useState(null); //1급
   const [kbsBookList2, setKbsBookList2] = useState(null); //2급 
   const scrollRef = useRef();
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 150;
 
   const listData = [
     {
@@ -135,6 +139,9 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
           ref={scrollRef}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
@@ -186,10 +193,20 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
           }
         />
       )}
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            scrollRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+        )}
     </View>
   );
 }
 
+        
 const styles = StyleSheet.create({
   root: {
     flex: 1,
@@ -229,6 +246,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     alignSelf: 'center',
     textAlign: 'center',
+  },
+  scrolltotop: {
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    resizeMode: 'contain',
+  },
+  topButton: {
+    alignItems: 'center',
+    width: widthPercentage(35),
+    height: heightPercentage(35),
+    position: 'absolute',
+    bottom: 0,
+    left: screenWidth / 2.2,
+    display: 'flex',
   },
   infoFooter: {
     fontSize: fontPercentage(10.5),

@@ -59,6 +59,9 @@ export default function FeedBookFeed({route, navigation}) {
   const [refreshing, setRefreshing] = useState(false);
   const [scrolltop, setscrolltop] = useState(0);
 
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
+
   const [toggleIndex, setToggleIndex] = useState(0); // 좋아요 animation 전체 뜨는거 방지
   const [lastTap, setLastTap] = useState(null); // 더블탭 시간 대기
   const opacity = useRef(new Animated.Value(0)).current;
@@ -436,11 +439,8 @@ export default function FeedBookFeed({route, navigation}) {
         showsVerticalScrollIndicator={false}
         keyExtractor={keyExtractor} // arrow 함수 자제
         renderItem={memoizedRenderItem} // arrow 함수 자제
-        onScroll={() => {
-            setscrolltop(1);
-            setTimeout(() => {
-              setscrolltop(0);
-            }, 2000);
+        onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
           }}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
@@ -450,13 +450,15 @@ export default function FeedBookFeed({route, navigation}) {
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}
       />
-      <TouchableOpacity
-        onPress={() => {
-          listRef.current.scrollToOffset({ animated: true, offset: 0 });
-        }}
-        style={scrolltop === 1 ? styles.button : styles.none_button}>
-        <Image source={images.scrollTop} style={styles.scrolltotop} />
-      </TouchableOpacity>
+       {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+        <TouchableOpacity
+          onPress={() => {
+            listRef.current.scrollToOffset({ animated: true, offset: 0 });
+          }}
+          style={styles.topButton}>
+          <Image source={images.scrollTop} style={styles.scrolltotop} />
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
@@ -466,18 +468,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  button: {
+  topButton: {
     alignItems: 'center',
-    width: widthPercentage(30),
-    height: heightPercentage(30),
+    width: widthPercentage(35),
+    height: heightPercentage(35),
     position: 'absolute',
-    top: screenHeight / 1.3,
-    left: screenWidth / 2.16,
+    bottom: heightPercentage(65),
+    left: screenWidth / 2.2,
     display: 'flex',
   },
   scrolltotop: {
-    width: widthPercentage(24),
-    height: heightPercentage(24),
+    width: widthPercentage(35),
+    height: heightPercentage(35),
     resizeMode: 'contain',
   },
   none_button: {
