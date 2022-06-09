@@ -65,6 +65,7 @@ export default function FeedBookUserImage({route, navigation}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
+      
       const newTime = new Date(+new Date() + 3240 * 10000)
         .toISOString()
         .replace('T', ' ')
@@ -74,6 +75,7 @@ export default function FeedBookUserImage({route, navigation}) {
       //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
       fetchUserData('reset', newTime);
+      
     }
     return () => {
       mount = false;
@@ -107,6 +109,9 @@ export default function FeedBookUserImage({route, navigation}) {
       params: {
         memberId: item.memberId,
         memberIdx: item.memberIdx,
+        profile_path:  item.profile
+                  ? item.profile
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
         feedIdx: item.feedIdx,
         isNewFeed: false,
         key: Date.now(),

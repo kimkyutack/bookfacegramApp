@@ -155,6 +155,9 @@ export default function FeedBookEditor({ route, navigation }) {
                   params: {
                     memberId: user.member_id,
                     memberIdx: user.member_idx,
+                    profile_path:  user?.profile_path
+                    ? user?.profile_path
+                    : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                     infoType: 'user',
                     isNewFeed: true,
                     key: Date.now(),
@@ -202,6 +205,9 @@ export default function FeedBookEditor({ route, navigation }) {
                   params: {
                     memberId: user.member_id,
                     memberIdx: user.member_idx,
+                    profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                     infoType: 'user',
                     isNewFeed: true,
                     key: Date.now(),
@@ -253,6 +259,9 @@ export default function FeedBookEditor({ route, navigation }) {
                 params: {
                   memberId: user.member_id,
                   memberIdx: user.member_idx,
+                  profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),
@@ -300,6 +309,9 @@ export default function FeedBookEditor({ route, navigation }) {
                 params: {
                   memberId: user.member_id,
                   memberIdx: user.member_idx,
+                  profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                   infoType: 'user',
                   isNewFeed: true,
                   key: Date.now(),

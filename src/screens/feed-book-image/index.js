@@ -64,7 +64,6 @@ export default function FeedBookImage({route, navigation}) {
       setMyInfo(false);
     }
   }, [route.params?.params?.key, official]);
-  console.log(route.params.params.noname)
 
   useEffect(() => {
     let mount = true;
@@ -128,10 +127,10 @@ export default function FeedBookImage({route, navigation}) {
     <SafeAreaView style={styles.safeView}>
       <Topbar
         title={
-          (userCurrentUserId && route.params.params.noname === undefined)
-            ? userCurrentUserId.length > 12
-              ? userCurrentUserId.substring(0, 12) + '...'
-              : userCurrentUserId
+          (route.params.params.memberId && route.params.params.noname === undefined)
+            ? route.params.params.memberId.length > 12
+              ? route.params.params.memberId.substring(0, 12) + '...'
+              : route.params.params.memberId
             : '피드북'
         }
         navigation={navigation}
@@ -175,6 +174,9 @@ export default function FeedBookImage({route, navigation}) {
               params: {
                 memberId: user.member_id,
                 memberIdx: user.member_idx,
+                profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
               },
             });
@@ -189,8 +191,8 @@ export default function FeedBookImage({route, navigation}) {
               size={widthPercentage(65)}
               style={styles.avator}
               path={
-                userProfilePath
-                  ? userProfilePath
+                route.params.params.profile_path
+                  ? route.params.params.profile_path
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
               }
             />

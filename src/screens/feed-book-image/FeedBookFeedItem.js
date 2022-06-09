@@ -83,6 +83,9 @@ const renderItem = ({
               params: {
                 memberId: memberId,
                 memberIdx: memberIdx,
+                profile_path:  profile
+                    ? profile
+                    : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
               },
             });

@@ -333,6 +333,9 @@ const deleteRereply = (onPress) => {
               params: {
                 memberId: user.member_id,
                 memberIdx: user.member_idx,
+                profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
               },
             }),

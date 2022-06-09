@@ -91,11 +91,15 @@ export default function FeedBookAllImage({route, navigation}) {
   };
 
   const onPress = (item, index) => {
+    console.log(item);
     navigation.navigate(routes.feedBookImage, {
       screen: routes.feedBookFeed,
       params: {
         memberId: item.memberId,
         memberIdx: item.memberIdx,
+        profile_path:  item.profile
+                  ? item.profile
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
         feedIdx: item.feedIdx,
         isNewFeed: false,
         key: Date.now(),
