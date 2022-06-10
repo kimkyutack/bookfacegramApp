@@ -186,7 +186,14 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
       ]}>
       {state.req.length === 0 && !loading ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <TextWrap>추천 도서리스트가 없습니다.</TextWrap>
+          <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: -50,
+          }}
+          color={colors.blue}
+        />
         </View>
       ) : 
       state.req.length === 0 && loading ? (

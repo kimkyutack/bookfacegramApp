@@ -254,7 +254,14 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
       ]}>
       {morenewBook.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <TextWrap>BookList가 없습니다.</TextWrap>
+          <ActivityIndicator
+          size="large"
+          style={{
+            alignSelf: 'center',
+            top: -50,
+          }}
+          color={colors.blue}
+        />
         </View>
       ) : (
         <FlatList

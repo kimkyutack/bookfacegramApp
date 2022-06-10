@@ -27,6 +27,7 @@ import {
   fontPercentage,
   heightPercentage,
   isIos,
+  screenHeight,
   screenWidth,
   widthPercentage,
 } from '../../services/util';
@@ -330,15 +331,18 @@ export default function PhotoEditor({ route, navigation }) {
         },
       }}>
       {saveButtonDisabled ? (
-        <ActivityIndicator
+        <View style={{height:screenHeight}}>
+          <ActivityIndicator
           size="large"
           style={{
             alignSelf: 'center',
             justifyContent: 'center',
-            top: heightPercentage(250),
+            top: screenHeight / 2.5,
           }}
           color={colors.blue}
         />
+        </View>
+        
       ) : (
         <FlatList
           ref={listRef}
