@@ -5,10 +5,11 @@ import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import { fontPercentage, formatTime, heightPercentage, screenHeight, screenWidth } from '../../services/util';
+import { fontPercentage, formatTime, heightPercentage, screenHeight, screenWidth, widthPercentage } from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 import AutoHeightImage from 'react-native-auto-height-image';
 import RenderHtml from 'react-native-render-html';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const renderersProps = {
   img: {
@@ -28,16 +29,26 @@ export default function NoticeItem({
   register_dt,
   title,
   contents,
-  filePath,
+  file1,
+  file2,
   isFocused,
   bannerYn
 }) {
-
   const regex = /<br>|\n|\r\s*\\?>/gm;
   const source = {
     html: contents.replace(/font/gi, 'span').trim().replace(regex, '')
   };
   const [open, setOpen] = useState(false);
+
+  const download = async (file) => {
+  await RNFetchBlob.config({
+    addAndroidDownloads: {
+      useDownloadManager: true,
+      notification: true,
+      path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file}`,
+    },
+  }).fetch('GET', 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/notice/' + file);
+};
 
   useEffect(() => {
     if (bannerYn !== 0) {
@@ -89,6 +100,16 @@ export default function NoticeItem({
           )} */}
           {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
           <View style={styles.descText}>
+            {file1 === null || file1 === ''
+            ? null
+            : <TouchableOpacity onPress={() => download(file1)} style={{flexDirection:'row'}}>
+            <Image source={images.noticeFile} style={{width:widthPercentage(10), height:heightPercentage(10)}}/><TextWrap style={{left:10, fontSize:fontPercentage(10), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file1}</TextWrap>
+            </TouchableOpacity>}
+            {file2 === null || file2 === ''
+            ? null
+            : <TouchableOpacity onPress={() => download(file2)} style={{flexDirection:'row'}}>
+            <Image source={images.noticeFile} style={{width:widthPercentage(10), height:heightPercentage(10)}}/><TextWrap style={{left:10, fontSize:fontPercentage(10), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file2}</TextWrap>
+            </TouchableOpacity>}
             {/* <HTMLView value={contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
             <RenderHtml
               contentWidth={screenWidth * 0.92}
