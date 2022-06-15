@@ -16,6 +16,7 @@ export default {
   submit_btn: require('../assets/images/submit_btn.png'),
   check: require('../assets/images/check.png'),
   retry: require('../assets/images/retry.png'),
+  noticeFile: require('../assets/images/noticeFile.png'),
   next_btn: require('../assets/images/next_btn.png'),
   note_icon: require('../assets/images/note_icon.png'),
   prev_btn: require('../assets/images/prev_btn.png'),
