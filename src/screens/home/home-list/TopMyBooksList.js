@@ -43,6 +43,7 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     page: 1,
   });
 
+  
   const fetchRequested = async stnum => {
     try {
       const {data, status} = await requestGet({
@@ -64,6 +65,29 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
       dispatch(dialogError(error));
     }
   };
+
+  useEffect(() => {
+    let mount = true;
+    if(genre.length !== 0){
+      setLoading(true);
+      if (mount) {
+        if(listTab.listTab.selectType === 'genre'){
+          setState({req: genre, page: 0});
+        }else if(listTab.listTab.selectType === 'rank'){
+          setState({req: rank, page: 0});
+        }else if(listTab.listTab.selectType === 'topic'){
+          setState({req: topic, page: 0});
+        }
+        setLoading(false);
+      }
+        
+        
+    }
+    return () => {
+      mount = false;
+    };
+  }, [genre.length]);
+
   useEffect(() => {
     setLoading(true);
     setStart(startPage);
@@ -81,6 +105,7 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     
     let mount = true;
     if (mount) {
+      setLoading(false);
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       scrollRef2.current?.scrollToOffset({y: 0.1, animated: false});
       scrollRef3.current?.scrollToOffset({y: 0.1, animated: false});
@@ -89,11 +114,11 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
         
     }
     
-      setLoading(false);
+      
     return () => {
       mount = false;
     };
-  }, [listTab.listTab.selectType]);
+  }, [listTab.listTab.selectType,genre,rank,topic]);
 
   useEffect(() => {
     setLoading(true);
@@ -106,34 +131,14 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
           page: state.page,
         });
       }
+      setLoading(false);
       }
       
-      setLoading(false);
+      
     return () => {
       mount = false;
     };
   }, [morenewBook,!listTab.listTab.selectType]);
-
-  useEffect(() => {
-    let mount = true;
-    if(genre.length !== 0){
-      setLoading(true);
-      if (mount) {
-      if(listTab.listTab.selectType === 'genre'){
-        setState({req: genre, page: 0});
-      }else if(listTab.listTab.selectType === 'rank'){
-        setState({req: rank, page: 0});
-      }else if(listTab.listTab.selectType === 'topic'){
-        setState({req: topic, page: 0});
-      }
-      }
-        
-        setLoading(false);
-    }
-    return () => {
-      mount = false;
-    };
-  }, [genre.length]);
 
   const loadMore = () => {
     if (!loading) {
