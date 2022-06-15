@@ -103,12 +103,12 @@ export default function NoticeItem({
             {file1 === null || file1 === ''
             ? null
             : <TouchableOpacity onPress={() => download(file1)} style={{flexDirection:'row'}}>
-            <Image source={images.noticeFile} style={{width:widthPercentage(10), height:heightPercentage(10)}}/><TextWrap style={{left:10, fontSize:fontPercentage(10), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file1}</TextWrap>
+            <Image source={images.noticeFile} style={{width:widthPercentage(15), height:heightPercentage(15)}}/><TextWrap style={{left:10, fontSize:fontPercentage(13), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file1.split('_pcnc_').reverse()[0]}</TextWrap>
             </TouchableOpacity>}
             {file2 === null || file2 === ''
             ? null
-            : <TouchableOpacity onPress={() => download(file2)} style={{flexDirection:'row'}}>
-            <Image source={images.noticeFile} style={{width:widthPercentage(10), height:heightPercentage(10)}}/><TextWrap style={{left:10, fontSize:fontPercentage(10), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file2}</TextWrap>
+            : <TouchableOpacity onPress={() => download(file2)} style={{flexDirection:'row', marginTop:heightPercentage(10)}}>
+            <Image source={images.noticeFile} style={{width:widthPercentage(15), height:heightPercentage(15)}}/><TextWrap style={{left:10, fontSize:fontPercentage(13), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file2.split('_pcnc_').reverse()[0]}</TextWrap>
             </TouchableOpacity>}
             {/* <HTMLView value={contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
             <RenderHtml
