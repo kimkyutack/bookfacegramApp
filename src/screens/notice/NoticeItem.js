@@ -10,6 +10,19 @@ import HTMLView from 'react-native-htmlview';
 import AutoHeightImage from 'react-native-auto-height-image';
 import RenderHtml from 'react-native-render-html';
 
+const renderersProps = {
+  img: {
+    enableExperimentalPercentWidth: true,
+  }
+};
+
+const tagsStyles = {
+  img: {
+    minWidth: screenWidth * 0.92,
+    maxWidth: screenWidth * 0.92,
+    alignSelf: 'center',
+  },
+};
 export default function NoticeItem({
   no_idxs,
   register_dt,
@@ -80,6 +93,8 @@ export default function NoticeItem({
             <RenderHtml
               contentWidth={screenWidth * 0.92}
               source={source}
+              tagsStyles={tagsStyles}
+              renderersProps={renderersProps}
             />
           </View>
         </View>

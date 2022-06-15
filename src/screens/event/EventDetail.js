@@ -25,6 +25,20 @@ import { useIsFocused } from '@react-navigation/core';
 import AutoHeightImage from 'react-native-auto-height-image';
 import RenderHtml from 'react-native-render-html';
 
+const renderersProps = {
+  img: {
+    enableExperimentalPercentWidth: true,
+  }
+};
+
+const tagsStyles = {
+  img: {
+    minWidth: screenWidth * 0.92,
+    maxWidth: screenWidth * 0.92,
+    alignSelf: 'center',
+  },
+};
+
 export default function EventDetail({ route, navigation }) {
 
   const dispatch = useDispatch();
@@ -39,6 +53,7 @@ export default function EventDetail({ route, navigation }) {
   const source = {
     html: routeParams?.ev_contents.replace(/font/gi, 'span').trim().replace(regex, '')
   };
+
   useEffect(() => {
     if (isFocused) {
       getEventList();
@@ -149,7 +164,7 @@ export default function EventDetail({ route, navigation }) {
             ),
         },
       }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 2 }} ref={scrollRef} scrollEnabled>
+      <ScrollView contentContainerStyle={{ width: screenWidth, flexGrow: 2 }} ref={scrollRef} scrollEnabled>
         <View style={styles.root}>
           {/*uri: routeParams.ev_img_f,*/}
           {routeParams && (
@@ -169,8 +184,10 @@ export default function EventDetail({ route, navigation }) {
             <View style={styles.root2}>
               {/* <HTMLView value={routeParams?.ev_contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
               <RenderHtml
-                contentWidth={screenWidth * 0.92}
+                contentWidth={screenWidth}
                 source={source}
+                tagsStyles={tagsStyles}
+                renderersProps={renderersProps}
               />
             </View>
 
@@ -252,7 +269,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'column',
-    marginHorizontal: 16,
+    paddingHorizontal: 16,
     marginBottom: 20,
   },
   root2: {
