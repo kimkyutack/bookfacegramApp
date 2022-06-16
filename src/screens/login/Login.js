@@ -536,7 +536,7 @@ export default function Login({ route }) {
       return atob(output);
     }
   }
-
+if(!appleAuth.isSupported){
   appleAuthAndroid.configure({
     clientId: 'com.bookfacegram.app',
     redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
@@ -555,6 +555,7 @@ export default function Login({ route }) {
     nonce: rawNonce,
     state,
   });
+}
   // Sign In with Apple
   const signInWithApple = async () => {
     try {
