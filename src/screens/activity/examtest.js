@@ -128,10 +128,10 @@ export default function Examtest({route, navigation}) {
             ))}
           </RadioForm>
         </View>
-        <View style={styles.button}>
+        <View style={Platform.OS === 'ios' ? styles.buttonIos : styles.button }>
           <Button
             title="정답 제출하기"
-            color="black"
+            color={Platform.OS === 'ios' ?  "white" : "black"}
             onPress={() =>
               answer === 3
                 ? navigate(routes.home, {
@@ -167,6 +167,13 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
     top: heightPercentage(20),
     height: screenHeight / 11,
+  },
+  buttonIos: {
+    left: '5%',
+    width: screenWidth * 0.9,
+    top: heightPercentage(20),
+    height: screenHeight / 11,
+    backgroundColor: 'black',
   },
   fonta: {
     top: heightPercentage(15),
