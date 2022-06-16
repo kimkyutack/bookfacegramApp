@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {Image, Keyboard, StyleSheet, View, Platform} from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Image, Keyboard, StyleSheet, View, Platform } from 'react-native';
 import Config from 'react-native-config';
 import axios from 'axios';
-import {decode as atob, encode as btoa} from 'base-64';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { decode as atob, encode as btoa } from 'base-64';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import InputWrap from '../../components/input-wrap/InputWrap';
 import TextButton from '../../components/text-button/TextButton';
@@ -22,24 +22,28 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
-import AppleAuthenticationAndroid, {
-  NOT_CONFIGURED_ERROR,
-  SIGNIN_CANCELLED_ERROR,
-  SIGNIN_FAILED_ERROR,
-  ResponseType,
-  Scope,
-} from 'react-native-apple-authentication-android';
-import appleAuth from '@invertase/react-native-apple-authentication';
+import { v4 as uuid } from 'uuid';
+
+// import AppleAuthenticationAndroid, {
+//   NOT_CONFIGURED_ERROR,
+//   SIGNIN_CANCELLED_ERROR,
+//   SIGNIN_FAILED_ERROR,
+//   ResponseType,
+//   Scope,
+// } from 'react-native-apple-authentication-android';
+
+import { appleAuthAndroid, appleAuth, AppleButton } from '@invertase/react-native-apple-authentication';
+
 import {
   dialogError,
   dialogOpenMessage,
   dialogOpenKakaoLoginSelect,
   dialogClose,
 } from '../../redux/dialog/DialogActions';
-import {userCheckToken, userSignOut} from '../../redux/user/UserActions';
-import {navigationRef, reset, navigate} from '../../services/navigation';
-import {requestGet, requestPost} from '../../services/network';
-import {getItem, setItem} from '../../services/preference';
+import { userCheckToken, userSignOut } from '../../redux/user/UserActions';
+import { navigationRef, reset, navigate } from '../../services/navigation';
+import { requestGet, requestPost } from '../../services/network';
+import { getItem, setItem } from '../../services/preference';
 import Avatar from '../../components/avatar/Avatar';
 
 import {
@@ -48,17 +52,19 @@ import {
   unlink,
   loginWithKakaoAccount,
 } from '@react-native-seoul/kakao-login';
-import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { NaverLogin, getProfile } from '@react-native-seoul/naver-login';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 // import {LoginManager, Profile} from 'react-native-fbsdk-next';
 
-export default function Login({route}) {
+export default function Login({ route }) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
+  const rawNonce = uuid();
+  const state = uuid();
 
   const [facebookAccessToken, setFacebookAccessToken] = useState('');
   const naverIosKeys = {
@@ -90,12 +96,6 @@ export default function Login({route}) {
     };
   }, []);
 
-  useEffect(() => {
-    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn('If this function executes, User Credentials have been Revoked');
-    });
-  }, []);
 
   const handleLogin = async type => {
     setLoading(true);
@@ -113,7 +113,7 @@ export default function Login({route}) {
           throw 'toapingError';
         }
       }
-      const {data, status} = await requestPost({
+      const { data, status } = await requestPost({
         url: consts.apiUrl + '/auth/login',
         body: {
           memberId: userId,
@@ -139,10 +139,10 @@ export default function Login({route}) {
       } else if (status === 'FAIL') {
         dispatch(
           dialogOpenMessage({
-             message: '존재하지 않는 회원입니다.',
+            message: '존재하지 않는 회원입니다.',
           }),
         );
-       // setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
+        // setPasswordError('가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.');
       }
     } catch (error) {
       if (error === 'toapingError') {
@@ -152,7 +152,7 @@ export default function Login({route}) {
         if (type === 'app') {
           dispatch(
             dialogOpenMessage({
-               message: '존재하지 않는 회원입니다.',
+              message: '존재하지 않는 회원입니다.',
             }),
           );
           /*setPasswordError(
@@ -177,11 +177,11 @@ export default function Login({route}) {
 
   const handleRegister = () => {
     navigate(routes.registerForm, {
-            data: '',
-            userId: '',
-            password:'',
-            platformType: '',
-          });
+      data: '',
+      userId: '',
+      password: '',
+      platformType: '',
+    });
   };
 
   const handleFindPassword = () => {
@@ -284,7 +284,7 @@ export default function Login({route}) {
         throw 'get kakao serviceTerms error';
       }
       console.log(profile)
-      const {data, status} = await requestPost({
+      const { data, status } = await requestPost({
         url: consts.apiUrl + '/auth/kakaoLogin',
         body: {
           platformType: 'kakao',
@@ -293,8 +293,8 @@ export default function Login({route}) {
             profile.gender === null
               ? ''
               : profile.gender === 'MALE'
-              ? '남'
-              : '여',
+                ? '남'
+                : '여',
           handphone:
             profile.phoneNumber === null
               ? ''
@@ -303,37 +303,37 @@ export default function Login({route}) {
             profile?.birthday === null
               ? ''
               : profile?.birthday.length === 4
-              ? profile.birthday
-              : '0' + profile.birthday,
+                ? profile.birthday
+                : '0' + profile.birthday,
           birth_year: profile.birthyear === null ? '' : profile.birthyear,
           age:
             profile.birthyear === null
               ? ''
               : getAgeFromMoment(
-                  profile.birthyear + profile.birthday,
-                  'YYYYMMDD',
-                ),
+                profile.birthyear + profile.birthday,
+                'YYYYMMDD',
+              ),
           kor_nm: profile.nickname,
           email: profile.email,
           profile_path: profile.thumbnailImageUrl,
           agree_sms: serviceTerms?.allowed_service_terms
             ? serviceTerms?.allowed_service_terms
-                ?.map(x => x.tag)
-                .indexOf('agree_sms') !== -1
+              ?.map(x => x.tag)
+              .indexOf('agree_sms') !== -1
               ? 1
               : 0
             : 0,
           agree_email: serviceTerms?.allowed_service_terms
             ? serviceTerms?.allowed_service_terms
-                ?.map(x => x.tag)
-                .indexOf('agree_email') !== -1
+              ?.map(x => x.tag)
+              .indexOf('agree_email') !== -1
               ? 1
               : 0
             : 0,
           agree_app_push: serviceTerms?.allowed_service_terms
             ? serviceTerms?.allowed_service_terms
-                ?.map(x => x.tag)
-                .indexOf('agree_app_push') !== -1
+              ?.map(x => x.tag)
+              .indexOf('agree_app_push') !== -1
               ? 1
               : 0
             : 0,
@@ -361,7 +361,7 @@ export default function Login({route}) {
           dispatch(dialogError('로그인 실패' + profileResult.message));
           return;
         }
-        const {data, status} = await requestPost({
+        const { data, status } = await requestPost({
           url: consts.apiUrl + '/auth/naverLogin',
           body: {
             platformType: 'naver',
@@ -405,7 +405,7 @@ export default function Login({route}) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      const {accessToken} = await GoogleSignin.getTokens();
+      const { accessToken } = await GoogleSignin.getTokens();
       await axios({
         method: 'GET',
         headers: {
@@ -416,7 +416,7 @@ export default function Login({route}) {
       })
         .then(async function (response) {
           if (response.data.phoneNumbers) {
-            const {data, status} = await requestPost({
+            const { data, status } = await requestPost({
               url: consts.apiUrl + '/auth/googleLogin',
               body: {
                 platformType: 'google',
@@ -436,7 +436,7 @@ export default function Login({route}) {
               setPasswordError('구글 로그인 에러');
             }
           } else {
-            const {data, status} = await requestPost({
+            const { data, status } = await requestPost({
               url: consts.apiUrl + '/auth/googleLogin',
               body: {
                 platformType: 'google',
@@ -536,28 +536,29 @@ export default function Login({route}) {
       return atob(output);
     }
   }
-  
-  
+
+  appleAuthAndroid.configure({
+    clientId: 'com.bookfacegram.app',
+    redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
+
+    // [OPTIONAL]
+    // Scope.ALL (DEFAULT) = 'email name'
+    // Scope.Email = 'email';
+    // Scope.Name = 'name';
+    scope: appleAuthAndroid.Scope.ALL,
+
+    // [OPTIONAL]
+    // ResponseType.ALL (DEFAULT) = 'code id_token';
+    // ResponseType.CODE = 'code';
+    // ResponseType.ID_TOKEN = 'id_token';
+    responseType: appleAuthAndroid.ResponseType.ALL,
+    nonce: rawNonce,
+    state,
+  });
   // Sign In with Apple
   const signInWithApple = async () => {
-    AppleAuthenticationAndroid.configure({
-      clientId: 'com.bookfacegram.app',
-      redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
-  
-      // [OPTIONAL]
-      // Scope.ALL (DEFAULT) = 'email name'
-      // Scope.Email = 'email';
-      // Scope.Name = 'name';
-      scope: Scope.ALL,
-  
-      // [OPTIONAL]
-      // ResponseType.ALL (DEFAULT) = 'code id_token';
-      // ResponseType.CODE = 'code';
-      // ResponseType.ID_TOKEN = 'id_token';
-      responseType: ResponseType.ALL,
-    });
     try {
-      const response = await AppleAuthenticationAndroid.signIn();
+      const response = await appleAuthAndroid.signIn();
       if (response) {
         const code = response.code; // Present if selected ResponseType.ALL / ResponseType.CODE
         const id_token = response.id_token; // Present if selected ResponseType.ALL / ResponseType.ID_TOKEN
@@ -578,11 +579,11 @@ export default function Login({route}) {
           query: {
             email: appleemail,
           },
-       })
+        })
           .then(async function (res) {
             console.log(res)
             if (res.status === 'SUCCESS') {
-              const {data, status} = await requestPost({
+              const { data, status } = await requestPost({
                 url: consts.apiUrl + '/auth/appleLogin',
                 body: {
                   email: appleemail,
@@ -601,51 +602,35 @@ export default function Login({route}) {
             }
           })
           .catch(async function (error) {
-              const applename = response.user.name.lastName;
-              const applename2 = response.user.name.firstName;
-              const fullName = applename + applename2;
-              const {data, status} = await requestPost({
-                url: consts.apiUrl + '/auth/appleLogin',
-                body: {
-                  email: appleemail,
-                  memberId: appleemail,
-                  kor_nm: fullName,
-                  platformType: 'apple',
-                },
-              });
-              if (status === 'SUCCESS') {
-                await setItem('accessToken', data.accessToken);
-                await setItem('refreshToken', data.refreshToken);
-                await setItem('platformType', 'apple');
-                dispatch(userCheckToken);
-              } else {
-                setPasswordError('애플 로그인 에러');
-              }
+            const applename = response.user.name.lastName;
+            const applename2 = response.user.name.firstName;
+            const fullName = applename + applename2;
+            const { data, status } = await requestPost({
+              url: consts.apiUrl + '/auth/appleLogin',
+              body: {
+                email: appleemail,
+                memberId: appleemail,
+                kor_nm: fullName,
+                platformType: 'apple',
+              },
+            });
+            if (status === 'SUCCESS') {
+              await setItem('accessToken', data.accessToken);
+              await setItem('refreshToken', data.refreshToken);
+              await setItem('platformType', 'apple');
+              dispatch(userCheckToken);
+            } else {
+              setPasswordError('애플 로그인 에러');
+            }
           });
       }
     } catch (error) {
-      if (error && error.message) {
-        switch (error.message) {
-          case NOT_CONFIGURED_ERROR:
-            console.log('AppleAuthenticationAndroid not configured yet.');
-            break;
-          case SIGNIN_FAILED_ERROR:
-            console.log('Apple signin failed.');
-            break;
-          case SIGNIN_CANCELLED_ERROR:
-            console.log('User cancelled apple signin.');
-            break;
-
-          default:
-            break;
-        }
-      }
     }
   };
 
 
-   // Sign In with Apple
-   const signInWithAppleIos = async () => {
+  // Sign In with Apple
+  const signInWithAppleIos = async () => {
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
@@ -662,47 +647,24 @@ export default function Login({route}) {
       //   console.log(appleAuthRequestResponse)
       // }
       let appleEmail = result.email;
-      
-        await requestGet({
-          url: 'https://toaping.me:8811/bookApp/auth/apple',
-          query: {
-            email: appleEmail,
-          },
-        })
-          .then(async function (res) {
-            if (res.status === 'SUCCESS') {
-              const { data, status } = await requestPost({
-                url: consts.apiUrl + '/auth/appleLogin',
-                body: {
-                  email: appleEmail,
-                  memberId: appleEmail,
-                  platformType: 'apple',
-                },
-              });
 
-              if (status === 'SUCCESS') {
-                await setItem('accessToken', data.accessToken);
-                await setItem('refreshToken', data.refreshToken);
-                await setItem('platformType', 'apple');
-                dispatch(userCheckToken);
-              } else {
-                setPasswordError('애플 로그인 에러');
-              }
-            }
-          })
-          .catch(async function (error) {
-            const applename = appleAuthRequestResponse.fullName.familyName;
-            const applename2 = appleAuthRequestResponse.fullName.givenName;
-            const fullName = applename + applename2;
+      await requestGet({
+        url: 'https://toaping.me:8811/bookApp/auth/apple',
+        query: {
+          email: appleEmail,
+        },
+      })
+        .then(async function (res) {
+          if (res.status === 'SUCCESS') {
             const { data, status } = await requestPost({
               url: consts.apiUrl + '/auth/appleLogin',
               body: {
                 email: appleEmail,
                 memberId: appleEmail,
-                kor_nm: fullName,
                 platformType: 'apple',
               },
             });
+
             if (status === 'SUCCESS') {
               await setItem('accessToken', data.accessToken);
               await setItem('refreshToken', data.refreshToken);
@@ -711,17 +673,41 @@ export default function Login({route}) {
             } else {
               setPasswordError('애플 로그인 에러');
             }
+          }
+        })
+        .catch(async function (error) {
+          const applename = appleAuthRequestResponse.fullName.familyName;
+          const applename2 = appleAuthRequestResponse.fullName.givenName;
+          const fullName = applename + applename2;
+          const { data, status } = await requestPost({
+            url: consts.apiUrl + '/auth/appleLogin',
+            body: {
+              email: appleEmail,
+              memberId: appleEmail,
+              kor_nm: fullName,
+              platformType: 'apple',
+            },
           });
-      
+          if (status === 'SUCCESS') {
+            await setItem('accessToken', data.accessToken);
+            await setItem('refreshToken', data.refreshToken);
+            await setItem('platformType', 'apple');
+            dispatch(userCheckToken);
+          } else {
+            setPasswordError('애플 로그인 에러');
+          }
+        });
+
+
     } catch (error) {
-      
+
     }
   };
 
- 
+
 
   // Initialize the module
-  
+
   return (
     <RootLayout style={styles.root}>
       <View style={styles.inputRow}>
@@ -733,7 +719,7 @@ export default function Login({route}) {
           selectionColor={colors.white}
           onChange={setUsername}
           maxLength={50}
-          borderBottomColor={{borderBottomColor: colors.white}}
+          borderBottomColor={{ borderBottomColor: colors.white }}
         />
         <InputWrap
           style={styles.input2}
@@ -745,7 +731,7 @@ export default function Login({route}) {
           maxLength={20}
           message={passwordError}
           messageColor={colors.red}
-          borderBottomColor={{borderBottomColor: colors.white}}
+          borderBottomColor={{ borderBottomColor: colors.white }}
         />
       </View>
 
@@ -838,7 +824,13 @@ export default function Login({route}) {
           <Avatar
             style={styles.avator}
             source={images.appleIcon}
-            onPress={Platform.OS === 'ios' ? signInWithAppleIos : signInWithApple}
+            onPress={() => {
+              if (appleAuth.isSupported) {
+                signInWithAppleIos();
+              } else {
+                signInWithApple();
+              }
+            }}
           />
         </View>
       </View>
@@ -859,7 +851,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: widthPercentage(40),
   },
-  row: {flexDirection: 'row'},
+  row: { flexDirection: 'row' },
   row1: {
     flexDirection: 'row',
     marginTop: heightPercentage(37.4),

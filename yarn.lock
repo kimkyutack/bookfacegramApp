@@ -7008,16 +7008,6 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-apple-authentication-android@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-native-apple-authentication-android/-/react-native-apple-authentication-android-1.0.6.tgz#1ff2a82bc33a4b7ed7ac48c64ee4e17193aa2b77"
-  integrity sha512-fRdvccyAxT7lm6+mJB9cEjSWbO9DcAuOqycwU1OdYYIh9Dc0iGhoscL8KRif0xAnkxk3413p1hLKJaCQNohjOA==
-
-react-native-apple-authentication@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-apple-authentication/-/react-native-apple-authentication-2.0.0.tgz#519a769fc1cb8ebc0093a5881d7f0ffec02275ca"
-  integrity sha512-7SZJ5Gl+9C0Dztu/hFag2j2ET2yhI9wf6Q0liiEwFWPbrP7Jd5/XfMNxDGJerrV/yv949h3bxiVTl4Ce0Xb8lg==
-
 react-native-auto-height-image@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/react-native-auto-height-image/-/react-native-auto-height-image-3.2.4.tgz#c7a95d4d9701055c680c8dc02076def1107f9522"
