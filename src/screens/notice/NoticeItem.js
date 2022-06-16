@@ -39,13 +39,14 @@ export default function NoticeItem({
     html: contents.replace(/font/gi, 'span').trim().replace(regex, '')
   };
   const [open, setOpen] = useState(false);
-
+  const { dirs } = RNFetchBlob.fs;
+  const dirToSave = Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
   const download = async (file) => {
   await RNFetchBlob.config({
     addAndroidDownloads: {
       useDownloadManager: true,
       notification: true,
-      path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file}`,
+      path: `${dirToSave}/${file}`,
     },
   }).fetch('GET', 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/notice/' + file);
 };

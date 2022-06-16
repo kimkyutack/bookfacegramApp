@@ -14,13 +14,7 @@ import consts from '../../libs/consts';
 import images from '../../libs/images';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import AppleAuthenticationAndroid, {
-  NOT_CONFIGURED_ERROR,
-  SIGNIN_CANCELLED_ERROR,
-  SIGNIN_FAILED_ERROR,
-  ResponseType,
-  Scope,
-} from 'react-native-apple-authentication-android';
+import jwtDecode from 'jwt-decode';
 import {
   convertKorPhoneFormat,
   getAgeFromMoment,
@@ -28,6 +22,14 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
+import AppleAuthenticationAndroid, {
+  NOT_CONFIGURED_ERROR,
+  SIGNIN_CANCELLED_ERROR,
+  SIGNIN_FAILED_ERROR,
+  ResponseType,
+  Scope,
+} from 'react-native-apple-authentication-android';
+import appleAuth from '@invertase/react-native-apple-authentication';
 import {
   dialogError,
   dialogOpenMessage,
@@ -59,12 +61,11 @@ export default function Login({route}) {
   const [loading, setLoading] = useState(false);
 
   const [facebookAccessToken, setFacebookAccessToken] = useState('');
-
   const naverIosKeys = {
     kConsumerKey: Config.NAVER_CLIENT_ID,
     kConsumerSecret: Config.NAVER_CLIENT_SECRET,
     kServiceAppName: Config.NAVER_CLIENT_NAME,
-    kServiceAppUrlScheme: Config.NAVER_CLINET_SCHEME, // only for iOS
+    kServiceAppUrlScheme: 'com.bookfacegram', // only for iOS
   };
   const naverAndroidKeys = {
     kConsumerKey: Config.NAVER_CLIENT_ID,
@@ -87,6 +88,13 @@ export default function Login({route}) {
       setUsername('');
       setPassword('');
     };
+  }, []);
+
+  useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('If this function executes, User Credentials have been Revoked');
+    });
   }, []);
 
   const handleLogin = async type => {
@@ -275,34 +283,34 @@ export default function Login({route}) {
       } catch (e) {
         throw 'get kakao serviceTerms error';
       }
-
+      console.log(profile)
       const {data, status} = await requestPost({
         url: consts.apiUrl + '/auth/kakaoLogin',
         body: {
           platformType: 'kakao',
           memberId: profile.email ? profile.email : '',
           sex:
-            profile.gender === 'null'
+            profile.gender === null
               ? ''
               : profile.gender === 'MALE'
               ? '남'
               : '여',
           handphone:
-            profile.phoneNumber === 'null'
+            profile.phoneNumber === null
               ? ''
               : convertKorPhoneFormat(profile.phoneNumber),
           birth_day:
-            profile?.birthday === 'null'
+            profile?.birthday === null
               ? ''
               : profile?.birthday.length === 4
               ? profile.birthday
               : '0' + profile.birthday,
-          birth_year: profile.birthyear === 'null' ? '' : profile.birthyear,
+          birth_year: profile.birthyear === null ? '' : profile.birthyear,
           age:
-            profile.birthyear === 'null'
+            profile.birthyear === null
               ? ''
               : getAgeFromMoment(
-                  profile.birthyear + profile.birthDay,
+                  profile.birthyear + profile.birthday,
                   'YYYYMMDD',
                 ),
           kor_nm: profile.nickname,
@@ -494,7 +502,7 @@ export default function Login({route}) {
   //     },
   //   );
   // };
-
+  // Initialize the module
   function b64DecodeUnicode(str) {
     return decodeURIComponent(
       atob(str).replace(/(.)/g, function (m, p) {
@@ -528,26 +536,26 @@ export default function Login({route}) {
       return atob(output);
     }
   }
-
-  // Initialize the module
-  AppleAuthenticationAndroid.configure({
-    clientId: 'com.bookfacegram.app',
-    redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
-
-    // [OPTIONAL]
-    // Scope.ALL (DEFAULT) = 'email name'
-    // Scope.Email = 'email';
-    // Scope.Name = 'name';
-    scope: Scope.ALL,
-
-    // [OPTIONAL]
-    // ResponseType.ALL (DEFAULT) = 'code id_token';
-    // ResponseType.CODE = 'code';
-    // ResponseType.ID_TOKEN = 'id_token';
-    responseType: ResponseType.ALL,
-  });
+  
+  
   // Sign In with Apple
   const signInWithApple = async () => {
+    AppleAuthenticationAndroid.configure({
+      clientId: 'com.bookfacegram.app',
+      redirectUri: 'https://toaping-735b6.firebaseapp.com/__/auth/handler',
+  
+      // [OPTIONAL]
+      // Scope.ALL (DEFAULT) = 'email name'
+      // Scope.Email = 'email';
+      // Scope.Name = 'name';
+      scope: Scope.ALL,
+  
+      // [OPTIONAL]
+      // ResponseType.ALL (DEFAULT) = 'code id_token';
+      // ResponseType.CODE = 'code';
+      // ResponseType.ID_TOKEN = 'id_token';
+      responseType: ResponseType.ALL,
+    });
     try {
       const response = await AppleAuthenticationAndroid.signIn();
       if (response) {
@@ -635,6 +643,85 @@ export default function Login({route}) {
     }
   };
 
+
+   // Sign In with Apple
+   const signInWithAppleIos = async () => {
+    try {
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
+      const result = jwtDecode(appleAuthRequestResponse.identityToken);
+      // get current authentication state for user
+      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+      //const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+      // console.log(credentialState)
+      // // use credentialState response to ensure the user is authenticated
+      // if (credentialState === appleAuth.State.AUTHORIZED) {
+      //   // user is authenticated
+      //   console.log(appleAuthRequestResponse)
+      // }
+      let appleEmail = result.email;
+      
+        await requestGet({
+          url: 'https://toaping.me:8811/bookApp/auth/apple',
+          query: {
+            email: appleEmail,
+          },
+        })
+          .then(async function (res) {
+            if (res.status === 'SUCCESS') {
+              const { data, status } = await requestPost({
+                url: consts.apiUrl + '/auth/appleLogin',
+                body: {
+                  email: appleEmail,
+                  memberId: appleEmail,
+                  platformType: 'apple',
+                },
+              });
+
+              if (status === 'SUCCESS') {
+                await setItem('accessToken', data.accessToken);
+                await setItem('refreshToken', data.refreshToken);
+                await setItem('platformType', 'apple');
+                dispatch(userCheckToken);
+              } else {
+                setPasswordError('애플 로그인 에러');
+              }
+            }
+          })
+          .catch(async function (error) {
+            const applename = appleAuthRequestResponse.fullName.familyName;
+            const applename2 = appleAuthRequestResponse.fullName.givenName;
+            const fullName = applename + applename2;
+            const { data, status } = await requestPost({
+              url: consts.apiUrl + '/auth/appleLogin',
+              body: {
+                email: appleEmail,
+                memberId: appleEmail,
+                kor_nm: fullName,
+                platformType: 'apple',
+              },
+            });
+            if (status === 'SUCCESS') {
+              await setItem('accessToken', data.accessToken);
+              await setItem('refreshToken', data.refreshToken);
+              await setItem('platformType', 'apple');
+              dispatch(userCheckToken);
+            } else {
+              setPasswordError('애플 로그인 에러');
+            }
+          });
+      
+    } catch (error) {
+      
+    }
+  };
+
+ 
+
+  // Initialize the module
+  
   return (
     <RootLayout style={styles.root}>
       <View style={styles.inputRow}>
@@ -747,12 +834,11 @@ export default function Login({route}) {
             onPress={signInWithGoogle}
           />
         </View>
-
         <View>
           <Avatar
             style={styles.avator}
             source={images.appleIcon}
-            onPress={signInWithApple}
+            onPress={Platform.OS === 'ios' ? signInWithAppleIos : signInWithApple}
           />
         </View>
       </View>

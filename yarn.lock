@@ -885,6 +885,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@invertase/react-native-apple-authentication@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@invertase/react-native-apple-authentication/-/react-native-apple-authentication-2.2.1.tgz#0e0618f644c9a9af59860f335545bf037b3f8e8a"
+  integrity sha512-sadjKQa9W2i422i7kcZquZ0ZNSBSCljfu7eN0oGqhrzV+RIlWnnU1HiKf/1hOibPQ2ceRvTatjYlHKxrDMirPQ==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -6851,6 +6856,15 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
+prop-types@15.7.2:
+  version "15.7.2"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.8.1"
+
 prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
@@ -6977,7 +6991,7 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.1.0.tgz#61aaed3096d30eacf2a2127118b5b41387d32a67"
   integrity sha512-Fl7FuabXsJnV5Q1qIOQwx/sagGF18kogb4gpfcG4gjLBWO0WDiiz1ko/ExayuxE7InyQkBLkxRFG5oxY6Uu3Kg==
 
-react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0:
+react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -6999,6 +7013,11 @@ react-native-apple-authentication-android@^1.0.6:
   resolved "https://registry.yarnpkg.com/react-native-apple-authentication-android/-/react-native-apple-authentication-android-1.0.6.tgz#1ff2a82bc33a4b7ed7ac48c64ee4e17193aa2b77"
   integrity sha512-fRdvccyAxT7lm6+mJB9cEjSWbO9DcAuOqycwU1OdYYIh9Dc0iGhoscL8KRif0xAnkxk3413p1hLKJaCQNohjOA==
 
+react-native-apple-authentication@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-apple-authentication/-/react-native-apple-authentication-2.0.0.tgz#519a769fc1cb8ebc0093a5881d7f0ffec02275ca"
+  integrity sha512-7SZJ5Gl+9C0Dztu/hFag2j2ET2yhI9wf6Q0liiEwFWPbrP7Jd5/XfMNxDGJerrV/yv949h3bxiVTl4Ce0Xb8lg==
+
 react-native-auto-height-image@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/react-native-auto-height-image/-/react-native-auto-height-image-3.2.4.tgz#c7a95d4d9701055c680c8dc02076def1107f9522"
@@ -7013,13 +7032,13 @@ react-native-button@^2.3.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-charts-wrapper@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/react-native-charts-wrapper/-/react-native-charts-wrapper-0.5.7.tgz#13cdb387ede67f4292b92c8b03a8f15de3a7a2f7"
-  integrity sha512-d1lOSN47YRUqFGOht4uBP+P7N7OvtRrhgwTOdTNlXC+ZmoveBIIE+bl65uwGkS08kUUBudRBugsCRkf5MB/p2w==
+react-native-charts-wrapper@^0.5.8:
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/react-native-charts-wrapper/-/react-native-charts-wrapper-0.5.8.tgz#8e63ede7db0765d06241acc3df06ac53930b4170"
+  integrity sha512-E7cdpxAFkFhAqmFUmiGR6ZGv/NL2ikZ5TaTh+sE91Uvoqshvp7mxjIIBZxnofbjq/BGtJMxa7CHAJEnLKhbneg==
   dependencies:
-    prop-types "^15.5.10"
-    react "16.8.3"
+    prop-types "15.7.2"
+    react "16.13.1"
 
 react-native-codegen@^0.0.7:
   version "0.0.7"
@@ -7336,15 +7355,14 @@ react-test-renderer@17.0.2:
     react-shallow-renderer "^16.13.1"
     scheduler "^0.20.2"
 
-react@16.8.3:
-  version "16.8.3"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.3.tgz#c6f988a2ce895375de216edcfaedd6b9a76451d9"
-  integrity sha512-3UoSIsEq8yTJuSu0luO1QQWYbgGEILm+eJl2QN/VLDi7hL+EN18M3q3oVZwmVzzBJ3DkM7RMdRwBmZZ+b4IzSA==
+react@16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.13.3"
 
 react@17.0.2:
   version "17.0.2"
@@ -7718,14 +7736,6 @@ saxes@^5.0.1:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
-
-scheduler@^0.13.3:
-  version "0.13.6"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
-  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.20.2:
   version "0.20.2"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>377505970464-k313naf618e11dkqoj8ommk30md9hd3i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.377505970464-k313naf618e11dkqoj8ommk30md9hd3i</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>377505970464-7m8f92jfd844dhur5jecatcbi328g3rl.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD4FBMxrFHUbsufk8g-K_jD-uqS35de7Vg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>377505970464</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bookfacegram</string>
+	<key>PROJECT_ID</key>
+	<string>toaping-735b6</string>
+	<key>STORAGE_BUCKET</key>
+	<string>toaping-735b6.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:377505970464:ios:d8c9117abe7e2b459a7f45</string>
+</dict>
+</plist>
