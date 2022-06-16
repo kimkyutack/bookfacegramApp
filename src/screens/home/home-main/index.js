@@ -30,6 +30,8 @@ import {
   dialogOpenMessage,
 } from '../../../redux/dialog/DialogActions';
 import messaging from '@react-native-firebase/messaging';
+import { requestPost, requestFile } from '../../../services/network';
+import consts from '../../../libs/consts';
 
 export default function HomeMain({ route, navigation }) {
   const [keyword, setKeyword] = useState('');
@@ -42,6 +44,9 @@ export default function HomeMain({ route, navigation }) {
 
       let fcmtoken = await AsyncStorage.getItem('fcmtoken');
       saveTokenToDatabase(fcmtoken);
+      if (fcmtoken) {
+        saveTokenToDatabaseKcee(fcmtoken); //토핑어플의 DB에 저장하는 로직
+      }
       if (fcmtoken !== null) {
         // value previously stored
       }
@@ -49,6 +54,8 @@ export default function HomeMain({ route, navigation }) {
       // error reading value
     }
   }
+
+  //fireStore에 토큰저장하는 로직
   const saveTokenToDatabase = async (token) => {
     // Assume user is already signed in
     const userId = user.member_id;
@@ -60,6 +67,25 @@ export default function HomeMain({ route, navigation }) {
         tokens: firestore.FieldValue.arrayUnion(token),
       });
   }
+  //토핑어플의 DB에 저장하는 로직 추가
+  const saveTokenToDatabaseKcee = async (token) => {
+    const formData = new FormData();
+    formData.append('memberId', user.member_id);
+    formData.append('token', token);
+    try {
+      const { data, status } = await requestFile(
+        { url: consts.apiUrl + '/admin/push/insertToken', method: 'post' },
+        formData,
+      );
+
+      if (status === 'SUCCESS') {
+        console.log('토큰저장성공');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //토핑어플의 DB에 저장하는 로직 끝
 
   useEffect(() => {
 
