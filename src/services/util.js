@@ -146,6 +146,9 @@ export const cameraItem = () => {
           PERMISSIONS.ANDROID.CAMERA,
           PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
           PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+          PERMISSIONS.IOS.CAMERA,
+          PERMISSIONS.IOS.PHOTO_LIBRARY,
+          PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY,
         ])
           .then(result => {
             if (result) {
@@ -277,6 +280,9 @@ export const cameraEditItem = () => {
           PERMISSIONS.ANDROID.CAMERA,
           PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
           PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+          PERMISSIONS.IOS.CAMERA,
+          PERMISSIONS.IOS.PHOTO_LIBRARY,
+          PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY,
         ])
           .then(result => {
             if (result) {
@@ -406,6 +412,9 @@ export const cameraProfile = profile_path => {
           PERMISSIONS.ANDROID.CAMERA,
           PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE,
           PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+          PERMISSIONS.IOS.CAMERA,
+          PERMISSIONS.IOS.PHOTO_LIBRARY,
+          PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY,
         ])
           .then(result => {
             if (result) {

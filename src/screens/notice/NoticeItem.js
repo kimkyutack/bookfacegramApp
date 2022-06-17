@@ -19,8 +19,8 @@ const renderersProps = {
 
 const tagsStyles = {
   img: {
-    minWidth: screenWidth * 0.92,
-    maxWidth: screenWidth * 0.92,
+    minWidth: screenWidth * 0.85,
+    maxWidth: screenWidth * 0.85,
     alignSelf: 'center',
   },
 };
@@ -42,14 +42,14 @@ export default function NoticeItem({
   const { dirs } = RNFetchBlob.fs;
   const dirToSave = Platform.OS == 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
   const download = async (file) => {
-  await RNFetchBlob.config({
-    addAndroidDownloads: {
-      useDownloadManager: true,
-      notification: true,
-      path: `${dirToSave}/${file}`,
-    },
-  }).fetch('GET', 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/notice/' + file);
-};
+    await RNFetchBlob.config({
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path: `${dirToSave}/${file}`,
+      },
+    }).fetch('GET', 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/notice/' + file);
+  };
 
   useEffect(() => {
     if (bannerYn !== 0) {
@@ -102,15 +102,15 @@ export default function NoticeItem({
           {/* <TextWrap style={styles.descText}>{CONTENTS}</TextWrap> */}
           <View style={styles.descText}>
             {file1 === null || file1 === ''
-            ? null
-            : <TouchableOpacity onPress={() => download(file1)} style={{flexDirection:'row'}}>
-            <Image source={images.noticeFile} style={{width:widthPercentage(15), height:heightPercentage(15)}}/><TextWrap style={{left:10, fontSize:fontPercentage(13), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file1.split('_pcnc_').reverse()[0]}</TextWrap>
-            </TouchableOpacity>}
+              ? null
+              : <TouchableOpacity onPress={() => download(file1)} style={{ flexDirection: 'row' }}>
+                <Image source={images.noticeFile} style={{ width: widthPercentage(15), height: heightPercentage(15) }} /><TextWrap style={{ left: 10, fontSize: fontPercentage(13), bottom: heightPercentage(2), fontWeight: 'bold' }}>{file1.split('_pcnc_').reverse()[0]}</TextWrap>
+              </TouchableOpacity>}
             {file2 === null || file2 === ''
-            ? null
-            : <TouchableOpacity onPress={() => download(file2)} style={{flexDirection:'row', marginTop:heightPercentage(10)}}>
-            <Image source={images.noticeFile} style={{width:widthPercentage(15), height:heightPercentage(15)}}/><TextWrap style={{left:10, fontSize:fontPercentage(13), bottom:heightPercentage(2), fontWeight: 'bold'}}>{file2.split('_pcnc_').reverse()[0]}</TextWrap>
-            </TouchableOpacity>}
+              ? null
+              : <TouchableOpacity onPress={() => download(file2)} style={{ flexDirection: 'row', marginTop: heightPercentage(10) }}>
+                <Image source={images.noticeFile} style={{ width: widthPercentage(15), height: heightPercentage(15) }} /><TextWrap style={{ left: 10, fontSize: fontPercentage(13), bottom: heightPercentage(2), fontWeight: 'bold' }}>{file2.split('_pcnc_').reverse()[0]}</TextWrap>
+              </TouchableOpacity>}
             {/* <HTMLView value={contents.trim().replace(regex, '')} renderNode={renderNode} /> */}
             <RenderHtml
               contentWidth={screenWidth * 0.92}
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   desc: {
-    padding: 16,
+    paddingHorizontal: screenWidth * 0.04,
+    paddingTop: 16,
     paddingBottom: 0,
   },
   descText: {

@@ -12,6 +12,7 @@ import {
 import {isIos} from './util';
 import {requestFile} from './network';
 import consts from '../libs/consts';
+import { Platform } from 'react-native';
 
 export async function splashCheckMultiplePermissions(permissions) {
   if (!isIos) {
@@ -27,10 +28,18 @@ export async function splashCheckMultiplePermissions(permissions) {
 
 export async function checkMultiplePermissions(permissions) {
   const statuses = await requestMultiple(permissions);
+  
   for (var index in permissions) {
-    if (statuses[permissions[index]] !== RESULTS.GRANTED) {
-      throw 'checkMultiplePermissions';
-      // throw '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.';
+    if(Platform.OS === 'android'){
+      if (statuses[permissions[index]] !== RESULTS.GRANTED) {
+        throw 'checkMultiplePermissions';
+        // throw '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.';
+      }
+    }else{
+      if (statuses['ios.permission.PHOTO_LIBRARY'] !== RESULTS.GRANTED) {
+        throw 'checkMultiplePermissions';
+        // throw '파일 첨부를 위해 다음 권한이 필요합니다.\n- 저장소 접근 권한\n- 카메라 접근 권한\n설정>어플리케이션>토핑에서 권한을 허용으로 변경해 주세요.';
+      }
     }
   }
   return true;
@@ -56,6 +65,7 @@ export const getImageFromCamera = async () => {
       },
     ];
   } catch (error) {
+    console.log(error)
     if (error.code !== 'E_PICKER_CANCELLED') {
       throw 'getImageFromCamera';
       // throw error;

@@ -92,10 +92,10 @@ export default function Examright({route, navigation}) {
           3. 전보다 얼굴이 많이 펴서 보기 좋다.
         </TextWrap>
 
-        <View style={styles.button}>
+        <View style={Platform.OS === 'ios' ? styles.buttonIos : styles.button }>
           <Button
             title="다른 활동하기"
-            color="black"
+            color={Platform.OS === 'ios' ?  "white" : "black"}
             onPress={() => {
               navigate(routes.home, {
                 screen: routes.topActivity,
@@ -123,6 +123,13 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
     top: heightPercentage(20),
     height: screenHeight / 11,
+  },
+  buttonIos: {
+    left: '5%',
+    width: screenWidth * 0.9,
+    top: heightPercentage(20),
+    height: screenHeight / 11,
+    backgroundColor: 'black',
   },
   root2: {
     top: heightPercentage(30),

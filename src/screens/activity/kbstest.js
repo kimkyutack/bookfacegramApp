@@ -38,10 +38,11 @@ export default function Kbstest({route, navigation}) {
                     />
 
         </View>
-        <View style={styles.button}>
+        <View style={Platform.OS === 'ios' ? styles.buttonIos : styles.button }>
           <Button
             title="시험 응시하기"
-            color="black"
+            color={Platform.OS === 'ios' ?  "white" : "black"}
+          
             onPress={() => dispatch(dialogError('시험 기간이 아닙니다.'))}
           />
         </View>
@@ -55,6 +56,12 @@ const styles = StyleSheet.create({
     top: 10,
     flex: 1,
     backgroundColor: '#ffffff',
+  },
+  buttonIos: {
+    left: '5%',
+    width: '90%',
+    bottom: '1%',
+    backgroundColor: 'black',
   },
   button: {
     left: '5%',

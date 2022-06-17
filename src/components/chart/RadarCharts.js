@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   processColor,
   Text,
+  Platform
 } from 'react-native';
 import {
   widthPercentage,
@@ -314,7 +315,7 @@ export default function RadarCharts() {
           drawWeb={true}
           webLineWidth={1}
           webLineWidthInner={1}
-          webAlpha={30} //오각형 밝기
+          webAlpha={Platform.OS === 'ios' ? 0.1 : 30} //오각형 밝기
           webColor={processColor('black')}
           webColorInner={processColor('black')}
           skipWebLineCount={0}
