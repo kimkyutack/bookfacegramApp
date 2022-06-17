@@ -508,9 +508,23 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(16),
   },
   image: {
-    borderRadius: 5,
-    backgroundColor: '#eeeeee',
-    height: heightPercentage(140),
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        borderRadius: 5,
+        backgroundColor: '#eeeeee',
+        height: heightPercentage(140),
+      },
+      android: {
+        backgroundColor: 'white',
+        elevation: 1,
+        borderRadius: 5,
+        backgroundColor: '#eeeeee',
+        height: heightPercentage(140),  
+      },
+    }),
   },
   headerContainer: {
     paddingLeft: 8,
