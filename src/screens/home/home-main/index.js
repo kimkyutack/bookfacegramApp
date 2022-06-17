@@ -126,8 +126,8 @@ export default function HomeMain({ route, navigation }) {
   }, []);
 
   const handleSearch = () => {
-    if (keyword?.length < 2) {
-      dispatch(dialogOpenMessage({ message: '두글자 이상 입력해주세요.' }));
+    if (keyword?.replace(/ /g, '')?.length < 1) {
+      dispatch(dialogOpenMessage({message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.'}));
     } else {
       setKeyword('');
       navigation.navigate(routes.searchBook, { keyword: keyword });
