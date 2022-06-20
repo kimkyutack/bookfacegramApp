@@ -7,14 +7,12 @@ import {heightPercentage, screenWidth} from '../../services/util';
 import FastImage from 'react-native-fast-image';
 
 export default function BookQuizCarouselImage({item, index, style}) {
-  // console.log(item.type, item?.img_nm, item?.imgNm);
-  const [bookThumbnail, setBookThumbnail] = useState(
-    item?.type === 'new' ? item?.img_nm : item?.imgNm,
+  const [bookThumbnail, setBookThumbnail] = useState(item?.isbn
   );
   useEffect(() => {
     // crawl , toaping
     setBookThumbnail(item?.isbn);
-  }, [item?.isbn, item?.isbn]);
+  }, [item?.isbn]);
 
   return (
     <FastImage

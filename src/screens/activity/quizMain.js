@@ -173,7 +173,11 @@ const styles = StyleSheet.create({
   root: {
     width: screenWidth,
     flexDirection: 'column',
-    bottom:heightPercentage(10),
+    ...Platform.select({
+      android: {
+        bottom:heightPercentage(10),
+      },
+  }),
   },
   row: {
     height: screenHeight / 25,
