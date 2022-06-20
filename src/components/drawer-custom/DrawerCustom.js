@@ -43,7 +43,8 @@ export default function DrawerCustom(props) {
         </View>
       </View>
 
-      <DrawerContentScrollView {...props}>
+      {/*<DrawerContentScrollView {...props}>*/}
+      <View>
         <View style={styles.drawerContainer}>
           <View style={styles.itemList}>
             <DrawerItem
@@ -153,7 +154,8 @@ export default function DrawerCustom(props) {
             />
           </View>
         </View>
-      </DrawerContentScrollView>
+        </View>
+      {/*</DrawerContentScrollView>*/}
     </View>
   );
 }
