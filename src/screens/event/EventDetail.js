@@ -24,6 +24,8 @@ import {
 import { useIsFocused } from '@react-navigation/core';
 import AutoHeightImage from 'react-native-auto-height-image';
 import RenderHtml from 'react-native-render-html';
+import table from '@native-html/table-plugin';
+import WebView from 'react-native-webview';
 
 const renderersProps = {
   img: {
@@ -37,6 +39,41 @@ const tagsStyles = {
     maxWidth: screenWidth * 0.92,
     alignSelf: 'center',
   },
+};
+
+const renderers = {
+  table
+};
+
+const htmlConfig = {
+  renderers,
+  WebView,
+  renderersProps: {
+    table: {
+      animationType: 'animated',
+      tableStyleSpecs: {
+        outerBorderWidthPx: 1,
+        rowsBorderWidthPx: 1,
+        columnsBorderWidthPx: 1,
+        trOddBackground: 'white',
+        thBorderColor: 'black',
+        tdBorderColor: 'black',
+        outerBorderColor: 'black',
+      }
+    }
+  },
+  tagsStyles: {
+    table: {
+      flex: 1
+    }
+  },
+  defaultWebViewProps: {},
+  computeEmbeddedMaxWidth: (contentWidth, tagName) => {
+    if (tagName === 'table') {
+      return Math.min(contentWidth, 500);
+    }
+    return contentWidth;
+  }
 };
 
 export default function EventDetail({ route, navigation }) {
@@ -188,6 +225,7 @@ export default function EventDetail({ route, navigation }) {
                 source={source}
                 tagsStyles={tagsStyles}
                 renderersProps={renderersProps}
+                {...htmlConfig}
               />
             </View>
 
