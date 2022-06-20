@@ -339,9 +339,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   chart: {
-    width: '100%',
-    height: 200,
-  },
+    ...Platform.select({
+      ios: {
+        width: '75%',
+        height: 240,
+        marginTop:heightPercentage(20),
+      },
+      android: {
+        width: '100%',
+        height: 200,
+      },
+  }),
+},
   image: {
     flex: 1,
     width: '100%',

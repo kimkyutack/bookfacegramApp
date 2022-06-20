@@ -376,10 +376,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color:'white',
     backgroundColor:'black',
-  },
-buttonText: {
+    alignItems:'center',
+    justifyContent:'center',
+
   width:widthPercentage(50),
   height:heightPercentage(25),
+  },
+buttonText: {
   color: 'white',
   fontSize:fontPercentage(12),
   fontWeight:'bold',
@@ -393,10 +396,13 @@ btn2: {
     backgroundColor:'white',
      borderColor:'black',
   borderWidth: 1,
-  },
-buttonText2: {
+  alignItems:'center',
+    justifyContent:'center',
+
   width:widthPercentage(50),
   height:heightPercentage(25),
+  },
+buttonText2: {
   color: 'black',
   fontSize:fontPercentage(12),
   fontWeight:'bold',
