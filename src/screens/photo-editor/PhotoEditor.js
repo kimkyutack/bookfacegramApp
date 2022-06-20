@@ -46,7 +46,6 @@ import {
 } from '../../redux/dialog/DialogActions';
 
 export default function PhotoEditor({ route, navigation }) {
-  console.log(PERMISSIONS)
   const user = useSelector(s => s.user, shallowEqual);
   const [contents, setContents] = useState('');
   const [tags, setTags] = useState({ tag: '', tagsArray: [] });

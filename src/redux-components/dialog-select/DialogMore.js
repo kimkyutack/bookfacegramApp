@@ -107,14 +107,14 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 3,
   },
   message: {
-    lineHeight: fontPercentage(13),
+    lineHeight: fontPercentage(15),
     fontSize: fontPercentage(12),
     color: '#222222',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   message3: {
-    lineHeight: fontPercentage(13),
+    lineHeight: fontPercentage(15),
     fontSize: fontPercentage(12),
     color: 'red',
     fontWeight: 'bold',
