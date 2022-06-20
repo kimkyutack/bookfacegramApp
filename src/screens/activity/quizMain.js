@@ -211,7 +211,14 @@ const styles = StyleSheet.create({
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    bottom: heightPercentage(20),
+    ...Platform.select({
+      android: {
+        bottom:heightPercentage(20),
+      },
+      ios: {
+        bottom: heightPercentage(50),
+      },
+  }),
     left: screenWidth / 2.2,
     display: 'flex',
   },

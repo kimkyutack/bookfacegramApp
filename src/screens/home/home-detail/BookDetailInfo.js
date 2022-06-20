@@ -7,6 +7,7 @@ import fonts from '../../../libs/fonts';
 import images from '../../../libs/images';
 import {formatTime, screenWidth} from '../../../services/util';
 import HTMLView from 'react-native-htmlview';
+import { fontPercentage, widthPercentage,heightPercentage } from '../../../services/util';
 
 export default function BookDetailInfo({
   book_cd,
@@ -55,7 +56,7 @@ export default function BookDetailInfo({
               source={open ? images.angleUp : images.angleDown}
               style={styles.up}
             />
-            <TextWrap font={fonts.kopubWorldDotumProMedium}> 자세히</TextWrap>
+            <TextWrap font={fonts.kopubWorldDotumProMedium} style={{fontSize:fontPercentage(12)}}> 자세히</TextWrap>
           </View>
         </TouchableOpacity>
       </View>
@@ -126,7 +127,7 @@ export default function BookDetailInfo({
 const styles = StyleSheet.create({
   descText: {
     color: '#555555',
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     lineHeight: 21,
     paddingHorizontal: 16,
     paddingTop: 20,
@@ -144,19 +145,19 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   date: {
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     lineHeight: 13,
     color: '#999999',
   },
   title: {
     color: colors.black,
-    fontSize: 15,
+    fontSize: fontPercentage(14),
     lineHeight: 19,
     letterSpacing: -0.5,
   },
   up: {
-    width: 20,
-    height: 20,
+    width: widthPercentage(20),
+    height: heightPercentage(20),
     alignSelf: 'center',
     resizeMode: 'contain',
   },

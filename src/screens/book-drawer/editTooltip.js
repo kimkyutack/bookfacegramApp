@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, Platform } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import images from '../../libs/images';
-import { heightPercentage, widthPercentage } from '../../services/util';
+import { fontPercentage, heightPercentage, widthPercentage } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import fonts from '../../libs/fonts';
 import {
@@ -197,5 +197,8 @@ const styles = StyleSheet.create({
   text: {
     bottom: 2,
     marginLeft: 6,
+    ...Platform.select({
+      ios:{fontSize:fontPercentage(13)},
+    }),
   },
 });

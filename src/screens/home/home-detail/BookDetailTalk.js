@@ -333,13 +333,20 @@ const styles = StyleSheet.create({
   textInput: {
     color: colors.black,
     height: heightPercentage(100),
+    fontSize:fontPercentage(15),
     textAlignVertical: 'top', //android-only
     fontFamily: fonts.kopubWorldDotumProMedium,
   },
   placeInput: {
     height: heightPercentage(100),
+    fontSize:fontPercentage(15),
     textAlign: 'center', //android-only
     fontFamily: fonts.kopubWorldDotumProMedium,
+    ...Platform.select({
+      ios: {
+        top:heightPercentage(30),
+      },
+    }),
   },
   buttonContainer: {
     alignSelf: 'flex-end',

@@ -565,7 +565,14 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    width: screenWidth - 36,
+    ...Platform.select({
+      ios:{
+        width: screenWidth - widthPercentage(30),
+      },
+      android:{
+        width: screenWidth - 36,
+      },
+    }),
     marginBottom: 18,
   },
   imageContainer: {

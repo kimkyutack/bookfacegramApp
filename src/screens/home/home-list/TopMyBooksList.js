@@ -189,18 +189,7 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
         styles.root,
         state.req.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      {state.req.length === 0 && !loading ? (
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator
-          size="large"
-          style={{
-            alignSelf: 'center',
-            top: -50,
-          }}
-          color={colors.blue}
-        />
-        </View>
-      ) : 
+      {
       state.req.length === 0 && loading ? (
         <ActivityIndicator
           size="large"

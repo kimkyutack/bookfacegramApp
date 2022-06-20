@@ -494,7 +494,7 @@ export default function BookDetailQuiz({ isbn }) {
         문제
       </TextWrap>
       <TextInput
-        style={contents.length !== 0 ? styles.inputStyle : styles.placeStyle}
+        style={contents.length !== 0 ? styles.contentinputStyle : styles.placeStyle}
         inputStyle={styles.inputValue}
         value={contents}
         multiline={true}
@@ -510,7 +510,7 @@ export default function BookDetailQuiz({ isbn }) {
         예문
       </TextWrap>
       <TextInput
-        style={subjm.length !== 0 ? styles.inputStyle : styles.placeStyle}
+        style={subjm.length !== 0 ? styles.contentinputStyle : styles.placeStyle}
         inputStyle={styles.inputValue}
         value={subjm}
         multiline={true}
@@ -973,6 +973,7 @@ const styles = StyleSheet.create({
   },
   noData: {
     marginTop: heightPercentage(30),
+    fontSize:fontPercentage(13),
     textAlign: 'center',
   },
   grayfont: {
@@ -1196,7 +1197,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     borderBottomWidth:0,
   },
-  inputStyle: {
+  contentinputStyle: {
     color: colors.black,
     fontSize: fontPercentage(12),
     lineHeight: fontPercentage(24),
@@ -1206,11 +1207,43 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     textAlignVertical: 'top',
     top: heightPercentage(20),
-    marginBottom: heightPercentage(20),
     alignSelf: 'center',
     borderWidth: 0.5,
     borderColor: '#ccc',
     width: '90%',
+    ...Platform.select({
+      ios: {
+        marginBottom: heightPercentage(70),
+        height:heightPercentage(200),
+      },
+      android: {
+        marginBottom: heightPercentage(20),
+      },
+    }),
+  },
+  inputStyle: {
+    color: colors.black,
+    fontSize: fontPercentage(12),
+    display: 'flex',
+    flexBasis: 300,
+    flexShrink: 1,
+    textAlign: 'left',
+    textAlignVertical: 'top',
+    top: heightPercentage(20),
+    alignSelf: 'center',
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+    width: '90%',
+    ...Platform.select({
+      ios: {
+        height:heightPercentage(50),
+        marginBottom: heightPercentage(20),
+      },
+      android: {
+        lineHeight: fontPercentage(24),
+        marginBottom: heightPercentage(20),
+      },
+    }),
   },
   placeStyle: {
     color: colors.black,
@@ -1221,11 +1254,20 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     textAlign: 'center',
     top: heightPercentage(20),
-    marginBottom: heightPercentage(20),
+    
     alignSelf: 'center',
     borderWidth: 0.5,
     borderColor: '#ccc',
     width: '90%',
+    ...Platform.select({
+      ios: {
+        height:heightPercentage(200),
+        marginBottom: heightPercentage(70),
+      },
+      android: {
+        marginBottom: heightPercentage(20),
+      },
+    }),
   },
   inputStyle2: {
     color: colors.black,

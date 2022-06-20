@@ -500,10 +500,12 @@ const styles = StyleSheet.create({
   },
   selectedTabFont: {
     color: colors.black,
+    fontSize:fontPercentage(14),
     textAlign: 'center',
   },
   normalTabFont: {
     color: '#BABABA',
+    fontSize:fontPercentage(14),
     textAlign: 'center',
   },
   highlight: {
