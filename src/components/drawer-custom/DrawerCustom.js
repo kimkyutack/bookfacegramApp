@@ -165,11 +165,24 @@ const styles = StyleSheet.create({
   drawerContainer: {},
   userInfoContainer: {
     backgroundColor: '#FED500',
-    height: heightPercentage(170),
+    ...Platform.select({
+      ios:{
+        height: heightPercentage(200),
+      },
+      android:{
+        height: heightPercentage(170),
+      },
+    }),
+    
     justifyContent: 'center',
   },
   itemList: {},
   avatorLeftMargin: {
+    ...Platform.select({
+      ios:{
+        marginTop: heightPercentage(30),
+      },
+    }),
     marginLeft: 10,
   },
   avator: {
