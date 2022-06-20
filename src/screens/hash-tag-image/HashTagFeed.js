@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -11,14 +11,14 @@ import {
   Easing,
   TouchableOpacity
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import moment from 'moment';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestDelete, requestPost} from '../../services/network';
+import { requestDelete, requestPost } from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -26,12 +26,12 @@ import {
   cameraItem,
   screenWidth
 } from '../../services/util';
-import {dialogOpenSelect, dialogError} from '../../redux/dialog/DialogActions';
-import {getNewestHashTag, getPopularHashTag} from '../../redux/tag/TagAction';
-import {HashTagFeedItem} from './HashTagFeedItem';
-import {useIsFocused} from '@react-navigation/core';
+import { dialogOpenSelect, dialogError } from '../../redux/dialog/DialogActions';
+import { getNewestHashTag, getPopularHashTag } from '../../redux/tag/TagAction';
+import { HashTagFeedItem } from './HashTagFeedItem';
+import { useIsFocused } from '@react-navigation/core';
 
-export default function HashTagFeed({route, navigation}) {
+export default function HashTagFeed({ route, navigation }) {
   const user = useSelector(s => s.user);
   const {
     isPopularLoading,
@@ -152,9 +152,9 @@ export default function HashTagFeed({route, navigation}) {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: '공유에 보이는 메세지 link',
-        url: 'http://bam.tech',
-        title: 'Wow, did you see that?',
+        message: 'https://toaping.me/bookfacegram/html/feed_share.jsp?feedIdx=' + idx,
+        url: 'https://toaping.me/bookfacegram/html/feed_share.jsp?feedIdx=' + idx,
+        title: '골라보는 맛있는 독서!',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -312,7 +312,7 @@ export default function HashTagFeed({route, navigation}) {
     }
   };
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <HashTagFeedItem
       {...item}
       index={index}
@@ -384,8 +384,8 @@ export default function HashTagFeed({route, navigation}) {
             : newestHashTags
         }
         onScroll={event => {
-            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
-          }}
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
         removeClippedSubviews={true}
         getItemLayout={(data, index) => ({
           length: heightPercentage(543.4),
@@ -410,7 +410,7 @@ export default function HashTagFeed({route, navigation}) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
 
     </SafeAreaView>
   );
