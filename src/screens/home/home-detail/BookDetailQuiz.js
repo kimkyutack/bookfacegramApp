@@ -65,6 +65,7 @@ export default function BookDetailQuiz({ isbn }) {
   const [ans3, setans3] = useState();
   const [ans4, setans4] = useState();
   const [ans5, setans5] = useState();
+  const comma = ",";
   const radio_props = [
     { label: '단답형', value: 1 },
     { label: '객관식', value: 2 },
@@ -85,7 +86,6 @@ export default function BookDetailQuiz({ isbn }) {
   ];
 
   const renderNode = (node, index, parent, siblings, defaultRenderer) => {
-    console.log(node.name)
     if (node.name == 'img') {
       const a = node.attribs;
       return (
@@ -317,8 +317,21 @@ export default function BookDetailQuiz({ isbn }) {
     }
   };
 
+  const quizMultiCheck = (instanceNum) => {
+    let answ = answer.toString().replace(instanceNum,'');
+    let total = answ.toString().replace(',,',',');
+    
+    if(total.endsWith(comma)){
+			setAnswer(total.slice(0,-1));
+		} else if(total.startsWith(comma)){
+			setAnswer(total.substring(1));
+		} else{
+      setAnswer(total);
+    }
+    
+
+  }
   const next = () => {
-    //console.log(totAnswer);
     if (titlenum !== bookQuiz.length) {
       if (totAnswer.length !== 0) {
         if (
@@ -327,14 +340,23 @@ export default function BookDetailQuiz({ isbn }) {
           answer === ''
         ) {
         } else {
-          totAnswer[examnum] = answer;
+          if(answer !== undefined && answer.toString().length !== 0){
+            totAnswer[examnum] = answer.toString();
+          }else{
+            totAnswer[examnum] = '';
+          }
         }
         setAnswer('');
         if (totAnswer.length > examnum) {
           setAnswer(totAnswer[examnum + 1]);
         }
       } else {
-        setTotAnswer([answer]);
+        if(answer !== undefined && answer.toString().length !== 0){
+          setTotAnswer([answer.toString()]);
+        }else{
+          setTotAnswer(['']);
+        }
+        
         setAnswer('');
       }
 
@@ -342,7 +364,17 @@ export default function BookDetailQuiz({ isbn }) {
       setTitlenum(titlenum + 1);
 
     } else {
-      setTotAnswer(totAnswer => [...totAnswer, answer]);
+      if(answer !== undefined){
+        if(answer.toString().endsWith(comma)){
+          setTotAnswer(totAnswer => [...totAnswer, answer.slice(0,-1)]);
+        } else if(answer.toString().startsWith(comma)){
+          setTotAnswer(totAnswer => [...totAnswer, answer.substring(1)]);
+        } else{
+          setTotAnswer(totAnswer => [...totAnswer, answer]);
+        }
+      }else{
+          setTotAnswer(totAnswer => [...totAnswer, '']);
+      }
       setQuizEnd(1);
       //quizRequested();
     }
@@ -683,23 +715,28 @@ export default function BookDetailQuiz({ isbn }) {
             <View key={index * page + 600} style={bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
-                  setAnswer(quiz.instanceNum);
+                  bookQuiz[examnum].answerCnt === 1 
+                  ? setAnswer(quiz.instanceNum) 
+                  : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && !answer.toString().includes(quiz.instanceNum) ? setAnswer((answer + ',' +  quiz.instanceNum).toString().replace(',,',','))
+                  : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && answer.toString().includes(quiz.instanceNum) ? quizMultiCheck(quiz.instanceNum)
+                  : setAnswer(quiz.instanceNum) 
                 }}>
                 <TextWrap
                   style={
-                    answer === quiz.instanceNum
+                    answer !== undefined && answer.toString().includes(quiz.instanceNum)
                       ? styles.selecttab
                       : totAnswer.length >= titlenum &&
-                        totAnswer[examnum] === quiz.instanceNum &&
+                        totAnswer[examnum].toString().includes(quiz.instanceNum) &&
                         answer.length === 0
                         ? styles.selecttab
                         : styles.answertab
                   }
                   font={fonts.kopubWorldDotumProLight}>
-                  {quiz.instanceNum}) {quiz.instance}
+                  {quiz.instanceNum}{')'} {quiz.instance}
                 </TextWrap>
               </TouchableOpacity>
             </View>
+            
           );
         })
       )}
