@@ -328,6 +328,109 @@ export default function FeedBookEditor({ route, navigation }) {
       }
     } else {
       // ios ~
+      
+        try {
+          // android file write on phone
+          if (params?.name === 'gallery') {
+            // 여러장
+
+            const formData = new FormData();
+            const file = [];
+            if (params.image !== undefined) {
+              for (let i = 0; i < params.image.length; i++) {
+                file.push({
+                  uri: params.image[i].uri,
+                  type: params.image[i].type,
+                  name: params.image[i].name,
+                });
+                formData.append('file', file[i]);
+              }
+            }
+            formData.append('feedIdx', route.params.idx);
+            formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
+            formData.append('hashTags', tags.tagsArray?.toString());
+
+            const { data, status } = await requestFile(
+              {
+                url: consts.apiUrl + '/mypage/feedBook/my',
+                method: 'put',
+              },
+              formData,
+            );
+            if (status === 'SUCCESS') {
+              setSaveButtonDisabled(false);
+              navigate(routes.feedBookImage, {
+                screen: routes.feedBookFeed,
+                params: {
+                  memberId: user.member_id,
+                  memberIdx: user.member_idx,
+                  profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+                  infoType: 'user',
+                  isNewFeed: true,
+                  key: Date.now(),
+                  noname: 'name',
+                },
+              });
+            }
+          } else {
+            // 한장
+
+            var formData = new FormData();
+            var file = [];
+            if (params.image !== undefined) {
+              file.push({
+                uri: params.image[0].uri,
+                type: params.image[0].type,
+                name: params.image[0].name,
+              });
+
+              formData.append('file', file[0]);
+            }
+            formData.append('feedIdx', route.params.idx);
+            formData.append('contents', contents);
+            formData.append('bookNm', title);
+            formData.append('author', writer);
+            formData.append('hashTags', tags.tagsArray?.toString());
+
+            const { data, status } = await requestFile(
+              {
+                url: consts.apiUrl + '/mypage/feedBook/my',
+                method: 'put',
+              },
+              formData,
+            );
+            if (status === 'SUCCESS') {
+              setSaveButtonDisabled(false);
+              if (params?.name === 'camera') {
+                const saveResult = await CameraRoll.save(params.image[0].uri, {
+                  type: 'photo',
+                  album: 'toaping',
+                });
+              }
+              navigate(routes.feedBookImage, {
+                screen: routes.feedBookFeed,
+                params: {
+                  memberId: user.member_id,
+                  memberIdx: user.member_idx,
+                  profile_path:  user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+                  infoType: 'user',
+                  isNewFeed: true,
+                  key: Date.now(),
+                  noname: 'name',
+                },
+              });
+            }
+          }
+        } catch (e) {
+          setSaveButtonDisabled(false);
+          dispatch(dialogError(e));
+        }
     }
   };
 

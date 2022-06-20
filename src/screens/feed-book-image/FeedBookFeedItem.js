@@ -99,7 +99,7 @@ const renderItem = ({
                 : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
             }
           />
-          <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.info}>
+          <TextWrap font={fonts.kopubWorldDotumProMedium} numberOfLines={1} ellipsizeMode='tail' style={styles.info}>
             {/* {memberId} */}
             {memberId}
           </TextWrap>
@@ -315,6 +315,7 @@ const styles = StyleSheet.create({
     paddingLeft: widthPercentage(5),
     alignSelf: 'center',
     width:screenWidth/2,
+    
   },
   infoRight: {
     fontSize: fontPercentage(11),
