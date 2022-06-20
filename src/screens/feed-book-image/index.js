@@ -127,7 +127,7 @@ export default function FeedBookImage({route, navigation}) {
     <SafeAreaView style={styles.safeView}>
       <Topbar
         title={
-          (route.params.params.memberId && route.params.params.noname === undefined)
+          (route.params.screen === 'feedBookUserImage' && route.params.params.memberId && route.params.params.noname === undefined)
             ? route.params.params.memberId.length > 12
               ? route.params.params.memberId.substring(0, 12) + '...'
               : route.params.params.memberId
