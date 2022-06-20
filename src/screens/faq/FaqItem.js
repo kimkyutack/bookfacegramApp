@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     height: heightPercentage(50),
+    top:heightPercentage(16),
   },
   mainOpend: { paddingVertical: 10 },
   date: {

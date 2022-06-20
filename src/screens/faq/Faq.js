@@ -123,20 +123,22 @@ export default function Faq({ route, navigation }) {
                 피드북
               </TextWrap>
             ) : (
+              <View style={{
+                borderBottomColor: color2,
+                borderBottomWidth: 4,
+              }}>
               <TextWrap
                 style={{
-                  borderBottomColor: color2,
                   width: screenWidth / 4,
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
                   textAlign: 'center',
-
-                  borderBottomWidth: 4,
                 }}>
                 피드북
               </TextWrap>
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -157,19 +159,22 @@ export default function Faq({ route, navigation }) {
                 서비스
               </TextWrap>
             ) : (
+              <View style={{
+                borderBottomColor: color1,
+                borderBottomWidth: 4,
+              }}>
               <TextWrap
                 style={{
-                  borderBottomColor: color1,
                   width: screenWidth / 4,
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
                   textAlign: 'center',
-                  borderBottomWidth: 4,
                 }}>
                 서비스
               </TextWrap>
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -191,19 +196,22 @@ export default function Faq({ route, navigation }) {
                 독후활동
               </TextWrap>
             ) : (
+              <View style={{
+                borderBottomColor: color3,
+                borderBottomWidth: 4,
+              }}>
               <TextWrap
                 style={{
-                  borderBottomColor: color3,
                   width: screenWidth / 4,
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   textAlign: 'center',
                   fontSize: fontPercentage(13),
-                  borderBottomWidth: 4,
                 }}>
                 독후활동
               </TextWrap>
+              </View>
             )}
           </TouchableOpacity>
         </View>
@@ -224,19 +232,22 @@ export default function Faq({ route, navigation }) {
                 회원
               </TextWrap>
             ) : (
+              <View style={{
+                borderBottomColor: color4,
+                borderBottomWidth: 4,
+              }}>
               <TextWrap
                 style={{
-                  borderBottomColor: color4,
                   width: screenWidth / 4,
                   height: heightPercentage(40),
                   alignItems: 'center',
                   alignSelf: 'stretch',
                   fontSize: fontPercentage(13),
                   textAlign: 'center',
-                  borderBottomWidth: 4,
                 }}>
                 회원
               </TextWrap>
+              </View>
             )}
           </TouchableOpacity>
         </View>
