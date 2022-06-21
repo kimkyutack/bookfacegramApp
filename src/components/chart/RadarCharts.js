@@ -9,7 +9,8 @@ import {
   SafeAreaView,
   processColor,
   Text,
-  Platform
+  Platform,
+  DynamicColorIOS,
 } from 'react-native';
 import {
   widthPercentage,
@@ -88,12 +89,14 @@ export default function RadarCharts() {
           xAxis: {
             valueFormatter: ['A', 'B', 'C', 'D', 'E'],
             textSize: fontPercentage(20),
+            textColor : processColor('black'),
           },
           yAxis: {
             axisMinimum: 0,
             axisMaximum: 100,
             labelCount: 6,
             labelCountForce: true,
+            textColor : processColor('black'),
           },
           legend: {
             enabled: false,

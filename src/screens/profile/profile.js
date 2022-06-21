@@ -13,6 +13,7 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  Platform,
 } from 'react-native';
 import TagInput from 'react-native-tags-input';
 import Avatar from '../../components/avatar/Avatar';
@@ -387,7 +388,7 @@ export default function Profile({ route, navigation }) {
           </TextWrap>
           <InputWrap2
             style={styles.inputStyle}
-            inputStyle={styles.inputValue}
+            inputStyle={styles.inputValue2}
             value={autoHypenPhone(phone)}
             onChange={eve => {
               setPhone(eve);
@@ -523,6 +524,15 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlign: 'left',
     paddingHorizontal: 0,
+  },
+  inputValue2: {
+    fontFamily: fonts.kopubWorldDotumProMedium,
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(24),
+    color: colors.black,
+    textAlign: 'left',
+    paddingHorizontal: 0,
+    top : Platform.OS === 'ios' ? heightPercentage(-4) : 0 ,
   },
   image: {
     width: widthPercentage(30),
@@ -683,7 +693,14 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   mainSub2: {
-    paddingVertical: 2,
+    ...Platform.select({
+      ios: {
+        paddingVertical : 14,
+      },
+      android: {
+        paddingVertical: 2,
+      },
+  }),
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignContent: 'flex-start',
@@ -720,6 +737,6 @@ const styles = StyleSheet.create({
     flexBasis: 300,
     flexShrink: 1,
     textAlign: 'left',
-    top: heightPercentage(8),
+    top: Platform.OS === 'ios' ? heightPercentage(4) : heightPercentage(8),
   },
 });
