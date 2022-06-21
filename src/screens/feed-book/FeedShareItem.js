@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -23,25 +23,24 @@ import images from '../../libs/images';
 import routes from '../../libs/routes';
 import FastImage from 'react-native-fast-image';
 
-import {navigate} from '../../services/navigation';
+import { navigate } from '../../services/navigation';
 import Avatar from '../../components/avatar/Avatar';
 import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
 import Swiper from 'react-native-swiper';
 
 const toStringByFormatting = (source) => {
-   const year = source.substring(0,4); 
-   const month = source.substring(5,7); 
-   const day = source.substring(8,10); 
-   return year + '.' + month +'.' + day; 
-  }
+  const year = source.substring(0, 4);
+  const month = source.substring(5, 7);
+  const day = source.substring(8, 10);
+  return year + '.' + month + '.' + day;
+}
 
 
 const renderItem = ({
   feeditem,
-  index,
 }) => {
-  const replacecontents = feeditem.contents.replace(/&nbsp/g, ' ');
+  const replacecontents = feeditem[0].contents.replace(/&nbsp/g, ' ');
   return (
     <View style={styles.itemContainer}>
       <View style={styles.infoContainer}>
@@ -51,13 +50,13 @@ const renderItem = ({
             size={widthPercentage(25)}
             style={styles.avator}
             path={
-              feeditem.profile
-                ? feeditem.profile
+              feeditem[0].profile
+                ? feeditem[0].profile
                 : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
             }
           />
           <TextWrap font={fonts.kopubWorldDotumProMedium} style={styles.info}>
-            {feeditem.memberId}
+            {feeditem[0].memberId}
           </TextWrap>
         </TouchableOpacity>
       </View>
@@ -75,16 +74,16 @@ const renderItem = ({
           removeClippedSubviews={false}
           dotColor={colors.border}
           activeDotColor={colors.blue}
-          dotStyle={{top: 10}}
-          activeDotStyle={{top: 10}}
+          dotStyle={{ top: 10 }}
+          activeDotStyle={{ top: 10 }}
           nextButton={<Text />}
           prevButton={<Text />}>
-          {feeditem.feedImgName?.map((url, index) => {
+          {feeditem[0].feedImgName?.map((url, index) => {
             return (
               <TouchableWithoutFeedback key={index?.toString()}>
                 <FastImage
                   source={{
-                    uri: feeditem.feedImgName?.length
+                    uri: feeditem[0].feedImgName?.length
                       ? consts.imgUrl + '/feedBook/' + url
                       : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                     priority: FastImage.priority.normal,
@@ -101,20 +100,20 @@ const renderItem = ({
         <View style={styles.contentCountContainer}>
           <TouchableOpacity
             style={styles.iconContainer}>
-              <Image style={styles.icon} source={images.heart} />
+            <Image style={styles.icon} source={images.heart} />
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
-            {feeditem.likeCnt ? feeditem.likeCnt : 0}개
+            {feeditem[0].likeCnt ? feeditem[0].likeCnt : 0}개
           </TextWrap>
           <TouchableOpacity
-            style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
+            style={[styles.iconContainer, { marginLeft: widthPercentage(10) }]}>
             <Image style={styles.icon} source={images.comment} />
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
-            {feeditem.replyCnt ? feeditem.replyCnt : 0}개
+            {feeditem[0].replyCnt ? feeditem[0].replyCnt : 0}개
           </TextWrap>
           <TouchableOpacity
-            style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
+            style={[styles.iconContainer, { marginLeft: widthPercentage(10) }]}>
             <Image style={styles.icon2} source={images.share} />
           </TouchableOpacity>
         </View>
@@ -124,16 +123,16 @@ const renderItem = ({
             font={fonts.kopubWorldDotumProMedium}
             style={styles.contents}
             timeKey={Date.now()}
-            index={index}>
-            {feeditem.contents
+          >
+            {feeditem[0].contents
               ? replacecontents.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n')
               : ''}
           </TextMoreWrap>
         </View>
         <View>
-          {feeditem.feedHashtag && (
+          {feeditem[0].feedHashtag && (
             <TextWrap>
-              {feeditem.feedHashtag.map((data, hashIndex) => {
+              {feeditem[0].feedHashtag.map((data, hashIndex) => {
                 if (!data) {
                   return;
                 }
@@ -154,7 +153,7 @@ const renderItem = ({
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.joinDate}>
-            {feeditem.regDate ? toStringByFormatting(feeditem.regDate.substring(0,10)) : ''}
+            {feeditem[0].regDate ? toStringByFormatting(feeditem[0].regDate.substring(0, 10)) : ''}
           </TextWrap>
         </View>
       </View>
