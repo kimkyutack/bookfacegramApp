@@ -271,6 +271,32 @@ export const requestPut = async ({url, body = {}, headers = {}, file}) => {
   }
 };
 
+export const fetchGet = async ({url, query = {}}) => {
+  try {
+    // request 토큰 유효
+    const response = await axios.get(
+      `${url}?${Object.keys(query)
+        .map(key => `${key}=${query[key]}`)
+        .join('&')}`,
+    );
+    return response.data;
+  } catch (error) {
+    // other error
+    let errorObj;
+    if (error.response) {
+      const {data} = error.response;
+      if (typeof data === 'string') {
+        errorObj = {message: data};
+      } else {
+        errorObj = data;
+      }
+    } else {
+      errorObj = error;
+    }
+    throw errorObj;
+  }
+};
+
 export const requestGet = async ({url, headers, query = {}}) => {
   try {
     // request 토큰 유효
