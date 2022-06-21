@@ -91,7 +91,6 @@ export default function FeedBookAllImage({route, navigation}) {
   };
 
   const onPress = (item, index) => {
-    console.log(item);
     navigation.navigate(routes.feedBookImage, {
       screen: routes.feedBookFeed,
       params: {

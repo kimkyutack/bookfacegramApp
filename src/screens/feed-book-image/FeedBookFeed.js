@@ -13,6 +13,7 @@ import {
   Easing,
 } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 
 import moment from 'moment';
 import colors from '../../libs/colors';
@@ -115,17 +116,21 @@ export default function FeedBookFeed({ route, navigation }) {
         if (route.params?.index === 0) {
           listRef.current?.scrollToOffset({ y: 0, animated: false });
         } else {
-          listRef.current?.scrollToIndex({
-            animated: false,
-            index: route.params?.index,
-          });
+          setTimeout(() => {
+            listRef.current?.scrollToIndex({
+              animated: false,
+              index: route.params?.index,
+            });
+          }, 100);
+          
         }
       }
     }
     return () => {
       mount = false;
     };
-  }, [route.params?.key, route.params?.isNewFeed]);
+  }, [route.params?.key, route.params?.isNewFeed, listRef]);
+
 
   const feedEdit = feedIdx => {
     navigation.navigate(routes.feedBookEditor, {
@@ -378,21 +383,22 @@ export default function FeedBookFeed({ route, navigation }) {
     }
   };
 
-  const renderItem = ({ item, index }) => (
-    <FeedBookFeedItem
-      {...item}
-      index={index}
-      login_id={user?.member_id}
-      login_idx={user?.member_idx}
-      userProfile={user?.profile_path}
-      editOnPress={editOnPress}
-      onShare={onShare}
-      toggleHeart={toggleHeart}
-      handleDoubleTap={handleDoubleTap}
-      opacity={opacity}
-      toggleIndex={toggleIndex}
-    />
-  );
+  const renderItem = ({ item, index }) => {
+    return (
+      <FeedBookFeedItem
+        {...item}
+        index={index}
+        login_id={user?.member_id}
+        login_idx={user?.member_idx}
+        userProfile={user?.profile_path}
+        editOnPress={editOnPress}
+        onShare={onShare}
+        toggleHeart={toggleHeart}
+        handleDoubleTap={handleDoubleTap}
+        opacity={opacity}
+        toggleIndex={toggleIndex}
+      />
+    )};
 
   const renderFooter = () => {
     if (userBooks?.length === 0 || !isUserLoading) {
@@ -420,7 +426,6 @@ export default function FeedBookFeed({ route, navigation }) {
     <SafeAreaView style={styles.root}>
       <FlatList
         initialNumToRender={limit}
-        initialScrollIndex={route.params?.index}
         ref={listRef}
         data={
           route.params?.infoType && route.params?.infoType === 'user'
@@ -432,7 +437,6 @@ export default function FeedBookFeed({ route, navigation }) {
             ? userBooks
             : allBooks
         }
-        removeClippedSubviews={true}
         getItemLayout={(data, index) => ({
           length: heightPercentage(543.4),
           offset: heightPercentage(543.4) * index,
