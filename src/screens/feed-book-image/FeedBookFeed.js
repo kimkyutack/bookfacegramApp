@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useCallback, useMemo} from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import {
   Alert,
   FlatList,
@@ -12,14 +12,15 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 
 import moment from 'moment';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
 import routes from '../../libs/routes';
-import {requestDelete, requestPost} from '../../services/network';
+import { requestDelete, requestPost } from '../../services/network';
 import {
   widthPercentage,
   heightPercentage,
@@ -38,13 +39,13 @@ import {
   dialogOpenAction,
   dialogOpenMessage,
 } from '../../redux/dialog/DialogActions';
-import {getFeedUser, getFeedAll} from '../../redux/book/BookActions';
-import {FeedBookFeedItem} from './FeedBookFeedItem';
-import {useIsFocused} from '@react-navigation/core';
+import { getFeedUser, getFeedAll } from '../../redux/book/BookActions';
+import { FeedBookFeedItem } from './FeedBookFeedItem';
+import { useIsFocused } from '@react-navigation/core';
 
-export default function FeedBookFeed({route, navigation}) {
+export default function FeedBookFeed({ route, navigation }) {
   const user = useSelector(s => s.user);
-  const {isUserLoading, userBooks, allBooks, userPage, allPage} = useSelector(
+  const { isUserLoading, userBooks, allBooks, userPage, allPage } = useSelector(
     s => s.book,
   );
 
@@ -104,7 +105,7 @@ export default function FeedBookFeed({route, navigation}) {
     let mount = true;
     if (mount && isFocused) {
       if (route.params?.isNewFeed) {
-        listRef.current?.scrollToOffset({y: 0.1, animated: false});
+        listRef.current?.scrollToOffset({ y: 0.1, animated: false });
         const newTime = new Date(+new Date() + 3300 * 10000)
           .toISOString()
           .replace('T', ' ')
@@ -113,7 +114,7 @@ export default function FeedBookFeed({route, navigation}) {
         fetchUserFeed('reset', newTime);
       } else {
         if (route.params?.index === 0) {
-          listRef.current?.scrollToOffset({y: 0, animated: false});
+          listRef.current?.scrollToOffset({ y: 0, animated: false });
         } else {
           listRef.current?.scrollToIndex({
             animated: false,
@@ -157,9 +158,9 @@ export default function FeedBookFeed({route, navigation}) {
               params: {
                 memberId: user.member_id,
                 memberIdx: user.member_idx,
-                profile_path:  user?.profile_path
-                    ? user?.profile_path
-                    : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+                profile_path: user?.profile_path
+                  ? user?.profile_path
+                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
               },
             });
@@ -378,7 +379,7 @@ export default function FeedBookFeed({route, navigation}) {
     }
   };
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <FeedBookFeedItem
       {...item}
       index={index}
@@ -418,7 +419,7 @@ export default function FeedBookFeed({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.root}>
-      <FlatList
+      <OptimizedFlatList
         initialNumToRender={limit}
         initialScrollIndex={route.params?.index}
         ref={listRef}
@@ -443,8 +444,8 @@ export default function FeedBookFeed({route, navigation}) {
         keyExtractor={keyExtractor} // arrow 함수 자제
         renderItem={memoizedRenderItem} // arrow 함수 자제
         onScroll={event => {
-            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
-          }}
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.6}
         refreshing={refreshing}
@@ -453,7 +454,7 @@ export default function FeedBookFeed({route, navigation}) {
         windowSize={5} // 위 2개 가운데 1개 아래2개 보통 2개 항목이 화면을 체울경우 5
         ListFooterComponent={renderFooter}
       />
-       {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
         <TouchableOpacity
           onPress={() => {
             listRef.current.scrollToOffset({ animated: true, offset: 0 });
