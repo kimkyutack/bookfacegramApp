@@ -13,7 +13,6 @@ import {
   Easing,
 } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 
 import moment from 'moment';
 import colors from '../../libs/colors';
@@ -419,7 +418,7 @@ export default function FeedBookFeed({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.root}>
-      <OptimizedFlatList
+      <FlatList
         initialNumToRender={limit}
         initialScrollIndex={route.params?.index}
         ref={listRef}
