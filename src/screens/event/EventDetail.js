@@ -59,12 +59,16 @@ const htmlConfig = {
         thBorderColor: 'black',
         tdBorderColor: 'black',
         outerBorderColor: 'black',
-      }
+      },
     }
   },
   tagsStyles: {
     table: {
-      flex: 1
+      flex: 1,
+      alignSelf: 'center',
+      minWidth: screenWidth * 0.92,
+      maxWidth: screenWidth * 0.92,
+      paddingHorizontal: 2,
     }
   },
   defaultWebViewProps: {},
