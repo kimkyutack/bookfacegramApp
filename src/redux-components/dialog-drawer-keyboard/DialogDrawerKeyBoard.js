@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Keyboard,
   SafeAreaView,
@@ -10,9 +10,10 @@ import {
   View,
   Image,
   KeyboardAvoidingView,
-  NativeModules 
+  NativeModules,
+  Platform
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
@@ -25,30 +26,30 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../services/util';
-import {requestPut, requestPost} from '../../services/network';
+import { requestPut, requestPost } from '../../services/network';
 import {
   dialogClose,
   dialogError,
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
-import {goBack, navigate} from '../../services/navigation';
+import { goBack, navigate } from '../../services/navigation';
 
-export default function DialogDrawerKeyBoard({}) {
+export default function DialogDrawerKeyBoard({ }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
-  const {drawerKeyBoardDialog, drawerDialog} = useSelector(s => s.dialog);
+  const { drawerKeyBoardDialog, drawerDialog } = useSelector(s => s.dialog);
   const [text, setText] = useState(
     drawerKeyBoardDialog.text ? drawerKeyBoardDialog.text : '',
   );
   const { StatusBarManager } = NativeModules
 
-  useEffect(()=>{
+  useEffect(() => {
     Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
-        setStatusBarHeight(statusBarFrameData.height)
-      }) : null
-}, []);
+      setStatusBarHeight(statusBarFrameData.height)
+    }) : null
+  }, []);
 
-const [statusBarHeight, setStatusBarHeight] = useState(0);
+  const [statusBarHeight, setStatusBarHeight] = useState(0);
 
   useEffect(() => {
     if (drawerKeyBoardDialog.open) {
@@ -226,116 +227,222 @@ const [statusBarHeight, setStatusBarHeight] = useState(0);
 
   return (
     <SafeAreaView style={styles.root}>
-      <KeyboardAvoidingView
+      {
+        Platform.OS === 'ios' ? (
+          <KeyboardAvoidingView
             style={styles.rootContainer}
             behavior={"padding"}
-            //keyboardVerticalOffset={statusBarHeight}
-            >
-      <TouchableOpacity
-        style={styles.wrap}
-        onPress={() => dispatch(dialogClose())}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            return;
-          }}>
-            <View>
-          
-            <View style={styles.inputContainer}>
-              <View
-                style={{
-                  width: screenWidth,
-                  alignItems: 'center',
+          >
+            <TouchableOpacity
+              style={styles.wrap}
+              onPress={() => dispatch(dialogClose())}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  return;
                 }}>
+                <View>
+
+                  <View style={styles.inputContainer}>
+                    <View
+                      style={{
+                        width: screenWidth,
+                        alignItems: 'center',
+                      }}>
+                      <View
+                        style={{
+                          width: widthPercentage(31),
+                          borderBottomColor: '#c2c2c2',
+                          borderRadius: 3,
+                          borderBottomWidth: 4,
+                          position: 'absolute',
+                          top: 12,
+                          alignSelf: 'center',
+                        }}
+                      />
+                      <TouchableOpacity
+                        style={{
+                          position: 'absolute',
+                          top: heightPercentage(30),
+                          left: widthPercentage(20),
+                        }}
+                        onPress={() => dispatch(dialogClose())}>
+                        <Image source={images.delete} style={styles.delete} />
+                      </TouchableOpacity>
+                      <TextWrap
+                        font={fonts.kopubWorldDotumProBold}
+                        style={styles.inputTitle}>
+                        {drawerKeyBoardDialog.title ? drawerKeyBoardDialog.title : ''}
+                      </TextWrap>
+                    </View>
+                    <TextInput
+                      ref={inputRef}
+                      placeholder={'책서랍 이름을 최소 한 글자 이상 입력해주세요'}
+                      style={styles.input}
+                      autoFocus={true}
+                      multiline={true}
+                      maxLength={15}
+                      autoCapitalize="none"
+                      onChangeText={t => {
+                        if (t.length >= 16) {
+                          return;
+                        }
+                        setText(t);
+                      }}
+                      value={text}
+                    />
+                    <TextWrap
+                      style={styles.inputCount}
+                      font={fonts.kopubWorldDotumProLight}>
+                      <TextWrap
+                        style={styles.inputCount}
+                        font={fonts.kopubWorldDotumProBold}>
+                        {text ? text.length : 0}
+                      </TextWrap>
+                      /15
+                    </TextWrap>
+                  </View>
+                  <TouchableOpacity
+                    style={
+                      text
+                        ? drawerKeyBoardDialog.text === text
+                          ? styles.disabledButtonContainer
+                          : styles.buttonContainer
+                        : styles.disabledButtonContainer
+                    }
+                    disabled={
+                      text
+                        ? drawerKeyBoardDialog.text === text
+                          ? true
+                          : false
+                        : true
+                    }
+                    onPress={
+                      drawerKeyBoardDialog.from === 'new'
+                        ? addBookDrawer
+                        : drawerKeyBoardDialog.from === 'rename'
+                          ? renameBookDrawer
+                          : drawerKeyBoardDialog.from === 'drawer'
+                            ? moveBookDrawer
+                            : selectedBookDrawer
+                    }>
+                    <TextWrap
+                      font={fonts.kopubWorldDotumProBold}
+                      style={text ? styles.complete : styles.completeDisabled}>
+                      {drawerKeyBoardDialog.buttonTitle
+                        ? drawerKeyBoardDialog.buttonTitle
+                        : ''}
+                    </TextWrap>
+                  </TouchableOpacity>
+                </View>
+              </TouchableWithoutFeedback>
+            </TouchableOpacity>
+
+          </KeyboardAvoidingView>
+        ) : (<TouchableOpacity
+          style={styles.wrap}
+          onPress={() => dispatch(dialogClose())}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              return;
+            }}>
+            <View>
+
+              <View style={styles.inputContainer}>
                 <View
                   style={{
-                    width: widthPercentage(31),
-                    borderBottomColor: '#c2c2c2',
-                    borderRadius: 3,
-                    borderBottomWidth: 4,
-                    position: 'absolute',
-                    top: 12,
-                    alignSelf: 'center',
+                    width: screenWidth,
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: widthPercentage(31),
+                      borderBottomColor: '#c2c2c2',
+                      borderRadius: 3,
+                      borderBottomWidth: 4,
+                      position: 'absolute',
+                      top: 12,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      top: heightPercentage(30),
+                      left: widthPercentage(20),
+                    }}
+                    onPress={() => dispatch(dialogClose())}>
+                    <Image source={images.delete} style={styles.delete} />
+                  </TouchableOpacity>
+                  <TextWrap
+                    font={fonts.kopubWorldDotumProBold}
+                    style={styles.inputTitle}>
+                    {drawerKeyBoardDialog.title ? drawerKeyBoardDialog.title : ''}
+                  </TextWrap>
+                </View>
+                <TextInput
+                  ref={inputRef}
+                  placeholder={'책서랍 이름을 최소 한 글자 이상 입력해주세요'}
+                  style={styles.input}
+                  autoFocus={true}
+                  multiline={true}
+                  maxLength={15}
+                  autoCapitalize="none"
+                  onChangeText={t => {
+                    if (t.length >= 16) {
+                      return;
+                    }
+                    setText(t);
                   }}
+                  value={text}
                 />
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    top: heightPercentage(30),
-                    left: widthPercentage(20),
-                  }}
-                  onPress={() => dispatch(dialogClose())}>
-                  <Image source={images.delete} style={styles.delete} />
-                </TouchableOpacity>
-                <TextWrap
-                  font={fonts.kopubWorldDotumProBold}
-                  style={styles.inputTitle}>
-                  {drawerKeyBoardDialog.title ? drawerKeyBoardDialog.title : ''}
-                </TextWrap>
-              </View>
-              <TextInput
-                ref={inputRef}
-                placeholder={'책서랍 이름을 최소 한 글자 이상 입력해주세요'}
-                style={styles.input}
-                autoFocus={true}
-                multiline={true}
-                maxLength={15}
-                autoCapitalize="none"
-                onChangeText={t => {
-                  if (t.length >= 16) {
-                    return;
-                  }
-                  setText(t);
-                }}
-                value={text}
-              />
-              <TextWrap
-                style={styles.inputCount}
-                font={fonts.kopubWorldDotumProLight}>
                 <TextWrap
                   style={styles.inputCount}
-                  font={fonts.kopubWorldDotumProBold}>
-                  {text ? text.length : 0}
+                  font={fonts.kopubWorldDotumProLight}>
+                  <TextWrap
+                    style={styles.inputCount}
+                    font={fonts.kopubWorldDotumProBold}>
+                    {text ? text.length : 0}
+                  </TextWrap>
+                  /15
                 </TextWrap>
-                /15
-              </TextWrap>
+              </View>
+              <TouchableOpacity
+                style={
+                  text
+                    ? drawerKeyBoardDialog.text === text
+                      ? styles.disabledButtonContainer
+                      : styles.buttonContainer
+                    : styles.disabledButtonContainer
+                }
+                disabled={
+                  text
+                    ? drawerKeyBoardDialog.text === text
+                      ? true
+                      : false
+                    : true
+                }
+                onPress={
+                  drawerKeyBoardDialog.from === 'new'
+                    ? addBookDrawer
+                    : drawerKeyBoardDialog.from === 'rename'
+                      ? renameBookDrawer
+                      : drawerKeyBoardDialog.from === 'drawer'
+                        ? moveBookDrawer
+                        : selectedBookDrawer
+                }>
+                <TextWrap
+                  font={fonts.kopubWorldDotumProBold}
+                  style={text ? styles.complete : styles.completeDisabled}>
+                  {drawerKeyBoardDialog.buttonTitle
+                    ? drawerKeyBoardDialog.buttonTitle
+                    : ''}
+                </TextWrap>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={
-                text
-                  ? drawerKeyBoardDialog.text === text
-                    ? styles.disabledButtonContainer
-                    : styles.buttonContainer
-                  : styles.disabledButtonContainer
-              }
-              disabled={
-                text
-                  ? drawerKeyBoardDialog.text === text
-                    ? true
-                    : false
-                  : true
-              }
-              onPress={
-                drawerKeyBoardDialog.from === 'new'
-                  ? addBookDrawer
-                  : drawerKeyBoardDialog.from === 'rename'
-                  ? renameBookDrawer
-                  : drawerKeyBoardDialog.from === 'drawer'
-                  ? moveBookDrawer
-                  : selectedBookDrawer
-              }>
-              <TextWrap
-                font={fonts.kopubWorldDotumProBold}
-                style={text ? styles.complete : styles.completeDisabled}>
-                {drawerKeyBoardDialog.buttonTitle
-                  ? drawerKeyBoardDialog.buttonTitle
-                  : ''}
-              </TextWrap>
-            </TouchableOpacity>
-            </View>
-        </TouchableWithoutFeedback>
-      </TouchableOpacity>
-
-      </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </TouchableOpacity>
+        )
+      }
     </SafeAreaView>
   );
 }
@@ -351,9 +458,9 @@ const styles = StyleSheet.create({
     zIndex: consts.dialogZindex,
   },
   rootContainer: {
-    flex : 1,
+    flex: 1,
   },
-  wrap: {flex: 1, justifyContent: 'flex-end'},
+  wrap: { flex: 1, justifyContent: 'flex-end' },
   inputTitle: {
     fontSize: fontPercentage(14),
     color: '#707070',
