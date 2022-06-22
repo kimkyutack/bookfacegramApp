@@ -9,6 +9,8 @@ import {
   TextInput,
   View,
   Image,
+  KeyboardAvoidingView,
+  NativeModules 
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -38,6 +40,15 @@ export default function DialogDrawerKeyBoard({}) {
   const [text, setText] = useState(
     drawerKeyBoardDialog.text ? drawerKeyBoardDialog.text : '',
   );
+  const { StatusBarManager } = NativeModules
+
+  useEffect(()=>{
+    Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
+        setStatusBarHeight(statusBarFrameData.height)
+      }) : null
+}, []);
+
+const [statusBarHeight, setStatusBarHeight] = useState(0);
 
   useEffect(() => {
     if (drawerKeyBoardDialog.open) {
@@ -215,6 +226,11 @@ export default function DialogDrawerKeyBoard({}) {
 
   return (
     <SafeAreaView style={styles.root}>
+      <KeyboardAvoidingView
+            style={styles.rootContainer}
+            behavior={"padding"}
+            //keyboardVerticalOffset={statusBarHeight}
+            >
       <TouchableOpacity
         style={styles.wrap}
         onPress={() => dispatch(dialogClose())}>
@@ -222,7 +238,8 @@ export default function DialogDrawerKeyBoard({}) {
           onPress={() => {
             return;
           }}>
-          <View>
+            <View>
+          
             <View style={styles.inputContainer}>
               <View
                 style={{
@@ -314,9 +331,11 @@ export default function DialogDrawerKeyBoard({}) {
                   : ''}
               </TextWrap>
             </TouchableOpacity>
-          </View>
+            </View>
         </TouchableWithoutFeedback>
       </TouchableOpacity>
+
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -330,6 +349,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.8)',
     bottom: 0,
     zIndex: consts.dialogZindex,
+  },
+  rootContainer: {
+    flex : 1,
   },
   wrap: {flex: 1, justifyContent: 'flex-end'},
   inputTitle: {
