@@ -275,12 +275,13 @@ const styles = StyleSheet.create({
   },
 
   hashTags: {
-    fontSize: fontPercentage(11),
-    lineHeight: fontPercentage(19),
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(20),
     color: '#004ac9',
   },
   contentLetter: {
     position: 'relative',
+    fontSize:fontPercentage(13),
     bottom: -2,
     left: 1,
   },
@@ -288,10 +289,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   info: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(17),
     paddingLeft: widthPercentage(5),
     alignSelf: 'center',
+    width:screenWidth/2,
+    
   },
   infoRight: {
     fontSize: fontPercentage(11),
@@ -299,7 +302,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   reply: {
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
     paddingLeft: widthPercentage(6),
     alignSelf: 'center',
@@ -307,12 +310,12 @@ const styles = StyleSheet.create({
   },
   contents: {
     marginTop: heightPercentage(10),
-    fontSize: fontPercentage(11),
+    fontSize: fontPercentage(13),
     lineHeight: fontPercentage(19),
   },
 
   joinDate: {
-    fontSize: fontPercentage(8),
+    fontSize: fontPercentage(10),
     lineHeight: fontPercentage(19),
     color: '#333333',
   },
@@ -343,3 +346,4 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
+

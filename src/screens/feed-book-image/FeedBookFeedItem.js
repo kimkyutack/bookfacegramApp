@@ -297,12 +297,13 @@ const styles = StyleSheet.create({
   },
 
   hashTags: {
-    fontSize: fontPercentage(11),
-    lineHeight: fontPercentage(19),
+    fontSize: fontPercentage(13),
+    lineHeight: fontPercentage(20),
     color: '#004ac9',
   },
   contentLetter: {
     position: 'relative',
+    fontSize:fontPercentage(13),
     bottom: -2,
     left: 1,
   },

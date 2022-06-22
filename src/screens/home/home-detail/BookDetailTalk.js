@@ -271,7 +271,7 @@ export default function BookDetailTalk({ selectedBook, wait }) {
             }}
             inputContainerStyle={styles.hashTagInput}
             inputStyle={{
-              fontSize: fontPercentage(11),
+              fontSize: fontPercentage(14),
               lineHeight: fontPercentage(20),
               marginLeft: 3,
               color: '#858585',

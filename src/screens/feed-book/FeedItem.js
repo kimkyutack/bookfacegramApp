@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
   },
   contentLetter: {
     position: 'relative',
+    fontSize:fontPercentage(13),
     bottom: -2,
     left: 1,
   },

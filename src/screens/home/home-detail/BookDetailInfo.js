@@ -128,12 +128,6 @@ const styles = StyleSheet.create({
   descText: {
     color: '#555555',
     fontSize: fontPercentage(14),
-    ...Platform.select({
-      android:{
-        lineHeight: 21,
-      },
-    }),
-    
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 10,
@@ -157,7 +151,6 @@ const styles = StyleSheet.create({
   title: {
     color: colors.black,
     fontSize: fontPercentage(14),
-    lineHeight: 19,
     letterSpacing: -0.5,
   },
   up: {

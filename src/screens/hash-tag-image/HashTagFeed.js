@@ -386,7 +386,6 @@ export default function HashTagFeed({ route, navigation }) {
         onScroll={event => {
           setContentVerticalOffset(event.nativeEvent.contentOffset.y);
         }}
-        removeClippedSubviews={true}
         getItemLayout={(data, index) => ({
           length: heightPercentage(543.4),
           offset: heightPercentage(543.4) * index,
