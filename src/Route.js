@@ -31,7 +31,7 @@ import Setting from './screens/setting/Setting';
 import Profile from './screens/profile/profile';
 import Event from './screens/event/Event';
 import EventDetail from './screens/event/EventDetail';
-
+import FeedBookShare from './screens/feed-book/FeedBookShare';
 import FeedBook from './screens/feed-book/FeedBook';
 import FeedBookImage from './screens/feed-book-image';
 import Search from './screens/search/Search';
@@ -407,6 +407,15 @@ export default function Router() {
             <Drawer.Screen
               name={routes.feedBook}
               component={FeedBook}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Drawer.Screen
+              name={routes.feedShare}
+              component={FeedBookShare}
               options={({route, navigation}) => {
                 return {
                   swipeEnabled: false,
