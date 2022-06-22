@@ -107,14 +107,14 @@ const styles = StyleSheet.create({
   },
   message2: {
     lineHeight: 21,
-    fontSize: 16,
+    fontSize: fontPercentage(16),
     color: '#222222',
     textAlign: 'left',
     paddingHorizontal: 30,
   },
   message: {
     lineHeight: 21,
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     color: '#222222',
     textAlign: 'left',
     paddingHorizontal: 30,
@@ -154,18 +154,18 @@ const styles = StyleSheet.create({
     left: 18,
   },
   title3: {
-    fontSize: 15,
+    fontSize: fontPercentage(15),
     lineHeight: 21,
     color: colors.primary,
     textAlign: 'left',
   },
   title2: {
-    fontSize: 15,
+    fontSize: fontPercentage(15),
     lineHeight: 21,
     color: colors.primary,
   },
   title: {
-    fontSize: 15,
+    fontSize: fontPercentage(15),
     lineHeight: 21,
     color: '#222222',
   },

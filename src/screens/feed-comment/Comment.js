@@ -9,8 +9,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
-  KeyboardAvoidingView,
-  NativeModules 
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -42,7 +40,6 @@ export default function Comment({route, navigation}) {
   const isFocused = useIsFocused();
   const inputRef = useRef();
   const listRef = useRef();
-  const { StatusBarManager } = NativeModules
 
   const [tabIndex, setTabIndex] = useState(0); // 0 댓글 1 답글 2 댓글 수정 3 대댓글 수정
   const [openYN, setopenYN] = useState({open : 0, replyIdx: 0}); // 0 대댓글 닫기 1 열기
@@ -53,13 +50,6 @@ export default function Comment({route, navigation}) {
   const [loading, setLoading] = useState(false);
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 150;
-  useEffect(()=>{
-        Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
-            setStatusBarHeight(statusBarFrameData.height)
-          }) : null
-    }, []);
-
-    const [statusBarHeight, setStatusBarHeight] = useState(0);
 
   const fetchCommentList = () => {
     setLoading(true);
@@ -351,11 +341,6 @@ const deleteRereply = (onPress) => {
             }),
         },
       }}>
-      <KeyboardAvoidingView
-            style={styles.rootContainer}
-            behavior={"padding"}
-            keyboardVerticalOffset={statusBarHeight+44}
-            >
       <View style={styles.root}>
         <View style={styles.inputContainer}>
           <Avatar
@@ -449,7 +434,6 @@ const deleteRereply = (onPress) => {
         </View>
       </View>
       <Footer page="feed" />
-      </KeyboardAvoidingView>
     </RootLayout>
   );
 }
@@ -460,10 +444,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: colors.white,
     justifyContent: 'space-between',
-  },
-  rootContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
   },
 scrolltotop: {
     width: widthPercentage(35),

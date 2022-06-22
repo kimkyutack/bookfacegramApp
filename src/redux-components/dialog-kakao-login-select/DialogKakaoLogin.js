@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   message: {
     lineHeight: 21,
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     color: '#222222',
     fontWeight: '700',
     textAlign: 'center',
