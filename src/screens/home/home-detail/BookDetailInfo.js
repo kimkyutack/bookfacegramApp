@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
@@ -128,7 +128,12 @@ const styles = StyleSheet.create({
   descText: {
     color: '#555555',
     fontSize: fontPercentage(14),
-    lineHeight: 21,
+    ...Platform.select({
+      android:{
+        lineHeight: 21,
+      },
+    }),
+    
     paddingHorizontal: 16,
     paddingTop: 20,
     paddingBottom: 10,

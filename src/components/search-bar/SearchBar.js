@@ -10,7 +10,7 @@ import {
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import images from '../../libs/images';
-import {widthPercentage} from '../../services/util';
+import {fontPercentage, widthPercentage} from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 export default function SearchBar({
   onPress,
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    fontSize:fontPercentage(15),
     color: '#222222',
     paddingVertical: 6,
     fontFamily: fonts.kopubWorldDotumProMedium,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   inputText: {
     flex: 1,
     color: '#222222',
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     lineHeight: 17,
   },
 });
