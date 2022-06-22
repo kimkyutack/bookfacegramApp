@@ -32,6 +32,7 @@ export default function Teenager({ route, navigation }) {
         onScroll={event => {
           setContentVerticalOffset(event.nativeEvent.contentOffset.y);
         }}
+        scrollEventThrottle={16}
       >
         <View style={styles.userInfoContainer}>
           <View>
