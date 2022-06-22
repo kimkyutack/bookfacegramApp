@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   message2: {
     lineHeight: 21,
-    fontSize: 18,
+    fontSize: fontPercentage(18),
     // marginTop: 10,
     color: '#222222',
     fontWeight: '700',
