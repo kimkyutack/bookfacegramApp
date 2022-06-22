@@ -38,7 +38,7 @@ export default function Provision({ route, navigation }) {
             <TextWrap style={styles.title2}>
               1. 개인정보의 수집 및 이용 목적
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               ㈜피씨엔씨가 운영하는 ‘토핑’ 앱 서비스는 다음의 목적을 위해
               개인정보를 수집·이용합니다. 수집한 개인정보는 다음의 목적 이외의
               용도로는 사용되지 않으며, 이용 목적이 변경되는 경우에는 별도의
@@ -58,7 +58,7 @@ export default function Provision({ route, navigation }) {
             <TextWrap style={styles.title}>
               2. 개인정보 수집 항목 및 방법
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               ㈜피씨엔씨가 운영하는 ‘토핑’ 앱 서비스는 회원가입 및 서비스 제공을
               위해 필요한 최소한의 개인정보를 수집하고 있습니다. {'\n'}
               {'\n'}
@@ -94,7 +94,7 @@ export default function Provision({ route, navigation }) {
             <TextWrap style={styles.title}>
               3. 개인정보의 보유 및 이용 기간
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               ㈜피씨엔씨가 운영하는 ‘토핑’ 앱 서비스는 법령에 따른 개인정보 보유
               및 이용 기간 또는 정보주체로부터 개인정보를 수집 시에 동의 받은
               개인정보 보유, 이용기간 내에서 개인정보를 처리, 보유합니다. {'\n'}
@@ -108,7 +108,7 @@ export default function Provision({ route, navigation }) {
               시{'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>4. 개인정보의 파기</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               ㈜피씨엔씨가 운영하는 ‘토핑’ 앱 서비스는 귀중한 이용자의
               개인정보를 안전하게 처리하며, 유출의 방지를 위하여 다음과 같은
               방법을 통하여 개인정보를 파기합니다.{'\n'}
@@ -141,7 +141,7 @@ export default function Provision({ route, navigation }) {
               있습니다.{'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>5. 개인정보 자동수집</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               당사는 온라인 맞춤형 광고 등 이용자에게 최적화된 맞춤형 서비스 및
               혜택을 제공하기 위하여 이용자의 ADID(Android OS)/IDFA(iOS) 모바일
               앱 이용자의 광고 식별 값을 수집할 수 있습니다. {'\n'}
@@ -154,7 +154,7 @@ export default function Provision({ route, navigation }) {
             <TextWrap style={styles.title}>
               6. 개인정보 관련 기술적, 관리적 대책
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               당사는 개인정보를 처리함에 있어 개인정보가 분실, 도난, 누출, 변조
               또는 훼손되지 않도록 안전성 확보를 위하여 기술적, 관리적, 물리적
               조치를 강구하고 있습니다.{'\n'}
@@ -176,7 +176,7 @@ export default function Provision({ route, navigation }) {
               비밀번호가 유출되지 않도록 각별히 유의하셔야 합니다.{'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>7. 개인정보 보호책임자</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               서비스를 이용하시는 과정에서 발생하는 모든 개인정보보호 관련 문의,
               불만처리는 개인정보 보호책임자에게 연락해 주시기 바랍니다. 당사는
               이용자들의 목소리에 대해 신속하고 충분한 답변을 드릴 것입니다.
@@ -187,7 +187,7 @@ export default function Provision({ route, navigation }) {
             <TextWrap style={styles.title}>
               8. 개인정보처리 정책 변경에 따른 고지
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               본 개인정보처리방침은 관련 법률 및 정부 지침의 변경과 당사의 내부
               정책 변경에 의하여 수시로 변경될 수 있습니다. 당사의
               개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경
@@ -230,6 +230,9 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(5),
     fontWeight: 'bold',
     fontSize: fontPercentage(15),
+  },
+  contents: {
+    fontSize: fontPercentage(13),
   },
   title2: {
     marginBottom: heightPercentage(5),
