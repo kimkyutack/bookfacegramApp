@@ -35,13 +35,13 @@ export default function PolicyHome({ route, navigation }) {
       >
         <View style={styles.userInfoContainer}>
           <View>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               본 약관은 ㈜피씨엔씨가 운영하는 ‘토핑’ 앱 회원으로 가입한 시점부터
               적용되므로 ‘토핑’ 앱 가입 및 서비스 이용전에 반드시 숙지하여
               주시기 바랍니다.
             </TextWrap>
             <TextWrap style={styles.title}>제 1조 목적</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               본 약관은 ㈜피씨엔씨(이하 ‘당사’라 함.)가 운영하는 ‘토핑’
               어플리케이션(이하 ‘어플’이라 함.) 서비스 이용과 관련한 제반 사항을
               명확히 규제함으로써, 회원님에 대한 고객 서비스의 증진과 의무, 절차
@@ -50,7 +50,7 @@ export default function PolicyHome({ route, navigation }) {
             <TextWrap style={styles.title}>
               제 2조 이용약관의 효력 및 변경
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 당사는 본 약관의 내용을 ‘회원’이 사전에 확인할 수 있도록
               회원가입 단계 페이지에 게시합니다. {'\n'}
               2. 당사가 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여
@@ -61,7 +61,7 @@ export default function PolicyHome({ route, navigation }) {
               적용하는 것을 원칙으로 합니다. {'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>제 3조 용어의 정의</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               본 약관에서 사용하는 용어의 정의는 아래 각 호와 같습니다. {'\n'}
               1. ‘토핑’ 어플이란 당사가 회원을 위해 제공하는 인공지능 기반의
               개인 맞춤 도서 추천 및 독후활동을 할 수 있는 독서 서비스입니다.
@@ -87,7 +87,7 @@ export default function PolicyHome({ route, navigation }) {
               게시한 부호, 문자, 글, 사진, 동영상 등을 의미합니다. {'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>제 4조 이용계약의 체결</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 이용계약은 토핑 어플의 회원이 되고자 하는 자가 약관 내용에 대해
               동의 후 회원가입을 신청하고 당사가 이를 승낙함으로써 체결됩니다.{' '}
               {'\n'}
@@ -102,7 +102,7 @@ export default function PolicyHome({ route, navigation }) {
             <TextWrap style={styles.title}>
               제 5조 회원탈퇴 및 이용계약의 해지
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 회원은 회원탈퇴를 통해 언제든지 서비스 이용계약 해지를 요청할
               수 있으며, 관련 정책에 따라 즉시 회원 탈퇴 처리를 합니다. 또한
               관련 법령 및 개인정보 처리방침 내 명시된 경우를 제외하고 해지 즉시
@@ -120,7 +120,7 @@ export default function PolicyHome({ route, navigation }) {
             <TextWrap style={styles.title}>
               제 6조 정보의 제공 및 광고의 게재
             </TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 당사는 서비스 운영과 관련하여 광고를 게재할 수 있습니다. 회원은
               서비스 이용 시 노출되는 맞춤 광고 게재에 대해 동의합니다.{'\n'}
               2. 당사는 서비스 이용 중 필요하다고 인정되는 다양한 정보를
@@ -130,7 +130,7 @@ export default function PolicyHome({ route, navigation }) {
               수신거절 할 수 있습니다. {'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>제 7조 회원에 대한 통지</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 당사는 회원에게 알려야 할 사항이 있는 경우 회원이 공개한
               연락처, 이메일 주소 등을 통해 개별 통지를 하거나, 어플 내의 팝업
               메시지를 통해 통지할 수 있습니다. 단, 회원이 어플을 삭제하거나
@@ -141,7 +141,7 @@ export default function PolicyHome({ route, navigation }) {
               {'\n'}
             </TextWrap>
             <TextWrap style={styles.title}>부칙</TextWrap>
-            <TextWrap>
+            <TextWrap style={styles.contents}>
               1. 본 약관은 2022년 1월 1일부터 시행합니다.{'\n'}
             </TextWrap>
           </View>
@@ -178,6 +178,9 @@ const styles = StyleSheet.create({
     marginBottom: heightPercentage(5),
     fontWeight: 'bold',
     fontSize: fontPercentage(15),
+  },
+  contents: {
+    fontSize: fontPercentage(13),
   },
   scrolltotop: {
     width: widthPercentage(35),

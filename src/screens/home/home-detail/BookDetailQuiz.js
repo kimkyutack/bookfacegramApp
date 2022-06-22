@@ -7,6 +7,7 @@ import {
   View,
   ActivityIndicator,
   TextInput,
+  Platform,
 } from 'react-native';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import colors from '../../../libs/colors';
@@ -1082,6 +1083,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   quizdata2: {
     backgroundColor: '#f2f2f2',
@@ -1093,6 +1095,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#c9c9c9',
     height: heightPercentage(30),
     textAlignVertical: 'center',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   quizdata3: {
     backgroundColor: '#f2f2f2',
@@ -1102,6 +1105,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: heightPercentage(30),
     textAlignVertical: 'center',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   quizdata4: {
     backgroundColor: '#f2f2f2',
@@ -1111,6 +1115,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: heightPercentage(30),
     textAlignVertical: 'center',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   answernum: {
     backgroundColor: '#cdde95',
@@ -1122,6 +1127,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     height: heightPercentage(30),
     textAlignVertical: 'center',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   answer: {
     backgroundColor: '#f2f2f2',
@@ -1133,6 +1139,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     height: heightPercentage(30),
     textAlignVertical: 'center',
+    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
   },
   onData: {
     textAlign: 'center',
