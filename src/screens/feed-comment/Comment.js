@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
+  Platform,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -428,7 +429,7 @@ const deleteRereply = (onPress) => {
             />
           ) : (
             <View>
-              <TextWrap>댓글이 없습니다.</TextWrap>
+              <TextWrap style={{fontSize:fontPercentage(14)}}>댓글이 없습니다.</TextWrap>
             </View>
           )}
         </View>
@@ -486,6 +487,12 @@ scrolltotop: {
     color: colors.text,
     width: widthPercentage(271),
     height: 50,
+    ...Platform.select({
+      ios:{
+        paddingTop:fontPercentage(14),
+      },
+    }),
+    
     paddingLeft: widthPercentage(9.5),
     fontFamily: fonts.kopubWorldDotumProMedium,
   },
