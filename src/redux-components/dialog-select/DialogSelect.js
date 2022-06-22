@@ -15,7 +15,7 @@ import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import {dialogClose} from '../../redux/dialog/DialogActions';
 import images from '../../libs/images';
-
+import { fontPercentage } from '../../services/util';
 export default function DialogSelect({}) {
   const dispatch = useDispatch();
   const {selectDialog} = useSelector(s => s.dialog, shallowEqual);
@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
   },
   message: {
     lineHeight: 21,
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     color: '#222222',
     fontWeight: '700',
     textAlign: 'center',
   },
   message2: {
     lineHeight: 21,
-    fontSize: 18,
+    fontSize: fontPercentage(18),
     // marginTop: 10,
     color: '#222222',
     fontWeight: '700',

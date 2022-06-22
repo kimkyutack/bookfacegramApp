@@ -4,6 +4,7 @@ import TextButton from '../../components/text-button/TextButton';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
+import { fontPercentage } from '../../services/util';
 
 export default function ListHeader({
   label,
@@ -36,12 +37,12 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#222',
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     lineHeight: 24,
   },
   labelButton: {
     color: colors.blue,
-    fontSize: 14,
+    fontSize: fontPercentage(14),
     lineHeight: 24,
   },
 });

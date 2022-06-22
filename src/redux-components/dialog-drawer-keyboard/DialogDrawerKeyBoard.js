@@ -493,6 +493,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     color: colors.text,
     width: screenWidth,
+    fontSize:fontPercentage(17),
     marginTop: heightPercentage(14),
     paddingLeft: widthPercentage(20),
     paddingRight: widthPercentage(28),
@@ -529,8 +530,10 @@ const styles = StyleSheet.create({
   },
   completeDisabled: {
     color: '#c6c6c6',
+    fontSize:fontPercentage(16),
   },
   complete: {
     color: colors.white,
+    fontSize:fontPercentage(16),
   },
 });

@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   valueStyle: {
     lineHeight: 14,
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     color: colors.black,
     padding: 5,
   },
