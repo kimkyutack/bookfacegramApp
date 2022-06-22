@@ -10,6 +10,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import TagInput from 'react-native-tags-input';
 import Avatar from '../../components/avatar/Avatar';
@@ -492,6 +493,11 @@ export default function PhotoEditor({ route, navigation }) {
                 </TextWrap>
                 <InputWrap
                   inputStyle={{
+                    ...Platform.select({
+                      ios: {
+                        height : fontPercentage(50),
+                      }
+                    }),
                     fontSize: fontPercentage(12),
                     lineHeight: fontPercentage(19),
                     color: '#858585',
@@ -507,8 +513,14 @@ export default function PhotoEditor({ route, navigation }) {
                 />
                 <InputWrap
                   inputStyle={{
+                    ...Platform.select({
+                      ios: {
+                        height : fontPercentage(50),
+                      }
+                    }),
                     fontSize: fontPercentage(12),
                     lineHeight: fontPercentage(19),
+                    
                     color: '#858585',
                     fontFamily: fonts.kopubWorldDotumProBold,
                     borderBottomWidth: 0.5,
