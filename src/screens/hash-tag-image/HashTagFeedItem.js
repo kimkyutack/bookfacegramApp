@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ import images from '../../libs/images';
 import routes from '../../libs/routes';
 import FastImage from 'react-native-fast-image';
 
-import {navigate} from '../../services/navigation';
+import { navigate } from '../../services/navigation';
 import Avatar from '../../components/avatar/Avatar';
 import TextMoreWrap from '../../components/text-more-wrap/TextMoreWrap';
 import consts from '../../libs/consts';
@@ -66,7 +66,7 @@ const renderItem = ({
               params: {
                 memberId: memberId,
                 memberIdx: memberIdx,
-                profile_path:  profile
+                profile_path: profile
                   ? profile
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
@@ -111,11 +111,11 @@ const renderItem = ({
         />
         {feedIdx === toggleIndex &&
           (idx !== -1 ? (
-            <Animated.View style={{position: 'absolute', opacity: opacity}}>
+            <Animated.View style={{ position: 'absolute', opacity: opacity }}>
               <Icon name="heart" size={50} color={'#ea0000'} />
             </Animated.View>
           ) : (
-            <Animated.View style={{position: 'absolute', opacity: opacity}}>
+            <Animated.View style={{ position: 'absolute', opacity: opacity }}>
               <Icon name="hearto" size={50} color={'white'} />
             </Animated.View>
           ))}
@@ -143,15 +143,15 @@ const renderItem = ({
                 memberIdx: memberIdx,
               })
             }
-            style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
+            style={[styles.iconContainer, { marginLeft: widthPercentage(10) }]}>
             <Image style={styles.icon} source={images.comment} />
           </TouchableOpacity>
           <TextWrap style={styles.contentLetter}>
             {replyCnt ? replyCnt : 0}개
           </TextWrap>
           <TouchableOpacity
-            onPress={onShare}
-            style={[styles.iconContainer, {marginLeft: widthPercentage(10)}]}>
+            onPress={() => onShare(feedIdx)}
+            style={[styles.iconContainer, { marginLeft: widthPercentage(10) }]}>
             <Image style={styles.icon2} source={images.share} />
           </TouchableOpacity>
         </View>

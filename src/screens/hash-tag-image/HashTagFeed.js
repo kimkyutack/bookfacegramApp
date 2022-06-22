@@ -149,7 +149,7 @@ export default function HashTagFeed({ route, navigation }) {
     );
   };
 
-  const onShare = async () => {
+  const onShare = async (idx) => {
     try {
       const result = await Share.share({
         message: 'https://toaping.me/bookfacegram/html/feed_share.jsp?feedIdx=' + idx,
