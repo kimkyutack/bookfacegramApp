@@ -7,6 +7,9 @@ import {
   TouchableWithoutFeedback,
   View,
   Image,
+  KeyboardAvoidingView,
+  NativeModules,
+  Platform
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -33,6 +36,17 @@ export default function DialogDrawerKeyBoardPW({}) {
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
 
   const {drawerKeyBoardDialogPW, drawerDialog} = useSelector(s => s.dialog);
+
+  const { StatusBarManager } = NativeModules;
+
+  useEffect(() => {
+    Platform.OS == 'ios' ? StatusBarManager.getHeight((statusBarFrameData) => {
+      setStatusBarHeight(statusBarFrameData.height)
+    }) : null
+  }, []);
+
+  const [statusBarHeight, setStatusBarHeight] = useState(0);
+
   useEffect(() => {
     if (password && passwordConfirm && password === passwordConfirm) {
       setPasswordConfirmError('');
@@ -112,6 +126,12 @@ export default function DialogDrawerKeyBoardPW({}) {
 
   return (
     <SafeAreaView style={styles.root}>
+      {
+        Platform.OS === 'ios' ? (
+          <KeyboardAvoidingView
+            style={styles.rootContainer}
+            behavior={"padding"}
+          >
       <TouchableOpacity
         style={styles.wrap}
         onPress={() => {
@@ -243,6 +263,140 @@ export default function DialogDrawerKeyBoardPW({}) {
           </View>
         </TouchableWithoutFeedback>
       </TouchableOpacity>
+      </KeyboardAvoidingView>
+        ) : (
+        <TouchableOpacity
+          style={styles.wrap}
+          onPress={() => {
+            dispatch(dialogClose());
+            setPassword('');
+            setPasswordConfirm('');
+          }}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              return;
+            }}>
+            <View>
+              <View style={styles.inputContainer}>
+                <View
+                  style={{
+                    width: screenWidth,
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: widthPercentage(31),
+                      borderBottomColor: '#c2c2c2',
+                      borderRadius: 3,
+                      borderBottomWidth: 4,
+                      position: 'absolute',
+                      top: 12,
+                      alignSelf: 'center',
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      position: 'absolute',
+                      top: heightPercentage(30),
+                      left: widthPercentage(20),
+                    }}
+                    onPress={() => {
+                      dispatch(dialogClose());
+                      setPassword('');
+                      setPasswordConfirm('');
+                    }}>
+                    <Image source={images.delete} style={styles.delete} />
+                  </TouchableOpacity>
+                  <TextWrap
+                    font={fonts.kopubWorldDotumProBold}
+                    style={styles.inputTitle}>
+                    {drawerKeyBoardDialogPW.title
+                      ? drawerKeyBoardDialogPW.title
+                      : ''}
+                  </TextWrap>
+                </View>
+                <InputWrap2
+                  style={styles.input}
+                  inputStyle={styles.inputValue}
+                  value={password}
+                  onChange={setPassword}
+                  secure
+                  maxLength={20}
+                  onChangeText={t => {
+                    if (t.length >= 21) {
+                      return;
+                    }
+                  }}
+                  placeholder="새 비밀번호를 입력하세요."
+                  placeholderTextColor="#acacac"
+                  message={
+                    passwordError
+                      ? passwordError
+                      : !password
+                      ? '8~20자리 영문+숫자+특수문자 조합'
+                      : '정상입력입니다.'
+                  }
+                  messageColor={
+                    password
+                      ? passwordError
+                        ? colors.red
+                        : colors.blue
+                      : colors.black
+                  }
+                />
+                <InputWrap2
+                  style={styles.input}
+                  inputStyle={styles.inputValue}
+                  value={passwordConfirm}
+                  onChange={setPasswordConfirm}
+                  autoFocus={true}
+                  secure
+                  maxLength={20}
+                  placeholderTextColor="#acacac"
+                  placeholder="새 비밀번호를 한번 더 입력하세요."
+                  onChangeText={t => {
+                    if (t.length >= 21) {
+                      return;
+                    }
+                  }}
+                  message={
+                    passwordConfirmError
+                      ? passwordConfirmError
+                      : !passwordConfirm
+                      ? '비밀번호가 일치하지 않습니다.'
+                      : '비밀번호가 일치합니다.'
+                  }
+                  messageColor={
+                    passwordConfirm
+                      ? passwordConfirmError
+                        ? colors.red
+                        : colors.blue
+                      : colors.black
+                  }
+                />
+              </View>
+              <TouchableOpacity
+                style={
+                  buttonDisabled
+                    ? styles.disabledButtonContainer
+                    : styles.buttonContainer
+                }
+                disabled={buttonDisabled}
+                onPress={updatePwd}>
+                <TextWrap
+                  font={fonts.kopubWorldDotumProBold}
+                  style={
+                    !buttonDisabled ? styles.complete : styles.completeDisabled
+                  }>
+                  {drawerKeyBoardDialogPW.buttonTitle
+                    ? drawerKeyBoardDialogPW.buttonTitle
+                    : ''}
+                </TextWrap>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        </TouchableOpacity>
+        ) }
     </SafeAreaView>
   );
 }
@@ -256,6 +410,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.8)',
     bottom: 0,
     zIndex: consts.dialogZindex,
+  },
+
+  rootContainer: {
+    flex: 1,
   },
   wrap: {flex: 1, justifyContent: 'flex-end'},
   inputTitle: {
