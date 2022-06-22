@@ -14,9 +14,16 @@ export default function TextMoreWrap(props) {
   const toggleNumberOfLines = () => {
     setTextShown(!textShown);
   };
+  //console.log(props.numOfLines)
   const onTextLayout = useCallback(e => {
+
     setStartWidth(e.nativeEvent.lines[props.numOfLines - 1]?.width);
-    setLengthMore(e.nativeEvent.lines.length > props.numOfLines);
+    setLengthMore(props.children.split(/\r\n|\r|\n/).length > props.numOfLines);
+
+    //console.log('length', e.nativeEvent);
+    console.log('프롭스',props.children);
+    console.log('------------------------------');
+    
   }, []);
 
   useEffect(() => {
@@ -43,7 +50,7 @@ export default function TextMoreWrap(props) {
             fontSize: fontPercentage(13),
             lineHeight: fontPercentage(19),
             fontFamily: props.font || fonts.kopubWorldDotumProLight,
-            left: startWidth ? startWidth : widthPercentage(296),
+            left: 0,
             bottom: 0,
             color: '#727272',
           }}
