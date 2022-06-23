@@ -31,11 +31,52 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   const [loading, setLoading] = useState(true);
   const [newBookList, setNewBookList] = useState(null);
   const [bannerList, setBannerList] = useState(null);
+  const [sessiontime, setsessiontime] = useState(0);
   const [kbsBookList1, setKbsBookList1] = useState(null); //1급
   const [kbsBookList2, setKbsBookList2] = useState(null); //2급 
   const scrollRef = useRef();
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 150;
+
+
+  var hour = 0,minute =0, second =-1;  
+  const browsing_time = () => {
+    var dsp_hour, dsp_minute, dsp_second;
+    second++;
+    
+    if(minute == 60){
+      hour++;
+      minute = 0;
+    }
+    if(second == 60){
+      minute++;
+      second = 0;
+    }
+    
+    if(hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+    
+    if(minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+    
+    if(second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+    
+
+    var date_state = dsp_hour + dsp_minute + dsp_second;
+    
+    setTimeout('browsing_time()', 1000);
+    setsessiontime(date_state);
+    console.log(date_state);
+  }
+
+
 
   const listData = [
     {
@@ -96,12 +137,14 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     let isMounted = true;
     if(isMounted ){
       if(scrollRef.current !== undefined){
+      browsing_time()
       scrollRef.current.scrollToOffset({animated: false, offset: 0});
       }
     }
     return () => {
       isMounted = false;
       setContentVerticalOffset(0);
+
     };
   },[route]);
 
