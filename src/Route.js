@@ -40,7 +40,7 @@ import Follow from './screens/follow/Follow';
 import Comment from './screens/feed-comment/Comment';
 
 import HashTagImage from './screens/hash-tag-image';
-
+import { LogBox } from 'react-native';
 import BookDrawer from './screens/book-drawer/BookDrawer';
 import BookDrawerDetail from './screens/book-drawer-detail/BookDrawerDetail';
 
@@ -68,10 +68,336 @@ import RNExitApp from 'react-native-exit-app';
 import {widthPercentage} from './services/util';
 import colors from './libs/colors';
 import Activity from './screens/activity';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 console.reportErrorsAsExceptions = false;
+
+const StackNavigator = () => {
+  return (
+    <Stack.Navigator
+    headerMode="none"
+    >
+      <Stack.Screen
+              name={routes.home}
+              component={Home}
+              initialRouteName="MainScreen"
+              
+              options={({route, navigation}) => {
+                return {
+                 
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.homeList}
+              component={HomeList}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.homeDetail}
+              component={HomeDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.feedBook}
+              component={FeedBook}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.feedShare}
+              component={FeedBookShare}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.feedBookImage}
+              component={FeedBookImage}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Stack.Screen
+              name={routes.search}
+              component={Search}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.kbstest}
+              component={Kbstest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.mainQuiz}
+              component={MainQuiz}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.activity}
+              component={Activity}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.examtest}
+              component={Examtest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.bookContest}
+              component={BookContest}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.searchBook}
+              component={SearchBook}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.follow}
+              component={Follow}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.comment}
+              component={Comment}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Stack.Screen
+              name={routes.hashTagImage}
+              component={HashTagImage}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Stack.Screen
+              name={routes.bookDrawer}
+              component={BookDrawer}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Stack.Screen
+              name={routes.bookDrawerDetail}
+              component={BookDrawerDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+
+            <Stack.Screen
+              name={routes.tab}
+              component={Tabs}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.notice}
+              component={Notice}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.faq}
+              component={Faq}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.setting}
+              component={Setting}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.profile}
+              component={Profile}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.event}
+              component={Event}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.eventDetail}
+              component={EventDetail}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.cameraRollPicker}
+              component={CameraRollPicker}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.photoEditor}
+              component={PhotoEditor}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.feedBookEditor}
+              component={FeedBookEditor}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.intro1}
+              component={Intro1}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.intro2}
+              component={Intro2}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.intro3}
+              component={Intro3}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.policyHome}
+              component={PolicyHome}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.teenager}
+              component={Teenager}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+            <Stack.Screen
+              name={routes.provision}
+              component={Provision}
+              options={({route, navigation}) => {
+                return {
+                  swipeEnabled: false,
+                };
+              }}
+            />
+    </Stack.Navigator>
+  );
+}
+
 export default function Router() {
   const [currentRouteName, setCurrentRoutName] = useState(null);
   const user = useSelector(s => s.user, shallowEqual);
@@ -376,318 +702,9 @@ export default function Router() {
             }}
             headerMode="none"
             initialRouteName={routes.home}
-            drawerContent={props => <DrawerCustom {...props} />}>
-            <Drawer.Screen
-              name={routes.home}
-              component={Home}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.homeList}
-              component={HomeList}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.homeDetail}
-              component={HomeDetail}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.feedBook}
-              component={FeedBook}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.feedShare}
-              component={FeedBookShare}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.feedBookImage}
-              component={FeedBookImage}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-
-            <Drawer.Screen
-              name={routes.search}
-              component={Search}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.kbstest}
-              component={Kbstest}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.mainQuiz}
-              component={MainQuiz}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.activity}
-              component={Activity}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.examtest}
-              component={Examtest}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.bookContest}
-              component={BookContest}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.searchBook}
-              component={SearchBook}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.follow}
-              component={Follow}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.comment}
-              component={Comment}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-
-            <Drawer.Screen
-              name={routes.hashTagImage}
-              component={HashTagImage}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-
-            <Drawer.Screen
-              name={routes.bookDrawer}
-              component={BookDrawer}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-
-            <Drawer.Screen
-              name={routes.bookDrawerDetail}
-              component={BookDrawerDetail}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-
-            <Drawer.Screen
-              name={routes.tab}
-              component={Tabs}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.notice}
-              component={Notice}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.faq}
-              component={Faq}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.setting}
-              component={Setting}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.profile}
-              component={Profile}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.event}
-              component={Event}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.eventDetail}
-              component={EventDetail}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.cameraRollPicker}
-              component={CameraRollPicker}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.photoEditor}
-              component={PhotoEditor}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.feedBookEditor}
-              component={FeedBookEditor}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.intro1}
-              component={Intro1}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.intro2}
-              component={Intro2}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.intro3}
-              component={Intro3}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.policyHome}
-              component={PolicyHome}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.teenager}
-              component={Teenager}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
-            <Drawer.Screen
-              name={routes.provision}
-              component={Provision}
-              options={({route, navigation}) => {
-                return {
-                  swipeEnabled: false,
-                };
-              }}
-            />
+            drawerContent={props => <DrawerCustom {...props} />}
+            swipeEnabled="false">
+            <Drawer.Screen name="Main" component={StackNavigator} options={{drawerLabel: 'HOME', swipeEnabled: 'false'}} />
           </Drawer.Navigator>
         </NavigationContainer>
       )}
