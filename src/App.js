@@ -26,6 +26,7 @@ function App({ }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    LogBox.ignoreLogs(['Sending']);
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       dispatch(dialogError(remoteMessage.notification.body));
     });

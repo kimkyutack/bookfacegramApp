@@ -73,18 +73,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+
 console.reportErrorsAsExceptions = false;
 
 const StackNavigator = () => {
   return (
     <Stack.Navigator
       headerMode="none"
+      initialRouteName="MainScreen"
     >
       <Stack.Screen
         name={routes.home}
         component={Home}
-        initialRouteName="MainScreen"
-
         options={({ route, navigation }) => {
           return {
 
@@ -701,13 +701,12 @@ export default function Router() {
               width: widthPercentage(210),
             }}
             headerMode="none"
-            initialRouteName={routes.home}
+            initialRouteName={"HomeScreens"}
             drawerContent={props => <DrawerCustom {...props} />}
             swipeEnabled="false">
             <Drawer.Screen name="Main" component={StackNavigator}
               options={({ route, navigation }) => {
                 return {
-                  drawerLabel: 'HOME',
                   swipeEnabled: false,
                 };
               }} />
