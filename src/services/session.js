@@ -55,7 +55,7 @@ export function browsing_time(referer, startYN) {
 
       var date_state = dsp_hour + dsp_minute + dsp_second;
       
-      setTimeout(browsing_time(), 1000);
+      setTimeout(browsing_time(referer,startYN), 1000);
       setSessiontime(date_state);
     }else{
       fetchRequested();
