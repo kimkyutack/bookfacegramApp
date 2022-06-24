@@ -27,19 +27,6 @@ import RenderHtml from 'react-native-render-html';
 import table from '@native-html/table-plugin';
 import WebView from 'react-native-webview';
 
-const renderersProps = {
-  img: {
-    enableExperimentalPercentWidth: true,
-  }
-};
-
-const tagsStyles = {
-  img: {
-    minWidth: screenWidth * 0.92,
-    maxWidth: screenWidth * 0.92,
-    alignSelf: 'center',
-  },
-};
 
 const renderers = {
   table
@@ -60,6 +47,9 @@ const htmlConfig = {
         tdBorderColor: 'black',
         outerBorderColor: 'black',
       },
+    },
+    img: {
+      enableExperimentalPercentWidth: true,
     }
   },
   tagsStyles: {
@@ -69,7 +59,21 @@ const htmlConfig = {
       minWidth: screenWidth * 0.92,
       maxWidth: screenWidth * 0.92,
       paddingHorizontal: 2,
-    }
+    },
+    img: {
+      minWidth: screenWidth * 0.85,
+      maxWidth: screenWidth * 0.85,
+      alignSelf: 'center',
+    },
+    p: {
+      fontSize: fontPercentage(14)
+    },
+    span: {
+      fontSize: fontPercentage(14)
+    },
+    strong: {
+      fontSize: fontPercentage(14)
+    },
   },
   defaultWebViewProps: {},
   computeEmbeddedMaxWidth: (contentWidth, tagName) => {
@@ -227,8 +231,6 @@ export default function EventDetail({ route, navigation }) {
               <RenderHtml
                 contentWidth={screenWidth}
                 source={source}
-                tagsStyles={tagsStyles}
-                renderersProps={renderersProps}
                 {...htmlConfig}
               />
             </View>

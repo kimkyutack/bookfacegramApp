@@ -7,6 +7,65 @@ import images from '../../libs/images';
 import { fontPercentage, heightPercentage, screenWidth } from '../../services/util';
 import HTMLView from 'react-native-htmlview';
 import RenderHtml from 'react-native-render-html';
+import table from '@native-html/table-plugin';
+import WebView from 'react-native-webview';
+
+const renderers = {
+  table
+};
+
+const htmlConfig = {
+  renderers,
+  WebView,
+  renderersProps: {
+    table: {
+      animationType: 'animated',
+      tableStyleSpecs: {
+        outerBorderWidthPx: 1,
+        rowsBorderWidthPx: 1,
+        columnsBorderWidthPx: 1,
+        trOddBackground: 'white',
+        thBorderColor: 'black',
+        tdBorderColor: 'black',
+        outerBorderColor: 'black',
+      },
+    },
+    img: {
+      enableExperimentalPercentWidth: true,
+    }
+  },
+  tagsStyles: {
+    table: {
+      flex: 1,
+      alignSelf: 'center',
+      minWidth: screenWidth * 0.92,
+      maxWidth: screenWidth * 0.92,
+      paddingHorizontal: 2,
+    },
+    img: {
+      minWidth: screenWidth * 0.85,
+      maxWidth: screenWidth * 0.85,
+      alignSelf: 'center',
+    },
+    p: {
+      fontSize: fontPercentage(14)
+    },
+    span: {
+      fontSize: fontPercentage(14)
+    },
+    strong: {
+      fontSize: fontPercentage(14)
+    },
+  },
+  defaultWebViewProps: {},
+  computeEmbeddedMaxWidth: (contentWidth, tagName) => {
+    if (tagName === 'table') {
+      return Math.min(contentWidth, 500);
+    }
+    return contentWidth;
+  }
+};
+
 export default function FaqItem({
   registerDt,
   question,
@@ -155,6 +214,7 @@ export default function FaqItem({
             <RenderHtml
               contentWidth={screenWidth * 0.92}
               source={source}
+              {...htmlConfig}
             />
           </View>
         </View>
@@ -201,10 +261,10 @@ const styles = StyleSheet.create({
     height: heightPercentage(50),
     ...Platform.select({
       ios: {
-      top:heightPercentage(20),
+        top: heightPercentage(20),
       },
-  }),
-},
+    }),
+  },
   mainOpend: { paddingVertical: 10 },
   date: {
     fontSize: fontPercentage(12),
