@@ -306,6 +306,7 @@ export default function BookMainCarousel({
                       grade: null,
                       type: 'list',
                       key: Date.now(),
+                      bookType: 'new'
                     },
                   });
                   
@@ -373,6 +374,7 @@ export default function BookMainCarousel({
                       grade: grade,
                       type: 'list',
                       key: Date.now(),
+                      bookType:'kbs'
                     },
                   });
                     // navigate(routes.home, {

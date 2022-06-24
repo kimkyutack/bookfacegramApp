@@ -25,7 +25,6 @@ export default function TopNewBooks({route}) {
   const [th, setTh] = useState(18);
   const [banner, setBanner] = useState([]);
   const [drawerList, setDrawerList] = useState([]);
-
   const fetchRequested = async () => {
     try {
       setLoading(true);
@@ -102,6 +101,7 @@ export default function TopNewBooks({route}) {
           kbsBook={kbsBook}
           newBook={newBook}
           th={th}
+          booktype={route.params.bookType}
         />
       ) : !loading && route.params.type === 'detail' ? (
         <TopNewBooksDetail route={route} />

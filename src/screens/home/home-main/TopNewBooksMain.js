@@ -137,7 +137,6 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     let isMounted = true;
     if(isMounted ){
       if(scrollRef.current !== undefined){
-      browsing_time()
       scrollRef.current.scrollToOffset({animated: false, offset: 0});
       }
     }

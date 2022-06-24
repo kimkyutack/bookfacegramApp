@@ -24,12 +24,12 @@ import {
 import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
 
-export default function TopNewBooksList({route, newBook, kbsBook, th}) {
+export default function TopNewBooksList({route, newBook, kbsBook, th, booktype}) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const listTab = useSelector(s => s.tab, shallowEqual);
-  const [type, setType] = useState('new');
+  const [type, setType] = useState(booktype);
   const [start, setStart] = useState(30);
   const [morenewBook, setNewBook] = useState([]);
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
@@ -38,7 +38,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
     req: listTab.listTab.grade === null ? newBook : kbsBook,
     page: 1,
   });
-
+console.log(booktype)
   const fetchRequested = async startpage => {
     try {
       setLoading(true);
@@ -65,7 +65,6 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
     }
   };
   useEffect(() => {
-    setNewBook(listTab.listTab.grade === null ? newBook : kbsBook);
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
@@ -118,6 +117,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
           page: 1,
         });
       }
+      setLoading(false);
     }
     return () => {
       mount = false;
@@ -127,6 +127,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
+      console.log('1')
       //scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       if (listTab.listTab.grade === null) {
         setType('new');
@@ -210,9 +211,11 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
   }, [morenewBook]);
 
   const loadMore = () => {
-    fetchRequested(start);
-
-    return () => {};
+    if (!loading) {
+      setLoading(true);
+      fetchRequested(start);
+      }
+      return () => {};
   };
 
   const getDrawerList = async bookCd => {
@@ -250,9 +253,9 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
     <View
       style={[
         styles.root,
-        morenewBook.length === 0 && {flex: 1, justifyContent: 'center'},
+        state.req.length === 0 && {flex: 1, justifyContent: 'center'},
       ]}>
-      {morenewBook.length === 0 ? (
+      {state.req.length === 0 ? (
         <View style={{flex: 1, justifyContent: 'center'}}>
           <ActivityIndicator
           size="large"
@@ -279,7 +282,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th}) {
             return (
               <BookListItem
                 item={item}
-                type={type}
+                type={booktype}
                 index={index}
                 grade={listTab.listTab.grade}
                 th={th}
