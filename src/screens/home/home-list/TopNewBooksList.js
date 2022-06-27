@@ -38,7 +38,6 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
     req: listTab.listTab.grade === null ? newBook : kbsBook,
     page: 1,
   });
-console.log(booktype)
   const fetchRequested = async startpage => {
     try {
       setLoading(true);
@@ -127,7 +126,6 @@ console.log(booktype)
   useEffect(() => {
     let mount = true;
     if (mount) {
-      console.log('1')
       //scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       if (listTab.listTab.grade === null) {
         setType('new');

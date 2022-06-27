@@ -44,7 +44,6 @@ export default function Examtest({route, navigation}) {
     {label: '④ 얼굴이 빨개지다.', value: 4},
   ];
 
-  console.log(answer);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <ScrollView style={styles.root}>

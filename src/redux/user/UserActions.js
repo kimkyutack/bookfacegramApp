@@ -150,13 +150,10 @@ export const userUpdateProfileImage =
       //     item: cameraProfile(),
       //   }),
       // );
-      console.log('file', file);
-      console.log('profile_path', profile_path);
       // console.log('file2', file2);
       if (file === undefined) {
         return;
       }
-      console.log('file', file);
       const formData = new FormData();
       if (profile_path !== null) {
         let originProfile;
