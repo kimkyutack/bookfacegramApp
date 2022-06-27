@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   Platform,
   Linking,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import moment from 'moment-timezone';
 import Swiper from 'react-native-swiper';
 
@@ -17,7 +17,7 @@ import colors from '../../../libs/colors';
 import consts from '../../../libs/consts';
 import routes from '../../../libs/routes';
 import fonts from '../../../libs/fonts';
-import {navigationRef, navigate} from '../../../services/navigation';
+import { navigationRef, navigate } from '../../../services/navigation';
 import {
   fontPercentage,
   heightPercentage,
@@ -28,9 +28,9 @@ import FastImage from 'react-native-fast-image';
 import { requestGet } from '../../../services/network';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import CardWrap from '../../../components/card-wrap/CardWrap';
-import {setTab} from '../../../redux/tab/TabAction';
+import { setTab } from '../../../redux/tab/TabAction';
 import BookMainCarouselImage from './BookMainCarouselImage';
-import {dialogError} from '../../../redux/dialog/DialogActions';
+import { dialogError } from '../../../redux/dialog/DialogActions';
 
 export default function BookMainCarousel({
   name,
@@ -45,16 +45,16 @@ export default function BookMainCarousel({
 }) {
   const dispatch = useDispatch();
   const hello = (bookCd) => {
-      dispatch(
-            setTab({
-              tab: 'detail',
-              selectedBook: bookCd,
-              viewType: 'kbs',
-            }),
-        );
-        navigate(routes.homeDetail, {
-            type: 'detail',
-        });
+    dispatch(
+      setTab({
+        tab: 'detail',
+        selectedBook: bookCd,
+        viewType: 'kbs',
+      }),
+    );
+    navigate(routes.homeDetail, {
+      type: 'detail',
+    });
 
   }
   const eventBanner = async (idx) => {
@@ -66,7 +66,7 @@ export default function BookMainCarousel({
     })
       .then(data => {
         if (data.status === 'SUCCESS') {
-        navigate(routes.eventDetail, data);
+          navigate(routes.eventDetail, data);
         } else {
           dispatch({
             type: bookActionType.allFailure,
@@ -85,22 +85,22 @@ export default function BookMainCarousel({
           allPage: page,
         });
       });
-    
 
-}
+
+  }
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
         <TouchableWithoutFeedback
           key={index}
           onPress={() => {
-            item.bannerType === 'detail' 
-            ? hello(item.bookCd) 
-            : item.bannerType === 'event' 
-            ? eventBanner(item.idx)
-            : item.bannerType === 'notice' 
-            ? navigate(routes.notice, {idx: item.idx})
-            : (dispatch(dialogError({message: item.bannerType})));
+            item.bannerType === 'detail'
+              ? hello(item.bookCd)
+              : item.bannerType === 'event'
+                ? eventBanner(item.idx)
+                : item.bannerType === 'notice'
+                  ? navigate(routes.notice, { idx: item.idx })
+                  : (dispatch(dialogError({ message: item.bannerType })));
           }}>
           <View style={styles.bannerContainer}>
             <FastImage
@@ -141,7 +141,7 @@ export default function BookMainCarousel({
               <CardWrap
                 style={[
                   styles.card,
-                  itemWidth && {width: itemWidth},
+                  itemWidth && { width: itemWidth },
                   // index1 === 2
                   //   ? {alignItems: 'flex-end'}
                   //   : index1 === 0
@@ -162,11 +162,11 @@ export default function BookMainCarousel({
                   });
                 }}>
                 {item1?.book_cd && (
-                  <View style={{width: itemWidth}}>
+                  <View style={{ width: itemWidth }}>
                     <BookMainCarouselImage
                       item={item1}
                       index={index}
-                      style={[{width: itemWidth}, styles.bookShadow]}
+                      style={[{ width: itemWidth }, styles.bookShadow]}
                     />
                     <TextWrap
                       style={styles.info}
@@ -209,7 +209,7 @@ export default function BookMainCarousel({
               <CardWrap
                 style={[
                   styles.card,
-                  itemWidth && {width: itemWidth},
+                  itemWidth && { width: itemWidth },
                   // index1 === 2
                   //   ? {alignItems: 'flex-end'}
                   //   : index1 === 0
@@ -230,11 +230,11 @@ export default function BookMainCarousel({
                   });
                 }}>
                 {item1?.bookCd && (
-                  <View style={{width: itemWidth}}>
+                  <View style={{ width: itemWidth }}>
                     <BookMainCarouselImage
                       item={item1}
                       index={index}
-                      style={[{width: itemWidth}, styles.bookShadow]}
+                      style={[{ width: itemWidth }, styles.bookShadow]}
                     />
                     <TextWrap
                       style={styles.info}
@@ -279,24 +279,24 @@ export default function BookMainCarousel({
                         grade === null
                           ? null
                           : grade === '1급'
-                          ? {color: colors.st1}
-                          : grade === '2급'
-                          ? {color: colors.st2}
-                          : grade === '3급'
-                          ? {color: colors.st3}
-                          : grade === '4급'
-                          ? {color: colors.st4}
-                          : grade === '5급'
-                          ? {color: colors.st5}
-                          : grade === '준3급'
-                          ? {color: colors.st3}
-                          : grade === '준4급'
-                          ? {color: colors.st4}
-                          : grade === '준5급'
-                          ? {color: colors.st5}
-                          : grade === '누리급'
-                          ? {color: colors.st6}
-                          : null,
+                            ? { color: colors.st1 }
+                            : grade === '2급'
+                              ? { color: colors.st2 }
+                              : grade === '3급'
+                                ? { color: colors.st3 }
+                                : grade === '4급'
+                                  ? { color: colors.st4 }
+                                  : grade === '5급'
+                                    ? { color: colors.st5 }
+                                    : grade === '준3급'
+                                      ? { color: colors.st3 }
+                                      : grade === '준4급'
+                                        ? { color: colors.st4 }
+                                        : grade === '준5급'
+                                          ? { color: colors.st5 }
+                                          : grade === '누리급'
+                                            ? { color: colors.st6 }
+                                            : null,
                     }),
                   );
 
@@ -309,7 +309,7 @@ export default function BookMainCarousel({
                       bookType: 'new'
                     },
                   });
-                  
+
                 }}>
                 &gt; 전체보기
               </TextWrap>
@@ -348,35 +348,35 @@ export default function BookMainCarousel({
                           grade === null
                             ? null
                             : grade === '1급'
-                            ? {color: colors.st1}
-                            : grade === '2급'
-                            ? {color: colors.st2}
-                            : grade === '3급'
-                            ? {color: colors.st3}
-                            : grade === '4급'
-                            ? {color: colors.st4}
-                            : grade === '5급'
-                            ? {color: colors.st5}
-                            : grade === '준3급'
-                            ? {color: colors.st3}
-                            : grade === '준4급'
-                            ? {color: colors.st4}
-                            : grade === '준5급'
-                            ? {color: colors.st5}
-                            : grade === '누리급'
-                            ? {color: colors.st6}
-                            : null,
+                              ? { color: colors.st1 }
+                              : grade === '2급'
+                                ? { color: colors.st2 }
+                                : grade === '3급'
+                                  ? { color: colors.st3 }
+                                  : grade === '4급'
+                                    ? { color: colors.st4 }
+                                    : grade === '5급'
+                                      ? { color: colors.st5 }
+                                      : grade === '준3급'
+                                        ? { color: colors.st3 }
+                                        : grade === '준4급'
+                                          ? { color: colors.st4 }
+                                          : grade === '준5급'
+                                            ? { color: colors.st5 }
+                                            : grade === '누리급'
+                                              ? { color: colors.st6 }
+                                              : null,
                       }),
                     );
                     navigate(routes.homeList, {
-                    screen: routes.topNewBooks,
-                    params: {
-                      grade: grade,
-                      type: 'list',
-                      key: Date.now(),
-                      bookType:'kbs'
-                    },
-                  });
+                      screen: routes.topNewBooks,
+                      params: {
+                        grade: grade,
+                        type: 'list',
+                        key: Date.now(),
+                        bookType: 'kbs'
+                      },
+                    });
                     // navigate(routes.home, {
                     //   screen: routes.topNewBooks,
                     //   params: {
@@ -405,9 +405,9 @@ export default function BookMainCarousel({
         autoplay={name === 'banner' ? true : false}
         autoplayTimeout={3}
         pagingEnabled={name === 'banner' ? true : false}
-        dotStyle={{top: 15}}
+        dotStyle={{ top: 15 }}
         dotColor={colors.border}
-        activeDotStyle={{top: 15}}
+        activeDotStyle={{ top: 15 }}
         activeDotColor={colors.blue}
         nextButton={<Text />}
         prevButton={<Text />}>
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
   info: {
     width: '95%',
     fontSize: fontPercentage(12),
-    marginTop: heightPercentage(7),
+    marginTop: heightPercentage(5),
     lineHeight: fontPercentage(16),
   },
   blueText: {
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
       },
       android: {
