@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {requestGet} from '../../services/network';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { requestGet } from '../../services/network';
 import consts from '../../libs/consts';
 import images from '../../libs/images';
 import colors from '../../libs/colors';
@@ -20,13 +20,13 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
-import {dialogError} from '../../redux/dialog/DialogActions';
-import {dialogOpenGrade} from '../../redux/dialog/DialogActions';
+import { dialogError } from '../../redux/dialog/DialogActions';
+import { dialogOpenGrade } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
 import { navigate } from '../../services/navigation';
 import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function MainQuiz({route}, start) {
+export default function MainQuiz({ route }, start) {
   const dispatch = useDispatch();
   const detailTab = useSelector(s => s.tab, shallowEqual);
   const [loading, setLoading] = useState(true);
@@ -36,6 +36,7 @@ export default function MainQuiz({route}, start) {
   const [grade, setGrade] = useState('전체');
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
   //console.log(detailTab);
   let hour = 0, minute = 0, second = -1;
 
@@ -77,7 +78,7 @@ export default function MainQuiz({route}, start) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -86,7 +87,7 @@ export default function MainQuiz({route}, start) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('독서퀴즈(메인페이지)', sessionTime));
+        dispatch(browsingTime('독서퀴즈(메인페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -105,7 +106,7 @@ export default function MainQuiz({route}, start) {
         start = 0;
       }
       setLoading(true);
-      const {data, status} = await requestGet({
+      const { data, status } = await requestGet({
         url: consts.apiUrl + '/book/quiz/activity',
         query: {
           rank: Rank,
@@ -201,7 +202,7 @@ export default function MainQuiz({route}, start) {
             zIndex: 1, // works on ios
             elevation: 1,
           }}>
-          <View style={{width:'100%'}}>
+          <View style={{ width: '100%' }}>
             <TextWrap style={styles.selectfont}>{'학년별'}</TextWrap>
             <Image source={images.selectbox} style={styles.select} />
           </View>
@@ -220,9 +221,9 @@ export default function MainQuiz({route}, start) {
             elevation: 1,
           }}
           onPress={() => {
-            dispatch(dialogOpenGrade({message: '준비중.', grade: Rank}));
+            dispatch(dialogOpenGrade({ message: '준비중.', grade: Rank }));
           }}>
-          <View style={{width:'100%'}}>
+          <View style={{ width: '100%' }}>
             <TextWrap style={styles.selectfont}>{grade}</TextWrap>
             <Image source={images.selectbox} style={styles.select} />
           </View>
@@ -256,11 +257,11 @@ const styles = StyleSheet.create({
 
   loading: {
     //flex: 1,
-    justifyContent:'center',
+    justifyContent: 'center',
     width: screenWidth,
     height: screenHeight,
     alignItems: 'center',
-    bottom: screenHeight /5,
+    bottom: screenHeight / 5,
     backgroundColor: colors.white,
   },
 
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     height: screenHeight / 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   cameraIcon: {
     width: widthPercentage(24),

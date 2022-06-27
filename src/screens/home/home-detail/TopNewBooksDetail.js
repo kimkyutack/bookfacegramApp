@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   Image,
@@ -10,15 +10,15 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
-import {openSettings, PERMISSIONS} from 'react-native-permissions';
+import { openSettings, PERMISSIONS } from 'react-native-permissions';
 
 import consts from '../../../libs/consts';
 import colors from '../../../libs/colors';
 import images from '../../../libs/images';
 import routes from '../../../libs/routes';
-import {requestGet, requestPost} from '../../../services/network';
+import { requestGet, requestPost } from '../../../services/network';
 import {
   screenWidth,
   widthPercentage,
@@ -45,7 +45,7 @@ import {
   dialogOpenDrawerSelect,
 } from '../../../redux/dialog/DialogActions';
 import fonts from '../../../libs/fonts';
-import {useIsFocused} from '@react-navigation/core';
+import { useIsFocused } from '@react-navigation/core';
 
 FastImage.preload([
   {
@@ -53,7 +53,7 @@ FastImage.preload([
   },
 ]);
 
-export default function TopNewBooksDetail({route}) {
+export default function TopNewBooksDetail({ route }) {
   const [loading, setLoading] = useState(false);
   const detailTab = useSelector(s => s.tab, shallowEqual);
   const dispatch = useDispatch();
@@ -66,12 +66,13 @@ export default function TopNewBooksDetail({route}) {
   const [selectType, setSelectType] = useState('detail');
   const [drawerList, setDrawerList] = useState([]);
   const [sessionTime, setSessionTime] = useState('000000');
+  const user = useSelector(s => s.user, shallowEqual);
 
 
   const fetchRequested = async () => {
     try {
       setLoading(true);
-      const {data, status} = await requestGet({
+      const { data, status } = await requestGet({
         url: consts.apiUrl + '/book/bookDetail',
         query: {
           book_cd: selectedBook,
@@ -92,7 +93,7 @@ export default function TopNewBooksDetail({route}) {
       setLoading(false);
       dispatch(dialogError(error));
     }
-    
+
   };
 
   const getDrawerList = () => {
@@ -163,7 +164,7 @@ export default function TopNewBooksDetail({route}) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -172,7 +173,7 @@ export default function TopNewBooksDetail({route}) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('도서 상세보기', sessionTime));
+        dispatch(browsingTime('도서 상세보기', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -233,14 +234,14 @@ export default function TopNewBooksDetail({route}) {
     <ScrollView
       contentContainerStyle={[
         styles.root,
-        loading && {flex: 1, justifyContent: 'center'},
+        loading && { flex: 1, justifyContent: 'center' },
       ]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled">
       {loading ? (
         <ActivityIndicator
           size="large"
-          style={{alignSelf: 'center', marginBottom: 60}}
+          style={{ alignSelf: 'center', marginBottom: 60 }}
           color={colors.blue}
         />
       ) : tabs === 0 ? (
@@ -252,9 +253,9 @@ export default function TopNewBooksDetail({route}) {
                   uri:
                     bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
-                        '/book/book_img/' +
-                        bookThumbnail +
-                        '.gif'
+                      '/book/book_img/' +
+                      bookThumbnail +
+                      '.gif'
                       : consts.imgUrl + '/thumbnail/bookDefault.gif',
                   priority: FastImage.priority.normal,
                 }}
@@ -354,9 +355,9 @@ export default function TopNewBooksDetail({route}) {
                   uri:
                     bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
-                        '/book/book_img/' +
-                        bookThumbnail +
-                        '.gif'
+                      '/book/book_img/' +
+                      bookThumbnail +
+                      '.gif'
                       : consts.imgUrl + '/thumbnail/bookDefault.gif',
                   priority: FastImage.priority.normal,
                 }}
@@ -430,9 +431,9 @@ export default function TopNewBooksDetail({route}) {
                   uri:
                     bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
                       ? consts.toapingUrl +
-                        '/book/book_img/' +
-                        bookThumbnail +
-                        '.gif'
+                      '/book/book_img/' +
+                      bookThumbnail +
+                      '.gif'
                       : consts.imgUrl + '/thumbnail/bookDefault.gif',
                   priority: FastImage.priority.normal,
                 }}
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
       },
       android: {
@@ -562,12 +563,12 @@ const styles = StyleSheet.create({
   },
   selectedTabFont: {
     color: colors.black,
-    fontSize:fontPercentage(14),
+    fontSize: fontPercentage(14),
     textAlign: 'center',
   },
   normalTabFont: {
     color: '#BABABA',
-    fontSize:fontPercentage(14),
+    fontSize: fontPercentage(14),
     textAlign: 'center',
   },
   highlight: {

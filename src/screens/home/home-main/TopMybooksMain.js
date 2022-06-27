@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Image,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
   Text,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useSelector, shallowEqual, useDispatch} from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import colors from '../../../libs/colors';
 import TextButton from '../../../components/text-button/TextButton';
 import TextWrap from '../../../components/text-wrap/TextWrap';
@@ -25,19 +25,19 @@ import {
 } from '../../../services/util';
 import MyBookCarousel from './MyBookCarousel';
 import NoMybooks from './NoMybooks';
-import {ScrollView} from 'react-native-gesture-handler';
-import {navigate} from '../../../services/navigation';
+import { ScrollView } from 'react-native-gesture-handler';
+import { navigate } from '../../../services/navigation';
 import { browsingTime } from '../../../redux/session/SessionAction';
 import { useIsFocused } from '@react-navigation/native';
 import routes from '../../../libs/routes';
 import { set } from 'react-native-reanimated';
 import RadarCharts from '../../../components/chart/RadarCharts';
 
-export default function TopMyBooksMain({route, genre, rank, topic}) {
+export default function TopMyBooksMain({ route, genre, rank, topic }) {
   const [loading, setLoading] = useState(true);
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
-  const [select , setSelect] = useState('genre');
+  const [select, setSelect] = useState('genre');
   const scrollRef = useRef();
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 150;
@@ -45,9 +45,9 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
   const isFocused = useIsFocused();
   const [listData, setListData] = useState([
     {
-      
+
       name: 'genre',
-      renderData1: genre.slice(0,15),
+      renderData1: genre.slice(0, 15),
       renderData2: genre.slice(15),
       itemWidth: widthPercentage(332),
       slideWidth: widthPercentage(332),
@@ -56,7 +56,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     },
     {
       name: 'genre',
-      renderData1: genre.slice(0,15) ? chunk(genre.slice(0,15), 3) : genre.slice(0,15),
+      renderData1: genre.slice(0, 15) ? chunk(genre.slice(0, 15), 3) : genre.slice(0, 15),
       renderData2: genre.slice(15) ? chunk(genre.slice(15), 3) : genre.slice(15),
       itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
       slideWidth: widthPercentage(344),
@@ -105,7 +105,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -114,7 +114,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('MYBOOKS(메인페이지)', sessionTime));
+        dispatch(browsingTime('MYBOOKS(메인페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -127,7 +127,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     setLoading(false);
     select === 'genre' ? setListData([{
       name: 'genre',
-      renderData1: genre.slice(0,15),
+      renderData1: genre.slice(0, 15),
       renderData2: genre.slice(15),
       itemWidth: widthPercentage(332),
       slideWidth: widthPercentage(332),
@@ -136,7 +136,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
     },
     {
       name: 'genre',
-      renderData1: genre.slice(0,15) ? chunk(genre.slice(0,15), 3) : genre.slice(0,15),
+      renderData1: genre.slice(0, 15) ? chunk(genre.slice(0, 15), 3) : genre.slice(0, 15),
       renderData2: genre.slice(15) ? chunk(genre.slice(15), 3) : genre.slice(15),
       itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
       slideWidth: widthPercentage(344),
@@ -144,64 +144,64 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
       pagination: false,
       header: true,
     },])
-    : select === 'rank' ? setListData([{
-      name: 'rank',
-      renderData1: rank.slice(0,15),
-      renderData2: rank.slice(15),
-      itemWidth: widthPercentage(332),
-      slideWidth: widthPercentage(332),
-      pagination: true,
-      header: false,
-    },
-    {
-      name: 'rank',
-      renderData1: rank.slice(0,15) ? chunk(rank.slice(0,15), 3) : rank.slice(0,15),
-      renderData2: rank.slice(15) ? chunk(rank.slice(15), 3) : rank.slice(15),
-      itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
-      slideWidth: widthPercentage(344),
-      grade: null,
-      pagination: false,
-      header: true,
-    },])
-    :  setListData([{
-      name: 'topic',
-      renderData1: topic.slice(0,15),
-      renderData2: topic.slice(15),
-      itemWidth: widthPercentage(332),
-      slideWidth: widthPercentage(332),
-      pagination: true,
-      header: false,
-    },
-    {
-      name: 'topic',
-      renderData1: topic.slice(0,15) ? chunk(topic.slice(0,15), 3) : topic.slice(0,15),
-      renderData2: topic.slice(15) ? chunk(topic.slice(15), 3) : topic.slice(15),
-      itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
-      slideWidth: widthPercentage(344),
-      grade: null,
-      pagination: false,
-      header: true,
-    },])
-  }, [select,genre,rank,topic]);
+      : select === 'rank' ? setListData([{
+        name: 'rank',
+        renderData1: rank.slice(0, 15),
+        renderData2: rank.slice(15),
+        itemWidth: widthPercentage(332),
+        slideWidth: widthPercentage(332),
+        pagination: true,
+        header: false,
+      },
+      {
+        name: 'rank',
+        renderData1: rank.slice(0, 15) ? chunk(rank.slice(0, 15), 3) : rank.slice(0, 15),
+        renderData2: rank.slice(15) ? chunk(rank.slice(15), 3) : rank.slice(15),
+        itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
+        slideWidth: widthPercentage(344),
+        grade: null,
+        pagination: false,
+        header: true,
+      },])
+        : setListData([{
+          name: 'topic',
+          renderData1: topic.slice(0, 15),
+          renderData2: topic.slice(15),
+          itemWidth: widthPercentage(332),
+          slideWidth: widthPercentage(332),
+          pagination: true,
+          header: false,
+        },
+        {
+          name: 'topic',
+          renderData1: topic.slice(0, 15) ? chunk(topic.slice(0, 15), 3) : topic.slice(0, 15),
+          renderData2: topic.slice(15) ? chunk(topic.slice(15), 3) : topic.slice(15),
+          itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
+          slideWidth: widthPercentage(344),
+          grade: null,
+          pagination: false,
+          header: true,
+        },])
+  }, [select, genre, rank, topic]);
 
   useEffect(() => {
     let isMounted = true;
-    if(isMounted ){
-      if(scrollRef.current !== undefined){
-      scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    if (isMounted) {
+      if (scrollRef.current !== undefined) {
+        scrollRef.current.scrollToOffset({ animated: false, offset: 0 });
       }
     }
     return () => {
       isMounted = false;
       setContentVerticalOffset(0);
     };
-  },[route]);
+  }, [route]);
 
 
-  
+
   return (
-    
-    <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>
+
+    <View style={[styles.root, loading && { flex: 1, justifyContent: 'center' }]}>
       {/* <View style={styles.cardHeader}>
         <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
         <TextWrap style={styles.welcome}>
@@ -226,7 +226,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
       {loading ? (
         <ActivityIndicator
           size="large"
-          style={{alignSelf: 'center', marginBottom: 60}}
+          style={{ alignSelf: 'center', marginBottom: 60 }}
           color={colors.blue}
         />
       ) : genre.length < 20 ? (
@@ -243,17 +243,17 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
             </View>
             <View style={styles.root2}>
               <View style={styles.cardHeader2}>
-                
-                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+
+                <TouchableOpacity onPress={() => { setSelect('genre') }} style={select === 'genre' ? styles.btn : styles.btn2}>
                   <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('rank') }} style={select === 'rank' ? styles.btn : styles.btn2}>
                   <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('topic') }} style={select === 'topic' ? styles.btn : styles.btn2}>
                   <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
                 </TouchableOpacity>
-                      
+
               </View>
               <NoMybooks />
             </View>
@@ -272,36 +272,36 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <MyBookCarousel {...item} />;
           }}
-          ListHeaderComponent= {
-          <View>
-            <View style={styles.cardHeader}>
-              <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
-              <TextWrap style={styles.welcome}>
-                을 위한 맞춤도서를 확인해보세요!
-              </TextWrap>
+          ListHeaderComponent={
+            <View>
+              <View style={styles.cardHeader}>
+                <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
+                <TextWrap style={styles.welcome}>
+                  을 위한 맞춤도서를 확인해보세요!
+                </TextWrap>
+              </View>
+              <RadarCharts></RadarCharts>
+              <View style={styles.cardHeader2}>
+
+                <TouchableOpacity onPress={() => { setSelect('genre') }} style={select === 'genre' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { setSelect('rank') }} style={select === 'rank' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { setSelect('topic') }} style={select === 'topic' ? styles.btn : styles.btn2}>
+                  <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
+                </TouchableOpacity>
+
+              </View>
             </View>
-            <RadarCharts></RadarCharts>
-            <View style={styles.cardHeader2}>
-              
-              <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
-                <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
-                <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
-                <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
-              </TouchableOpacity>
-                    
-            </View>
-          </View>
           }
         />
       ) : genre.length === 20 && select === 'rank' ? (
-           <FlatList
+        <FlatList
           data={listData}
           extraData={listData}
           ref={scrollRef}
@@ -313,10 +313,10 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <MyBookCarousel {...item} />;
           }}
-          ListHeaderComponent= {
+          ListHeaderComponent={
             <View>
               <View style={styles.cardHeader}>
                 <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
@@ -326,23 +326,23 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
               </View>
               <RadarCharts></RadarCharts>
               <View style={styles.cardHeader2}>
-                
-                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+
+                <TouchableOpacity onPress={() => { setSelect('genre') }} style={select === 'genre' ? styles.btn : styles.btn2}>
                   <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('rank') }} style={select === 'rank' ? styles.btn : styles.btn2}>
                   <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('topic') }} style={select === 'topic' ? styles.btn : styles.btn2}>
                   <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
                 </TouchableOpacity>
-                      
+
               </View>
             </View>
-            }
+          }
         />
-      ) : ( 
-         <FlatList
+      ) : (
+        <FlatList
           data={listData}
           extraData={listData}
           ref={scrollRef}
@@ -354,10 +354,10 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <MyBookCarousel {...item} />;
           }}
-          ListHeaderComponent= {
+          ListHeaderComponent={
             <View>
               <View style={styles.cardHeader}>
                 <TextWrap style={styles.userName}>{user.kor_nm} 님</TextWrap>
@@ -367,24 +367,24 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
               </View>
               <RadarCharts></RadarCharts>
               <View style={styles.cardHeader2}>
-                
-                <TouchableOpacity onPress={()=> {setSelect('genre')}} style={select === 'genre' ? styles.btn : styles.btn2}>
+
+                <TouchableOpacity onPress={() => { setSelect('genre') }} style={select === 'genre' ? styles.btn : styles.btn2}>
                   <Text style={select === 'genre' ? styles.buttonText : styles.buttonText2}>장르별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('rank')}} style={select === 'rank' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('rank') }} style={select === 'rank' ? styles.btn : styles.btn2}>
                   <Text style={select === 'rank' ? styles.buttonText : styles.buttonText2}>수준별</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setSelect('topic')}} style={select === 'topic' ? styles.btn : styles.btn2}>
+                <TouchableOpacity onPress={() => { setSelect('topic') }} style={select === 'topic' ? styles.btn : styles.btn2}>
                   <Text style={select === 'topic' ? styles.buttonText : styles.buttonText2}>주제별</Text>
                 </TouchableOpacity>
-                      
+
               </View>
             </View>
-            }
+          }
         />
       )
-      
-      
+
+
       }
       {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
         <TouchableOpacity
@@ -394,7 +394,7 @@ export default function TopMyBooksMain({route, genre, rank, topic}) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
 
     </View>
   );
@@ -407,22 +407,22 @@ const styles = StyleSheet.create({
   },
   root2: {
     flexGrow: 1,
-    marginBottom : heightPercentage(30),
+    marginBottom: heightPercentage(30),
   },
   cardHeader: {
     flexDirection: 'row',
     marginTop: 12,
     marginBottom: 40,
-    paddingLeft : widthPercentage(20),
+    paddingLeft: widthPercentage(20),
   },
   cardHeader2: {
-    alignSelf:'center',
-    width:screenWidth * 0.7,
+    alignSelf: 'center',
+    width: screenWidth * 0.7,
     flexDirection: 'row',
     marginTop: 12,
     marginBottom: 40,
-    alignItems:'center',
-    justifyContent:'space-between',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   userName: {
     fontSize: fontPercentage(15),
@@ -436,43 +436,43 @@ const styles = StyleSheet.create({
   btn: {
     borderRadius: 70,
     fontWeight: 'bold',
-    color:'white',
-    backgroundColor:'black',
-    alignItems:'center',
-    justifyContent:'center',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
 
-  width:widthPercentage(50),
-  height:heightPercentage(25),
+    width: widthPercentage(50),
+    height: heightPercentage(25),
   },
-buttonText: {
-  color: 'white',
-  fontSize:fontPercentage(12),
-  fontWeight:'bold',
-  textAlign:'center',
-  textAlignVertical:'center', 
-},
-btn2: {
+  buttonText: {
+    color: 'white',
+    fontSize: fontPercentage(12),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  btn2: {
     borderRadius: 70,
     fontWeight: 'bold',
-    color:'black',
-    backgroundColor:'white',
-     borderColor:'black',
-  borderWidth: 1,
-  alignItems:'center',
-    justifyContent:'center',
+    color: 'black',
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
 
-  width:widthPercentage(50),
-  height:heightPercentage(25),
+    width: widthPercentage(50),
+    height: heightPercentage(25),
   },
-buttonText2: {
-  color: 'black',
-  fontSize:fontPercentage(12),
-  fontWeight:'bold',
-  textAlign:'center',
-  textAlignVertical:'center', 
- 
-},
-scrolltotop: {
+  buttonText2: {
+    color: 'black',
+    fontSize: fontPercentage(12),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+
+  },
+  scrolltotop: {
     width: widthPercentage(35),
     height: heightPercentage(35),
     resizeMode: 'contain',

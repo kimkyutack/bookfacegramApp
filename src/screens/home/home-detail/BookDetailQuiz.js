@@ -21,7 +21,7 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import { requestGet, requestPost,  requestFile } from '../../../services/network';
+import { requestGet, requestPost, requestFile } from '../../../services/network';
 import {
   formatTime,
   screenWidth,
@@ -90,6 +90,7 @@ export default function BookDetailQuiz({ isbn }) {
     { label: '4번:', value: 4 },
     { label: '5번:', value: 5 },
   ];
+  const user = useSelector(s => s.user, shallowEqual);
 
   const renderNode = (node, index, parent, siblings, defaultRenderer) => {
     if (node.name == 'img') {
@@ -211,7 +212,7 @@ export default function BookDetailQuiz({ isbn }) {
   const createQuiz = async () => {
     //독서퀴즈 회원 출제
     var formData = new FormData();
-    
+
     /*let totAns = [];
     if (ans1 !== undefined) {
       totAns.push(ans1);
@@ -235,7 +236,7 @@ export default function BookDetailQuiz({ isbn }) {
         formData.append('bookCd', isbn);
         formData.append('subJimun', subjm);
         formData.append('subjYn', 'S');
-        const {data, status} = await requestFile(
+        const { data, status } = await requestFile(
           {
             url: consts.apiUrl + '/book/quiz/chul',
             method: 'post',
@@ -259,14 +260,14 @@ export default function BookDetailQuiz({ isbn }) {
         formData.append('instanceJimun2', ans2);
         formData.append('instanceJimun3', ans3);
         formData.append('instanceJimun4', ans4);
-        if(ans5 !== undefined){
+        if (ans5 !== undefined) {
           formData.append('instanceJimun5', ans5);
         }
         formData.append('VPexam', contents);
         formData.append('bookCd', isbn);
         formData.append('subJimun', subjm);
         formData.append('subjYn', 'O');
-        const {data, status} = await requestFile(
+        const { data, status } = await requestFile(
           {
             url: consts.apiUrl + '/book/quiz/chul',
             method: 'post',
@@ -291,7 +292,7 @@ export default function BookDetailQuiz({ isbn }) {
 
         }
       }
-      
+
     } catch (error) {
 
       if (subtype !== 1 && Answerno > totAns.length) {
@@ -324,17 +325,17 @@ export default function BookDetailQuiz({ isbn }) {
   };
 
   const quizMultiCheck = (instanceNum) => {
-    let answ = answer.toString().replace(instanceNum,'');
-    let total = answ.toString().replace(',,',',');
-    
-    if(total.endsWith(comma)){
-			setAnswer(total.slice(0,-1));
-		} else if(total.startsWith(comma)){
-			setAnswer(total.substring(1));
-		} else{
+    let answ = answer.toString().replace(instanceNum, '');
+    let total = answ.toString().replace(',,', ',');
+
+    if (total.endsWith(comma)) {
+      setAnswer(total.slice(0, -1));
+    } else if (total.startsWith(comma)) {
+      setAnswer(total.substring(1));
+    } else {
       setAnswer(total);
     }
-    
+
 
   }
   const next = () => {
@@ -346,9 +347,9 @@ export default function BookDetailQuiz({ isbn }) {
           answer === ''
         ) {
         } else {
-          if(answer !== undefined && answer.toString().length !== 0){
+          if (answer !== undefined && answer.toString().length !== 0) {
             totAnswer[examnum] = answer.toString();
-          }else{
+          } else {
             totAnswer[examnum] = '';
           }
         }
@@ -357,12 +358,12 @@ export default function BookDetailQuiz({ isbn }) {
           setAnswer(totAnswer[examnum + 1]);
         }
       } else {
-        if(answer !== undefined && answer.toString().length !== 0){
+        if (answer !== undefined && answer.toString().length !== 0) {
           setTotAnswer([answer.toString()]);
-        }else{
+        } else {
           setTotAnswer(['']);
         }
-        
+
         setAnswer('');
       }
 
@@ -370,16 +371,16 @@ export default function BookDetailQuiz({ isbn }) {
       setTitlenum(titlenum + 1);
 
     } else {
-      if(answer !== undefined){
-        if(answer.toString().endsWith(comma)){
-          setTotAnswer(totAnswer => [...totAnswer, answer.slice(0,-1)]);
-        } else if(answer.toString().startsWith(comma)){
+      if (answer !== undefined) {
+        if (answer.toString().endsWith(comma)) {
+          setTotAnswer(totAnswer => [...totAnswer, answer.slice(0, -1)]);
+        } else if (answer.toString().startsWith(comma)) {
           setTotAnswer(totAnswer => [...totAnswer, answer.substring(1)]);
-        } else{
+        } else {
           setTotAnswer(totAnswer => [...totAnswer, answer]);
         }
-      }else{
-          setTotAnswer(totAnswer => [...totAnswer, '']);
+      } else {
+        setTotAnswer(totAnswer => [...totAnswer, '']);
       }
       setQuizEnd(1);
       //quizRequested();
@@ -444,7 +445,7 @@ export default function BookDetailQuiz({ isbn }) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -453,7 +454,7 @@ export default function BookDetailQuiz({ isbn }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('독서퀴즈(상세페이지)', sessionTime));
+        dispatch(browsingTime('독서퀴즈(상세페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -781,11 +782,11 @@ export default function BookDetailQuiz({ isbn }) {
             <View key={index * page + 600} style={bookQuiz[examnum].subJimun !== null && bookQuiz[examnum].subJimun.length > 1 && index === 0 ? styles.subanswerview2 : styles.subanswerview}>
               <TouchableOpacity
                 onPress={() => {
-                  bookQuiz[examnum].answerCnt === 1 
-                  ? setAnswer(quiz.instanceNum) 
-                  : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && !answer.toString().includes(quiz.instanceNum) ? setAnswer((answer + ',' +  quiz.instanceNum).toString().replace(',,',','))
-                  : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && answer.toString().includes(quiz.instanceNum) ? quizMultiCheck(quiz.instanceNum)
-                  : setAnswer(quiz.instanceNum) 
+                  bookQuiz[examnum].answerCnt === 1
+                    ? setAnswer(quiz.instanceNum)
+                    : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && !answer.toString().includes(quiz.instanceNum) ? setAnswer((answer + ',' + quiz.instanceNum).toString().replace(',,', ','))
+                      : bookQuiz[examnum].answerCnt !== 1 && answer !== undefined && answer.toString().includes(quiz.instanceNum) ? quizMultiCheck(quiz.instanceNum)
+                        : setAnswer(quiz.instanceNum)
                 }}>
                 <TextWrap
                   style={
@@ -802,7 +803,7 @@ export default function BookDetailQuiz({ isbn }) {
                 </TextWrap>
               </TouchableOpacity>
             </View>
-            
+
           );
         })
       )}
@@ -1039,7 +1040,7 @@ const styles = StyleSheet.create({
   },
   noData: {
     marginTop: heightPercentage(30),
-    fontSize:fontPercentage(13),
+    fontSize: fontPercentage(13),
     textAlign: 'center',
   },
   grayfont: {
@@ -1148,7 +1149,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   quizdata2: {
     backgroundColor: '#f2f2f2',
@@ -1160,7 +1161,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#c9c9c9',
     height: heightPercentage(30),
     textAlignVertical: 'center',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   quizdata3: {
     backgroundColor: '#f2f2f2',
@@ -1170,7 +1171,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: heightPercentage(30),
     textAlignVertical: 'center',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   quizdata4: {
     backgroundColor: '#f2f2f2',
@@ -1180,7 +1181,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: heightPercentage(30),
     textAlignVertical: 'center',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   answernum: {
     backgroundColor: '#cdde95',
@@ -1192,7 +1193,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     height: heightPercentage(30),
     textAlignVertical: 'center',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   answer: {
     backgroundColor: '#f2f2f2',
@@ -1204,7 +1205,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     height: heightPercentage(30),
     textAlignVertical: 'center',
-    paddingVertical : Platform.OS === 'ios' ? heightPercentage(5) : 0 ,
+    paddingVertical: Platform.OS === 'ios' ? heightPercentage(5) : 0,
   },
   onData: {
     textAlign: 'center',
@@ -1264,10 +1265,10 @@ const styles = StyleSheet.create({
   inputValue2: {
     fontFamily: fonts.kopubWorldDotumProMedium,
     fontSize: fontPercentage(12),
-    height:heightPercentage(55),
+    height: heightPercentage(55),
     color: colors.black,
     textAlign: 'left',
-    borderBottomWidth:0,
+    borderBottomWidth: 0,
   },
   contentinputStyle: {
     color: colors.black,
@@ -1286,7 +1287,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         marginBottom: heightPercentage(70),
-        height:heightPercentage(200),
+        height: heightPercentage(200),
       },
       android: {
         marginBottom: heightPercentage(20),
@@ -1308,7 +1309,7 @@ const styles = StyleSheet.create({
     width: '90%',
     ...Platform.select({
       ios: {
-        height:heightPercentage(50),
+        height: heightPercentage(50),
         marginBottom: heightPercentage(20),
       },
       android: {
@@ -1326,14 +1327,14 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     textAlign: 'center',
     top: heightPercentage(20),
-    
+
     alignSelf: 'center',
     borderWidth: 0.5,
     borderColor: '#ccc',
     width: '90%',
     ...Platform.select({
       ios: {
-        height:heightPercentage(200),
+        height: heightPercentage(200),
         marginBottom: heightPercentage(70),
       },
       android: {
@@ -1346,7 +1347,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(12),
     lineHeight: fontPercentage(24),
     display: 'flex',
-    height:heightPercentage(40),
+    height: heightPercentage(40),
     textAlign: 'left',
     marginBottom: heightPercentage(20),
     alignSelf: 'center',

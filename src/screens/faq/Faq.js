@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import { dialogOpenSelect } from '../../redux/dialog/DialogActions';
@@ -40,6 +40,7 @@ export default function Faq({ route, navigation }) {
   const CONTENT_OFFSET_THRESHOLD = 50;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
   const changeStyle = type => {
     if (type === 'service') {
       setColor1('#FED500');
@@ -105,7 +106,7 @@ export default function Faq({ route, navigation }) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -114,7 +115,7 @@ export default function Faq({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('FAQ', sessionTime));
+        dispatch(browsingTime('FAQ', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -187,17 +188,17 @@ export default function Faq({ route, navigation }) {
                 borderBottomColor: color2,
                 borderBottomWidth: 4,
               }}>
-              <TextWrap
-                style={{
-                  width: screenWidth / 4,
-                  height: heightPercentage(40),
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  fontSize: fontPercentage(13),
-                  textAlign: 'center',
-                }}>
-                피드북
-              </TextWrap>
+                <TextWrap
+                  style={{
+                    width: screenWidth / 4,
+                    height: heightPercentage(40),
+                    alignItems: 'center',
+                    alignSelf: 'stretch',
+                    fontSize: fontPercentage(13),
+                    textAlign: 'center',
+                  }}>
+                  피드북
+                </TextWrap>
               </View>
             )}
           </TouchableOpacity>
@@ -223,17 +224,17 @@ export default function Faq({ route, navigation }) {
                 borderBottomColor: color1,
                 borderBottomWidth: 4,
               }}>
-              <TextWrap
-                style={{
-                  width: screenWidth / 4,
-                  height: heightPercentage(40),
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  fontSize: fontPercentage(13),
-                  textAlign: 'center',
-                }}>
-                서비스
-              </TextWrap>
+                <TextWrap
+                  style={{
+                    width: screenWidth / 4,
+                    height: heightPercentage(40),
+                    alignItems: 'center',
+                    alignSelf: 'stretch',
+                    fontSize: fontPercentage(13),
+                    textAlign: 'center',
+                  }}>
+                  서비스
+                </TextWrap>
               </View>
             )}
           </TouchableOpacity>
@@ -260,17 +261,17 @@ export default function Faq({ route, navigation }) {
                 borderBottomColor: color3,
                 borderBottomWidth: 4,
               }}>
-              <TextWrap
-                style={{
-                  width: screenWidth / 4,
-                  height: heightPercentage(40),
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  textAlign: 'center',
-                  fontSize: fontPercentage(13),
-                }}>
-                독후활동
-              </TextWrap>
+                <TextWrap
+                  style={{
+                    width: screenWidth / 4,
+                    height: heightPercentage(40),
+                    alignItems: 'center',
+                    alignSelf: 'stretch',
+                    textAlign: 'center',
+                    fontSize: fontPercentage(13),
+                  }}>
+                  독후활동
+                </TextWrap>
               </View>
             )}
           </TouchableOpacity>
@@ -296,17 +297,17 @@ export default function Faq({ route, navigation }) {
                 borderBottomColor: color4,
                 borderBottomWidth: 4,
               }}>
-              <TextWrap
-                style={{
-                  width: screenWidth / 4,
-                  height: heightPercentage(40),
-                  alignItems: 'center',
-                  alignSelf: 'stretch',
-                  fontSize: fontPercentage(13),
-                  textAlign: 'center',
-                }}>
-                회원
-              </TextWrap>
+                <TextWrap
+                  style={{
+                    width: screenWidth / 4,
+                    height: heightPercentage(40),
+                    alignItems: 'center',
+                    alignSelf: 'stretch',
+                    fontSize: fontPercentage(13),
+                    textAlign: 'center',
+                  }}>
+                  회원
+                </TextWrap>
               </View>
             )}
           </TouchableOpacity>
@@ -321,8 +322,8 @@ export default function Faq({ route, navigation }) {
         data={data}
         ref={listRef}
         onScroll={event => {
-            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
-          }}
+          setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+        }}
         keyExtractor={(item, index) => {
           return item.question + index.toString();
         }}
@@ -340,7 +341,7 @@ export default function Faq({ route, navigation }) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
 
       <Footer page="faq" />
     </RootLayout>

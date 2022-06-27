@@ -120,7 +120,7 @@ export default function Profile({ route, navigation }) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -129,7 +129,7 @@ export default function Profile({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('개인정보수정', sessionTime));
+        dispatch(browsingTime('개인정보수정', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -595,7 +595,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlign: 'left',
     paddingHorizontal: 0,
-    top : Platform.OS === 'ios' ? heightPercentage(-4) : 0 ,
+    top: Platform.OS === 'ios' ? heightPercentage(-4) : 0,
   },
   image: {
     width: widthPercentage(30),
@@ -758,12 +758,12 @@ const styles = StyleSheet.create({
   mainSub2: {
     ...Platform.select({
       ios: {
-        paddingVertical : 14,
+        paddingVertical: 14,
       },
       android: {
         paddingVertical: 2,
       },
-  }),
+    }),
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignContent: 'flex-start',

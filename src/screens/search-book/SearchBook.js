@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import ListHeader from '../../components/list-header/ListHeader';
 import NoFound from '../../components/no-found/NoFound';
 import SearchBar from '../../components/search-bar/SearchBar';
@@ -35,12 +35,12 @@ import {
   screenWidth,
 } from '../../services/util';
 import SearchBookItem from './SearchBookItem';
-import {requestGet, requestPost} from '../../services/network';
+import { requestGet, requestPost } from '../../services/network';
 import { useIsFocused } from '@react-navigation/native';
 import { navigate } from '../../services/navigation';
 import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function SearchBook({route, navigation}) {
+export default function SearchBook({ route, navigation }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const scrollRef = useRef();
@@ -50,11 +50,12 @@ export default function SearchBook({route, navigation}) {
   const [rednerData, setRenderData] = useState([]);
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
 
   const fetchRequested = async searchKeyword => {
     try {
       setLoading(true);
-      const {data, status} = await requestGet({
+      const { data, status } = await requestGet({
         url: consts.apiUrl + '/book/search',
         query: {
           keyword: searchKeyword ? searchKeyword : route.params?.keyword,
@@ -73,7 +74,7 @@ export default function SearchBook({route, navigation}) {
 
   const handleSearch = () => {
     if (search?.replace(/ /g, '')?.length < 1) {
-      dispatch(dialogOpenMessage({message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.'}));
+      dispatch(dialogOpenMessage({ message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.' }));
     } else {
       fetchRequested(search);
     }
@@ -119,7 +120,7 @@ export default function SearchBook({route, navigation}) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -128,7 +129,7 @@ export default function SearchBook({route, navigation}) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('도서 검색페이지', sessionTime));
+        dispatch(browsingTime('도서 검색페이지', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -197,11 +198,11 @@ export default function SearchBook({route, navigation}) {
         <View
           style={[
             styles.root,
-            rednerData.length === 0 && {flex: 1, justifyContent: 'center'},
+            rednerData.length === 0 && { flex: 1, justifyContent: 'center' },
           ]}>
           {rednerData.length === 0 ? (
             <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <TextWrap>검색결과가 없습니다.</TextWrap>
             </View>
           ) : (
@@ -217,7 +218,7 @@ export default function SearchBook({route, navigation}) {
                       font={fonts.kopubWorldDotumProMedium}>
                       총 검색결과{' '}
                       <TextWrap
-                        style={{color: colors.blue}}
+                        style={{ color: colors.blue }}
                         font={fonts.kopubWorldDotumProBold}>
                         {rednerData?.length}
                       </TextWrap>
@@ -229,7 +230,7 @@ export default function SearchBook({route, navigation}) {
               keyExtractor={(item, index) => {
                 return index.toString();
               }}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return <SearchBookItem item={item} />;
               }}
             />

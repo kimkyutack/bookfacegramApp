@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   FlatList,
   Image,
@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import TextWrap from '../../../components/text-wrap/TextWrap';
 import consts from '../../../libs/consts';
 import colors from '../../../libs/colors';
@@ -21,13 +21,13 @@ import {
   widthPercentage,
   heightPercentage,
 } from '../../../services/util';
-import {requestGet, requestPost} from '../../../services/network';
-import {dialogError} from '../../../redux/dialog/DialogActions';
+import { requestGet, requestPost } from '../../../services/network';
+import { dialogError } from '../../../redux/dialog/DialogActions';
 import { navigate } from '../../../services/navigation';
 import { browsingTime } from '../../../redux/session/SessionAction';
 import { useIsFocused } from '@react-navigation/native';
 
-export default function TopNewBooksList({route, newBook, kbsBook, th, booktype}) {
+export default function TopNewBooksList({ route, newBook, kbsBook, th, booktype }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
   const CONTENT_OFFSET_THRESHOLD = 300;
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
   const [state, setState] = useState({
     req: listTab.listTab.grade === null ? newBook : kbsBook,
     page: 1,
@@ -46,7 +47,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
   const fetchRequested = async startpage => {
     try {
       setLoading(true);
-      const {data, status} = await requestGet({
+      const { data, status } = await requestGet({
         url: consts.apiUrl + '/book/bookList',
         query: {
           startPaging: startpage,
@@ -109,7 +110,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -117,10 +118,10 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
 
     if (!isFocused) {
       if (sessionTime !== '000000') {
-        if(booktype === 'kbs'){
-          dispatch(browsingTime('KBS선정도서>전체보기', sessionTime));
-        }else{
-          dispatch(browsingTime('신간도서>전체보기', sessionTime));
+        if (booktype === 'kbs') {
+          dispatch(browsingTime('KBS선정도서>전체보기', sessionTime, user.member_id));
+        } else {
+          dispatch(browsingTime('신간도서>전체보기', sessionTime, user.member_id));
         }
       }
     }
@@ -134,10 +135,10 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
   useEffect(() => {
     let mount = true;
     if (mount) {
-      scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
+      scrollRef.current?.scrollToOffset({ y: 0.1, animated: false });
       if (listTab.listTab.grade === null) {
         setType('new');
-        setState({req: newBook, page: 1});
+        setState({ req: newBook, page: 1 });
       } else if (listTab.listTab.grade === '1급') {
         setType('kbs');
         setState({
@@ -280,12 +281,12 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
     if (!loading) {
       setLoading(true);
       fetchRequested(start);
-      }
-      return () => {};
+    }
+    return () => { };
   };
 
   const getDrawerList = async bookCd => {
-    const {data, status} = await requestGet({
+    const { data, status } = await requestGet({
       url: consts.apiUrl + '/mypage/bookDrawer/keep',
       query: {
         bookIdx: bookCd,
@@ -319,18 +320,18 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
     <View
       style={[
         styles.root,
-        state.req.length === 0 && {flex: 1, justifyContent: 'center'},
+        state.req.length === 0 && { flex: 1, justifyContent: 'center' },
       ]}>
       {state.req.length === 0 ? (
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
           <ActivityIndicator
-          size="large"
-          style={{
-            alignSelf: 'center',
-            top: -50,
-          }}
-          color={colors.blue}
-        />
+            size="large"
+            style={{
+              alignSelf: 'center',
+              top: -50,
+            }}
+            color={colors.blue}
+          />
         </View>
       ) : (
         <FlatList
@@ -343,7 +344,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             item.type = type;
             return (
               <BookListItem
@@ -375,7 +376,7 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
 
     </View>
   );
