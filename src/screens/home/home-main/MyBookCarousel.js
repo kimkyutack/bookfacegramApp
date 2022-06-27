@@ -134,7 +134,6 @@ export default function MyBookCarousel({
   };
 
   const _onMomentumScrollEnd = (e, state, context) => {
-    console.log('state', state)
   }
 
   return (

@@ -46,9 +46,6 @@ export const browsingTime = (referer, date_state) => async dispatch => {
       dispatch({
         type: SessionActionType.active, referer: referer, sessionTime: date_state,
       });
-      console.log(data);
-      console.log(referer, date_state);
-      console.log('success');
     } else {
       console.log('fail');
     }

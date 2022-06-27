@@ -46,7 +46,6 @@ export default function FindIdOk({route, navigation}) {
 
     return unsubscribe;
   }, [navigate]);
-  console.log(params);
   const handleRegister = () => {
     navigate(routes.registerForm);
   };

@@ -283,7 +283,6 @@ export default function Login({ route }) {
       } catch (e) {
         throw 'get kakao serviceTerms error';
       }
-      console.log(profile)
       const { data, status } = await requestPost({
         url: consts.apiUrl + '/auth/kakaoLogin',
         body: {
@@ -582,7 +581,6 @@ if(!appleAuth.isSupported){
           },
         })
           .then(async function (res) {
-            console.log(res)
             if (res.status === 'SUCCESS') {
               const { data, status } = await requestPost({
                 url: consts.apiUrl + '/auth/appleLogin',

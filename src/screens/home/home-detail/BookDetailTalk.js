@@ -91,7 +91,6 @@ export default function BookDetailTalk({ selectedBook, wait }) {
     setNowEditing(1);
     setReplyContent(contents);
     setStarRate(startRate);
-    console.log(bookHashtag[0].length)
     if (bookHashtag[0].length !== 0) {
       setTags({ tag: '', tagsArray: bookHashtag });
     } else {
@@ -218,7 +217,6 @@ export default function BookDetailTalk({ selectedBook, wait }) {
   };
 
   const handleKeyPress = e => {
-    console.log(e);
     if (e.key === 'Enter') {
       setTimeout(() => tagRef.current.focus(), 400);
     }
