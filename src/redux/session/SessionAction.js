@@ -26,16 +26,16 @@ export const setSession =
       }
     };
 
-export const browsingTime = (referer, date_state) => async dispatch => {
+export const browsingTime = (referer, date_state,memberId) => async dispatch => {
   try {
 
 
 
 
     const formData = new FormData();
+    formData.append('memberId', memberId);
     formData.append('sessionTime', date_state);
     formData.append('url', referer);
-
 
     const { data, status } = await requestFile(
       { url: consts.apiUrl + '/pagelog/insert', method: 'post' },

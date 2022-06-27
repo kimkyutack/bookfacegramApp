@@ -23,9 +23,9 @@ import BookMainCarousel from './BookMainCarousel';
 import { ScrollView } from 'react-native-gesture-handler';
 import { navigate } from '../../../services/navigation';
 import routes from '../../../libs/routes';
-import { setSession, browsingTime } from '../../../redux/session/SessionAction';
+import { browsingTime } from '../../../redux/session/SessionAction';
 import { useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector,shallowEqual } from 'react-redux';
 
 export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th }) {
   const [arrayGrade, setArrayGrade] = useState([
@@ -41,6 +41,7 @@ export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th })
   const dispatch = useDispatch();
   const [sessionTime, setSessionTime] = useState('000000');
   const CONTENT_OFFSET_THRESHOLD = 150;
+  const user = useSelector(s => s.user, shallowEqual);
 
 
   const isFocused = useIsFocused();
@@ -94,7 +95,7 @@ export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th })
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('NEWBOOKS(메인페이지)', sessionTime));
+        dispatch(browsingTime('NEWBOOKS(메인페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
