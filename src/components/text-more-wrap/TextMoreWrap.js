@@ -1,9 +1,9 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {View, Text, TextPropTypes} from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, TextPropTypes } from 'react-native';
 import fonts from '../../libs/fonts';
 import colors from '../../libs/colors';
 import propType from 'prop-types';
-import {fontPercentage, widthPercentage} from '../../services/util';
+import { fontPercentage, widthPercentage } from '../../services/util';
 import { navigationRef } from '../../services/navigation';
 
 export default function TextMoreWrap(props) {
@@ -21,9 +21,9 @@ export default function TextMoreWrap(props) {
     setLengthMore(props.children.split(/\r\n|\r|\n/).length > props.numOfLines);
 
     //console.log('length', e.nativeEvent);
-    console.log('프롭스',props.children);
-    console.log('------------------------------');
-    
+    // console.log('프롭스',props.children);
+    // console.log('------------------------------');
+
   }, []);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function TextMoreWrap(props) {
         ellipsizeMode={'clip'}
         style={[
           props.style,
-          {fontFamily: props.font || fonts.kopubWorldDotumProLight},
+          { fontFamily: props.font || fonts.kopubWorldDotumProLight },
         ]}>
         {props.children}
       </Text>
