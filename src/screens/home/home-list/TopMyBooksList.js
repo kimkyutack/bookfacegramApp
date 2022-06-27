@@ -25,6 +25,9 @@ import {
 import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
 import TopMyBooksMain from '../home-main/TopNewBooksMain';
+import { navigate } from '../../../services/navigation';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../../redux/session/SessionAction';
 
 export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
   const scrollRef = useRef();
@@ -38,6 +41,8 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   const [morenewBook, setNewBook] = useState([]);
+  const [sessionTime, setSessionTime] = useState('000000');
+  const isFocused = useIsFocused();
   const [state, setState] = useState({
     req: [],
     page: 1,
@@ -65,6 +70,72 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
       dispatch(dialogError(error));
     }
   };
+
+  let hour = 0, minute = 0, second = -1;
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+//page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+        if(listTab.listTab.selectType === 'genre'){
+          dispatch(browsingTime('MYBOOKS>장르별>전체보기', sessionTime));
+        }else if(listTab.listTab.selectType === 'rank'){
+          dispatch(browsingTime('MYBOOKS>수준별>전체보기', sessionTime));
+        }else{
+          dispatch(browsingTime('MYBOOKS>주제별>전체보기', sessionTime));
+        }
+        
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
+
 
   useEffect(() => {
     let mount = true;

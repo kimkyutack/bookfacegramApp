@@ -23,6 +23,9 @@ import {
 } from '../../../services/util';
 import {requestGet, requestPost} from '../../../services/network';
 import {dialogError} from '../../../redux/dialog/DialogActions';
+import { navigate } from '../../../services/navigation';
+import { browsingTime } from '../../../redux/session/SessionAction';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function TopNewBooksList({route, newBook, kbsBook, th, booktype}) {
   const scrollRef = useRef();
@@ -34,6 +37,8 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
   const [morenewBook, setNewBook] = useState([]);
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
+  const [sessionTime, setSessionTime] = useState('000000');
+  const isFocused = useIsFocused();
   const [state, setState] = useState({
     req: listTab.listTab.grade === null ? newBook : kbsBook,
     page: 1,
@@ -63,6 +68,69 @@ export default function TopNewBooksList({route, newBook, kbsBook, th, booktype})
       dispatch(dialogError(error));
     }
   };
+
+  let hour = 0, minute = 0, second = -1;
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+//page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+        if(booktype === 'kbs'){
+          dispatch(browsingTime('KBS선정도서>전체보기', sessionTime));
+        }else{
+          dispatch(browsingTime('신간도서>전체보기', sessionTime));
+        }
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
+
   useEffect(() => {
     let mount = true;
     if (mount) {

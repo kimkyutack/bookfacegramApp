@@ -9,12 +9,15 @@ import {
   Alert,
 } from 'react-native';
 import images from '../../libs/images';
+import { useEffect, useState } from 'react';
 import {useDispatch} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
 import {setTab} from '../../redux/tab/TabAction';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../redux/session/SessionAction';
 import {
   widthPercentage,
   heightPercentage,
@@ -26,6 +29,69 @@ import {
 
 export default function ActivityMain({route}) {
   const dispatch = useDispatch();
+  const [sessionTime, setSessionTime] = useState('000000');
+  const isFocused = useIsFocused();
+
+
+  let hour = 0, minute = 0, second = -1;
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+//page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('ACTIVITY', sessionTime));
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
+
   return (
     <View style={styles.mainroot}>
       <View style={styles.textroot}>
