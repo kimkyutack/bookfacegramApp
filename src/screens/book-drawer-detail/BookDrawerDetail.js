@@ -53,6 +53,8 @@ export default function BookDrawerDetail({ route, navigation }) {
   const isFocused = useIsFocused();
   const [sessionTime, setSessionTime] = useState('000000');
 
+  const user = useSelector(s => s.user, shallowEqual);
+
   let hour = 0, minute = 0, second = -1;
 
   //카운트 올라가는 로직
@@ -103,7 +105,7 @@ export default function BookDrawerDetail({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('책서랍(상세페이지)', sessionTime));
+        dispatch(browsingTime('책서랍(상세페이지)', sessionTime, user.member_id));
       }
     }
     return () => {

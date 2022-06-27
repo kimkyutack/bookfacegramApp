@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import { dialogOpenSelect } from '../../redux/dialog/DialogActions';
 import { requestGet } from '../../services/network';
@@ -25,6 +25,7 @@ export default function Notice({ route, navigation }) {
   const isFocused = useIsFocused();
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const [sessionTime, setSessionTime] = useState('000000');
+  const user = useSelector(s => s.user, shallowEqual);
 
   const CONTENT_OFFSET_THRESHOLD = 300;
   const listRef = useRef();
@@ -93,7 +94,7 @@ export default function Notice({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('공지사항', sessionTime));
+        dispatch(browsingTime('공지사항', sessionTime, user.member_id));
       }
     }
     return () => {

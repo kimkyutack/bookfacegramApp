@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FlatList, View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import consts from '../../libs/consts';
 import { requestGet } from '../../services/network';
@@ -26,6 +26,7 @@ export default function Event({ navigation }) {
   const listRef = useRef();
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -91,7 +92,7 @@ export default function Event({ navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('이벤트', sessionTime));
+        dispatch(browsingTime('이벤트', sessionTime, user.member_id));
       }
     }
     return () => {

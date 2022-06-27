@@ -144,7 +144,7 @@ export default function FeedBookFeed({ route, navigation }) {
     setSessionTime(date_state);
   };
 
-//page 로그 찍는 로직
+  //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
       var timer = setInterval(() => { timeCount() }, 1000);
@@ -153,7 +153,7 @@ export default function FeedBookFeed({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('피드북(전체페이지)', sessionTime));
+        dispatch(browsingTime('피드북(전체페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
@@ -184,7 +184,7 @@ export default function FeedBookFeed({ route, navigation }) {
               index: route.params?.index,
             });
           }, 100);
-          
+
         }
       }
     }
@@ -460,7 +460,8 @@ export default function FeedBookFeed({ route, navigation }) {
         opacity={opacity}
         toggleIndex={toggleIndex}
       />
-    )};
+    )
+  };
 
   const renderFooter = () => {
     if (userBooks?.length === 0 || !isUserLoading) {

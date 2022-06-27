@@ -108,7 +108,7 @@ export default function HashTagFeed({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('피드북(해시태그 상세)', sessionTime));
+        dispatch(browsingTime('피드북(해시태그 상세)', sessionTime, user.member_id));
       }
     }
     return () => {

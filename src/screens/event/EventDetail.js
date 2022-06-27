@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Image, View, ScrollView, StyleSheet, Linking, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import RootLayout from '../../layouts/root-layout/RootLayout';
 import EventReplyItem from './EventReplyItem';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
@@ -95,6 +95,7 @@ export default function EventDetail({ route, navigation }) {
   const isFocused = useIsFocused();
   const scrollRef = useRef();
   const [sessionTime, setSessionTime] = useState('000000');
+  const user = useSelector(s => s.user, shallowEqual);
 
   const regex = /<br>|\n|\r\s*\\?>/gm;
   const source = {
@@ -169,7 +170,7 @@ export default function EventDetail({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('이벤트(상세페이지)', sessionTime));
+        dispatch(browsingTime('이벤트(상세페이지)', sessionTime, user.member_id));
       }
     }
     return () => {

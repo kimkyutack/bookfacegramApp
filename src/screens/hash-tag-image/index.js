@@ -93,7 +93,7 @@ export default function HashTagImage({ route, navigation }) {
     if (!isFocused) {
       if (sessionTime !== '000000') {
 
-        dispatch(browsingTime('피드북(검색페이지)', sessionTime));
+        dispatch(browsingTime('피드북(검색페이지)', sessionTime, user.member_id));
       }
     }
     return () => {
