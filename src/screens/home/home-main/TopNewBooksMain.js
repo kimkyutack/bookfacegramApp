@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Image,
   StyleSheet,
@@ -20,61 +20,92 @@ import {
   heightPercentage
 } from '../../../services/util';
 import BookMainCarousel from './BookMainCarousel';
-import {ScrollView} from 'react-native-gesture-handler';
-import {navigate} from '../../../services/navigation';
+import { ScrollView } from 'react-native-gesture-handler';
+import { navigate } from '../../../services/navigation';
 import routes from '../../../libs/routes';
+import { setSession, browsingTime } from '../../../redux/session/SessionAction';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 
-export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
+export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th }) {
   const [arrayGrade, setArrayGrade] = useState([
     ...new Set(kbsBook.map(x => x.grade)),
   ]);
   const [loading, setLoading] = useState(true);
   const [newBookList, setNewBookList] = useState(null);
   const [bannerList, setBannerList] = useState(null);
-  const [sessiontime, setsessiontime] = useState(0);
   const [kbsBookList1, setKbsBookList1] = useState(null); //1급
   const [kbsBookList2, setKbsBookList2] = useState(null); //2급 
   const scrollRef = useRef();
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const dispatch = useDispatch();
+  const [sessionTime, setSessionTime] = useState('000000');
   const CONTENT_OFFSET_THRESHOLD = 150;
 
 
-  var hour = 0,minute =0, second =-1;  
-  const browsing_time = () => {
-    var dsp_hour, dsp_minute, dsp_second;
+  const isFocused = useIsFocused();
+
+  let hour = 0, minute = 0, second = -1;
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
     second++;
-    
-    if(minute == 60){
+
+    if (minute == 60) {
       hour++;
       minute = 0;
     }
-    if(second == 60){
+    if (second == 60) {
       minute++;
       second = 0;
     }
-    
-    if(hour < 10)
+
+    if (hour < 10)
       dsp_hour = '0' + hour;
     else
       dsp_hour = hour;
-    
-    if(minute < 10)
+
+    if (minute < 10)
       dsp_minute = '0' + minute;
     else
       dsp_minute = minute;
-    
-    if(second < 10)
+
+    if (second < 10)
       dsp_second = '0' + second;
     else
       dsp_second = second;
-    
 
-    var date_state = dsp_hour + dsp_minute + dsp_second;
-    
-    setTimeout('browsing_time()', 1000);
-    setsessiontime(date_state);
-    console.log(date_state);
-  }
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+
+    console.log('date_state ::', date_state);
+  };
+
+  //page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('NEWBOOKS(메인페이지)', sessionTime));
+      }
+      console.log('hihi');
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
 
 
 
@@ -99,7 +130,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     {
       name: 'kbs',
       grade: arrayGrade[0],
-      gradeStyle: {color: colors.st1},
+      gradeStyle: { color: colors.st1 },
       renderData: kbsBookList1 ? chunk(kbsBookList1, 3) : kbsBookList1,
       itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
       slideWidth: widthPercentage(344),
@@ -110,7 +141,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
     {
       name: 'kbs',
       grade: arrayGrade[1],
-      gradeStyle: {color: colors.st2},
+      gradeStyle: { color: colors.st2 },
       renderData: kbsBookList2 ? chunk(kbsBookList2, 3) : kbsBookList2,
       itemWidth: (widthPercentage(332) / 3).toFixed(1) * 1 - 10,
       slideWidth: widthPercentage(344),
@@ -122,11 +153,11 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
 
   useEffect(() => {
     let isMounted = true;
-    if(isMounted ){
-    setNewBookList([...newBook]);
-    setKbsBookList1([...kbsBook?.filter(x => x.grade === arrayGrade[0])]);
-    setKbsBookList2([...kbsBook?.filter(x => x.grade === arrayGrade[1])]);
-    setBannerList([...banner]);
+    if (isMounted) {
+      setNewBookList([...newBook]);
+      setKbsBookList1([...kbsBook?.filter(x => x.grade === arrayGrade[0])]);
+      setKbsBookList2([...kbsBook?.filter(x => x.grade === arrayGrade[1])]);
+      setBannerList([...banner]);
     }
     return () => {
       isMounted = false;
@@ -135,9 +166,9 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
 
   useEffect(() => {
     let isMounted = true;
-    if(isMounted ){
-      if(scrollRef.current !== undefined){
-      scrollRef.current.scrollToOffset({animated: false, offset: 0});
+    if (isMounted) {
+      if (scrollRef.current !== undefined) {
+        scrollRef.current.scrollToOffset({ animated: false, offset: 0 });
       }
     }
     return () => {
@@ -145,7 +176,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
       setContentVerticalOffset(0);
 
     };
-  },[route]);
+  }, [route]);
 
   useEffect(() => {
     if (th && newBookList && bannerList && kbsBookList1 && kbsBookList2) {
@@ -168,11 +199,11 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
   };
 
   return (
-    <View style={[styles.root, loading && {flex: 1, justifyContent: 'center'}]}>
+    <View style={[styles.root, loading && { flex: 1, justifyContent: 'center' }]}>
       {loading ? (
         <ActivityIndicator
           size="large"
-          style={{alignSelf: 'center', marginBottom: 60}}
+          style={{ alignSelf: 'center', marginBottom: 60 }}
           color={colors.blue}
         />
       ) : (
@@ -188,7 +219,7 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <BookMainCarousel {...item} />;
           }}
           ListFooterComponent={
@@ -244,12 +275,12 @@ export default function TopNewBooksMain({route, kbsBook, newBook, banner, th}) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
     </View>
   );
 }
 
-        
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
