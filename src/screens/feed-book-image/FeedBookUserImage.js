@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import {
   Image,
   View,
@@ -7,11 +7,11 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
-import {PinchGestureHandler} from 'react-native-gesture-handler';
+import { PinchGestureHandler } from 'react-native-gesture-handler';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -23,11 +23,11 @@ import {
   screenWidth,
   fontPercentage,
 } from '../../services/util';
-import {getFeedUser} from '../../redux/book/BookActions';
+import { getFeedUser } from '../../redux/book/BookActions';
 import TextWrap from '../../components/text-wrap/TextWrap';
 
-export default function FeedBookUserImage({route, navigation}) {
-  const {isUserLoading, userBooks, userPage, userErrorMessage} = useSelector(
+export default function FeedBookUserImage({ route, navigation }) {
+  const { isUserLoading, userBooks, userPage, userErrorMessage } = useSelector(
     s => s.book,
   );
   const dispatch = useDispatch();
@@ -62,20 +62,22 @@ export default function FeedBookUserImage({route, navigation}) {
     }
   };
 
+
+
   useEffect(() => {
     let mount = true;
     if (mount) {
-      
+
       const newTime = new Date(+new Date() + 3240 * 10000)
         .toISOString()
         .replace('T', ' ')
         .replace(/\..*/, '');
       //console.log(today);
-      listRef.current?.scrollToOffset({y: 0.1, animated: false});
+      listRef.current?.scrollToOffset({ y: 0.1, animated: false });
       //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       setTime(newTime);
       fetchUserData('reset', newTime);
-      
+
     }
     return () => {
       mount = false;
@@ -109,9 +111,9 @@ export default function FeedBookUserImage({route, navigation}) {
       params: {
         memberId: item.memberId,
         memberIdx: item.memberIdx,
-        profile_path:  item.profile
-                  ? item.profile
-                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+        profile_path: item.profile
+          ? item.profile
+          : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
         feedIdx: item.feedIdx,
         isNewFeed: false,
         key: Date.now(),
@@ -122,7 +124,7 @@ export default function FeedBookUserImage({route, navigation}) {
     });
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         onPress={() => onPress(item, index)}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -19,8 +19,8 @@ import {
   cameraItem,
   fontPercentage,
 } from '../../services/util';
-import {navigationRef} from '../../services/navigation';
-import {requestPost} from '../../services/network';
+import { navigationRef } from '../../services/navigation';
+import { requestPost } from '../../services/network';
 
 import Avatar from '../../components/avatar/Avatar';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -32,12 +32,75 @@ import {
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
 import FeedTopTabs from './FeedTopTabs';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function HashTagImage({route, navigation}) {
+export default function HashTagImage({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const [sessionTime, setSessionTime] = useState('000000');
 
-  const {currentHashTag} = useSelector(s => s.tag);
+  const { currentHashTag } = useSelector(s => s.tag);
+
+  let hour = 0, minute = 0, second = -1;
+
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+  //page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('피드북(검색페이지)', sessionTime));
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -48,10 +111,10 @@ export default function HashTagImage({route, navigation}) {
               ? '#' + currentHashTag?.substring(0, 10) + '...'
               : '#' + currentHashTag
             : route.params?.params?.hashTag
-            ? route.params?.params?.hashTag?.length > 10
-              ? '#' + route.params?.params?.hashTag?.substring(0, 10) + '...'
-              : '#' + route.params?.params?.hashTag
-            : '해시태그'
+              ? route.params?.params?.hashTag?.length > 10
+                ? '#' + route.params?.params?.hashTag?.substring(0, 10) + '...'
+                : '#' + route.params?.params?.hashTag
+              : '해시태그'
         }
         navigation={navigation}
         back={true}
@@ -94,7 +157,7 @@ export default function HashTagImage({route, navigation}) {
               params: {
                 memberId: user.member_id,
                 memberIdx: user.member_idx,
-                profile_path:  user?.profile_path
+                profile_path: user?.profile_path
                   ? user?.profile_path
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),

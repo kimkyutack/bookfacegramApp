@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback, useMemo, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
@@ -27,7 +27,7 @@ import {
   dialogOpenAction,
   dialogClose,
 } from '../../redux/dialog/DialogActions';
-import {setTab} from '../../redux/tab/TabAction';
+import { setTab } from '../../redux/tab/TabAction';
 import {
   widthPercentage,
   heightPercentage,
@@ -35,9 +35,11 @@ import {
   chunk,
   screenWidth
 } from '../../services/util';
-import {requestGet, requestDelete, requestPost} from '../../services/network';
+import { requestGet, requestDelete, requestPost } from '../../services/network';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function BookDrawerDetail({route, navigation}) {
+export default function BookDrawerDetail({ route, navigation }) {
   const dispatch = useDispatch();
   const [editActive, setEditActive] = useState(false);
   const [selectedArr, setSelectedArr] = useState([]);
@@ -47,6 +49,68 @@ export default function BookDrawerDetail({route, navigation}) {
   const [drawerList, setDrawerList] = useState([]);
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 150;
+
+  const isFocused = useIsFocused();
+  const [sessionTime, setSessionTime] = useState('000000');
+
+  let hour = 0, minute = 0, second = -1;
+
+  //카운트 올라가는 로직
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+  //page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('책서랍(상세페이지)', sessionTime));
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     let mount = true;
@@ -61,7 +125,7 @@ export default function BookDrawerDetail({route, navigation}) {
               res.data?.find(x => x.drawIdx === route.params.drawIdx),
             );
             setDrawerList(
-              res.data?.map(x => [{name: x.name, contentsIdx: x.drawIdx}]),
+              res.data?.map(x => [{ name: x.name, contentsIdx: x.drawIdx }]),
             );
           } else if (res.status === 'FAIL') {
             // error 일때 해야함
@@ -84,7 +148,7 @@ export default function BookDrawerDetail({route, navigation}) {
     };
   }, [route.params?.timeKey]);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     const itemWidth = (widthPercentage(332) / 3).toFixed(1) * 1 - 10;
     if (item?.length === 1) {
       item.push({}, {});
@@ -101,12 +165,12 @@ export default function BookDrawerDetail({route, navigation}) {
               justifyContent: 'space-between',
               flexDirection: 'row',
             },
-            editActive && {marginLeft: 9},
+            editActive && { marginLeft: 9 },
           ]}>
           {item?.map((item1, index1) => {
             return (
               <CardWrap
-                style={[styles.card, itemWidth && {width: itemWidth}]}
+                style={[styles.card, itemWidth && { width: itemWidth }]}
                 key={index1.toString()}
                 onPress={() => {
                   if (!item1?.bookIdx) {
@@ -135,7 +199,7 @@ export default function BookDrawerDetail({route, navigation}) {
                     });
                   }
                 }}>
-                <View style={{width: itemWidth}}>
+                <View style={{ width: itemWidth }}>
                   {editActive &&
                     item1?.contentsIdx &&
                     (selectedArr.indexOf(item1?.contentsIdx) !== -1 ? (
@@ -154,28 +218,28 @@ export default function BookDrawerDetail({route, navigation}) {
                       source={
                         item1?.type === 'kbs'
                           ? {
-                              uri:
-                                item1?.imgNm !== '' &&
+                            uri:
+                              item1?.imgNm !== '' &&
                                 item1?.imgNm !== undefined &&
                                 item1?.imgNm !== 'bookDefault'
-                                  ? consts.toapingUrl +
-                                    '/book/book_img/' +
-                                    item1?.imgNm +
-                                    '.gif'
-                                  : consts.imgUrl +
-                                    '/thumbnail/bookDefault.gif',
-                            }
+                                ? consts.toapingUrl +
+                                '/book/book_img/' +
+                                item1?.imgNm +
+                                '.gif'
+                                : consts.imgUrl +
+                                '/thumbnail/bookDefault.gif',
+                          }
                           : {
-                              uri:
-                                item1?.imgNm !== '' &&
+                            uri:
+                              item1?.imgNm !== '' &&
                                 item1?.imgNm !== undefined
-                                  ? consts.imgUrl +
-                                    '/thumbnail/' +
-                                    item1?.imgNm +
-                                    '.gif'
-                                  : consts.imgUrl +
-                                    '/thumbnail/bookDefault.gif',
-                            }
+                                ? consts.imgUrl +
+                                '/thumbnail/' +
+                                item1?.imgNm +
+                                '.gif'
+                                : consts.imgUrl +
+                                '/thumbnail/bookDefault.gif',
+                          }
                       }
                       resizeMode="cover"
                       style={styles.image}
@@ -290,7 +354,7 @@ export default function BookDrawerDetail({route, navigation}) {
         },
       }}>
       {loading ? (
-        <View style={[styles.root, {justifyContent: 'center'}]}>
+        <View style={[styles.root, { justifyContent: 'center' }]}>
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
       ) : (
@@ -359,7 +423,7 @@ export default function BookDrawerDetail({route, navigation}) {
                     <View
                       style={[
                         styles.headerContainer,
-                        editActive && {marginLeft: 9},
+                        editActive && { marginLeft: 9 },
                       ]}>
                       <TextWrap
                         style={styles.header}
@@ -414,7 +478,7 @@ export default function BookDrawerDetail({route, navigation}) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
       <Footer page="draw" />
     </RootLayout>
   );
@@ -485,7 +549,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
       },
       android: {
@@ -521,7 +585,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         backgroundColor: '#eeeeee',
-        height: heightPercentage(140),  
+        height: heightPercentage(140),
       },
     }),
   },

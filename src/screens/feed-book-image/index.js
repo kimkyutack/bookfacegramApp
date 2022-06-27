@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -19,7 +19,7 @@ import {
   cameraItem,
   fontPercentage,
 } from '../../services/util';
-import {navigationRef} from '../../services/navigation';
+import { navigationRef } from '../../services/navigation';
 
 import Avatar from '../../components/avatar/Avatar';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -29,12 +29,14 @@ import {
   dialogOpenSelect,
   dialogOpenAction,
 } from '../../redux/dialog/DialogActions';
-import {followUpdate} from '../../redux/book/BookActions';
+import { followUpdate } from '../../redux/book/BookActions';
 import ButtonWrap from '../../components/button-wrap/ButtonWrap';
 import FeedTopTabs from './FeedTopTabs';
-import {requestPost} from '../../services/network';
+import { requestPost } from '../../services/network';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function FeedBookImage({route, navigation}) {
+export default function FeedBookImage({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   const {
     currentUserId,
@@ -49,6 +51,8 @@ export default function FeedBookImage({route, navigation}) {
   const dispatch = useDispatch();
   const [myInfo, setMyInfo] = useState(true);
   const [myFollowing, setMyFollowing] = useState(true);
+  const isFocused = useIsFocused();
+  const [sessionTime, setSessionTime] = useState('000000');
 
   const [stateFollowerCount, setStateFollowerCount] = useState(followerCnt);
   const [stateFollowingCount, setStateFollowingCount] = useState(followingCnt);
@@ -57,6 +61,66 @@ export default function FeedBookImage({route, navigation}) {
   const [totalCount, setTotalCount] = useState(totalCnt);
   const [userProfilePath, setUserProfilePath] = useState(profilePath);
   const [userCurrentUserId, setUserCurrentUserId] = useState(currentUserId);
+
+  let hour = 0, minute = 0, second = -1;
+
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+  //page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('피드북(개인별페이지)', sessionTime));
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
   useEffect(() => {
     if (route.params?.params?.memberIdx === user.member_idx || official === 1) {
       setMyInfo(true);
@@ -174,7 +238,7 @@ export default function FeedBookImage({route, navigation}) {
               params: {
                 memberId: user.member_id,
                 memberIdx: user.member_idx,
-                profile_path:  user?.profile_path
+                profile_path: user?.profile_path
                   ? user?.profile_path
                   : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
                 key: Date.now(),
@@ -186,85 +250,85 @@ export default function FeedBookImage({route, navigation}) {
       <View style={styles.root}>
         {navigationRef.current.getCurrentRoute()?.name !==
           routes.feedBookFeed && (
-          <View style={styles.infoContainer}>
-            <Avatar
-              size={widthPercentage(65)}
-              style={styles.avator}
-              path={
-                route.params.params.profile_path
-                  ? route.params.params.profile_path
-                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
-              }
-            />
-            {!myInfo && (
-              <ButtonWrap
-                style={myFollowing ? styles.status : styles.statusOutline}
-                styleTitle={myFollowing && styles.statusTitle}
-                onPress={() =>
-                  !myFollowing &&
-                  dispatch(
-                    dialogOpenAction({
-                      titleColor: '#2699fb',
-                      cancelTitle: '취소',
-                      message: `${userCurrentUserId}님을 팔로잉 하시겠습니까?`,
-                      onPress: a => {
-                        if (a) {
-                          requestFollowing(route.params?.params?.memberIdx);
-                        }
-                      },
-                    }),
-                  )
+            <View style={styles.infoContainer}>
+              <Avatar
+                size={widthPercentage(65)}
+                style={styles.avator}
+                path={
+                  route.params.params.profile_path
+                    ? route.params.params.profile_path
+                    : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png'
                 }
-                outline>
-                팔로우
-              </ButtonWrap>
-            )}
-            <View style={[styles.info, {marginLeft: widthPercentage(60)}]}>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>
-                {totalCount ? totalCount : 0}
-              </TextWrap>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>게시물</TextWrap>
+              />
+              {!myInfo && (
+                <ButtonWrap
+                  style={myFollowing ? styles.status : styles.statusOutline}
+                  styleTitle={myFollowing && styles.statusTitle}
+                  onPress={() =>
+                    !myFollowing &&
+                    dispatch(
+                      dialogOpenAction({
+                        titleColor: '#2699fb',
+                        cancelTitle: '취소',
+                        message: `${userCurrentUserId}님을 팔로잉 하시겠습니까?`,
+                        onPress: a => {
+                          if (a) {
+                            requestFollowing(route.params?.params?.memberIdx);
+                          }
+                        },
+                      }),
+                    )
+                  }
+                  outline>
+                  팔로우
+                </ButtonWrap>
+              )}
+              <View style={[styles.info, { marginLeft: widthPercentage(60) }]}>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>
+                  {totalCount ? totalCount : 0}
+                </TextWrap>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>게시물</TextWrap>
+              </View>
+              <TouchableOpacity
+                style={styles.info}
+                onPress={() =>
+                  navigation.navigate(routes.follow, {
+                    memberId: userCurrentUserId,
+                    memberIdx: route.params?.params.memberIdx,
+                    type: 'follower',
+                    myInfo:
+                      route.params?.params?.memberIdx === user.member_idx
+                        ? true
+                        : false,
+                    key: Date.now(),
+                  })
+                }>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>
+                  {stateFollowerCount ? stateFollowerCount : 0}
+                </TextWrap>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로워</TextWrap>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.info, { marginRight: widthPercentage(43.6) }]}
+                onPress={() =>
+                  navigation.navigate(routes.follow, {
+                    memberId: userCurrentUserId,
+                    memberIdx: route.params?.params.memberIdx,
+                    type: 'follow',
+                    myInfo:
+                      route.params?.params?.memberIdx === user.member_idx
+                        ? true
+                        : false,
+                    key: Date.now(),
+                  })
+                }>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>
+                  {stateFollowingCount ? stateFollowingCount : 0}
+                </TextWrap>
+                <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로잉</TextWrap>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.info}
-              onPress={() =>
-                navigation.navigate(routes.follow, {
-                  memberId: userCurrentUserId,
-                  memberIdx: route.params?.params.memberIdx,
-                  type: 'follower',
-                  myInfo:
-                    route.params?.params?.memberIdx === user.member_idx
-                      ? true
-                      : false,
-                  key: Date.now(),
-                })
-              }>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>
-                {stateFollowerCount ? stateFollowerCount : 0}
-              </TextWrap>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로워</TextWrap>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.info, {marginRight: widthPercentage(43.6)}]}
-              onPress={() =>
-                navigation.navigate(routes.follow, {
-                  memberId: userCurrentUserId,
-                  memberIdx: route.params?.params.memberIdx,
-                  type: 'follow',
-                  myInfo:
-                    route.params?.params?.memberIdx === user.member_idx
-                      ? true
-                      : false,
-                  key: Date.now(),
-                })
-              }>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>
-                {stateFollowingCount ? stateFollowingCount : 0}
-              </TextWrap>
-              <TextWrap font={fonts.kopubWorldDotumProMedium}>팔로잉</TextWrap>
-            </TouchableOpacity>
-          </View>
-        )}
+          )}
 
         <FeedTopTabs route={route} />
       </View>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import {
   View,
   FlatList,
@@ -7,10 +7,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
-import {PinchGestureHandler} from 'react-native-gesture-handler';
+import { PinchGestureHandler } from 'react-native-gesture-handler';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import consts from '../../libs/consts';
@@ -22,29 +22,93 @@ import {
   screenWidth,
   fontPercentage,
 } from '../../services/util';
-import {getFeedAll} from '../../redux/book/BookActions';
+import { getFeedAll } from '../../redux/book/BookActions';
 import TextWrap from '../../components/text-wrap/TextWrap';
+import { useIsFocused } from '@react-navigation/native';
+import { browsingTime } from '../../redux/session/SessionAction';
 
-export default function FeedBookAllImage({route, navigation}) {
+export default function FeedBookAllImage({ route, navigation }) {
   const limit = 24;
   const dispatch = useDispatch();
   const listRef = useRef();
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 150;
-  const {isAllLoading, allBooks, allPage, allErrorMessage, totalCnt} =
+  const { isAllLoading, allBooks, allPage, allErrorMessage, totalCnt } =
     useSelector(s => s.book);
   const [time, setTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
   const [numColumns, setNumColumns] = useState(3); // pinch zoom columns number
   const user = useSelector(s => s.user, shallowEqual);
+  const isFocused = useIsFocused();
+  const [sessionTime, setSessionTime] = useState('000000');
   //console.log(user.member_idx)
+
+  let hour = 0, minute = 0, second = -1;
+
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+  };
+
+  //page 로그 찍는 로직
+  useEffect(() => {
+    if (isFocused) {
+      var timer = setInterval(() => { timeCount() }, 1000);
+    }
+
+    if (!isFocused) {
+      if (sessionTime !== '000000') {
+
+        dispatch(browsingTime('피드북(전체페이지)', sessionTime));
+      }
+    }
+    return () => {
+      clearInterval(timer);
+      setSessionTime('000000');
+    }
+  }, [isFocused]);
+
 
   const fetchWholeData = (type, newTime) => {
     let mount = true;
     if (mount) {
       if (type === 'reset') {
-        dispatch(getFeedAll(1, limit, newTime,user.member_idx));
+        dispatch(getFeedAll(1, limit, newTime, user.member_idx));
       } else {
-        dispatch(getFeedAll(allPage + 1, limit, time,user.member_idx));
+        dispatch(getFeedAll(allPage + 1, limit, time, user.member_idx));
       }
     }
     return () => {
@@ -55,7 +119,7 @@ export default function FeedBookAllImage({route, navigation}) {
   useEffect(() => {
     let mount = true;
     if (mount) {
-      listRef.current?.scrollToOffset({y: 0.1, animated: false});
+      listRef.current?.scrollToOffset({ y: 0.1, animated: false });
       //const newTime = moment().add(20, 'second').format('YYYY-MM-DD HH:mm:ss');
       const newTime = new Date(+new Date() + 3240 * 10000)
         .toISOString()
@@ -96,9 +160,9 @@ export default function FeedBookAllImage({route, navigation}) {
       params: {
         memberId: item.memberId,
         memberIdx: item.memberIdx,
-        profile_path:  item.profile
-                  ? item.profile
-                  : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
+        profile_path: item.profile
+          ? item.profile
+          : 'https://toaping.me/bookfacegram/images/menu_left/icon/toaping.png',
         feedIdx: item.feedIdx,
         isNewFeed: false,
         key: Date.now(),
@@ -109,7 +173,7 @@ export default function FeedBookAllImage({route, navigation}) {
     });
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         onPress={() => onPress(item, index)}
@@ -173,29 +237,29 @@ export default function FeedBookAllImage({route, navigation}) {
     </View>
   ) : (
     <View>
-    <PinchGestureHandler onGestureEvent={handleGesture}>
-      <FlatList
-        key={String(numColumns)}
-        numColumns={numColumns}
-        initialNumToRender={limit}
-        ref={listRef}
-        onScroll={event => {
+      <PinchGestureHandler onGestureEvent={handleGesture}>
+        <FlatList
+          key={String(numColumns)}
+          numColumns={numColumns}
+          initialNumToRender={limit}
+          ref={listRef}
+          onScroll={event => {
             setContentVerticalOffset(event.nativeEvent.contentOffset.y);
           }}
-        data={allBooks}
-        extraData={allBooks}
-        removeClippedSubviews={true}
-        disableVirtualization={false}
-        showsVerticalScrollIndicator={true}
-        keyExtractor={keyExtractor} // arrow 함수 자제
-        renderItem={memoizedRenderItem} // arrow 함수 자제
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.6}
-        ListFooterComponent={renderFooter}
-      />
-      
-    </PinchGestureHandler>
-     {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
+          data={allBooks}
+          extraData={allBooks}
+          removeClippedSubviews={true}
+          disableVirtualization={false}
+          showsVerticalScrollIndicator={true}
+          keyExtractor={keyExtractor} // arrow 함수 자제
+          renderItem={memoizedRenderItem} // arrow 함수 자제
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.6}
+          ListFooterComponent={renderFooter}
+        />
+
+      </PinchGestureHandler>
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
         <TouchableOpacity
           onPress={() => {
             listRef.current.scrollToOffset({ animated: true, offset: 0 });
@@ -203,10 +267,10 @@ export default function FeedBookAllImage({route, navigation}) {
           style={styles.topButton}>
           <Image source={images.scrollTop} style={styles.scrolltotop} />
         </TouchableOpacity>
-        )}
+      )}
     </View>
   );
- 
+
 }
 
 const styles = StyleSheet.create({
@@ -228,7 +292,7 @@ const styles = StyleSheet.create({
   tabs: {
     marginTop: 10,
   },
-scrolltotop: {
+  scrolltotop: {
     width: widthPercentage(35),
     height: heightPercentage(35),
     resizeMode: 'contain',
