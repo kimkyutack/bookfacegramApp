@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
   info: {
     width: '95%',
     fontSize: fontPercentage(12),
-    marginTop: heightPercentage(10),
+    marginTop: heightPercentage(7),
     lineHeight: fontPercentage(16),
   },
   blueText: {
