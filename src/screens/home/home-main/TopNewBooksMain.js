@@ -83,8 +83,6 @@ export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th })
 
 
     setSessionTime(date_state);
-
-    console.log('date_state ::', date_state);
   };
 
   //page 로그 찍는 로직
@@ -98,7 +96,6 @@ export default function TopNewBooksMain({ route, kbsBook, newBook, banner, th })
 
         dispatch(browsingTime('NEWBOOKS(메인페이지)', sessionTime));
       }
-      console.log('hihi');
     }
     return () => {
       clearInterval(timer);
