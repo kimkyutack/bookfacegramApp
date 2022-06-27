@@ -1,7 +1,7 @@
 import { SessionActionType } from "./SessionAction";
 
 const initSession = {
-  referer: '',
+  referer: 'NEWBOOKS(메인페이지)',
   sessionTime: '000000',
 };
 
@@ -11,7 +11,6 @@ export default function session(state = initSession, action) {
     case SessionActionType.main:
       return {
         ...state,
-        referer: 'NEWBOOKS(메인페이지)',
       };
     case SessionActionType.init:
       return {

@@ -32,12 +32,65 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import { requestPost, requestFile } from '../../../services/network';
 import consts from '../../../libs/consts';
+import { setSession, browsingTime } from '../../../redux/session/SessionAction';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function HomeMain({ route, navigation }) {
   const [keyword, setKeyword] = useState('');
+  const [sessionTime, setSessionTime] = useState('000000');
+
   const dispatch = useDispatch();
   const inputRef = useRef();
   const user = useSelector(s => s.user, shallowEqual);
+  const session = useSelector(s => s.session, shallowEqual);
+
+  const isFocused = useIsFocused();
+
+  let hour = 0, minute = 0, second = -1;
+
+  function timeCount() {
+
+
+    let dsp_hour, dsp_minute, dsp_second;
+
+    second++;
+
+    if (minute == 60) {
+      hour++;
+      minute = 0;
+    }
+    if (second == 60) {
+      minute++;
+      second = 0;
+    }
+
+    if (hour < 10)
+      dsp_hour = '0' + hour;
+    else
+      dsp_hour = hour;
+
+    if (minute < 10)
+      dsp_minute = '0' + minute;
+    else
+      dsp_minute = minute;
+
+    if (second < 10)
+      dsp_second = '0' + second;
+    else
+      dsp_second = second;
+
+
+    let date_state = dsp_hour + dsp_minute + dsp_second;
+
+
+    setSessionTime(date_state);
+
+    console.log('date_state ::', date_state);
+
+
+
+  };
+
 
   const getData = async () => {
     try {
@@ -78,56 +131,85 @@ export default function HomeMain({ route, navigation }) {
         formData,
       );
 
-      if (status === 'SUCCESS') {
-        console.log('토큰저장성공');
-      }
     } catch (error) {
       console.log(error);
     }
   };
   //토핑어플의 DB에 저장하는 로직 끝
 
+  let timer;
+
+  useEffect(() => {
+    if (isFocused) {
+      timer = setInterval(() => {
+        timeCount()
+
+      }, 1000);
+    }
+
+    const unsubscribe = navigation.addListener('beforeRemove', () => {
+      console.log('11')
+      clearInterval(timer);
+      setSessionTime('000000');
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   useEffect(() => {
 
     if (user.agree_notice === 1) {
       messaging()
         .subscribeToTopic('toapingNotice')
-        .then(() => console.log('Subscribed to toapingNotice!'));
+        .then(() => { });
     } else if (user.agree_notice === 0) {
       messaging()
         .unsubscribeFromTopic('toapingNotice')
-        .then(() => console.log('Unsubscribed fom the toapingNotice!'));
+        .then(() => { });
     }
 
     if (user.agree_app_push === 1) {
       messaging()
         .subscribeToTopic('toapingAppPush')
-        .then(() => console.log('Subscribed to toapingAppPush!'));
+        .then(() => { });
     } else if (user.agree_app_push === 0) {
       messaging()
         .unsubscribeFromTopic('toapingAppPush')
-        .then(() => console.log('Unsubscribed fom the toapingAppPush!'));
+        .then(() => { });
     }
 
     if (user.agree_event === 1) {
       messaging()
         .subscribeToTopic('toapingEvent')
-        .then(() => console.log('Subscribed to toapingEvent!'));
+        .then(() => { });
     } else if (user.agree_event === 0) {
       messaging()
         .unsubscribeFromTopic('toapingEvent')
-        .then(() => console.log('Unsubscribed fom the toapingEvent!'));
+        .then(() => { });
     }
 
     getData();
+
+
     return () => {
       setKeyword('');
     };
   }, []);
 
+  useEffect(() => {
+
+    dispatch(browsingTime('NEWMAIN', sessionTime));
+
+    console.log('sessionTime zzz', sessionTime);
+  }, [sessionTime]);
+
+  useEffect(() => {
+    console.log('session 이 바뀌었다', session);
+  }, [session]);
+
   const handleSearch = () => {
     if (keyword?.replace(/ /g, '')?.length < 1) {
-      dispatch(dialogOpenMessage({message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.'}));
+      dispatch(dialogOpenMessage({ message: '한글자 이상 입력해주세요. \n*공백은 제거됩니다.' }));
     } else {
       setKeyword('');
       navigation.navigate(routes.searchBook, { keyword: keyword });
