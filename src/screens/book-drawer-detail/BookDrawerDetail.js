@@ -519,7 +519,6 @@ const styles = StyleSheet.create({
       },
       android: {
         backgroundColor: 'white',
-        elevation: 1,
         borderRadius: 5,
         backgroundColor: '#eeeeee',
         height: heightPercentage(140),  

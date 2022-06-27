@@ -80,8 +80,6 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
         }
         setLoading(false);
       }
-        
-        
     }
     return () => {
       mount = false;
@@ -118,7 +116,7 @@ export default function TopMyBooksList({route, genre, rank, topic, startPage}) {
     return () => {
       mount = false;
     };
-  }, [listTab.listTab.selectType,genre,rank,topic]);
+  }, [listTab.listTab.selectType,topic]);
 
   useEffect(() => {
     setLoading(true);
