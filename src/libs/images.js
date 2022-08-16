@@ -10,6 +10,7 @@ export default {
   kakaoLoginClose: require('../assets/images/kakao_login_close.png'),
   naverIcon: require('../assets/images/naver_icon.png'),
   appleIcon: require('../assets/images/apple_icon.png'),
+  audioIcon: require('../assets/images/audiobook.png'),
   toapingIcon: require('../assets/images/toaping_icon.png'),
   que_btn: require('../assets/images/que_btn.png'),
   quiz_btn: require('../assets/images/quiz_btn.png'),

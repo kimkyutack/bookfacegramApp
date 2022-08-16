@@ -1,0 +1,219 @@
+import React, {useState} from 'react';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  Platform,
+} from 'react-native';
+import {useDispatch} from 'react-redux';
+import FastImage from 'react-native-fast-image';
+import moment from 'moment-timezone';
+import colors from '../../libs/colors';
+import consts from '../../libs/consts';
+import fonts from '../../libs/fonts';
+import routes from '../../libs/routes';
+import images from '../../libs/images';
+import {navigationRef, navigate} from '../../services/navigation';
+import {
+  fontPercentage,
+  formatTime,
+  heightPercentage,
+  screenWidth,
+  widthPercentage,
+} from '../../services/util';
+import {numFormat} from '../../services/util';
+import TextWrap from '../../components/text-wrap/TextWrap';
+import AudioCarouselImage from './AudioCarouselImage';
+import {setTab} from '../../redux/tab/TabAction';
+import {
+  dialogError,
+  dialogOpenDrawerSelect,
+} from '../../redux/dialog/DialogActions';
+
+export default function AudioItem({item, playtime, index}) {
+  const dispatch = useDispatch();
+  let cnt = 0;
+  //console.log(JSON.stringify(playtime));
+  return (
+    <>
+    
+      <View style={styles.headerContainer} />
+      
+      <View style={styles.root}>
+        <TouchableOpacity
+          style={styles.main}
+          onPress={() => {
+            dispatch(
+              setTab({
+                tab: 'detail',
+                selectedBook: item.bookCd,
+                viewType: 'kbs',
+                selectType: 'quiz',
+              }),
+            );
+            navigate(routes.homeDetail, {
+              type: 'detail',
+            });
+          }}>
+          <View style={styles.mainContent}>
+            <AudioCarouselImage item={item} style={styles.thumbnail} />
+            <View style={styles.info}>
+              <TextWrap
+                font={fonts.kopubWorldDotumProMedium}
+                style={styles.title}
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {item.title}
+              </TextWrap>
+              <TextWrap
+                style={styles.writer}
+                font={fonts.kopubWorldDotumProLight}>
+                {item.writer}
+              </TextWrap>
+              {playtime.length !== 0 && playtime.map((data, Index) => {
+                if (data.title === item.title && data.currentsTime < item.durationTime - 2) {
+                  cnt  = 1;
+                }else if(data.title === item.title && data.currentsTime >= item.durationTime - 2){
+                  cnt  = 2;
+                }
+              })}
+              {cnt === 0 ?
+              (
+              <TextWrap
+                font={fonts.kopubWorldDotumProLight}
+                style={styles.writer}
+                >
+                독서전 | {Math.floor(item.durationTime / 60) < 10 ? '0'+ Math.floor(item.durationTime / 60) : Math.floor(item.durationTime % 60)}분 {Math.floor(item.durationTime % 60) < 10 ? '0'+ Math.floor(item.durationTime % 60) : Math.floor(item.durationTime % 60)}초 
+              </TextWrap>
+              ) : cnt === 2 ? (
+                <TextWrap
+                  font={fonts.kopubWorldDotumProLight}
+                  style={styles.writer}>
+                  독서완료 | {Math.floor(item.durationTime / 60) < 10 ? '0'+ Math.floor(item.durationTime / 60) : Math.floor(item.durationTime / 60)}분 {Math.floor(item.durationTime % 60) < 10 ? '0'+ Math.floor(item.durationTime % 60) : Math.floor(item.durationTime % 60)}초 
+                </TextWrap>
+              ) : (
+                <TextWrap
+                  font={fonts.kopubWorldDotumProLight}
+                  style={styles.writer}>
+                  독서중 | {Math.floor(item.durationTime / 60) < 10 ? '0'+ Math.floor(item.durationTime / 60) : Math.floor(item.durationTime / 60)}분 {Math.floor(item.durationTime % 60) < 10 ? '0'+ Math.floor(item.durationTime % 60) : Math.floor(item.durationTime % 60)}초 
+                </TextWrap>
+              )
+              }
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingVertical: 10,
+    margin: 5,
+    //paddingRight: widthPercentage(10),
+    justifyContent: 'space-between',
+    backgroundColor: colors.white,
+  },
+  main: {
+    flex: 1,
+  },
+  mainContent: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  date: {
+    marginTop: 5,
+    fontWeight: '700',
+  },
+  title: {
+    color: colors.black,
+    marginVertical: 3,
+    fontSize: fontPercentage(11),
+    lineHeight: fontPercentage(17),
+    textAlign: 'center',
+    top: 10,
+  },
+  writer: {
+    color: colors.black,
+    marginVertical: 1.5,
+    fontSize: fontPercentage(8),
+    lineHeight: fontPercentage(17),
+    textAlign: 'center',
+  },
+  divider: {
+    marginHorizontal: 16,
+    borderWidth: 0.3,
+    borderColor: '#ccc',
+  },
+  thumbnail: {
+    height: screenWidth / 2.8,
+    width: screenWidth / 4,
+    resizeMode: 'cover',
+    flexDirection: 'row',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.2,
+      },
+      android: {
+        backgroundColor: 'white',
+      },
+    }),
+  },
+  info: {
+    flex: 1,
+    flexDirection: 'column',
+    alignSelf: 'center',
+  },
+  buttonContainer: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
+  },
+  button1: {
+    width: 40,
+    height: 40,
+    flex: 1,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  button2: {
+    width: 40,
+    height: 40,
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  headerContainer: {
+    backgroundColor: colors.white,
+  },
+  header: {
+    fontSize: fontPercentage(14),
+    lineHeight: fontPercentage(18),
+    color: colors.black,
+    // fontWeight: '700',
+  },
+  subHeader: {
+    color: colors.black,
+    fontSize: fontPercentage(13),
+    marginTop: 10,
+  },
+  cardHeaderTitle: {
+    color: colors.black,
+    fontSize: fontPercentage(14),
+    lineHeight: fontPercentage(18),
+  },
+  blueText: {
+    color: colors.blue,
+  },
+  
+});

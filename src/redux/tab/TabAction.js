@@ -4,6 +4,7 @@ export const tabActionType = {
   mylist: 'tab/mylist',
   detail: 'tab/detail',
   quiz: 'tab/quiz',
+  audio: 'tab/audio',
 };
 
 export const setTab =
@@ -33,6 +34,12 @@ export const setTab =
         viewType,
         selectType,
         rank,
+      });
+    } else if (tab === 'audio') {
+      dispatch({
+        type: tabActionType.audio,
+        tab,
+        selectedBook,
       });
     } else {
       dispatch({

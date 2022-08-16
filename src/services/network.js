@@ -298,6 +298,7 @@ export const fetchGet = async ({url, query = {}}) => {
 };
 
 export const requestGet = async ({url, headers, query = {}}) => {
+  
   try {
     // request 토큰 유효
     const response = await axios.get(

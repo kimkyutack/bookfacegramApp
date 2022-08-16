@@ -19,6 +19,7 @@ import Examright from '../activity/examright';
 import Examwrong from '../activity/examwrong';
 import Bookcontest from '../activity/bookcontest';
 import ActivityMain from '../activity/ActivityMain';
+import AudioBook from '../activity/audiobook';
 import {
   widthPercentage,
   heightPercentage,
@@ -42,6 +43,8 @@ export default function TopActivity({route}) {
         <Examright route={route} />
       ) : route.params.type === 'examwrong' ? (
         <Examwrong route={route} />
+      ) : route.params.type === 'audio' ? (
+        <AudioBook route={route}  start={0}/>
       ) : (
         <ActivityMain route={route} />
       )}

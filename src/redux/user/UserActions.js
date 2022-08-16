@@ -245,6 +245,9 @@ export const userCheckToken = async dispatch => {
 
     const { data, status } = await requestGet({
       url: consts.apiUrl + '/auth/checkJwt',
+      query: {
+        type : platformType,
+      },
     });
 
     if (status === 'FAIL') {

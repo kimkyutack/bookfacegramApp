@@ -7,6 +7,7 @@ import {
   View,
   SafeAreaView,
   Alert,
+  ScrollView
 } from 'react-native';
 import images from '../../libs/images';
 import { useEffect, useState } from 'react';
@@ -26,13 +27,15 @@ import {
   screenWidth,
   screenHeight,
 } from '../../services/util';
+import { useSelector, shallowEqual } from 'react-redux';
 
 export default function ActivityMain({route}) {
   const dispatch = useDispatch();
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const user = useSelector(s => s.user, shallowEqual);
 
-
+//console.log(user.monthly);
   let hour = 0, minute = 0, second = -1;
 
   function timeCount() {
@@ -93,6 +96,7 @@ export default function ActivityMain({route}) {
 
 
   return (
+    <ScrollView>
     <View style={styles.mainroot}>
       <View style={styles.textroot}>
         <TextWrap style={styles.font}>다양한 독후활동에 참여해보세요!</TextWrap>
@@ -188,20 +192,48 @@ export default function ActivityMain({route}) {
             </TouchableOpacity>
           </View>
         </View>
+        {user.monthly == 1 ? ( 
+        <View style={styles.root2}>
+          <View style={styles.box2}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(
+                  setTab({
+                    tab: 'audio',
+                  }),
+                );
+                navigate(routes.activity, {
+                  type: 'audio',
+                });
+              }}>
+              <View style={styles.box3}>
+                <View style={styles.font4}>
+                  <Image style={styles.img2} source={images.audioIcon} />
+                  <TextWrap style={styles.text_font}>오디오북</TextWrap>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.nonebox}>
+          </View>
+        </View>
+        ) : null}
       </View>
     </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    top: 10,
-    flex: 10,
+    top: heightPercentage(30),
+    marginBottom:heightPercentage(40),
+    flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
   },
   textroot: {
-    top: 10,
+    top: 0,
     flex: 1,
     backgroundColor: '#ffffff',
   },
@@ -287,5 +319,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  nonebox: {
+    margin: 5,
+    borderColor: '#c9c9c9',
+    borderWidth: 0,
+    height: heightPercentage(160),
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontWeight: 'bold',
   },
 });

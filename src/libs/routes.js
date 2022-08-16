@@ -16,6 +16,7 @@ export default {
   topNewBooksList: 'topNewBooksList',
   topMyBooksList: 'topMyBooksList',
   mainQuiz: 'mainQuiz',
+  audiobook: 'audiobook',
   feedShare: 'feedShare',
   QuizMain: 'QuizMain',
   topNewBooksDetail: 'topNewBooksDetail',

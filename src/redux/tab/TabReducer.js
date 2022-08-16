@@ -10,6 +10,7 @@ const initTab = {
 };
 
 export default function loading(state = initTab, action) {
+  
   //alert(action.selectType);
   switch (action.type) {
     case tabActionType.main:
@@ -53,6 +54,14 @@ export default function loading(state = initTab, action) {
         tab: action.tab,
         tabType: action.tabType,
         rank: action.rank,
+      };
+    case tabActionType.audio:
+      return {
+        ...state,
+        tab: action.tab,
+        detailTab: {
+          selectedBook: action.selectedBook,
+        },
       };
     default:
       return state;
