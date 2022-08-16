@@ -8,7 +8,11 @@ import {
   SafeAreaView,
   ActivityIndicator,
   StatusBar,
+  Text,
+  TouchableWithoutFeedback
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import Swiper from 'react-native-swiper';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import consts from '../../libs/consts';
@@ -55,12 +59,13 @@ export default function AudioMain({
   const [render, setRender] = useState([]);
   const [type, setType] = useState('kbs');
   const [start, setStart] = useState(20);
+  const [banner, setBanner] = useState([]);
+  const [banner2, setBanner2] = useState([]);
   const [state, setState] = useState({req: audiolist, playtime:playtime, page: 1});
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   const fetchRequested = async startpage => {
     try {
-      setLoading(true);
       const {data, status} = await requestGet({
         url: consts.apiUrl + '/audio/AudioBookList',
         query: {
@@ -68,7 +73,6 @@ export default function AudioMain({
           endPaging: 20,
         },
       });
-      setLoading(false);
       if (status === 'SUCCESS') {
         setStart(start + 20);
         setState({
@@ -85,14 +89,55 @@ export default function AudioMain({
       dispatch(dialogError(error));
     }
   };
+  //배너 관련
+  const fetchRequested2 = async () => {
+    try {
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/banner',
+        query: {
+          bannerGroupCode: 'banner02',
+        },
+      });
+      if (status === 'SUCCESS') {
+        setBanner([...data.banner]);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+
+   const fetchRequested3 = async () => {
+    try {
+      
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/banner',
+        query: {
+          bannerGroupCode: 'banner03',
+        },
+      });
+      if (status === 'SUCCESS') {
+        setBanner2([...data.banner]);
+        setLoading(false);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
 
   useEffect(() => {
     let mount = true;
     if (mount) {
+      setLoading(true);
+      fetchRequested2();
+      fetchRequested3();
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
     }
     return () => {
       mount = false;
+      setBanner([]);
+      setBanner2([]);
     };
   }, []);
 
@@ -110,6 +155,83 @@ export default function AudioMain({
           color={colors.blue}
         />
       );
+    }
+  };
+  const hello = (bookCd) => {
+    dispatch(
+      setTab({
+        tab: 'detail',
+        selectedBook: bookCd,
+        viewType: 'kbs',
+      }),
+    );
+    navigate(routes.homeDetail, {
+      type: 'detail',
+    });
+
+  }
+  const eventBanner = async (idx) => {
+    requestGet({
+      url: consts.apiUrl + '/mypage/eventDetail',
+      query: {
+        ev_idx: idx,
+      },
+    })
+      .then(data => {
+        if (data.status === 'SUCCESS') {
+          navigate(routes.eventDetail, data);
+        } else {
+          dispatch({
+            type: bookActionType.allFailure,
+            data: `error code : ${data?.code}`,
+            allPage: page,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: bookActionType.allFailure,
+          data:
+            error?.data?.msg ||
+            error?.message ||
+            (typeof error === 'object' ? JSON.stringify(error) : error),
+          allPage: page,
+        });
+      });
+
+
+  }
+  const bannerRenderItem = (item, index, type) => {
+    if (item) {
+      return (
+        <TouchableWithoutFeedback
+          key={index}
+          /*onPress={() => {
+            type === 2 ? console.log('타입') 
+            : item.bannerType === 'detail' && type === 1
+              ? hello(item.bookCd)
+              : item.bannerType === 'event' && type === 1
+                ? eventBanner(item.idx)
+                : item.bannerType === 'notice' && type === 1
+                  ? navigate(routes.notice, { idx: item.idx })
+                  : (dispatch(dialogError({ message: item.bannerType })));
+          }}*/
+          >
+          <View style={styles.bannerContainer}>
+            <FastImage
+              source={{
+                uri: consts.bannerUrl + '/banner/' + item.bannerImageName,
+              }}
+              resizeMode={FastImage.resizeMode.stretch}
+              style={type === 1 ? styles.banner : styles.banner2}
+              //onPress={() => Linking.openURL(item?.bannerLink)}
+              onError={() => (item.title = 'bookDefault.gif')}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      );
+    } else {
+      return;
     }
   };
 
@@ -131,8 +253,8 @@ export default function AudioMain({
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>audiolist가 없습니다.</TextWrap>
         </View>
-      ) : (
-        <View style={{marginBottom:30}}>
+      ) : audiolist.length !== 0 && !loading ? (
+        <View style={{marginBottom:heightPercentage(0)}}>
         <FlatList
           ref={scrollRef}
           data={state.req} //morekbsbook
@@ -148,7 +270,36 @@ export default function AudioMain({
           numColumns={2}
           ListHeaderComponent={
             <View>
+            <Swiper
+              style={styles.wrapper}
+              showsButtons={false}
+              width={screenWidth}
+              height={heightPercentage(300)}
+              showsPagination={true}
+              removeClippedSubviews={false}
+              loop={true}
+              autoplay={true}
+              autoplayTimeout={3}
+              pagingEnabled={true}
+              dotStyle={{ top: 15 }}
+              dotColor={colors.border}
+              activeDotStyle={{ top: 15 }}
+              activeDotColor={colors.blue}
+              nextButton={<Text />}
+              prevButton={<Text />}>
+              {banner?.map((data, index) => {
+                  return bannerRenderItem(data, index, 1);
+              })}
+            </Swiper>
+           
+            <View>
+              {banner2?.map((data, index) => {
+                  return bannerRenderItem(data, index, 2);
+              })}
+            </View>
+            <View style={{marginTop:10}}>
             <TextWrap style={styles.font}>나만을 위한 토핑 오디오북</TextWrap>
+            </View>
             </View>
           }
           ListFooterComponent={renderFooter}
@@ -166,7 +317,11 @@ export default function AudioMain({
       </TouchableOpacity>
         )}
       </View>
-      )}
+      ) : <ActivityIndicator
+          size="large"
+          style={{ alignSelf: 'center', marginTop: screenHeight / 3 }}
+          color={colors.blue}
+        />}
     </View>
   );
 }
@@ -181,6 +336,7 @@ const styles = StyleSheet.create({
       },
   }),
   },
+  wrapper: {},
   row: {
     height: screenHeight / 25,
     flexDirection: 'row',
@@ -189,6 +345,10 @@ const styles = StyleSheet.create({
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
+  },
+  bannerContainer: {
+    alignSelf: 'center',
+    marginTop: heightPercentage(15),
   },
   select: {
     position: 'absolute',
@@ -208,19 +368,20 @@ const styles = StyleSheet.create({
     height: heightPercentage(35),
     resizeMode: 'contain',
   },
+  banner: {
+    width: widthPercentage(332),
+    height: heightPercentage(300),
+  },
+  banner2: {
+    width: widthPercentage(332),
+    height: heightPercentage(100),
+  },
   topButton: {
     alignItems: 'center',
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(20),
-      },
-      ios: {
-        bottom: heightPercentage(50),
-      },
-  }),
+    bottom: heightPercentage(0),
     left: screenWidth / 2.2,
     display: 'flex',
   },

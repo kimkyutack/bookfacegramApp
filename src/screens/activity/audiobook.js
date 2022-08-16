@@ -134,9 +134,6 @@ export default function AudioBook({ route }, start) {
 
   return (
     <View style={styles.root}>
-      <View style={styles.row}>
-         
-      </View>
       {loading ? (
         <View style={[styles.loading]}>
           <ActivityIndicator size="large" color={colors.blue} />
