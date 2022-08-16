@@ -142,20 +142,7 @@ export default function AudioMain({
   }, []);
 
   const renderFooter = () => {
-    if (audiolist?.length === 0 || !loading || audiolist?.length < 20) {
       return <></>;
-    } else {
-      return (
-        <ActivityIndicator
-          size="large"
-          style={{
-            alignSelf: 'center',
-            top: -50,
-          }}
-          color={colors.blue}
-        />
-      );
-    }
   };
   const hello = (bookCd) => {
     dispatch(
@@ -253,7 +240,7 @@ export default function AudioMain({
         <View style={{flex: 1, justifyContent: 'center'}}>
           <TextWrap>audiolist가 없습니다.</TextWrap>
         </View>
-      ) : audiolist.length !== 0 && !loading ? (
+      ) : (
         <View style={{marginBottom:heightPercentage(0)}}>
         <FlatList
           ref={scrollRef}
@@ -317,11 +304,7 @@ export default function AudioMain({
       </TouchableOpacity>
         )}
       </View>
-      ) : <ActivityIndicator
-          size="large"
-          style={{ alignSelf: 'center', marginTop: screenHeight / 3 }}
-          color={colors.blue}
-        />}
+      )}
     </View>
   );
 }

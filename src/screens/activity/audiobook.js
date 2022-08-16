@@ -128,7 +128,6 @@ export default function AudioBook({ route }, start) {
 
     return () => {
       setLoading(true);
-      setKbsQuiz([]);
     };
   }, []);
 
