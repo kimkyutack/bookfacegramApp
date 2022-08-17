@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { requestGet } from '../../services/network';
+import { requestGet, requestPost } from '../../services/network';
 import consts from '../../libs/consts';
 import images from '../../libs/images';
 import colors from '../../libs/colors';
@@ -34,6 +34,7 @@ export default function AudioBook({ route }, start) {
   const [playtime, setPlaytime] = useState([]);
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
+  const title = '나만의 오디오북';
   const user = useSelector(s => s.user, shallowEqual);
   //console.log(detailTab);
   let hour = 0, minute = 0, second = -1;
@@ -118,6 +119,14 @@ export default function AudioBook({ route }, start) {
   };
 
   useEffect(() => {
+    if(user.monthly === 1){
+      requestPost({
+        url: consts.apiUrl + '/mypage/bookDrawer',
+        body: {
+          name: title,
+        },
+      });
+    }
     fetchRequested().then(res => {
       if (res === 'SUCCESS') {
         setLoading(false);

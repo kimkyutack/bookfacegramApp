@@ -38,6 +38,7 @@ import {
 import { requestGet, requestDelete, requestPost } from '../../services/network';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
+import { navigate } from '../../services/navigation';
 
 export default function BookDrawerDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -52,7 +53,8 @@ export default function BookDrawerDetail({ route, navigation }) {
 
   const isFocused = useIsFocused();
   const [sessionTime, setSessionTime] = useState('000000');
-
+  const [showindex, setShowindex] = useState(false);
+//console.log(route.params.name)
   const user = useSelector(s => s.user, shallowEqual);
 
   let hour = 0, minute = 0, second = -1;
@@ -99,6 +101,7 @@ export default function BookDrawerDetail({ route, navigation }) {
   //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
+      setShowindex(false);
       var timer = setInterval(() => { timeCount() }, 1000);
     }
 
@@ -111,6 +114,7 @@ export default function BookDrawerDetail({ route, navigation }) {
     return () => {
       clearInterval(timer);
       setSessionTime('000000');
+      setShowindex(false);
     }
   }, [isFocused]);
 
@@ -172,7 +176,7 @@ export default function BookDrawerDetail({ route, navigation }) {
           {item?.map((item1, index1) => {
             return (
               <CardWrap
-                style={[styles.card, itemWidth && { width: itemWidth }]}
+                style={[item1?.type === 'audio' ? styles.card2 : styles.card, itemWidth && { width: itemWidth }]}
                 key={index1.toString()}
                 onPress={() => {
                   if (!item1?.bookIdx) {
@@ -188,6 +192,10 @@ export default function BookDrawerDetail({ route, navigation }) {
                     } else {
                       setSelectedArr([...selectedArr, item1.contentsIdx]);
                     }
+                  } else if(item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2) {
+                    console.log('처음부터 시작');
+                  } else if(item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2) {
+                    setShowindex(item1?.num);
                   } else {
                     dispatch(
                       setTab({
@@ -201,6 +209,36 @@ export default function BookDrawerDetail({ route, navigation }) {
                     });
                   }
                 }}>
+                {item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2 && showindex === item1?.num ? (
+                  <View style={styles.showContent}>
+                    <TouchableOpacity
+                      style={styles.playbtn}
+                      onPress={() => {
+                        //fetchRequested();
+                      }}>
+                        <TextWrap
+                          font={fonts.kopubWorldDotumProMedium}
+                          style={styles.playtext}
+                          numberOfLines={1}>
+                          이어서 듣기
+                        </TextWrap>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                      style={styles.playbtn}
+                      onPress={() => {
+                        //setCurrentTime(0);
+                      }}>
+                        <TextWrap
+                          font={fonts.kopubWorldDotumProMedium}
+                          style={styles.playtext}
+                          numberOfLines={1}>
+                          처음부터 듣기
+                        </TextWrap>
+                      </TouchableOpacity>
+                  </View>
+                ) : null}
+
                 <View style={{ width: itemWidth }}>
                   {editActive &&
                     item1?.contentsIdx &&
@@ -231,6 +269,16 @@ export default function BookDrawerDetail({ route, navigation }) {
                                 : consts.imgUrl +
                                 '/thumbnail/bookDefault.gif',
                           }
+                          : item1?.type === 'audio'
+                          ? {
+                            uri:
+                              item1?.imgNm !== '' &&
+                                item1?.imgNm !== undefined
+                                ? 'https://toaping.com/aud_file/' +
+                                item1?.imgNm
+                                : consts.imgUrl +
+                                '/thumbnail/bookDefault.gif',
+                          }
                           : {
                             uri:
                               item1?.imgNm !== '' &&
@@ -249,6 +297,8 @@ export default function BookDrawerDetail({ route, navigation }) {
                   ) : (
                     <></>
                   )}
+                  {item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2 ? (
+                  <View>
                   <TextWrap
                     style={styles.info}
                     ellipsizeMode="tail"
@@ -259,6 +309,45 @@ export default function BookDrawerDetail({ route, navigation }) {
                     {'\n'}
                     {item1?.bookNm}
                   </TextWrap>
+                  <TextWrap
+                    style={styles.infotime}
+                    font={fonts.kopubWorldDotumProBold}
+                    numberOfLines={1}>
+                    독서완료 | {Math.floor(item1?.durationTime / 60) < 10 ? '0'+ Math.floor(item1?.durationTime / 60) : Math.floor(item1?.durationTime % 60)}분 {Math.floor(item1?.durationTime % 60) < 10 ? '0'+ Math.floor(item1?.durationTime % 60) : Math.floor(item1?.durationTime % 60)}초
+                  </TextWrap>
+                  </View>
+                  ) : item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2 ? (
+                    <View>
+                    <TextWrap
+                    style={styles.info}
+                    ellipsizeMode="tail"
+                    font={fonts.kopubWorldDotumProBold}
+                    numberOfLines={2}>
+                    {item1?.writer?.substring(0, 9)}
+                    {item1?.writer && '/'}
+                    {'\n'}
+                    {item1?.bookNm}
+                  </TextWrap>
+                  <TextWrap
+                    style={styles.infotime}
+                    font={fonts.kopubWorldDotumProBold}
+                    numberOfLines={1}>
+                    독서중 | {Math.floor(item1?.durationTime / 60) < 10 ? '0'+ Math.floor(item1?.durationTime / 60) : Math.floor(item1?.durationTime % 60)}분 {Math.floor(item1?.durationTime % 60) < 10 ? '0'+ Math.floor(item1?.durationTime % 60) : Math.floor(item1?.durationTime % 60)}초
+                  </TextWrap>
+                  </View>
+                  ) : (
+                   <TextWrap
+                    style={styles.info}
+                    ellipsizeMode="tail"
+                    font={fonts.kopubWorldDotumProBold}
+                    numberOfLines={2}>
+                    {item1?.writer?.substring(0, 9)}
+                    {item1?.writer && '/'}
+                    {'\n'}
+                    {item1?.bookNm}
+                  </TextWrap> 
+                  )
+                  }
                 </View>
               </CardWrap>
             );
@@ -342,7 +431,7 @@ export default function BookDrawerDetail({ route, navigation }) {
         navigation: navigation,
         back: true,
         options: {
-          component: drawerData?.bookCnt !== 0 && (
+          component: drawerData?.bookCnt !== 0 && route.params?.name !== '나만의 오디오북' && (
             <ButtonWrap
               onPress={editButtonPress}
               styleTitle={
@@ -361,7 +450,7 @@ export default function BookDrawerDetail({ route, navigation }) {
         </View>
       ) : (
         <View style={styles.root}>
-          {drawerData?.bookCnt === 0 ? (
+          {drawerData?.bookCnt === 0 && route.params?.name !== '나만의 오디오북' ? (
             <View style={styles.emptyRoot}>
               <Image
                 source={images.bookDrawerDefault}
@@ -395,6 +484,85 @@ export default function BookDrawerDetail({ route, navigation }) {
                   나만의 추천도서 보러가기
                 </TextWrap>
               </ButtonWrap>
+            </View>
+          ) : drawerData?.bookCnt === 0 && route.params?.name === '나만의 오디오북' ? (
+            <View style={styles.emptyRoot}>
+              <Image
+                source={images.bookDrawerDefault}
+                style={styles.emptyIcon}
+              />
+              <TextWrap
+                font={fonts.kopubWorldDotumProMedium}
+                style={styles.emptyTitle}>
+                보관중인 오디오북이 없습니다
+              </TextWrap>
+              <TextWrap
+                font={fonts.kopubWorldDotumProLight}
+                style={styles.emptySubTitle}>
+                도서별 오디오북을 청취하고 자신만의 책서랍을
+                완성해보세요!
+              </TextWrap>
+              <ButtonWrap
+                style={styles.input}
+                onPress={() => {
+                  dispatch(
+                    setTab({
+                      tab: 'audio',
+                    }),
+                  );
+                  navigate(routes.activity, {
+                    type: 'audio',
+                  });
+              }}>
+                <TextWrap
+                  style={styles.inputTitle}
+                  font={fonts.kopubWorldDotumProMedium}>
+                  나만의 추천오디오북 보러가기
+                </TextWrap>
+              </ButtonWrap>
+            </View>
+          ) : drawerData?.bookCnt !== 0 && route.params?.name === '나만의 오디오북' ? (
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+              }}>
+              <FlatList
+                ref={scrollRef}
+                data={
+                  drawerData?.bookDrawerContents
+                    ? chunk(drawerData?.bookDrawerContents, 3)
+                    : []
+                }
+                extraData={
+                  drawerData?.bookDrawerContents
+                    ? chunk(drawerData?.bookDrawerContents, 3)
+                    : []
+                }
+                onScroll={event => {
+                  setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+                }}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={keyExtractor}
+                ListHeaderComponent={() => {
+                  return (
+                    <View
+                      style={[
+                        styles.headerContainer,
+                        editActive && { marginLeft: 9 },
+                      ]}>
+                      <TextWrap
+                        style={styles.header}
+                        font={fonts.kopubWorldDotumProMedium}>
+                        보관중인 책{' '}
+                        {drawerData?.bookCnt ? drawerData?.bookCnt : 0}권
+                      </TextWrap>
+                    </View>
+                  );
+                }}
+                renderItem={renderItem}
+              />
             </View>
           ) : (
             <View
@@ -538,6 +706,24 @@ const styles = StyleSheet.create({
     height: heightPercentage(35),
     resizeMode: 'contain',
   },
+  playbtn: {
+    width:'85%',
+    height:'20%',
+    borderWidth:1,
+    borderColor:colors.white,
+    marginTop:heightPercentage(30),
+    alignSelf:'center',
+    justifyContent:'center'
+  },
+  playtext: {
+    height:'100%',
+    color:colors.white,
+    fontSize:fontPercentage(13),
+    alignSelf:'center',
+    textAlignVertical:'center',
+    fontWeight:'bold'
+    
+  },
   topButton: {
     alignItems: 'center',
     width: widthPercentage(35),
@@ -546,6 +732,16 @@ const styles = StyleSheet.create({
     bottom: heightPercentage(65),
     left: screenWidth / 2.2,
     display: 'flex',
+  },
+  showContent: {
+    opacity:0.8,
+    position:'absolute',
+    backgroundColor:colors.black,
+    height: heightPercentage(140),
+    width: screenWidth / 3.5,
+    bottom:heightPercentage(70),
+    zIndex:9999,
+    alignItems:'center'
   },
   bookShadow: {
     ...Platform.select({
@@ -567,11 +763,25 @@ const styles = StyleSheet.create({
     height: heightPercentage(180),
     marginBottom: heightPercentage(17),
   },
+  card2: {
+    flex: 1,
+    alignItems: 'center',
+    width: widthPercentage(100),
+    height: heightPercentage(210),
+    marginBottom: heightPercentage(17),
+  },
   info: {
     width: '95%',
     fontSize: fontPercentage(12),
     marginTop: heightPercentage(7),
     lineHeight: fontPercentage(16),
+  },
+  infotime: {
+    width: '95%',
+    fontSize: fontPercentage(11),
+    marginTop: heightPercentage(7),
+    lineHeight: fontPercentage(16),
+    color:'#aaa'
   },
   image: {
     ...Platform.select({

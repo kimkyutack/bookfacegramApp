@@ -7,6 +7,7 @@ import tab from './tab/TabReducer';
 import book from './book/BookReducer';
 import tag from './tag/TagReducer';
 import session from './session/SessionReducer';
+import showAudio from './audiobook/AudioAction';
 
 const appReducer = combineReducers({
   user: user,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   keyboard: keyboard,
   dialog: dialog,
   session: session,
+  showaudio: showAudio,
 });
 
 const rootReducer = (state, action) => {

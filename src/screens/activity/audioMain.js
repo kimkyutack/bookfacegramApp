@@ -144,7 +144,7 @@ export default function AudioMain({
   const renderFooter = () => {
       return <></>;
   };
-  const hello = (bookCd) => {
+  /*const hello = (bookCd) => {
     dispatch(
       setTab({
         tab: 'detail',
@@ -187,7 +187,7 @@ export default function AudioMain({
       });
 
 
-  }
+  }*/
   const bannerRenderItem = (item, index, type) => {
     if (item) {
       return (

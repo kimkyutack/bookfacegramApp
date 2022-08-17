@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,7 +7,7 @@ import {
   Text,
   Platform,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment-timezone';
 import colors from '../../libs/colors';
@@ -16,6 +16,7 @@ import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
 import images from '../../libs/images';
 import {navigationRef, navigate} from '../../services/navigation';
+import { requestGet, requestPost } from '../../services/network';
 import {
   fontPercentage,
   formatTime,
@@ -31,33 +32,120 @@ import {
   dialogError,
   dialogOpenDrawerSelect,
 } from '../../redux/dialog/DialogActions';
+import { setShowAudio } from '../../redux/audiobook/AudioAction';
 
 export default function AudioItem({item, playtime, index}) {
   const dispatch = useDispatch();
+  const [play, setPlay] = useState(0);
+  const [show, setShow] = useState(false);
+  const showaudio = useSelector(state => state.showaudio);
+  const user = useSelector(s => s.user);
+  const [currentTime, setCurrentTime] = useState(0);
+  //console.log(currentTime)
+  
   let cnt = 0;
-  //console.log(JSON.stringify(playtime));
+  //console.log(play);
+
+  const setplaytime = async () => {
+    console.log(currentTime)
+    try {
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/audio/play',
+        query: {
+          currentsTime:currentTime,
+          durationTime:item.durationTime,
+          memberId: user.member_id,
+          title: item.title,
+        },
+      });
+      console.log(status)
+      if (status === 'SUCCESS') {
+        
+      }
+      return status;
+    } catch (error) {
+    }
+  };
+
+  const fetchRequested = async () => {
+    try {
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/audio/getCurrentsTime',
+        query: {
+          memberId: user.member_id,
+          title: item.title,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setCurrentTime(data.currents_time);
+        setplaytime();
+      }
+      return status;
+    } catch (error) {
+    }
+  };
+
+  
+
+  useEffect(() => {
+    let mount = true;
+    if (mount) {
+      setShow(false);
+    }
+    return () => {
+      mount = false;
+    };
+  }, [showaudio.shownum]);
   return (
     <>
-    
+    {playtime.length !== 0 && playtime.map((data, Index) => {
+      if (data.title === item.title && data.currentsTime < item.durationTime - 2) {
+        cnt  = 1;
+      }else if(data.title === item.title && data.currentsTime >= item.durationTime - 2){
+        cnt  = 2;
+      }
+    })}
       <View style={styles.headerContainer} />
       
       <View style={styles.root}>
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
-            dispatch(
-              setTab({
-                tab: 'detail',
-                selectedBook: item.bookCd,
-                viewType: 'kbs',
-                selectType: 'quiz',
-              }),
-            );
-            navigate(routes.homeDetail, {
-              type: 'detail',
-            });
+            dispatch(setShowAudio(index,item.title));
           }}>
+       
           <View style={styles.mainContent}>
+            {showaudio.shownum === index && cnt == 1 ? (
+              <View style={styles.showContent}>
+                <TouchableOpacity
+                  style={styles.playbtn}
+                  onPress={() => {
+                    fetchRequested();
+                  }}>
+                    <TextWrap
+                      font={fonts.kopubWorldDotumProMedium}
+                      style={styles.playtext}
+                      numberOfLines={1}>
+                      이어서 듣기
+                    </TextWrap>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                  style={styles.playbtn}
+                  onPress={() => {
+                    setCurrentTime(0);
+                  }}>
+                    <TextWrap
+                      font={fonts.kopubWorldDotumProMedium}
+                      style={styles.playtext}
+                      numberOfLines={1}>
+                      처음부터 듣기
+                    </TextWrap>
+
+                  </TouchableOpacity>
+
+              </View>
+            ) : null}
             <AudioCarouselImage item={item} style={styles.thumbnail} />
             <View style={styles.info}>
               <TextWrap
@@ -72,13 +160,7 @@ export default function AudioItem({item, playtime, index}) {
                 font={fonts.kopubWorldDotumProLight}>
                 {item.writer}
               </TextWrap>
-              {playtime.length !== 0 && playtime.map((data, Index) => {
-                if (data.title === item.title && data.currentsTime < item.durationTime - 2) {
-                  cnt  = 1;
-                }else if(data.title === item.title && data.currentsTime >= item.durationTime - 2){
-                  cnt  = 2;
-                }
-              })}
+              
               {cnt === 0 ?
               (
               <TextWrap
@@ -126,6 +208,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
+    position:'relative',
+    flexWrap:'nowrap'
   },
   date: {
     marginTop: 5,
@@ -202,11 +286,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     // fontWeight: '700',
   },
-  subHeader: {
-    color: colors.black,
-    fontSize: fontPercentage(13),
-    marginTop: 10,
-  },
   cardHeaderTitle: {
     color: colors.black,
     fontSize: fontPercentage(14),
@@ -215,5 +294,33 @@ const styles = StyleSheet.create({
   blueText: {
     color: colors.blue,
   },
-  
+  showContent: {
+    opacity:0.8,
+    position:'absolute',
+    backgroundColor:colors.black,
+    height: screenWidth / 3.1,
+    width: screenWidth / 4,
+    bottom:heightPercentage(77),
+    zIndex:9999,
+    alignItems:'center'
+  },
+  playbtn: {
+    width:'85%',
+    height:'20%',
+    borderWidth:1,
+    borderColor:colors.white,
+    marginTop:heightPercentage(30),
+    alignSelf:'center',
+    justifyContent:'center'
+  },
+  playtext: {
+    height:'100%',
+    color:colors.white,
+    fontSize:fontPercentage(13),
+    alignSelf:'center',
+    textAlignVertical:'center',
+    fontWeight:'bold'
+    
+  },
+
 });

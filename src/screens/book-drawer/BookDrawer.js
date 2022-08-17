@@ -55,6 +55,7 @@ export default function BookDrawer({ route, navigation }) {
   const [sessionTime, setSessionTime] = useState('000000');
 
   const user = useSelector(s => s.user, shallowEqual);
+  const title = '나만의 오디오북';
 
   let hour = 0, minute = 0, second = -1;
 
@@ -118,6 +119,14 @@ export default function BookDrawer({ route, navigation }) {
   useEffect(() => {
     let mount = true;
     if (mount && isFocused) {
+      if(user.monthly === 1){
+        requestPost({
+          url: consts.apiUrl + '/mypage/bookDrawer',
+          body: {
+            name: title,
+          },
+        });
+      }
       setLoading(true);
       requestGet({
         url: consts.apiUrl + '/mypage/bookDrawer',
@@ -206,7 +215,17 @@ export default function BookDrawer({ route, navigation }) {
                             '.gif'
                             : consts.imgUrl + '/thumbnail/bookDefault.gif',
                       }
-                      : {
+                      : item.bookDrawerContents[0]?.type === 'audio'
+                      ? {
+                        uri:
+                          item.bookDrawerContents[0].imgNm !== '' &&
+                            item.bookDrawerContents[0].imgNm !== undefined &&
+                            item.bookDrawerContents[0].imgNm !== 'bookDefault'
+                            ? 
+                            'https://toaping.com/aud_file/' +
+                            item.bookDrawerContents[0].imgNm
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      } : {
                         uri:
                           item.bookDrawerContents[0].imgNm !== '' &&
                             item.bookDrawerContents[0].imgNm !== undefined
@@ -233,8 +252,16 @@ export default function BookDrawer({ route, navigation }) {
                             item.bookDrawerContents[1].imgNm +
                             '.gif'
                             : consts.imgUrl + '/thumbnail/bookDefault.gif',
-                      }
-                      : {
+                      } : item.bookDrawerContents[1]?.type === 'audio'
+                      ? {
+                        uri:
+                          item.bookDrawerContents[1].imgNm !== '' &&
+                            item.bookDrawerContents[1].imgNm !== undefined &&
+                            item.bookDrawerContents[1].imgNm !== 'bookDefault'
+                            ?  'https://toaping.com/aud_file/' +
+                            item.bookDrawerContents[1].imgNm
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      } : {
                         uri:
                           item.bookDrawerContents[1].imgNm !== '' &&
                             item.bookDrawerContents[1].imgNm !== undefined
@@ -265,7 +292,17 @@ export default function BookDrawer({ route, navigation }) {
                             '.gif'
                             : consts.imgUrl + '/thumbnail/bookDefault.gif',
                       }
-                      : {
+                      : item.bookDrawerContents[2]?.type === 'audio'
+                      ? {
+                        uri:
+                          item.bookDrawerContents[2].imgNm !== '' &&
+                            item.bookDrawerContents[2].imgNm !== undefined &&
+                            item.bookDrawerContents[2].imgNm !== 'bookDefault'
+                            ? 
+                            'https://toaping.com/aud_file/' +
+                            item.bookDrawerContents[2].imgNm
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      } : {
                         uri:
                           item.bookDrawerContents[2].imgNm !== '' &&
                             item.bookDrawerContents[2].imgNm !== undefined
@@ -294,7 +331,17 @@ export default function BookDrawer({ route, navigation }) {
                             '.gif'
                             : consts.imgUrl + '/thumbnail/bookDefault.gif',
                       }
-                      : {
+                      : item.bookDrawerContents[3]?.type === 'audio'
+                      ? {
+                        uri:
+                          item.bookDrawerContents[3].imgNm !== '' &&
+                            item.bookDrawerContents[3].imgNm !== undefined &&
+                            item.bookDrawerContents[3].imgNm !== 'bookDefault'
+                            ? 
+                            'https://toaping.com/aud_file/' +
+                            item.bookDrawerContents[3].imgNm
+                            : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                      } : {
                         uri:
                           item.bookDrawerContents[3].imgNm !== '' &&
                             item.bookDrawerContents[3].imgNm !== undefined
@@ -324,7 +371,7 @@ export default function BookDrawer({ route, navigation }) {
                   보관중인 책 {item?.bookDrawerContents?.length}권
                 </TextWrap>
               </View>
-              {item?.name !== '기본 책서랍' && (
+              {item?.name !== '기본 책서랍' && item?.name !== '나만의 오디오북' && (
                 <EditToolTip
                   item={item}
                   index={index}
@@ -382,7 +429,35 @@ export default function BookDrawer({ route, navigation }) {
                           '.gif'
                           : consts.imgUrl + '/thumbnail/bookDefault.gif',
                     }
-                    : {
+                    : item.bookDrawerContents[
+                    item?.bookDrawerContents?.length !== 0
+                      ? item?.bookDrawerContents?.length - 1
+                      : 0
+                  ]?.type === 'audio' ? {
+                    uri:
+                        item.bookDrawerContents[
+                          item?.bookDrawerContents?.length !== 0
+                            ? item?.bookDrawerContents?.length - 1
+                            : 0
+                        ].imgNm !== '' &&
+                          item.bookDrawerContents[
+                            item?.bookDrawerContents?.length !== 0
+                              ? item?.bookDrawerContents?.length - 1
+                              : 0
+                          ].imgNm !== undefined &&
+                          item.bookDrawerContents[
+                            item?.bookDrawerContents?.length !== 0
+                              ? item?.bookDrawerContents?.length - 1
+                              : 0
+                          ].imgNm !== 'bookDefault'
+                          ? 'https://toaping.com/aud_file/' +
+                          item.bookDrawerContents[
+                            item?.bookDrawerContents?.length !== 0
+                              ? item?.bookDrawerContents?.length - 1
+                              : 0
+                          ].imgNm
+                          : consts.imgUrl + '/thumbnail/bookDefault.gif',
+                  } : {
                       uri:
                         item.bookDrawerContents[
                           item?.bookDrawerContents?.length !== 0
@@ -423,7 +498,7 @@ export default function BookDrawer({ route, navigation }) {
                   보관중인 책 {item?.bookDrawerContents?.length}권
                 </TextWrap>
               </View>
-              {item?.name !== '기본 책서랍' && (
+              {item?.name !== '기본 책서랍' && item?.name !== '나만의 오디오북' && (
                 <EditToolTip
                   item={item}
                   index={index}
@@ -467,7 +542,7 @@ export default function BookDrawer({ route, navigation }) {
                 보관중인 책 {item?.bookDrawerContents?.length}권
               </TextWrap>
             </View>
-            {item?.name !== '기본 책서랍' && (
+            {item?.name !== '기본 책서랍' && item?.name !== '나만의 오디오북' && (
               <EditToolTip
                 item={item}
                 index={index}
