@@ -23,6 +23,7 @@ import {
   heightPercentage,
   screenWidth,
   widthPercentage,
+  screenHeight
 } from '../../services/util';
 import {numFormat} from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -225,8 +226,8 @@ const styles = StyleSheet.create({
   },
   writer: {
     color: colors.black,
-    marginVertical: 1.5,
-    fontSize: fontPercentage(8),
+    marginVertical: heightPercentage(5),
+    fontSize: fontPercentage(9),
     lineHeight: fontPercentage(17),
     textAlign: 'center',
   },
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     height: screenWidth / 2.8,
-    width: screenWidth / 4,
+    width: screenWidth / 3.3,
     resizeMode: 'cover',
     flexDirection: 'row',
     ...Platform.select({
@@ -298,9 +299,9 @@ const styles = StyleSheet.create({
     opacity:0.8,
     position:'absolute',
     backgroundColor:colors.black,
-    height: screenWidth / 3.1,
-    width: screenWidth / 4,
-    bottom:heightPercentage(77),
+    height: screenWidth / 3,
+    width: screenWidth / 3.3,
+    bottom:screenHeight / 8.4,
     zIndex:9999,
     alignItems:'center'
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     height:'20%',
     borderWidth:1,
     borderColor:colors.white,
-    marginTop:heightPercentage(30),
+    marginTop:'23%',
     alignSelf:'center',
     justifyContent:'center'
   },
