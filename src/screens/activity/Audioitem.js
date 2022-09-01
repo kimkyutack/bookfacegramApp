@@ -33,6 +33,8 @@ import {
   dialogOpenDrawerSelect,
 } from '../../redux/dialog/DialogActions';
 import { setShowAudio } from '../../redux/audiobook/AudioAction';
+import AudioPlayer from './audioplayer';
+import { FBProfile } from 'react-native-fbsdk-next/types/FBProfile';
 
 export default function AudioItem({item, playtime, index}) {
   const dispatch = useDispatch();
@@ -41,22 +43,46 @@ export default function AudioItem({item, playtime, index}) {
   const showaudio = useSelector(state => state.showaudio);
   const user = useSelector(s => s.user);
   const [currentTime, setCurrentTime] = useState(0);
+  const [open, setOpen] = useState(false);
+
   //console.log(currentTime)
   
   let cnt = 0;
   //console.log(play);
 
-  const setplaytime = async () => {
-    console.log(currentTime)
+  // const setPlayTime = async () => {
+  //   try {
+  //     const {data, status} = await requestPost({
+  //       url: consts.apiUrl + '/audio/play',
+  //       query: {
+  //         currentsTime:currentTime,
+  //         durationTime:item.durationTime,
+  //         memberId: user.member_id,
+  //         title: item.title,
+  //       },
+  //     });
+  //     console.log(status)
+  //     if (status === 'SUCCESS') {
+        
+  //     }
+  //     return status;
+  //   } catch (error) {
+  //   }
+  // };
+
+  const setPlayCount = async () => {
     try {
+      const formData = new FormData();
+      formData.append('memberId', user.member_id);
+      formData.append('title',item.title);
+
       const {data, status} = await requestPost({
-        url: consts.apiUrl + '/audio/play',
-        query: {
-          currentsTime:currentTime,
-          durationTime:item.durationTime,
-          memberId: user.member_id,
-          title: item.title,
-        },
+        url: consts.apiUrl + '/audio/count',
+        body: formData,
+        // {
+        //   memberId: user.member_id,
+        //   title: item.title,
+        // },
       });
       console.log(status)
       if (status === 'SUCCESS') {
@@ -67,6 +93,19 @@ export default function AudioItem({item, playtime, index}) {
     }
   };
 
+  //이어서 듣기
+  const openModalWhitData = async () => {
+    //데이터 받아온 후 모달 열기
+    await fetchRequested(); 
+    setOpen(true);
+  }
+
+  //처음부터 듣기
+  const openModalWithNoData = () =>{
+    setCurrentTime(0);  //재생 시점 0으로 초기화
+    setPlayCount(); //재생 횟수 증가
+    setOpen(true);
+  }
   const fetchRequested = async () => {
     try {
       const {data, status} = await requestGet({
@@ -78,15 +117,14 @@ export default function AudioItem({item, playtime, index}) {
       });
       if (status === 'SUCCESS') {
         setCurrentTime(data.currents_time);
-        setplaytime();
+        // setplaytime();
+        setPlayCount();
       }
       return status;
     } catch (error) {
     }
   };
-
   
-
   useEffect(() => {
     let mount = true;
     if (mount) {
@@ -108,19 +146,34 @@ export default function AudioItem({item, playtime, index}) {
       <View style={styles.headerContainer} />
       
       <View style={styles.root}>
+        {open && (
+          <AudioPlayer
+            track={{  //오디오 정보
+            url: consts.toapingUrl+'/aud_file/'+item.audFile, //'https://toaping.com/aud_file/adg40009.mp3',
+            artwork: consts.toapingUrl+'/aud_file/'+item.audImg,//'https://toaping.com/aud_file/adb1.jpg',
+            title: item.title,
+            duration: item.durationTime,
+            }}
+            currentTime={currentTime} //현재 시간
+            userId ={user.member_id}  //사용자 ID
+            onClose={() => {
+              setOpen(false);
+            }}
+          />
+          )}
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
             dispatch(setShowAudio(index,item.title));
+            if ( cnt != 1 ) openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
           }}>
-       
           <View style={styles.mainContent}>
             {showaudio.shownum === index && cnt == 1 ? (
               <View style={styles.showContent}>
                 <TouchableOpacity
                   style={styles.playbtn}
                   onPress={() => {
-                    fetchRequested();
+                    openModalWhitData();  //이어서 듣기
                   }}>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -133,7 +186,7 @@ export default function AudioItem({item, playtime, index}) {
                   <TouchableOpacity
                   style={styles.playbtn}
                   onPress={() => {
-                    setCurrentTime(0);
+                    openModalWithNoData();  //처음부터 듣기
                   }}>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -145,7 +198,7 @@ export default function AudioItem({item, playtime, index}) {
                   </TouchableOpacity>
 
               </View>
-            ) : null}
+            ) :null }
             <AudioCarouselImage item={item} style={styles.thumbnail} />
             <View style={styles.info}>
               <TextWrap

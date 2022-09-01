@@ -4,10 +4,10 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 21
-        compileSdkVersion = 30
-        targetSdkVersion = 30
+        compileSdkVersion = 31  //30 -> 31 Verserion Upgrade For react-native-track-player
+        targetSdkVersion = 31   //30 -> 31 Verserion Upgrade For react-native-track-player
         ndkVersion = "20.1.5948944"
-        kotlinVersion = '1.4.30'
+        kotlinVersion = '1.5.31'    //1.4.30 -> 1.5.31 Verserion Upgrade For react-native-track-player
         googlePlayServicesAuthVersion = '17.0.0'
     }
     repositories {

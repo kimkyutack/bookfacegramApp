@@ -29,14 +29,15 @@
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize">
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
             <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
       </activity>
-      <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+      <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -50,8 +51,8 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="b4b7856761a806433adb1a57e358d674" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/> 
-        <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" /> 
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"  android:exported="true"/> 
+        <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" android:exported="true"/> 
         <activity android:name="com.facebook.CustomTabActivity" android:exported="true"> 
           <intent-filter> 
             <action android:name="android.intent.action.VIEW" /> 
