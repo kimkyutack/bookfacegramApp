@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
   root: {
     //flex: 1,
     width: screenWidth,
-    height: screenHeight / 1.5,
     alignItems: 'center',
     backgroundColor: colors.white,
   },

@@ -106,7 +106,7 @@ export default function AudioMain({
       dispatch(dialogError(error));
     }
   };
-
+   //서브 배너 관련
    const fetchRequested3 = async () => {
     try {
       
@@ -257,7 +257,7 @@ export default function AudioMain({
           numColumns={2}
           ListHeaderComponent={
             <View>
-            <Swiper
+            <Swiper key={audiolist.length}
               style={styles.wrapper}
               showsButtons={false}
               width={screenWidth}
@@ -313,11 +313,6 @@ const styles = StyleSheet.create({
   root: {
     width: screenWidth,
     flexDirection: 'column',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(10),
-      },
-  }),
   },
   wrapper: {},
   row: {
@@ -353,18 +348,18 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: widthPercentage(332),
-    height: heightPercentage(300),
+    height: heightPercentage(280),
   },
   banner2: {
     width: widthPercentage(332),
-    height: heightPercentage(100),
+    height: heightPercentage(80),
   },
   topButton: {
     alignItems: 'center',
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    bottom: heightPercentage(0),
+    bottom: heightPercentage(5),
     left: screenWidth / 2.2,
     display: 'flex',
   },

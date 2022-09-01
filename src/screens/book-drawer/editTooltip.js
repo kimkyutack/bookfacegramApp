@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: heightPercentage(8),
     marginBottom: heightPercentage(6),
     marginLeft: 6,
-    height: heightPercentage(75),
+    height: heightPercentage(90),
   },
   editOpen: {
     width: widthPercentage(20),
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: heightPercentage(8),
   },
   icon: {
     width: widthPercentage(13),
@@ -199,6 +199,9 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     ...Platform.select({
       ios:{fontSize:fontPercentage(13)},
+      android:{
+fontSize:fontPercentage(13)
+      },
     }),
   },
 });

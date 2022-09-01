@@ -671,8 +671,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: 'white',
-    width: screenWidth - 36,
-    height: heightPercentage(53),
+    width: '90%',
+    height: heightPercentage(55),
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -693,7 +693,7 @@ const styles = StyleSheet.create({
   infoIcon: {
     marginLeft: 15,
     width: widthPercentage(20),
-    height: heightPercentage(16),
+    height: heightPercentage(20),
     resizeMode: 'cover',
   },
   infoAdd: {
@@ -704,15 +704,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    ...Platform.select({
-      ios: {
-        width: screenWidth - widthPercentage(30),
-      },
-      android: {
-        width: screenWidth - 36,
-      },
-    }),
-    marginBottom: 18,
+    marginLeft: '4.5%',
   },
   imageContainer: {
     width: widthPercentage(308.6) / 2,
@@ -745,36 +737,42 @@ const styles = StyleSheet.create({
   quarterImageSubContainer1: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
+    borderRadius: 6,
   },
   quarterImageSubContainer2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
+    borderRadius: 6,
   },
   quarterImage1: {
     width: widthPercentage(76.1),
     height: heightPercentage(89),
-    borderTopLeftRadius: 6,
+    borderRadius: 6,
+    borderWidth:0.5,
+    borderColor:'#eee'
   },
   quarterImage2: {
     width: widthPercentage(76.1),
     height: heightPercentage(89),
-    borderTopRightRadius: 6,
+    borderRadius: 6,
+    borderWidth:0.5,
+    borderColor:'#eee'
   },
   quarterImage3: {
     marginTop: 2,
     width: widthPercentage(76.1),
     height: heightPercentage(89),
-    borderBottomLeftRadius: 6,
+    borderRadius: 6,
+    borderWidth:0.5,
+    borderColor:'#eee'
   },
   quarterImage4: {
     marginTop: 2,
     width: widthPercentage(76.1),
     height: heightPercentage(89),
-    borderBottomRightRadius: 6,
+    borderRadius: 6,
+    borderWidth:0.5,
+    borderColor:'#eee'
   },
   paragraphContainer: {
     marginTop: heightPercentage(12),

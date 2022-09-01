@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
   },
   writer: {
     color: colors.black,
-    marginVertical: 1.5,
-    fontSize: fontPercentage(8),
+    marginVertical: heightPercentage(5),
+    fontSize: fontPercentage(9),
     lineHeight: fontPercentage(17),
     textAlign: 'center',
   },
