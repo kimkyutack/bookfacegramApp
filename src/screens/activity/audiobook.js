@@ -139,21 +139,18 @@ export default function AudioBook({ route }, start) {
       setLoading(true);
     };
   }, []);
-
   return (
     <View style={styles.root}>
       {loading ? (
         <View style={[styles.loading]}>
           <ActivityIndicator size="large" color={colors.blue} />
         </View>
-      ) : !loading ? (
+      ) : (
         <AudioMain
           route={route}
           audiolist={audioList}
           playtime={playtime}
         />
-      ) : (
-        <></>
       )}
     </View>
   );

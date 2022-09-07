@@ -5,9 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  ActivityIndicator,
-  StatusBar,
   Text,
   TouchableWithoutFeedback
 } from 'react-native';
@@ -18,32 +15,16 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
-import routes from '../../libs/routes';
-import Topbar from '../../components/topbar/Topbar';
-import SearchBar from '../../components/search-bar/SearchBar';
-import TopTabs from '../activity/TopTabs';
 import AudioItem from '../activity/Audioitem';
-import Footer from '../../libs/footer';
-import TextButton from '../../components/text-button/TextButton';
-import {navigate, navigationRef} from '../../services/navigation';
-import MainQuiz from '../activity/MainQuiz';
 import {
   screenWidth,
   screenHeight,
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
 } from '../../services/util';
-import {requestGet, requestPost} from '../../services/network';
+import {requestGet} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
-import {
-  dialogOpenSelect,
-  dialogOpenMessage,
-  dialogOpenGrade,
-} from '../../redux/dialog/DialogActions';
-import {relativeTimeRounding} from 'moment-timezone';
-import {useHandler} from 'react-native-reanimated';
 
 export default function AudioMain({
   route,
@@ -144,66 +125,10 @@ export default function AudioMain({
   const renderFooter = () => {
       return <></>;
   };
-  /*const hello = (bookCd) => {
-    dispatch(
-      setTab({
-        tab: 'detail',
-        selectedBook: bookCd,
-        viewType: 'kbs',
-      }),
-    );
-    navigate(routes.homeDetail, {
-      type: 'detail',
-    });
-
-  }
-  const eventBanner = async (idx) => {
-    requestGet({
-      url: consts.apiUrl + '/mypage/eventDetail',
-      query: {
-        ev_idx: idx,
-      },
-    })
-      .then(data => {
-        if (data.status === 'SUCCESS') {
-          navigate(routes.eventDetail, data);
-        } else {
-          dispatch({
-            type: bookActionType.allFailure,
-            data: `error code : ${data?.code}`,
-            allPage: page,
-          });
-        }
-      })
-      .catch(error => {
-        dispatch({
-          type: bookActionType.allFailure,
-          data:
-            error?.data?.msg ||
-            error?.message ||
-            (typeof error === 'object' ? JSON.stringify(error) : error),
-          allPage: page,
-        });
-      });
-
-
-  }*/
   const bannerRenderItem = (item, index, type) => {
     if (item) {
       return (
-        <TouchableWithoutFeedback
-          key={index}
-          /*onPress={() => {
-            type === 2 ? console.log('타입') 
-            : item.bannerType === 'detail' && type === 1
-              ? hello(item.bookCd)
-              : item.bannerType === 'event' && type === 1
-                ? eventBanner(item.idx)
-                : item.bannerType === 'notice' && type === 1
-                  ? navigate(routes.notice, { idx: item.idx })
-                  : (dispatch(dialogError({ message: item.bannerType })));
-          }}*/
-          >
+        <TouchableWithoutFeedback key={index}>
           <View style={styles.bannerContainer}>
             <FastImage
               source={{
@@ -221,7 +146,6 @@ export default function AudioMain({
       return;
     }
   };
-
   const loadMore = () => {
     if(audiolist.length >= 20){
       fetchRequested(start);
@@ -230,34 +154,16 @@ export default function AudioMain({
   };
 
   return (
-    <View
-      style={[
-        styles.root,
-        audiolist.length === 0 && {flex: 1, justifyContent: 'center'},
-      ]}>
-       
-      {audiolist.length === 0 ? (
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <TextWrap>audiolist가 없습니다.</TextWrap>
-        </View>
-      ) : (
+    <View style={styles.root}>
         <View style={{marginBottom:heightPercentage(0)}}>
         <FlatList
           ref={scrollRef}
-          data={state.req} //morekbsbook
-          extraData={state.req} //morekbsbook
-          keyExtractor={(item, index) => {
-            return index.toString();
-          }}
-          renderItem={({item, index}) => {
-            return <AudioItem item={item} playtime={state.playtime} type={type} index={index} />;
-          }}
           onEndReached={loadMore}
           onEndReachedThreshold={0.8}
           numColumns={2}
           ListHeaderComponent={
             <View>
-            <Swiper key={audiolist.length}
+            <Swiper key={playtime.length}
               style={styles.wrapper}
               showsButtons={false}
               width={screenWidth}
@@ -289,11 +195,34 @@ export default function AudioMain({
             </View>
             </View>
           }
+          onScroll={event => {
+            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
+          }}
+        />
+        {audiolist.length === 0 ? (
+          <View style={{marginTop:heightPercentage(20),justifyContent: 'center'}}>
+            <TextWrap style={{fontSize: fontPercentage(10),textAlign:'center'}}>청취 가능한 오디오북이 없습니다.</TextWrap>
+          </View>
+        ) : (
+        <FlatList
+          ref={scrollRef}
+          data={state.req} //morekbsbook
+          extraData={state.req} //morekbsbook
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={({item, index}) => {
+            return <AudioItem item={item} playtime={state.playtime} type={type} index={index} />;
+          }}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.8}
+          numColumns={2}
           ListFooterComponent={renderFooter}
           onScroll={event => {
             setContentVerticalOffset(event.nativeEvent.contentOffset.y);
           }}
         />
+        )}
         {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
         <TouchableOpacity
         onPress={() => {
@@ -304,7 +233,6 @@ export default function AudioMain({
       </TouchableOpacity>
         )}
       </View>
-      )}
     </View>
   );
 }
