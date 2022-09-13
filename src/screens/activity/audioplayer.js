@@ -85,7 +85,7 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
 
       useEffect(() => {
         recordPlayTimeEverySeconde();
-      });
+      },[nextTime]);
   
     return (
       //모달창
@@ -104,7 +104,7 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
             </TextWrap>
 
             {/* 닫기 버튼 */}
-            <TouchableOpacity onPress={handleClose}>
+            <TouchableOpacity onPress={handleClose} style={{flex:1}}>
               <Image source={images.audio_close} style={header.bookInfo_image_close}/>
             </TouchableOpacity>
           </View>
@@ -133,30 +133,31 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
       flexDirection: 'row',
       alignItems: 'center',
       height: 100,
-      marginTop: -15,
     },
     bookInfo_bookTitle: {
+      alignSelf:'center',
       marginTop: 7,
       marginLeft: 10,
-      width:330,
+      flex:4,
       textAlign: 'center',
       color: '#f9f9f9',
       fontSize: fontPercentage(17),
     },
     bookInfo_image: {
-      width: '6%', 
+      flex:1,
       marginLeft: '4%',
     },
     bookInfo_image_arrow: {
       marginTop: 5,
-      width: '80%',
+      alignSelf:'center',
+      width: '30%',
       height: '20%',
     } ,
     bookInfo_image_close: {
       marginTop: 8,
-      marginRight: 10,
-      width: '200%',
-      height: '17%',
+      alignSelf:'center',
+      width: '35%',
+      height: '20%',
     },
   })
   const styles = StyleSheet.create({
@@ -168,13 +169,13 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
     },
     mainContent: {
         position: 'relative',
-        flex:10,
+        flex:1,
         alignItems: 'center',
     },
     mainContent_bgImage:{
-      marginVertical: heightPercentage(90),
-      width: widthPercentage(280),
-      height: heightPercentage(300),
+      marginVertical: heightPercentage(110),
+      width: widthPercentage(260),
+      height: heightPercentage(320),
     },
     mainContent_audImage: {
       zIndex: 999,
@@ -184,7 +185,7 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
       height: '15%',
     },
     audio_control: {
-        marginTop: 8,
+        paddingTop: heightPercentage(40),
         width: '100%',
         height: '28%',
       },

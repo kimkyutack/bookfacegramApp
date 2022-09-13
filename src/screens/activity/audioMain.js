@@ -25,6 +25,7 @@ import {
 } from '../../services/util';
 import {requestGet} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
+import { useMemo } from 'react';
 
 export default function AudioMain({
   route,
@@ -122,6 +123,7 @@ export default function AudioMain({
     };
   }, []);
 
+
   const renderFooter = () => {
       return <></>;
   };
@@ -153,17 +155,40 @@ export default function AudioMain({
     return () => {};
   };
 
+  const renderItem = ({ item, index }) => (
+    <AudioItem 
+      item={item} 
+      playtime={state.playtime} 
+      type={type} 
+      index={index} 
+    />
+  );
+
+  const memoizedRenderItem = useMemo(() => renderItem, []);
+
   return (
     <View style={styles.root}>
+      {audiolist.length === 0 ? (
+          <View style={{marginTop:heightPercentage(20),justifyContent: 'center'}}>
+            <TextWrap style={{fontSize: fontPercentage(10),textAlign:'center'}}>청취 가능한 오디오북이 없습니다.</TextWrap>
+          </View>
+        ) : (
         <View style={{marginBottom:heightPercentage(0)}}>
         <FlatList
           ref={scrollRef}
+          data={state.req} //morekbsbook
+          extraData={state.req} //morekbsbook
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={memoizedRenderItem}
           onEndReached={loadMore}
           onEndReachedThreshold={0.8}
           numColumns={2}
           ListHeaderComponent={
             <View>
-            <Swiper key={playtime.length}
+            <Swiper 
+              key={playtime.length}
               style={styles.wrapper}
               showsButtons={false}
               width={screenWidth}
@@ -199,30 +224,7 @@ export default function AudioMain({
             setContentVerticalOffset(event.nativeEvent.contentOffset.y);
           }}
         />
-        {audiolist.length === 0 ? (
-          <View style={{marginTop:heightPercentage(20),justifyContent: 'center'}}>
-            <TextWrap style={{fontSize: fontPercentage(10),textAlign:'center'}}>청취 가능한 오디오북이 없습니다.</TextWrap>
-          </View>
-        ) : (
-        <FlatList
-          ref={scrollRef}
-          data={state.req} //morekbsbook
-          extraData={state.req} //morekbsbook
-          keyExtractor={(item, index) => {
-            return index.toString();
-          }}
-          renderItem={({item, index}) => {
-            return <AudioItem item={item} playtime={state.playtime} type={type} index={index} />;
-          }}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.8}
-          numColumns={2}
-          ListFooterComponent={renderFooter}
-          onScroll={event => {
-            setContentVerticalOffset(event.nativeEvent.contentOffset.y);
-          }}
-        />
-        )}
+        
         {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD && (
         <TouchableOpacity
         onPress={() => {
@@ -233,6 +235,7 @@ export default function AudioMain({
       </TouchableOpacity>
         )}
       </View>
+      )}
     </View>
   );
 }
