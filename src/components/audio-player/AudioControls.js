@@ -18,6 +18,15 @@ import trackPlayerServices from './services/PlaybackService';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { useGettingPos } from './hooks/useProgressState';
 
+export const onRegisterPlayback = async() => {
+    
+  TrackPlayer.addEventListener('remote-play', () => TrackPlayer.play());
+
+ TrackPlayer.addEventListener('remote-pause', () => TrackPlayer.pause());
+
+ TrackPlayer.addEventListener('remote-stop', () => TrackPlayer.destroy())
+}
+
  //오디오 모달(슬라이더 포함)
   const AudioControls = ({
     //현재 오디오 재생 시점, 오디오 정보를 받음
@@ -60,8 +69,8 @@ import { useGettingPos } from './hooks/useProgressState';
           const isSetup = await TrackPlayer.isServiceRunning();
           
           if (!isSetup) {
-            await TrackPlayer.setupPlayer().then(async () =>{
-              TrackPlayer.registerPlaybackService(()=> trackPlayerServices);
+            TrackPlayer.registerPlaybackService(()=> onRegisterPlayback); //No Task Register~ 에러 발생하여 setup 전 등록
+            await TrackPlayer.setupPlayer().then(() =>{
             });
           }
           

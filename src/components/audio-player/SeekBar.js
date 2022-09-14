@@ -11,7 +11,7 @@ import { useSettingPos } from './hooks/useProgressState';
 
 const SeekBar = ({
 }) => {
-  const progress = useProgress(150); //오디오 진행 현황(duration, position)... 0.1초마다 업데이트
+  const progress = useProgress(500); //오디오 진행 현황(duration, position) 0.5초마다 업데이트 ...호출이 너무 잦으면 callback 501 발생하여 수정
   useSettingPos(progress.position);
   // console.log(useGettingPos());
   return (
