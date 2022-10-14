@@ -14,10 +14,13 @@ import {
   widthPercentage,
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
+import {useDispatch, useSelector} from 'react-redux';
 import { requestPost } from '../../services/network';
 import consts from '../../libs/consts';
 import { AudioControls } from '../../components/audio-player';
 import { useGettingPos } from '../../components/audio-player/hooks/useProgressState';
+import { setShowAudio } from '../../redux/audiobook/AudioAction';
+
 
  //오디오 모달(슬라이더 포함)
   const AudioPlayer = ({
@@ -28,6 +31,7 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
     onClose,
   }) => {
     // Modal 표시
+    const dispatch = useDispatch();
     const [visibleModal, setVisibleModal] = useState(true);
     const pos = useGettingPos();
 
@@ -38,6 +42,7 @@ import { useGettingPos } from '../../components/audio-player/hooks/useProgressSt
     };
     
     const handlehide = () => {
+      dispatch(setShowAudio(false,track,1));
       onClose();
     };
 

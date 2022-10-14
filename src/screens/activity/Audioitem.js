@@ -46,7 +46,7 @@ export default function AudioItem({item, playtime, index}) {
   const [currentTime, setCurrentTime] = useState(0);
   const [open, setOpen] = useState(false);
 
-  //console.log(currentTime)
+  //console.log(item)
   
   let cnt = 0;
   //console.log(play);
@@ -154,6 +154,7 @@ export default function AudioItem({item, playtime, index}) {
             artwork: consts.toapingUrl+'/aud_file/'+item.audImg,//'https://toaping.com/aud_file/adb1.jpg',
             title: item.title,
             duration: item.durationTime,
+            wirter: item.writer,
             }}
             currentTime={currentTime} //현재 시간
             userId ={user.member_id}  //사용자 ID
@@ -165,7 +166,7 @@ export default function AudioItem({item, playtime, index}) {
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
-            dispatch(setShowAudio(index,item.title));
+            dispatch(setShowAudio(index,item.title,0));
             if ( cnt != 1 ) openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
           }}>
           <View style={styles.mainContent}>

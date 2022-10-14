@@ -20,11 +20,12 @@ import DialogDrawerKeyBoardWD from './redux-components/dialog-drawer-keyboardWD/
 import messaging from '@react-native-firebase/messaging';
 import { requestUserPermission, NotificationLister } from './components/FCMContainer/pushnotification_helper';
 import { dialogError } from './redux/dialog/DialogActions';
+import BackgroundControls from './components/audio-player/BackgroundPlayer';
 
 
 function App({ }) {
   const dispatch = useDispatch();
-
+  const showaudio = useSelector(state => state.showaudio);
   useEffect(() => {
     LogBox.ignoreLogs(['Sending']);
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -58,6 +59,10 @@ function App({ }) {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(showaudio.playstart)
+  }, [showaudio])
+
   return (
     <>
       <StatusBar barStyle='light-content' />
@@ -74,6 +79,7 @@ function App({ }) {
       <DialogDrawerKeyBoardPW />
       <DialogDrawerKeyBoardWD />
       <DialogActionProfile />
+      {showaudio.playstart === 1 ? <BackgroundControls currentTime={0} track={showaudio.track} backRate={2}/> : null}
     </>
   );
 }
