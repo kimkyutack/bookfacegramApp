@@ -19,6 +19,9 @@ import TrackPlayer, { usePlaybackState,State } from 'react-native-track-player';
 import trackPlayerServices from './services/PlaybackService';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { useGettingPos } from './hooks/useProgressState';
+import { requestPost } from '../../services/network';
+import { useSelector, shallowEqual } from 'react-redux';
+import consts from '../../libs/consts';
 import { Text } from 'react-native';
 
 export const onRegisterPlayback = async() => {
@@ -43,13 +46,51 @@ export const onRegisterPlayback = async() => {
     //오디오 상태(멈춰있는지 재생중인지..)
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing;  
-
+    const user = useSelector(s => s.user, shallowEqual);
     //Play, Pause 토글 이벤트
     const onTogglePlayback = useOnTogglePlayback();
 
     //배속 세팅
     const [curRate, setCurRate] = useState(1.0);
     const [slider, setSlider] = useState(false);
+    const [nextTime, setNextTime] = useState(currentTime);
+
+    const recordPlayTimeEverySecond = () => {
+      let curTime = Math.floor(+ new Date()/1000);
+      const sliderValue = parseInt(pos);
+
+      if (( isPlaying && curTime == nextTime )) {
+        setPlayTime(sliderValue); //실행 중이고 1초 지났으면 API 호출
+        setNextTime(nextTime + 1);
+      }else if (curTime > nextTime) {
+        setPlayTime(sliderValue); 
+        setNextTime(curTime + 1);
+      }
+    };
+
+      //재생시점 기록 API
+    const setPlayTime = async (sliderValue) => {
+        const formData = new FormData();
+        formData.append('currentsTime', sliderValue);
+        formData.append('durationTime',parseInt(track.duration));
+        formData.append('memberId', user.member_id);
+        formData.append('title',track.title);
+     
+        try {
+            requestPost({
+            url: consts.apiUrl + '/audio/play',
+            body: formData,
+          })
+            .then(response => {
+        })
+        } catch (error) {
+            console.log(error);
+        }
+      };
+
+      useEffect(() => {
+        recordPlayTimeEverySecond();
+      },[pos]);
 
     useEffect(() => {
       (async () => {
@@ -65,7 +106,7 @@ export const onRegisterPlayback = async() => {
           }
           
         }catch(error){
-          console.log(error);
+          //console.log(error);
         }
 
         try{
@@ -90,7 +131,7 @@ export const onRegisterPlayback = async() => {
           TrackPlayer.play(); 
           setSlider(true);
         }catch(error){
-          console.log(error);
+          //console.log(error);
         }
       })();
     }, []);
@@ -106,8 +147,9 @@ export const onRegisterPlayback = async() => {
             {/* White Space */}
             <View style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:20}}>
               <Image source={{uri : track.artwork}} style={styles.playAudio_image}/>
-              <View style={{alignItems:'flex-start', justifyContent:'center', flex:1}}>
-                <TextWrap style={{ fontSize : fontPercentage(11), fontWeight:'bold'}}>{track.title}{'\n'}{track.wirter}</TextWrap>
+              <View style={{alignItems:'flex-start', justifyContent:'center', flex:1, flexDirection:'column'}}>
+                <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold'}}>{track.title}</TextWrap>
+                <TextWrap style={{ fontSize : fontPercentage(10)}}>{track.wirter}</TextWrap>
               </View>
             </View>
             <View style={{flex:2}} />
@@ -175,10 +217,11 @@ export const onRegisterPlayback = async() => {
         width: 42,
     },
     playAudio_image: {
-      height: heightPercentage(50),
+      height: heightPercentage(60),
       width: 100,
       alignItems: 'flex-start',
       justifyContent: 'center',
+      resizeMode:'stretch',
     },
     playButton_image: {
       height: 40,

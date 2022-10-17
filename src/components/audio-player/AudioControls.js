@@ -75,7 +75,7 @@ export const onRegisterPlayback = async() => {
           }
           
         }catch(error){
-          console.log(error);
+          //console.log(error);
         }
 
         try{
@@ -100,7 +100,7 @@ export const onRegisterPlayback = async() => {
           TrackPlayer.play(); 
           setSlider(true);
         }catch(error){
-          console.log(error);
+          //console.log(error);
         }
       })();
     }, []);
@@ -181,6 +181,7 @@ export const onRegisterPlayback = async() => {
       marginTop: 33,
       paddingTop: 0,
       height: 85,
+      marginRight:40,
     },
     BackRate: {
         flexDirection: 'column',

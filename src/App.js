@@ -59,10 +59,6 @@ function App({ }) {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(showaudio.playstart)
-  }, [showaudio])
-
   return (
     <>
       <StatusBar barStyle='light-content' />
@@ -79,7 +75,7 @@ function App({ }) {
       <DialogDrawerKeyBoardPW />
       <DialogDrawerKeyBoardWD />
       <DialogActionProfile />
-      {showaudio.playstart === 1 ? <BackgroundControls currentTime={0} track={showaudio.track} backRate={2}/> : null}
+      {showaudio.playstart === 1 ? <BackgroundControls currentTime={showaudio.current} track={showaudio.track} backRate={2}/> : null}
     </>
   );
 }

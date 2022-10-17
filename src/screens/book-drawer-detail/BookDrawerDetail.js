@@ -39,6 +39,7 @@ import { requestGet, requestDelete, requestPost } from '../../services/network';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
 import { navigate } from '../../services/navigation';
+import AudioPlayer from '../activity/audioplayer';
 
 export default function BookDrawerDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -53,12 +54,68 @@ export default function BookDrawerDetail({ route, navigation }) {
 
   const isFocused = useIsFocused();
   const [sessionTime, setSessionTime] = useState('000000');
+  const [currentTime, setCurrentTime] = useState(0);
   const [showindex, setShowindex] = useState(false);
+  const [open, setOpen] = useState(false);
 //console.log(route.params.name)
   const user = useSelector(s => s.user, shallowEqual);
 
   let hour = 0, minute = 0, second = -1;
 
+  //이어서 듣기
+  const openModalWhitData = async itemTitle => {
+    //데이터 받아온 후 모달 열기
+    await fetchRequested(itemTitle); 
+    setOpen(true);
+  }
+
+  //처음부터 듣기
+  const openModalWithNoData = itemTitle =>{
+    setCurrentTime(0);  //재생 시점 0으로 초기화
+    setPlayCount(itemTitle); //재생 횟수 증가
+    setOpen(true);
+  }
+  const fetchRequested = async titles => {
+    try {
+      const {data, status} = await requestGet({
+        url: consts.apiUrl + '/audio/getCurrentsTime',
+        query: {
+          memberId: user.member_id,
+          title: titles,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setCurrentTime(data.currents_time);
+        // setplaytime();
+        setPlayCount(titles);
+      }
+      return status;
+    } catch (error) {
+    }
+  };
+
+  const setPlayCount = async titles => {
+    try {
+      const formData = new FormData();
+      formData.append('memberId', user.member_id);
+      formData.append('title',titles);
+
+      const {data, status} = await requestPost({
+        url: consts.apiUrl + '/audio/count',
+        body: formData,
+        // {
+        //   memberId: user.member_id,
+        //   title: item.title,
+        // },
+      });
+      console.log(status)
+      if (status === 'SUCCESS') {
+        
+      }
+      return status;
+    } catch (error) {
+    }
+  };
   //카운트 올라가는 로직
   function timeCount() {
 
@@ -193,7 +250,7 @@ export default function BookDrawerDetail({ route, navigation }) {
                       setSelectedArr([...selectedArr, item1.contentsIdx]);
                     }
                   } else if(item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2) {
-                    console.log('처음부터 시작');
+                    openModalWithNoData(item1?.bookNm); 
                   } else if(item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2) {
                     setShowindex(item1?.num);
                   } else {
@@ -211,9 +268,26 @@ export default function BookDrawerDetail({ route, navigation }) {
                 }}>
                 {item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2 && showindex === item1?.num ? (
                   <View style={styles.showContent}>
+                    {open && (
+                      <AudioPlayer
+                        track={{  //오디오 정보
+                        url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
+                        artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
+                        title: item1?.bookNm,
+                        duration: item1?.durationTime,
+                        wirter: item1?.writer,
+                        }}
+                        currentTime={currentTime} //현재 시간
+                        userId ={user.member_id}  //사용자 ID
+                        onClose={() => {
+                          setOpen(false);
+                        }}
+                      />
+                    )}
                     <TouchableOpacity
                       style={styles.playbtn}
                       onPress={() => {
+                        openModalWhitData(item1?.bookNm);  //이어서 듣기
                         //fetchRequested();
                       }}>
                         <TextWrap
@@ -227,6 +301,7 @@ export default function BookDrawerDetail({ route, navigation }) {
                       <TouchableOpacity
                       style={styles.playbtn}
                       onPress={() => {
+                        openModalWithNoData(item1?.bookNm);  //처음부터 듣기
                         //setCurrentTime(0);
                       }}>
                         <TextWrap
@@ -299,6 +374,22 @@ export default function BookDrawerDetail({ route, navigation }) {
                   )}
                   {item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2 ? (
                   <View>
+                    {open && (
+                      <AudioPlayer
+                        track={{  //오디오 정보
+                        url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
+                        artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
+                        title: item1?.bookNm,
+                        duration: item1?.durationTime,
+                        wirter: item1?.writer,
+                        }}
+                        currentTime={currentTime} //현재 시간
+                        userId ={user.member_id}  //사용자 ID
+                        onClose={() => {
+                          setOpen(false);
+                        }}
+                      />
+                    )}
                   <TextWrap
                     style={styles.info}
                     ellipsizeMode="tail"

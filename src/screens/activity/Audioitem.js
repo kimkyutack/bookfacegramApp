@@ -33,7 +33,7 @@ import {
   dialogError,
   dialogOpenDrawerSelect,
 } from '../../redux/dialog/DialogActions';
-import { setShowAudio } from '../../redux/audiobook/AudioAction';
+import { setShowAudio, setShowWhat } from '../../redux/audiobook/AudioAction';
 import AudioPlayer from './audioplayer';
 import { FBProfile } from 'react-native-fbsdk-next/types/FBProfile';
 
@@ -45,31 +45,8 @@ export default function AudioItem({item, playtime, index}) {
   const user = useSelector(s => s.user);
   const [currentTime, setCurrentTime] = useState(0);
   const [open, setOpen] = useState(false);
-
-  //console.log(item)
   
   let cnt = 0;
-  //console.log(play);
-
-  // const setPlayTime = async () => {
-  //   try {
-  //     const {data, status} = await requestPost({
-  //       url: consts.apiUrl + '/audio/play',
-  //       query: {
-  //         currentsTime:currentTime,
-  //         durationTime:item.durationTime,
-  //         memberId: user.member_id,
-  //         title: item.title,
-  //       },
-  //     });
-  //     console.log(status)
-  //     if (status === 'SUCCESS') {
-        
-  //     }
-  //     return status;
-  //   } catch (error) {
-  //   }
-  // };
 
   const setPlayCount = async () => {
     try {
@@ -80,10 +57,6 @@ export default function AudioItem({item, playtime, index}) {
       const {data, status} = await requestPost({
         url: consts.apiUrl + '/audio/count',
         body: formData,
-        // {
-        //   memberId: user.member_id,
-        //   title: item.title,
-        // },
       });
       console.log(status)
       if (status === 'SUCCESS') {
@@ -134,7 +107,7 @@ export default function AudioItem({item, playtime, index}) {
     return () => {
       mount = false;
     };
-  }, [showaudio.shownum]);
+  }, [showaudio.showwt]);
   return (
     <>
     {playtime.length !== 0 && playtime.map((data, Index) => {
@@ -166,15 +139,19 @@ export default function AudioItem({item, playtime, index}) {
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
-            dispatch(setShowAudio(index,item.title,0));
-            if ( cnt != 1 ) openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
+            dispatch(setShowWhat(index));
+            if ( cnt != 1 ) {
+              dispatch(setShowAudio(index,item.title,0));
+              openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
+            }
           }}>
           <View style={styles.mainContent}>
-            {showaudio.shownum === index && cnt == 1 ? (
+            {showaudio.showwt === index && cnt == 1 ? (
               <View style={styles.showContent}>
                 <TouchableOpacity
                   style={styles.playbtn}
                   onPress={() => {
+                    dispatch(setShowAudio(index,item.title,0));
                     openModalWhitData();  //이어서 듣기
                   }}>
                     <TextWrap

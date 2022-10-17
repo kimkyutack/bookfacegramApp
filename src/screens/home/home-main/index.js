@@ -84,7 +84,7 @@ export default function HomeMain({ route, navigation }) {
       );
 
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
   //토핑어플의 DB에 저장하는 로직 끝

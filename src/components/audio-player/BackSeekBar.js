@@ -37,7 +37,7 @@ export default BackSeekBar;
 
 const styles = StyleSheet.create({
   slider: {
-    marginTop: -10,
+    marginTop: -13,
     marginLeft: -10,
     marginBottom: 5,
     width: screenWidth*1.1,

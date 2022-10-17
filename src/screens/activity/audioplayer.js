@@ -15,7 +15,7 @@ import {
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import {useDispatch, useSelector} from 'react-redux';
-import { requestPost } from '../../services/network';
+import { requestGet, requestPost } from '../../services/network';
 import consts from '../../libs/consts';
 import { AudioControls } from '../../components/audio-player';
 import { useGettingPos } from '../../components/audio-player/hooks/useProgressState';
@@ -41,9 +41,23 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
       onClose();
     };
     
-    const handlehide = () => {
-      dispatch(setShowAudio(false,track,1));
-      onClose();
+    const handlehide = async () => {
+      try {
+        const {data, status} = await requestGet({
+          url: consts.apiUrl + '/audio/getCurrentsTime',
+          query: {
+            memberId: userId,
+            title: track.title,
+          },
+        });
+        if (status === 'SUCCESS') {
+          dispatch(setShowAudio(false,track,1,data.currents_time));
+          onClose();
+        }
+        return status;
+      } catch (error) {
+
+      }
     };
 
     //
@@ -54,9 +68,9 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     //오디오 상태(멈춰있는지 재생중인지..)
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing; 
-
+    //console.log(parseInt(pos))
     //호출할 때 1초 지났는지 확인 
-    const recordPlayTimeEverySeconde = () => {
+    const recordPlayTimeEverySecond = () => {
         let curTime = Math.floor(+ new Date()/1000);
         const sliderValue = parseInt(pos);
 
@@ -64,6 +78,7 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
           setPlayTime(sliderValue); //실행 중이고 1초 지났으면 API 호출
           setNextTime(nextTime + 1);
         }else if (curTime > nextTime) {
+          setPlayTime(sliderValue); 
           setNextTime(curTime + 1);
         }
       };
@@ -75,7 +90,7 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
         formData.append('durationTime',parseInt(track.duration));
         formData.append('memberId',userId);
         formData.append('title',track.title);
-
+     
         try {
             requestPost({
             url: consts.apiUrl + '/audio/play',
@@ -89,8 +104,8 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
       };
 
       useEffect(() => {
-        recordPlayTimeEverySeconde();
-      },[nextTime]);
+        recordPlayTimeEverySecond();
+      },[pos]);
   
     return (
       //모달창
