@@ -1,35 +1,22 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import React from 'react';
+import {useDispatch} from 'react-redux';
 import {
   ScrollView,
-  Image,
   StyleSheet,
   View,
   SafeAreaView,
-  TouchableOpacity,
-  StatusBar,
-  Alert,
   Button,
 } from 'react-native';
 import colors from '../../libs/colors';
-import SearchBar from '../../components/search-bar/SearchBar';
-import Topbar from '../../components/topbar/Topbar';
 import images from '../../libs/images';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import {
-  dialogError,
-  dialogOpenSelect,
-  dialogOpenMessage,
-} from '../../redux/dialog/DialogActions';
-import Footer from '../../libs/footer';
+import {dialogError} from '../../redux/dialog/DialogActions';
 import {
   screenHeight,
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
 } from '../../services/util';
-import routes from '../../libs/routes';
 import FastImage from 'react-native-fast-image';
 
 export default function BookContest({route, navigation}) {

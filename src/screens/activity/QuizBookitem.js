@@ -1,36 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
   Platform,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import FastImage from 'react-native-fast-image';
-import moment from 'moment-timezone';
 import colors from '../../libs/colors';
-import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
 import routes from '../../libs/routes';
-import images from '../../libs/images';
-import {navigationRef, navigate} from '../../services/navigation';
+import {navigate} from '../../services/navigation';
 import {
   fontPercentage,
-  formatTime,
   heightPercentage,
   screenWidth,
-  widthPercentage,
 } from '../../services/util';
-import {numFormat} from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import BookQuizCarouselImage from '../activity/BookQuizCarouselImage';
 import {setTab} from '../../redux/tab/TabAction';
-import {
-  dialogError,
-  dialogOpenDrawerSelect,
-} from '../../redux/dialog/DialogActions';
 
 export default function QuizBookitem({item, index}) {
   const dispatch = useDispatch();

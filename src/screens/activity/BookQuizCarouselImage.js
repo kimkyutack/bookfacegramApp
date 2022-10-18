@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet} from 'react-native';
 
-import colors from '../../libs/colors';
 import consts from '../../libs/consts';
-import {heightPercentage, screenWidth} from '../../services/util';
+import {heightPercentage} from '../../services/util';
 import FastImage from 'react-native-fast-image';
 
 export default function BookQuizCarouselImage({item, index, style}) {

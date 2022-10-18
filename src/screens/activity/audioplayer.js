@@ -6,7 +6,7 @@ import {
     Modal,
     TouchableOpacity,
   } from 'react-native';
-import TrackPlayer, { usePlaybackState,State , useProgress } from 'react-native-track-player';
+import TrackPlayer, { usePlaybackState,State } from 'react-native-track-player';
 import images from '../../libs/images';
 import {
   fontPercentage,
@@ -14,7 +14,7 @@ import {
   widthPercentage,
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import { requestGet, requestPost } from '../../services/network';
 import consts from '../../libs/consts';
 import { AudioControls } from '../../components/audio-player';

@@ -19,18 +19,12 @@ import RadioForm, {
 import colors from '../../libs/colors';
 import images from '../../libs/images';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import {
-  dialogOpenSelect,
-  dialogOpenMessage,
-} from '../../redux/dialog/DialogActions';
 import {navigate} from '../../services/navigation';
-import Footer from '../../libs/footer';
 import {
   screenHeight,
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
   screenWidth,
 } from '../../services/util';
 import routes from '../../libs/routes';

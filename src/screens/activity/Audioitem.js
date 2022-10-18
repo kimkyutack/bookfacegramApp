@@ -1,41 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
   Platform,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import FastImage from 'react-native-fast-image';
-import moment from 'moment-timezone';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import routes from '../../libs/routes';
-import images from '../../libs/images';
-import {navigationRef, navigate} from '../../services/navigation';
 import { requestGet, requestPost } from '../../services/network';
 import {
   fontPercentage,
-  formatTime,
   heightPercentage,
   screenWidth,
-  widthPercentage,
   screenHeight
 } from '../../services/util';
-import {numFormat} from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import AudioCarouselImage from './AudioCarouselImage';
-import {setTab} from '../../redux/tab/TabAction';
-import {
-  dialogError,
-  dialogOpenDrawerSelect,
-} from '../../redux/dialog/DialogActions';
 import { setShowAudio, setShowWhat } from '../../redux/audiobook/AudioAction';
 import AudioPlayer from './audioplayer';
-import { FBProfile } from 'react-native-fbsdk-next/types/FBProfile';
 
 export default function AudioItem({item, playtime, index}) {
   const dispatch = useDispatch();

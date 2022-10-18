@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, TouchableWithoutFeedback, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import colors from '../../libs/colors';
 import routes from '../../libs/routes';
 import fonts from '../../libs/fonts';

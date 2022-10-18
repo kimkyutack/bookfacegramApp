@@ -1,12 +1,9 @@
 import React from 'react';
 import {
-  FlatList,
   Image,
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView,
-  Alert,
   ScrollView
 } from 'react-native';
 import images from '../../libs/images';
@@ -15,7 +12,6 @@ import {useDispatch} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import routes from '../../libs/routes';
 import {navigate} from '../../services/navigation';
-import MainQuiz from '../activity/MainQuiz';
 import {setTab} from '../../redux/tab/TabAction';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
@@ -23,7 +19,6 @@ import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
   screenWidth,
   screenHeight,
 } from '../../services/util';

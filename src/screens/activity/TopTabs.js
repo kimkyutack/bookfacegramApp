@@ -1,24 +1,15 @@
 import React from 'react';
 
-import {Animated, TouchableOpacity, View, Button} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import TopActivity from '../home/TopActivity';
-import MainQuiz from '../activity/MainQuiz';
 import TopMyBooks from '../home/TopMyBooks';
 import TopNewBooks from '../home/TopNewBooks';
 import routes from '../../libs/routes';
-import {
-  fontPercentage,
-  heightPercentage,
-  widthPercentage,
-} from '../../services/util';
-import fonts from '../../libs/fonts';
 import TabBar from '../activity/TabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function TopTabs({type, rank}) {
-  //alert(JSON.stringify(type));
   return (
     <Tab.Navigator
       initialRouteName={routes.topActivity}

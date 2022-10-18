@@ -1,27 +1,23 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
-  FlatList,
   Image,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import TextWrap from '../../components/text-wrap/TextWrap';
 import Topbar from '../../components/topbar/Topbar';
 import SearchBar from '../../components/search-bar/SearchBar';
 import TopTabs from '../activity/TopTabs';
 import images from '../../libs/images';
 import colors from '../../libs/colors';
-import {navigate} from '../../services/navigation';
 import routes from '../../libs/routes';
 import Footer from '../../libs/footer';
 
 import {
   widthPercentage,
   heightPercentage,
-  fontPercentage,
   cameraItem,
 } from '../../services/util';
 import {

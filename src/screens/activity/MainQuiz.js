@@ -23,7 +23,6 @@ import {
 import { dialogError } from '../../redux/dialog/DialogActions';
 import { dialogOpenGrade } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
-import { navigate } from '../../services/navigation';
 import { browsingTime } from '../../redux/session/SessionAction';
 
 export default function MainQuiz({ route }, start) {

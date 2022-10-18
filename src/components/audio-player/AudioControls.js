@@ -1,4 +1,4 @@
-import React, { component, useEffect , useState} from 'react';
+import React, { useEffect , useState} from 'react';
 import {
     View,
     StyleSheet,
@@ -8,13 +8,10 @@ import {
 import images from '../../libs/images';
 import {
   fontPercentage,
-  heightPercentage,
-  widthPercentage,
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import SeekBar from './SeekBar';
 import TrackPlayer, { usePlaybackState,State } from 'react-native-track-player';
-import trackPlayerServices from './services/PlaybackService';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { useGettingPos } from './hooks/useProgressState';
 

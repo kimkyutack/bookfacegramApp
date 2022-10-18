@@ -15,7 +15,6 @@ import colors from '../../../libs/colors';
 import images from '../../../libs/images';
 import routes from '../../../libs/routes';
 import BookListItem from './BookListItem';
-import TopNewBooks from '../TopNewBooks';
 import {
   screenWidth,
   widthPercentage,

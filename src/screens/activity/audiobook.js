@@ -12,7 +12,6 @@ import consts from '../../libs/consts';
 import images from '../../libs/images';
 import colors from '../../libs/colors';
 import AudioMain from './audioMain';
-import TextWrap from '../../components/text-wrap/TextWrap';
 import {
   screenWidth,
   screenHeight,
@@ -21,9 +20,7 @@ import {
   fontPercentage,
 } from '../../services/util';
 import { dialogError } from '../../redux/dialog/DialogActions';
-import { dialogOpenGrade } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
-import { navigate } from '../../services/navigation';
 import { browsingTime } from '../../redux/session/SessionAction';
 
 export default function AudioBook({ route }, start) {

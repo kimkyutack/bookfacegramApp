@@ -1,4 +1,4 @@
-import React, { component, useEffect , useState} from 'react';
+import React, { useEffect , useState} from 'react';
 import {
     View,
     StyleSheet,
@@ -11,20 +11,15 @@ import {
   heightPercentage,
   screenHeight,
   screenWidth,
-  widthPercentage,
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import BackSeekBar from './BackSeekBar';
 import TrackPlayer, { usePlaybackState,State, useProgress } from 'react-native-track-player';
-import trackPlayerServices from './services/PlaybackService';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
-import { useGettingPos } from './hooks/useProgressState';
 import { requestGet, requestPost } from '../../services/network';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import consts from '../../libs/consts';
-import { Text } from 'react-native';
-import { setShowAudio, setShowMain } from '../../redux/audiobook/AudioAction';
-import { DataNode } from 'domhandler';
+import { setShowAudio } from '../../redux/audiobook/AudioAction';
 
 export const onRegisterPlayback = async() => {
     

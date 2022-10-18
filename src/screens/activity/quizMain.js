@@ -5,40 +5,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView,
   ActivityIndicator,
-  StatusBar,
 } from 'react-native';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import consts from '../../libs/consts';
 import colors from '../../libs/colors';
 import images from '../../libs/images';
-import routes from '../../libs/routes';
-import Topbar from '../../components/topbar/Topbar';
-import SearchBar from '../../components/search-bar/SearchBar';
-import TopTabs from '../activity/TopTabs';
 import QuizBookitem from '../activity/QuizBookitem';
-import Footer from '../../libs/footer';
-import TextButton from '../../components/text-button/TextButton';
-import {navigate, navigationRef} from '../../services/navigation';
-import MainQuiz from '../activity/MainQuiz';
 import {
   screenWidth,
   screenHeight,
   widthPercentage,
   heightPercentage,
-  cameraItem,
 } from '../../services/util';
-import {requestGet, requestPost} from '../../services/network';
+import {requestGet} from '../../services/network';
 import {dialogError} from '../../redux/dialog/DialogActions';
-import {
-  dialogOpenSelect,
-  dialogOpenMessage,
-  dialogOpenGrade,
-} from '../../redux/dialog/DialogActions';
-import {relativeTimeRounding} from 'moment-timezone';
-import {useHandler} from 'react-native-reanimated';
 
 export default function QuizMain({
   route,
@@ -49,15 +31,9 @@ export default function QuizMain({
 }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
-  const [scrolltop, setscrolltop] = useState(0);
   const [loading, setLoading] = useState(false);
-  const listTab = useSelector(s => s.tab, shallowEqual);
-  const [render, setRender] = useState([]);
   const [type, setType] = useState('kbs');
   const [start, setStart] = useState(20);
-  const [grade, setGrade] = useState('전체');
-  const [morenotBook, setNotBook] = useState([]);
-  const [morekbsBook, setKbsBook] = useState(kbsBook);
   const [state, setState] = useState({req: kbsBook, page: 1});
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
@@ -80,8 +56,6 @@ export default function QuizMain({
           req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
           page: state.page + 1,
         });
-        //setNotBook([...data.notKbsBookQuizs]);
-        //setKbsBook([...data.kbsBookQuizs]);
       }
       return status;
     } catch (error) {
@@ -138,8 +112,8 @@ export default function QuizMain({
         <View>
         <FlatList
           ref={scrollRef}
-          data={state.req} //morekbsbook
-          extraData={state.req} //morekbsbook
+          data={state.req} 
+          extraData={state.req} 
           keyExtractor={(item, index) => {
             return index.toString();
           }}
