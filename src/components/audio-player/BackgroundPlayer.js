@@ -11,6 +11,7 @@ import {
   heightPercentage,
   screenHeight,
   screenWidth,
+  widthPercentage,
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import BackSeekBar from './BackSeekBar';
@@ -162,7 +163,7 @@ export const onRegisterPlayback = async() => {
           {/* 오디오 컨트롤 패널 */}
           <View style={styles.container}>
             {/* White Space */}
-            <TouchableOpacity style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:20}} onPress={() => showmain()}>
+            <TouchableOpacity style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:'5%'}} onPress={() => showmain()}>
               <Image source={{uri : track.artwork}} style={styles.playAudio_image}/>
               <View style={{alignItems:'flex-start', justifyContent:'center', flex:1, flexDirection:'column'}}>
                 <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold'}}>{track.title}</TextWrap>
@@ -234,24 +235,24 @@ export const onRegisterPlayback = async() => {
         width: 42,
     },
     playAudio_image: {
-      height: heightPercentage(60),
-      width: 100,
+      height: heightPercentage(85),
+      width: widthPercentage(60),
       alignItems: 'flex-start',
       justifyContent: 'center',
       resizeMode:'stretch',
     },
     playButton_image: {
-      height: 40,
-      width: 40,
+      height: heightPercentage(26),
+      width: widthPercentage(20),
       alignItems: 'flex-end',
       justifyContent: 'center',
     },
     playButton: {
-      height: 30,
+      height: '100%',
       width: '100%',
       alignItems: 'flex-end',
       justifyContent: 'center',
-      marginBottom:heightPercentage(20),
+      marginBottom:heightPercentage(40),
       marginRight:20
     },
   })

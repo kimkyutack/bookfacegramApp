@@ -8,6 +8,7 @@ import {
 import Slider from '@react-native-community/slider';
 import TrackPlayer, {useProgress} from 'react-native-track-player';
 import { useSettingPos } from './hooks/useProgressState';
+import { fontPercentage, heightPercentage, screenWidth, widthPercentage } from '../../services/util';
 
 const SeekBar = ({
 }) => {
@@ -34,8 +35,8 @@ const SeekBar = ({
           {/* 오디오 현재 값 */}
           {new Date(progress.position * 1000).toISOString().slice(14, 19)}
         </Text>
-        <View style={{flex: 1}} />
-        <Text style={[styles.text, {width: 40}]}>
+        <View style={{flex: 6}} />
+        <Text style={[styles.text2]}>
           {/* 오디오 MAX 값 */}
           {new Date(progress.duration * 1000).toISOString().slice(14, 19)}
         </Text>
@@ -48,31 +49,38 @@ export default SeekBar;
 
 const styles = StyleSheet.create({
   slider: {
-    marginTop: -5,
-    marginLeft: -20,
-    marginBottom: 5,
-    width: '109%',
-    scaleY: 1.2,
-    scaleX: 1.2,
+    marginTop: heightPercentage(30),
+    marginLeft: -widthPercentage(15),
+    marginBottom: 0,
+    width: '107%',
+    scaleY: heightPercentage(2.2),
+    scaleX: widthPercentage(1.6),
   },
   container: {
-    paddingTop: 16,
+    paddingTop: 0,
     marginLeft: 10,
     marginRight: 10,
-    width: '90%',
+    width: screenWidth,
     height: '20%',
   },
   track: {
     borderRadius: 10,
   },
   thumb: {
-    width: 100,
-    height: 100,
+    width: 10,
+    height: 10,
     borderRadius: 10,
   },
   text: {
+    flex:1,
     color: 'rgba(255, 255, 255, 0.72)',
-    fontSize: 12,
+    fontSize: fontPercentage(12),
     textAlign:'center',
-  }
+  },
+  text2: {
+    flex:1,
+    color: 'rgba(255, 255, 255, 0.72)',
+    fontSize: fontPercentage(12),
+    textAlign:'center',
+  },
 });

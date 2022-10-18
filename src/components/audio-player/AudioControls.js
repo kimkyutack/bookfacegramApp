@@ -7,7 +7,7 @@ import {
   } from 'react-native';
 import images from '../../libs/images';
 import {
-  fontPercentage,
+  fontPercentage, heightPercentage, widthPercentage,
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import SeekBar from './SeekBar';
@@ -121,7 +121,7 @@ export const onRegisterPlayback = async() => {
             </TouchableOpacity>
 
             {/* White Space */}
-            <View style={{width: 40}} />
+            <View style={{flex:0.3}} />
 
             {/* 15초 이전 */}
             <TouchableOpacity onPress={() => TrackPlayer.seekTo(pos - 15)} >
@@ -129,7 +129,7 @@ export const onRegisterPlayback = async() => {
             </TouchableOpacity>
 
             {/* White Space */} 
-            <View style={{width: 40}} />
+            <View style={{flex:0.3}} />
 
             {/* PLAY 버튼 */}
             {!isPlaying ?
@@ -146,7 +146,7 @@ export const onRegisterPlayback = async() => {
             }
 
             {/* White Space */}
-            <View style={{width: 40}} />
+            <View style={{flex:0.3}} />
 
             {/* 15초 빨리감기 */}
             <TouchableOpacity onPress={() => TrackPlayer.seekTo(pos +  15)}>
@@ -154,7 +154,7 @@ export const onRegisterPlayback = async() => {
             </TouchableOpacity>
 
             {/* White Space */}
-            <View style={{width: 40}} />
+            <View style={{flex:1}} />
           </View>
         </View>
       </View>
@@ -168,17 +168,17 @@ export const onRegisterPlayback = async() => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop: 10,
-      marginTop: 10,
+      paddingTop: 0,
+      marginTop: 0,
     },
     container: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 33,
+      marginTop: heightPercentage(10),
       paddingTop: 0,
       height: 85,
-      marginRight:40,
+      marginLeft: '12%',
     },
     BackRate: {
         flexDirection: 'column',
@@ -195,16 +195,16 @@ export const onRegisterPlayback = async() => {
         fontSize: fontPercentage(12),
     },
     skipButton: {
-        height: 42,
-        width: 42,
+        height: heightPercentage(36),
+        width: widthPercentage(30),
     },
     playButton_image: {
-      height: 90,
-      width: 90,
+      height: heightPercentage(62),
+        width: widthPercentage(48),
     },
     playButton: {
-      height: 62,
-      width: 62,
+      height: heightPercentage(60),
+      width: widthPercentage(60),
       alignItems: 'center',
       justifyContent: 'center',
     },

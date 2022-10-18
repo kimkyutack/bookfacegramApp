@@ -130,6 +130,10 @@ export default function AudioItem({item, playtime, index}) {
             }
           }}>
           <View style={styles.mainContent}>
+            <View style={{
+              height: screenWidth / 2.8,
+              width: screenWidth / 3.3,
+              flexDirection: 'row'}}>
             {showaudio.showwt === index && cnt == 1 ? (
               <View style={styles.showContent}>
                 <TouchableOpacity
@@ -163,6 +167,7 @@ export default function AudioItem({item, playtime, index}) {
               </View>
             ) :null }
             <AudioCarouselImage item={item} style={styles.thumbnail} />
+            </View>
             <View style={styles.info}>
               <TextWrap
                 font={fonts.kopubWorldDotumProMedium}
@@ -252,8 +257,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   thumbnail: {
-    height: screenWidth / 2.8,
-    width: screenWidth / 3.3,
+    height: '100%',
+    width: '100%',
     resizeMode: 'cover',
     flexDirection: 'row',
     ...Platform.select({
@@ -314,9 +319,8 @@ const styles = StyleSheet.create({
     opacity:0.8,
     position:'absolute',
     backgroundColor:colors.black,
-    height: screenWidth / 3,
-    width: screenWidth / 3.3,
-    bottom:screenHeight / 8.4,
+    height: '100%',
+    width: '100%',
     zIndex:9999,
     alignItems:'center'
   },

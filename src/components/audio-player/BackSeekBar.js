@@ -8,7 +8,7 @@ import Slider from '@react-native-community/slider';
 import TrackPlayer, {useProgress} from 'react-native-track-player';
 import { useSettingPos } from './hooks/useProgressState';
 import images from '../../libs/images';
-import { screenWidth } from '../../services/util';
+import { heightPercentage, screenWidth, widthPercentage } from '../../services/util';
 
 const BackSeekBar = ({
 }) => {
@@ -27,7 +27,6 @@ const BackSeekBar = ({
         style={styles.slider}
         minimumTrackTintColor='#30acd9' //진행된 슬라이더 색 진하게 표시
         maximumTrackTintColor='#3f748a' //진행될 슬라이더 색 연하게 표시
-        trackStyle={styles.track}
         thumbImage={images.circle24}
         step={0}  //1씩 증가
         />
@@ -39,12 +38,12 @@ export default BackSeekBar;
 
 const styles = StyleSheet.create({
   slider: {
-    marginTop: -13,
-    marginLeft: -10,
-    marginBottom: 5,
-    width: screenWidth*1.1,
-    scaleY: 3,
-    scaleX: 3,
+    marginTop: -widthPercentage(28),
+    marginLeft: -widthPercentage(24),
+    marginBottom: heightPercentage(5),
+    width: screenWidth*1.124,
+    scaleY: heightPercentage(3),
+    scaleX: widthPercentage(2),
   },
   container: {
     paddingTop: 16,
@@ -53,16 +52,4 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: '20%',
   },
-  track: {
-  },
-  thumb: {
-    width: 5,
-    height: 5,
-    borderRadius: 10,
-  },
-  text: {
-    color: 'rgba(255, 255, 255, 0.72)',
-    fontSize: 12,
-    textAlign:'center',
-  }
 });
