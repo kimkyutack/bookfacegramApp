@@ -25,7 +25,7 @@ async function getFCMToken() {
         await AsyncStorage.setItem("fcmtoken", fcmtoken);
       }
     } catch (error) {
-      console.log(error, "error in fcmtoken");
+      //console.log(error, "error in fcmtoken");
     }
   }
 }

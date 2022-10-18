@@ -16,16 +16,19 @@ import DialogKakaoLogin from './redux-components/dialog-kakao-login-select/Dialo
 import DialogDrawer from './redux-components/dialog-drawer/DialogDrawer';
 import DialogDrawerKeyBoard from './redux-components/dialog-drawer-keyboard/DialogDrawerKeyBoard';
 import DialogDrawerKeyBoardPW from './redux-components/dialog-drawer-keyboardPW/DialogDrawerKeyboardPW';
+import AudioPlayer from './screens/activity/audioplayer';
 import DialogDrawerKeyBoardWD from './redux-components/dialog-drawer-keyboardWD/DialogDrawerKeyBoardWD';
 import messaging from '@react-native-firebase/messaging';
 import { requestUserPermission, NotificationLister } from './components/FCMContainer/pushnotification_helper';
 import { dialogError } from './redux/dialog/DialogActions';
 import BackgroundControls from './components/audio-player/BackgroundPlayer';
+import { setShowMain } from './redux/audiobook/AudioAction';
 
 
 function App({ }) {
   const dispatch = useDispatch();
   const showaudio = useSelector(state => state.showaudio);
+  const user = useSelector(s => s.user, shallowEqual);
   useEffect(() => {
     LogBox.ignoreLogs(['Sending']);
     const unsubscribe = messaging().onMessage(async remoteMessage => {
@@ -76,6 +79,16 @@ function App({ }) {
       <DialogDrawerKeyBoardWD />
       <DialogActionProfile />
       {showaudio.playstart === 1 ? <BackgroundControls currentTime={showaudio.current} track={showaudio.track} backRate={2}/> : null}
+      {showaudio.startmain === 1 ?
+        <AudioPlayer
+          track={showaudio.track}
+          currentTime={showaudio.current} //현재 시간
+          userId ={user.member_id}  //사용자 ID
+          onClose={() => {
+            dispatch(setShowMain(0,0));
+          }}
+        />
+      : null}
     </>
   );
 }

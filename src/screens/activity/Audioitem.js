@@ -141,7 +141,7 @@ export default function AudioItem({item, playtime, index}) {
           onPress={() => {
             dispatch(setShowWhat(index));
             if ( cnt != 1 ) {
-              dispatch(setShowAudio(index,item.title,0));
+              dispatch(setShowAudio(index,item.title,0,0,0));
               openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
             }
           }}>
@@ -151,7 +151,7 @@ export default function AudioItem({item, playtime, index}) {
                 <TouchableOpacity
                   style={styles.playbtn}
                   onPress={() => {
-                    dispatch(setShowAudio(index,item.title,0));
+                    dispatch(setShowAudio(index,item.title,0,0,0));
                     openModalWhitData();  //이어서 듣기
                   }}>
                     <TextWrap

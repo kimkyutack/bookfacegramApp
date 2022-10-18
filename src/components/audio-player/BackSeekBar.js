@@ -15,6 +15,9 @@ const BackSeekBar = ({
 }) => {
   const progress = useProgress(500); //오디오 진행 현황(duration, position) 0.5초마다 업데이트 ...호출이 너무 잦으면 callback 501 발생하여 수정
   useSettingPos(progress.position);
+  //console.log(progress)
+
+    
   // console.log(useGettingPos());
   return (
     <View style={styles.container}>

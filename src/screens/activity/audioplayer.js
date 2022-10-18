@@ -34,7 +34,6 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     const dispatch = useDispatch();
     const [visibleModal, setVisibleModal] = useState(true);
     const pos = useGettingPos();
-
     const handleClose = () => {
       TrackPlayer.seekTo(0);
       TrackPlayer.pause();
@@ -51,7 +50,7 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
           },
         });
         if (status === 'SUCCESS') {
-          dispatch(setShowAudio(false,track,1,data.currents_time));
+          dispatch(setShowAudio(false,track,1,data.currents_time,0));
           onClose();
         }
         return status;

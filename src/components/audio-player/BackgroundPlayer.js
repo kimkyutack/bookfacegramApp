@@ -15,14 +15,16 @@ import {
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import BackSeekBar from './BackSeekBar';
-import TrackPlayer, { usePlaybackState,State } from 'react-native-track-player';
+import TrackPlayer, { usePlaybackState,State, useProgress } from 'react-native-track-player';
 import trackPlayerServices from './services/PlaybackService';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { useGettingPos } from './hooks/useProgressState';
-import { requestPost } from '../../services/network';
-import { useSelector, shallowEqual } from 'react-redux';
+import { requestGet, requestPost } from '../../services/network';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import consts from '../../libs/consts';
 import { Text } from 'react-native';
+import { setShowAudio, setShowMain } from '../../redux/audiobook/AudioAction';
+import { DataNode } from 'domhandler';
 
 export const onRegisterPlayback = async() => {
     
@@ -41,24 +43,25 @@ export const onRegisterPlayback = async() => {
     backRate,
   }) => {
     //오디오 현재 진행 상태 (슬라이더 관련)
-    const pos = useGettingPos();
-
+    //const pos = useGettingPos();
+    const progress = useProgress(500);
+    const pos = Math.floor(progress.position);
     //오디오 상태(멈춰있는지 재생중인지..)
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing;  
     const user = useSelector(s => s.user, shallowEqual);
+    const dispatch = useDispatch();
     //Play, Pause 토글 이벤트
     const onTogglePlayback = useOnTogglePlayback();
-
     //배속 세팅
     const [curRate, setCurRate] = useState(1.0);
     const [slider, setSlider] = useState(false);
     const [nextTime, setNextTime] = useState(currentTime);
 
-    const recordPlayTimeEverySecond = () => {
+    /*const recordPlayTimeEverySecond = () => {
       let curTime = Math.floor(+ new Date()/1000);
       const sliderValue = parseInt(pos);
-
+      
       if (( isPlaying && curTime == nextTime )) {
         setPlayTime(sliderValue); //실행 중이고 1초 지났으면 API 호출
         setNextTime(nextTime + 1);
@@ -66,12 +69,30 @@ export const onRegisterPlayback = async() => {
         setPlayTime(sliderValue); 
         setNextTime(curTime + 1);
       }
+    };*/
+
+    const showmain = async () => {
+      try {
+        const {data, status} = await requestGet({
+          url: consts.apiUrl + '/audio/getCurrentsTime',
+          query: {
+            memberId: user.member_id,
+            title: track.title,
+          },
+        });
+        if (status === 'SUCCESS') {
+          dispatch(setShowAudio(false,track,1,data.currents_time,1));
+        }
+        return status;
+      } catch (error) {
+
+      }
     };
 
       //재생시점 기록 API
-    const setPlayTime = async (sliderValue) => {
+    const setPlayTime = async () => {
         const formData = new FormData();
-        formData.append('currentsTime', sliderValue);
+        formData.append('currentsTime', pos);
         formData.append('durationTime',parseInt(track.duration));
         formData.append('memberId', user.member_id);
         formData.append('title',track.title);
@@ -84,12 +105,12 @@ export const onRegisterPlayback = async() => {
             .then(response => {
         })
         } catch (error) {
-            console.log(error);
         }
       };
-
+      //재생 시간 변할 시 재생 시점 기록 함수 호출
       useEffect(() => {
-        recordPlayTimeEverySecond();
+        //recordPlayTimeEverySecond();
+        setPlayTime();
       },[pos]);
 
     useEffect(() => {
@@ -102,6 +123,7 @@ export const onRegisterPlayback = async() => {
           if (!isSetup) {
             TrackPlayer.registerPlaybackService(()=> onRegisterPlayback); //No Task Register~ 에러 발생하여 setup 전 등록
             await TrackPlayer.setupPlayer().then(() =>{
+
             });
           }
           
@@ -145,13 +167,13 @@ export const onRegisterPlayback = async() => {
           {/* 오디오 컨트롤 패널 */}
           <View style={styles.container}>
             {/* White Space */}
-            <View style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:20}}>
+            <TouchableOpacity style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:20}} onPress={() => showmain()}>
               <Image source={{uri : track.artwork}} style={styles.playAudio_image}/>
               <View style={{alignItems:'flex-start', justifyContent:'center', flex:1, flexDirection:'column'}}>
                 <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold'}}>{track.title}</TextWrap>
                 <TextWrap style={{ fontSize : fontPercentage(10)}}>{track.wirter}</TextWrap>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={{flex:2}} />
             {/* PLAY 버튼 */}
             {!isPlaying ?
