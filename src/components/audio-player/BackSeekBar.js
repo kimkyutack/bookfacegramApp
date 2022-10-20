@@ -38,18 +38,16 @@ export default BackSeekBar;
 
 const styles = StyleSheet.create({
   slider: {
-    marginTop: -widthPercentage(28),
-    marginLeft: -widthPercentage(24),
-    marginBottom: heightPercentage(5),
-    width: screenWidth*1.124,
-    scaleY: heightPercentage(3),
-    scaleX: widthPercentage(2),
+    width: '113%',
+    zIndex:99999,
+    marginBottom:'2%',
   },
   container: {
-    paddingTop: 16,
-    marginLeft: 10,
-    marginRight: 10,
+    zIndex:99998,
     width: screenWidth,
-    height: '20%',
+    
+    alignItems:'center',
+    justifyContent:'flex-start',
+    position:'relative'
   },
 });

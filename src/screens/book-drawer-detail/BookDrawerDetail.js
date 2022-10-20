@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   Image,
   Platform,
   ActivityIndicator,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -25,7 +24,6 @@ import {
   dialogError,
   dialogOpenDrawerSelect,
   dialogOpenAction,
-  dialogClose,
 } from '../../redux/dialog/DialogActions';
 import { setTab } from '../../redux/tab/TabAction';
 import {
@@ -39,7 +37,7 @@ import { requestGet, requestDelete, requestPost } from '../../services/network';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
 import { navigate } from '../../services/navigation';
-import AudioPlayer from '../activity/audioplayer';
+import { setShowAudio } from '../../redux/audiobook/AudioAction';
 
 export default function BookDrawerDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -62,36 +60,29 @@ export default function BookDrawerDetail({ route, navigation }) {
 
   let hour = 0, minute = 0, second = -1;
 
-  //이어서 듣기
-  const openModalWhitData = async itemTitle => {
-    //데이터 받아온 후 모달 열기
-    await fetchRequested(itemTitle); 
-    setOpen(true);
-  }
+  const showmain = async (titles,track,time) => {
+    if(time == 0){
+      dispatch(setShowAudio(false,track,1,0,1));
+      setCurrentTime(0);
+    }else{
+      try {
+        const {data, status} = await requestGet({
+          url: consts.apiUrl + '/audio/getCurrentsTime',
+          query: {
+            memberId: user.member_id,
+            title: titles,
+          },
+        });
+        if (status === 'SUCCESS') {
+          dispatch(setShowAudio(false,track,1,data.currents_time,1));
+          setCurrentTime(data.currents_time);
+        }
+        return status;
+      } catch (error) {
 
-  //처음부터 듣기
-  const openModalWithNoData = itemTitle =>{
-    setCurrentTime(0);  //재생 시점 0으로 초기화
-    setPlayCount(itemTitle); //재생 횟수 증가
-    setOpen(true);
-  }
-  const fetchRequested = async titles => {
-    try {
-      const {data, status} = await requestGet({
-        url: consts.apiUrl + '/audio/getCurrentsTime',
-        query: {
-          memberId: user.member_id,
-          title: titles,
-        },
-      });
-      if (status === 'SUCCESS') {
-        setCurrentTime(data.currents_time);
-        // setplaytime();
-        setPlayCount(titles);
       }
-      return status;
-    } catch (error) {
     }
+    setPlayCount(titles);
   };
 
   const setPlayCount = async titles => {
@@ -250,7 +241,14 @@ export default function BookDrawerDetail({ route, navigation }) {
                       setSelectedArr([...selectedArr, item1.contentsIdx]);
                     }
                   } else if(item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2) {
-                    openModalWithNoData(item1?.bookNm); 
+                    //openModalWithNoData(item1?.bookNm); 
+                    showmain(item1?.bookNm,{
+                            url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
+                          artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
+                          title: item1?.bookNm,
+                          duration: item1?.durationTime,
+                          wirter: item1?.writer
+                        },0);  //처음부터 듣기
                   } else if(item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2) {
                     setShowindex(item1?.num);
                   } else {
@@ -268,27 +266,16 @@ export default function BookDrawerDetail({ route, navigation }) {
                 }}>
                 {item1?.type === 'audio' && item1?.currentsTime < item1?.durationTime - 2 && showindex === item1?.num ? (
                   <View style={styles.showContent}>
-                    {open && (
-                      <AudioPlayer
-                        track={{  //오디오 정보
-                        url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
-                        artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
-                        title: item1?.bookNm,
-                        duration: item1?.durationTime,
-                        wirter: item1?.writer,
-                        }}
-                        currentTime={currentTime} //현재 시간
-                        userId ={user.member_id}  //사용자 ID
-                        onClose={() => {
-                          setOpen(false);
-                        }}
-                      />
-                    )}
                     <TouchableOpacity
                       style={styles.playbtn}
                       onPress={() => {
-                        openModalWhitData(item1?.bookNm);  //이어서 듣기
-                        //fetchRequested();
+                        showmain(item1?.bookNm,{
+                          url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
+                        artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
+                        title: item1?.bookNm,
+                        duration: item1?.durationTime,
+                        wirter: item1?.writer
+                      },1); //이어서 듣기
                       }}>
                         <TextWrap
                           font={fonts.kopubWorldDotumProMedium}
@@ -299,11 +286,16 @@ export default function BookDrawerDetail({ route, navigation }) {
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                      style={styles.playbtn}
-                      onPress={() => {
-                        openModalWithNoData(item1?.bookNm);  //처음부터 듣기
-                        //setCurrentTime(0);
-                      }}>
+                        style={styles.playbtn}
+                        onPress={() => {
+                          showmain(item1?.bookNm,{
+                            url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
+                          artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
+                          title: item1?.bookNm,
+                          duration: item1?.durationTime,
+                          wirter: item1?.writer
+                        },0);  //처음부터 듣기
+                        }}>
                         <TextWrap
                           font={fonts.kopubWorldDotumProMedium}
                           style={styles.playtext}
@@ -374,22 +366,6 @@ export default function BookDrawerDetail({ route, navigation }) {
                   )}
                   {item1?.type === 'audio' && item1?.currentsTime >= item1?.durationTime - 2 ? (
                   <View>
-                    {open && (
-                      <AudioPlayer
-                        track={{  //오디오 정보
-                        url: consts.toapingUrl+'/aud_file/'+item1?.fileNm, //'https://toaping.com/aud_file/adg40009.mp3',
-                        artwork: consts.toapingUrl+'/aud_file/'+item1?.imgNm,//'https://toaping.com/aud_file/adb1.jpg',
-                        title: item1?.bookNm,
-                        duration: item1?.durationTime,
-                        wirter: item1?.writer,
-                        }}
-                        currentTime={currentTime} //현재 시간
-                        userId ={user.member_id}  //사용자 ID
-                        onClose={() => {
-                          setOpen(false);
-                        }}
-                      />
-                    )}
                   <TextWrap
                     style={styles.info}
                     ellipsizeMode="tail"
@@ -832,7 +808,8 @@ const styles = StyleSheet.create({
     width: screenWidth / 3.5,
     bottom:heightPercentage(70),
     zIndex:9999,
-    alignItems:'center'
+    alignItems:'center',
+    borderRadius: 5,
   },
   bookShadow: {
     ...Platform.select({

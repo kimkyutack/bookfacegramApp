@@ -163,28 +163,28 @@ export const onRegisterPlayback = async() => {
           {/* 오디오 컨트롤 패널 */}
           <View style={styles.container}>
             {/* White Space */}
-            <TouchableOpacity style={{flex:6, flexDirection:'row', marginBottom:heightPercentage(20), marginLeft:'5%'}} onPress={() => showmain()}>
+            <TouchableOpacity style={{flex:6,alignItems:'center',flexDirection:'row'}} onPress={() => showmain()}>
               <Image source={{uri : track.artwork}} style={styles.playAudio_image}/>
-              <View style={{alignItems:'flex-start', justifyContent:'center', flex:1, flexDirection:'column'}}>
-                <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold'}}>{track.title}</TextWrap>
-                <TextWrap style={{ fontSize : fontPercentage(10)}}>{track.wirter}</TextWrap>
+              <View style={{alignItems:'flex-start', justifyContent:'center',  flexDirection:'column'}}>
+                <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold', flex:1.5}}>{track.title}</TextWrap>
+                <TextWrap style={{ fontSize : fontPercentage(10),  flex:1}}>{track.wirter}</TextWrap>
               </View>
             </TouchableOpacity>
             <View style={{flex:2}} />
             {/* PLAY 버튼 */}
             {!isPlaying ?
-            <TouchableOpacity onPress={onTogglePlayback}>
+            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center'}}>
               <View style={styles.playButton}>
                 <Image source={images.playBtn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity> :
-            <TouchableOpacity onPress={onTogglePlayback}>
+            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center'}}>
               <View style={styles.playButton}>
                 <Image source={images.pauseBtn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity>
             }
-            <View style={{flex:1}} />
+            <View style={{flex:0.6}} />
           </View>
         </View>
       </View>
@@ -196,11 +196,13 @@ export const onRegisterPlayback = async() => {
   const styles = StyleSheet.create({
     root:{
       position:'absolute',
-      height:screenHeight / 10.5,
+      height:screenHeight / 10.6,
       zIndex:9999,
       backgroundColor:'#f1f1f1',
       width:screenWidth,
-      bottom:0
+      bottom:0,
+      alignItems:'center',
+      justifyContent:'center'
     },
     audioContainer: {
       top:0,
@@ -212,47 +214,24 @@ export const onRegisterPlayback = async() => {
       width:screenWidth,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 0,
-      height: screenHeight / 10,
-    },
-    BackRate: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    BackRate_Number: {
-        color: '#f9f9f9',
-        fontSize: fontPercentage(16),
-        fontWeight: 'bold',
-    },
-    BackRate_String: {
-        color: '#f9f9f9',
-        fontSize: fontPercentage(12),
-    },
-    skipButton: {
-        height: 42,
-        width: 42,
+      height: '80%',
+      justifyContent:'center',
+      paddingBottom:'6%'
     },
     playAudio_image: {
-      height: heightPercentage(85),
-      width: widthPercentage(60),
-      alignItems: 'flex-start',
-      justifyContent: 'center',
+      height: screenHeight / 11.5,
+      width: '30%',
       resizeMode:'stretch',
     },
     playButton_image: {
-      height: heightPercentage(26),
-      width: widthPercentage(20),
-      alignItems: 'flex-end',
-      justifyContent: 'center',
+      height: '60%',
+      width: '40%',
+      resizeMode:'stretch',
     },
     playButton: {
       height: '100%',
       width: '100%',
-      alignItems: 'flex-end',
+      alignItems: 'center',
       justifyContent: 'center',
-      marginBottom:heightPercentage(40),
-      marginRight:20
     },
   })

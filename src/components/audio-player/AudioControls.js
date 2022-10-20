@@ -7,7 +7,7 @@ import {
   } from 'react-native';
 import images from '../../libs/images';
 import {
-  fontPercentage, heightPercentage, widthPercentage,
+  fontPercentage, heightPercentage, screenHeight, widthPercentage,
 } from '../../services/util';
 import TextWrap from '../text-wrap/TextWrap';
 import SeekBar from './SeekBar';
@@ -111,6 +111,7 @@ export const onRegisterPlayback = async() => {
           {/* 오디오 컨트롤 패널 */}
           <View style={styles.container}>
             {/* 배속 기능 */}
+            <View style={{flex:1, right:'10%', alignItems:'center', justifyContent:'center'}}>
             <TouchableOpacity activeOpacity={0.0} onPress={onHandleRate} style={styles.BackRate}>
               <TextWrap style={styles.BackRate_Number}>
                   {parseFloat(curRate).toFixed(1)}  
@@ -119,42 +120,35 @@ export const onRegisterPlayback = async() => {
                   배속
               </TextWrap>
             </TouchableOpacity>
-
-            {/* White Space */}
-            <View style={{flex:0.3}} />
-
+            </View>
+            <View style={{flex:1, alignItems:'center', justifyContent:'center', marginRight:'1%'}}>
             {/* 15초 이전 */}
-            <TouchableOpacity onPress={() => TrackPlayer.seekTo(pos - 15)} >
+            <TouchableOpacity style={styles.touchcontainer} onPress={() => TrackPlayer.seekTo(pos - 15)} >
               <Image source={images.audio_minus15} style={styles.skipButton}/>
             </TouchableOpacity>
-
-            {/* White Space */} 
-            <View style={{flex:0.3}} />
-
+            </View>
+            <View style={{flex:2, alignItems:'center', justifyContent:'center'}}>
             {/* PLAY 버튼 */}
             {!isPlaying ?
-            <TouchableOpacity onPress={onTogglePlayback}>
+            <TouchableOpacity style={styles.touchcontainer} onPress={onTogglePlayback}>
               <View style={styles.playButton}>
                 <Image source={images.play_btn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity> :
-            <TouchableOpacity onPress={onTogglePlayback}>
+            <TouchableOpacity style={styles.touchcontainer} onPress={onTogglePlayback}>
               <View style={styles.playButton}>
                 <Image source={images.pause_btn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity>
             }
-
-            {/* White Space */}
-            <View style={{flex:0.3}} />
-
+            </View>
+            <View style={{flex:1, alignItems:'center', justifyContent:'center', marginLeft:'1%'}}>
             {/* 15초 빨리감기 */}
-            <TouchableOpacity onPress={() => TrackPlayer.seekTo(pos +  15)}>
+            <TouchableOpacity style={styles.touchcontainer} onPress={() => TrackPlayer.seekTo(pos +  15)}>
               <Image style={styles.skipButton} source={images.audio_plus15}/>
             </TouchableOpacity>
-
-            {/* White Space */}
-            <View style={{flex:1}} />
+            </View>
+            <View style={{flex:2}} />
           </View>
         </View>
       </View>
@@ -171,13 +165,19 @@ export const onRegisterPlayback = async() => {
       paddingTop: 0,
       marginTop: 0,
     },
+    touchcontainer: {
+      width:'100%',
+      height:'100%',
+      alignItems:'center',
+      justifyContent:'center'
+    },
     container: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: heightPercentage(10),
+      marginTop: '2%',
       paddingTop: 0,
-      height: 85,
+      height: screenHeight / 6,
       marginLeft: '12%',
     },
     BackRate: {
@@ -195,16 +195,18 @@ export const onRegisterPlayback = async() => {
         fontSize: fontPercentage(12),
     },
     skipButton: {
-        height: heightPercentage(36),
-        width: widthPercentage(30),
+        height: '30%',
+        width: '60%',
+        resizeMode:'contain'
     },
     playButton_image: {
-      height: heightPercentage(62),
-        width: widthPercentage(48),
+      height: '57%',
+      width: '62%',
+      resizeMode:'contain'
     },
     playButton: {
-      height: heightPercentage(60),
-      width: widthPercentage(60),
+      height: '100%',
+      width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
     },

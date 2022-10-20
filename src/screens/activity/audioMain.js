@@ -187,29 +187,30 @@ export default function AudioMain({
           numColumns={2}
           ListHeaderComponent={
             <View>
-            <Swiper 
-              key={playtime.length}
-              style={styles.wrapper}
-              showsButtons={false}
-              width={screenWidth}
-              height={heightPercentage(300)}
-              showsPagination={true}
-              removeClippedSubviews={false}
-              loop={true}
-              autoplay={true}
-              autoplayTimeout={3}
-              pagingEnabled={true}
-              dotStyle={{ top: 15 }}
-              dotColor={colors.border}
-              activeDotStyle={{ top: 15 }}
-              activeDotColor={colors.blue}
-              nextButton={<Text />}
-              prevButton={<Text />}>
-              {banner?.map((data, index) => {
-                  return bannerRenderItem(data, index, 1);
-              })}
-            </Swiper>
-           
+            {banner.length !== 0 && (
+              <Swiper 
+                key={playtime.length}
+                style={styles.wrapper}
+                showsButtons={false}
+                width={screenWidth}
+                height={heightPercentage(300)}
+                showsPagination={true}
+                removeClippedSubviews={false}
+                loop={true}
+                autoplay={true}
+                autoplayTimeout={3}
+                pagingEnabled={true}
+                dotStyle={{ top: 15 }}
+                dotColor={colors.border}
+                activeDotStyle={{ top: 15 }}
+                activeDotColor={colors.blue}
+                nextButton={<Text />}
+                prevButton={<Text />}>
+                {banner?.map((data, index) => {
+                    return bannerRenderItem(data, index, 1);
+                })}
+              </Swiper>
+            )}
             <View>
               {banner2?.map((data, index) => {
                   return bannerRenderItem(data, index, 2);
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    bottom: heightPercentage(5),
+    bottom: '2.5%',
     left: screenWidth / 2.2,
     display: 'flex',
   },

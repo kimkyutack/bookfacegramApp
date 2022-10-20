@@ -11,6 +11,8 @@ import images from '../../libs/images';
 import {
   fontPercentage,
   heightPercentage,
+  screenHeight,
+  screenWidth,
   widthPercentage,
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -29,6 +31,7 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     track,
     userId,
     onClose,
+    where
   }) => {
     // Modal 표시
     const dispatch = useDispatch();
@@ -39,7 +42,7 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
       TrackPlayer.pause();
       onClose();
     };
-    
+    //console.log(track.wirter)
     const handlehide = async () => {
       try {
         const {data, status} = await requestGet({
@@ -51,7 +54,9 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
         });
         if (status === 'SUCCESS') {
           dispatch(setShowAudio(false,track,1,data.currents_time,0));
-          onClose();
+          if(where === 'audio'){
+            onClose();
+          }
         }
         return status;
       } catch (error) {
@@ -118,10 +123,14 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
             </TouchableOpacity>
             
             {/* 책 제목 */}
-            <TextWrap style={header.bookInfo_bookTitle}>
-              {track.title}
-            </TextWrap>
-
+            <View style={{flexDirection:'column', flex:6,justifyContent:'center'}}>
+              <TextWrap style={header.bookInfo_bookTitle}>
+                {track.title}
+              </TextWrap>
+              <TextWrap style={header.bookInfo_bookWriter}>
+                {track.wirter}
+              </TextWrap>
+            </View>
             {/* 닫기 버튼 */}
             <TouchableOpacity onPress={handleClose} style={{flex:1}}>
               <Image source={images.audio_close} style={header.bookInfo_image_close}/>
@@ -151,36 +160,48 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
       position: 'relative',
       flexDirection: 'row',
       alignItems: 'center',
-      flex:0.8
+      flex:1
     },
     bookInfo_bookTitle: {
       alignSelf:'center',
-      marginTop: 7,
-      flex:4,
+      marginTop: '9%',
+      width:'100%',
       textAlign: 'center',
       color: '#f9f9f9',
       fontSize: fontPercentage(17),
+      justifyContent:'center',
+      height:'35%'
+    },
+    bookInfo_bookWriter: {
+      alignSelf:'center',
+      padding:0,
+      width:'100%',
+      textAlign: 'center',
+      color: '#1175F7',
+      fontSize: fontPercentage(15),
+      justifyContent:'center',
+      height:'35%'
     },
     bookInfo_image: {
       flex:1,
-      marginLeft: '4%',
+      marginLeft: 0,
     },
     bookInfo_image_arrow: {
-      marginTop: 5,
       alignSelf:'center',
       width: '30%',
       height: '20%',
+      resizeMode:'contain'
     } ,
     bookInfo_image_close: {
-      marginTop: 8,
       alignSelf:'center',
-      width: '35%',
-      height: '25%',
+      width: '30%',
+      height: '20%',
+      resizeMode:'contain'
     },
   })
   const styles = StyleSheet.create({
     root: {
-      width: '100%',
+      width: screenWidth,
       height: '100%',
       borderRadius: 1,
       backgroundColor: '#010101',
@@ -189,21 +210,22 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
         position: 'relative',
         flex:5,
         alignItems: 'center',
+        justifyContent:'center'
     },
     mainContent_bgImage:{
-      marginTop: heightPercentage(80),
-      width: widthPercentage(250),
-      height: heightPercentage(328),
+      width: screenWidth / 1.5,
+      height: screenHeight / 2.45,
+      resizeMode:'contain'
     },
     mainContent_audImage: {
       zIndex: 999,
       position: 'absolute',
-      marginTop: '30%',
       width: '40%',
-      height: '26%',
+      height: '42%',
+      resizeMode:'contain'
     },
     audio_control: {
         paddingTop: heightPercentage(40),
-        flex:2
+        flex:1.9
       },
   })

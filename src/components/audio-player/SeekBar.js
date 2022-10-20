@@ -22,11 +22,9 @@ const SeekBar = ({
         onSlidingComplete={value => {TrackPlayer.seekTo(value);}} //사용자가 슬라이더를 만질 때 동기화
         value={progress.position} //슬라이더 현재값 오디오 진행 시점으로 동기화
         style={styles.slider}
-        minimumTrackTintColor='#30acd9' //진행된 슬라이더 색 진하게 표시
+        minimumTrackTintColor='#1175F7' //진행된 슬라이더 색 진하게 표시
         maximumTrackTintColor='#3f748a' //진행될 슬라이더 색 연하게 표시
         thumbTintColor='#f9f9f9'  //현재 위치 표시
-        thumbStyle={styles.thumb}
-        trackStyle={styles.track}
         step={0}  //1씩 증가
         />
       
@@ -35,7 +33,7 @@ const SeekBar = ({
           {/* 오디오 현재 값 */}
           {new Date(progress.position * 1000).toISOString().slice(14, 19)}
         </Text>
-        <View style={{flex: 6}} />
+        <View style={{flex: 4}} />
         <Text style={[styles.text2]}>
           {/* 오디오 MAX 값 */}
           {new Date(progress.duration * 1000).toISOString().slice(14, 19)}
@@ -49,12 +47,9 @@ export default SeekBar;
 
 const styles = StyleSheet.create({
   slider: {
-    marginTop: heightPercentage(30),
-    marginLeft: -widthPercentage(15),
+    marginTop: 0,
     marginBottom: 0,
-    width: '107%',
-    scaleY: heightPercentage(2.2),
-    scaleX: widthPercentage(1.6),
+    width: '100%',
   },
   container: {
     paddingTop: 0,
@@ -62,14 +57,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: screenWidth,
     height: '20%',
-  },
-  track: {
-    borderRadius: 10,
-  },
-  thumb: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
+    alignItems:'center',
   },
   text: {
     flex:1,

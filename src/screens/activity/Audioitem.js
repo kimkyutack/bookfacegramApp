@@ -118,6 +118,7 @@ export default function AudioItem({item, playtime, index}) {
             onClose={() => {
               setOpen(false);
             }}
+            where={'audio'}
           />
           )}
         <TouchableOpacity
