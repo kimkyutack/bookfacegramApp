@@ -20,7 +20,7 @@ import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { requestGet, requestPost } from '../../services/network';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import consts from '../../libs/consts';
-import { setShowAudio } from '../../redux/audiobook/AudioAction';
+import { setShowAudio, setShowPlay } from '../../redux/audiobook/AudioAction';
 
 export const onRegisterPlayback = async() => {
     
@@ -46,6 +46,7 @@ export const onRegisterPlayback = async() => {
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing;  
     const user = useSelector(s => s.user, shallowEqual);
+    const showaudio = useSelector(state => state.showaudio);
     const dispatch = useDispatch();
     //Play, Pause 토글 이벤트
     const onTogglePlayback = useOnTogglePlayback();
@@ -146,13 +147,21 @@ export const onRegisterPlayback = async() => {
 
           // currentTime 부터 재생
           TrackPlayer.seekTo(currentTime);
-          TrackPlayer.play(); 
+          if(showaudio.playnow === false){
+            TrackPlayer.stop(); 
+          }else{
+            TrackPlayer.play(); 
+          }
           setSlider(true);
         }catch(error){
           //console.log(error);
         }
       })();
     }, []);
+
+    useEffect(() => {
+      dispatch(setShowPlay(isPlaying));
+    },[isPlaying])
 
     return (
       <View style={styles.root}>
@@ -161,31 +170,31 @@ export const onRegisterPlayback = async() => {
           {/* 슬라이더 */}
           {slider && <BackSeekBar />}
           {/* 오디오 컨트롤 패널 */}
-          <View style={styles.container}>
+          <TouchableOpacity style={styles.container} onPress={() => showmain()}>
             {/* White Space */}
-            <TouchableOpacity style={{flex:6,alignItems:'center',flexDirection:'row'}} onPress={() => showmain()}>
+            <View style={{flex:6,alignItems:'center',flexDirection:'row'}}>
               <Image source={{uri : track.artwork}} style={styles.playAudio_image}/>
               <View style={{alignItems:'flex-start', justifyContent:'center',  flexDirection:'column'}}>
                 <TextWrap style={{ fontSize : fontPercentage(12), fontWeight:'bold', flex:1.5}}>{track.title}</TextWrap>
                 <TextWrap style={{ fontSize : fontPercentage(10),  flex:1}}>{track.wirter}</TextWrap>
               </View>
-            </TouchableOpacity>
+            </View>
             <View style={{flex:2}} />
             {/* PLAY 버튼 */}
             {!isPlaying ?
-            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center'}}>
+            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center',zIndex:500}}>
               <View style={styles.playButton}>
                 <Image source={images.playBtn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity> :
-            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center'}}>
+            <TouchableOpacity onPress={onTogglePlayback} style={{flex:1,height:'100%', alignItems:'center',zIndex:500}}>
               <View style={styles.playButton}>
                 <Image source={images.pauseBtn} style={styles.playButton_image}/>
               </View>
             </TouchableOpacity>
             }
             <View style={{flex:0.6}} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -216,7 +225,8 @@ export const onRegisterPlayback = async() => {
       alignItems: 'center',
       height: '80%',
       justifyContent:'center',
-      paddingBottom:'6%'
+      paddingBottom:'6%',
+      zIndex:300
     },
     playAudio_image: {
       height: screenHeight / 11.5,

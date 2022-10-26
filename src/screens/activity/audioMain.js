@@ -42,6 +42,7 @@ export default function AudioMain({
   const [type, setType] = useState('kbs');
   const [start, setStart] = useState(20);
   const [banner, setBanner] = useState([]);
+  const [bannerindex, setBannerindex] = useState(0);
   const [banner2, setBanner2] = useState([]);
   const [state, setState] = useState({req: audiolist, playtime:playtime, page: 1});
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
@@ -114,6 +115,7 @@ export default function AudioMain({
       setLoading(true);
       fetchRequested2();
       fetchRequested3();
+      setBannerindex(0);
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
     }
     return () => {
@@ -197,6 +199,10 @@ export default function AudioMain({
                 showsPagination={true}
                 removeClippedSubviews={false}
                 loop={true}
+                onIndexChanged={(index) => {
+                  setBannerindex(index);
+                }}
+                index={bannerindex}
                 autoplay={true}
                 autoplayTimeout={3}
                 pagingEnabled={true}

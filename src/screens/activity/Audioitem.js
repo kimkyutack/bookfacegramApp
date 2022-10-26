@@ -29,9 +29,9 @@ export default function AudioItem({item, playtime, index}) {
   const user = useSelector(s => s.user);
   const [currentTime, setCurrentTime] = useState(0);
   const [open, setOpen] = useState(false);
+  const [blind, setBlind] = useState(false);
   
   let cnt = 0;
-
   const setPlayCount = async () => {
     try {
       const formData = new FormData();
@@ -82,7 +82,17 @@ export default function AudioItem({item, playtime, index}) {
     } catch (error) {
     }
   };
-  
+
+  useEffect(() => {
+    let mount = true;
+    if (mount) {
+      setBlind(false);
+    }
+    return () => {
+      mount = false;
+    };
+  }, []);
+
   useEffect(() => {
     let mount = true;
     if (mount) {
@@ -112,6 +122,7 @@ export default function AudioItem({item, playtime, index}) {
             title: item.title,
             duration: item.durationTime,
             wirter: item.writer,
+            code: item.code,
             }}
             currentTime={currentTime} //현재 시간
             userId ={user.member_id}  //사용자 ID
@@ -124,6 +135,7 @@ export default function AudioItem({item, playtime, index}) {
         <TouchableOpacity
           style={styles.main}
           onPress={() => {
+            setBlind(true);
             dispatch(setShowWhat(index));
             if ( cnt != 1 ) {
               dispatch(setShowAudio(index,item.title,0,0,0));
@@ -135,7 +147,7 @@ export default function AudioItem({item, playtime, index}) {
               height: screenWidth / 2.8,
               width: screenWidth / 3.3,
               flexDirection: 'row'}}>
-            {showaudio.showwt === index && cnt == 1 ? (
+            {showaudio.showwt === index && cnt == 1 && blind ? (
               <View style={styles.showContent}>
                 <TouchableOpacity
                   style={styles.playbtn}

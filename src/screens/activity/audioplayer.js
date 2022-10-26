@@ -63,7 +63,40 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
 
       }
     };
+    //나만의 오디오북 draw_idx 찾기
+    const getAudiobookdrawer = async () => {
+      try {
+        const {data, status} = await requestGet({
+          url: consts.apiUrl + '/audio/getAudioBookDrawer',
+        });
+        
+        if (status === 'SUCCESS') {
+          AudioContentsdrawer(data.drawIdx);
+        }
+      } catch (error) {
 
+      }
+    };
+    //나만의 오디오북에 컨텐츠 추가
+    const AudioContentsdrawer = async draw_idx => {
+      try {
+        const formData = new FormData();
+        formData.append('code', track?.code); 
+        formData.append('drawIdx', draw_idx);
+
+        const {data, status} = await requestPost({
+          url: consts.apiUrl + '/audio/audioBookDrawer/contents',
+          body: formData,
+        });
+        if (status === 'SUCCESS') {
+          console.log('등록되었습니다.');
+        }else{
+          console.log(data.msg);
+        }
+      } catch (error) {
+
+      }
+    };
     //
     // const progress = useProgress(1000);
 
@@ -106,6 +139,18 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
             console.log(error);
         }
       };
+
+      useEffect(() => {
+        let mount = true;
+        if (mount) {
+          if(where === 'audio'){
+            getAudiobookdrawer();
+          }
+        }
+        return () => {
+          mount = false;
+        };
+      },[]);
 
       useEffect(() => {
         recordPlayTimeEverySecond();
@@ -194,8 +239,8 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     } ,
     bookInfo_image_close: {
       alignSelf:'center',
-      width: '30%',
-      height: '20%',
+      width: '25%',
+      height: '18%',
       resizeMode:'contain'
     },
   })

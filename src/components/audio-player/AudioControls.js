@@ -14,6 +14,9 @@ import SeekBar from './SeekBar';
 import TrackPlayer, { usePlaybackState,State } from 'react-native-track-player';
 import { useOnTogglePlayback } from './hooks/useOnTogglePlayback';
 import { useGettingPos } from './hooks/useProgressState';
+import { useSelector } from 'react-redux';
+import { setShowPlay } from '../../redux/audiobook/AudioAction';
+import { useDispatch } from 'react-redux';
 
 export const onRegisterPlayback = async() => {
     
@@ -33,10 +36,11 @@ export const onRegisterPlayback = async() => {
   }) => {
     //오디오 현재 진행 상태 (슬라이더 관련)
     const pos = useGettingPos();
-
+    const showaudio = useSelector(state => state.showaudio);
     //오디오 상태(멈춰있는지 재생중인지..)
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing;  
+    const dispatch = useDispatch();
 
     //Play, Pause 토글 이벤트
     const onTogglePlayback = useOnTogglePlayback();
@@ -94,13 +98,21 @@ export const onRegisterPlayback = async() => {
 
           // currentTime 부터 재생
           TrackPlayer.seekTo(currentTime);
-          TrackPlayer.play(); 
+          if(showaudio.playnow === false){
+            TrackPlayer.stop(); 
+          }else{
+            TrackPlayer.play(); 
+          }
           setSlider(true);
         }catch(error){
           //console.log(error);
         }
       })();
     }, []);
+
+    useEffect(() => {
+      dispatch(setShowPlay(isPlaying));
+    },[isPlaying]);
 
     return (
       <View style={styles.root}>

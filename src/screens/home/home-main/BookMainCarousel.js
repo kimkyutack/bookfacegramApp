@@ -44,6 +44,7 @@ export default function BookMainCarousel({
   th,
 }) {
   const dispatch = useDispatch();
+  const [bannerindex, setBannerindex] = useState(0);
   const hello = (bookCd) => {
     dispatch(
       setTab({
@@ -88,6 +89,16 @@ export default function BookMainCarousel({
 
 
   }
+  useEffect(() => {
+     let mount = true;
+    if (mount) {
+      setBannerindex(0);
+    }
+    return () => {
+      mount = false;
+    };
+  },[]);
+
   const bannerRenderItem = (item, index) => {
     if (item) {
       return (
@@ -406,6 +417,10 @@ export default function BookMainCarousel({
         autoplayTimeout={3}
         pagingEnabled={name === 'banner' ? true : false}
         dotStyle={{ top: 15 }}
+        onIndexChanged={(index) => {
+                  name === 'banner' && setBannerindex(index);
+                }}
+        index={name === 'banner' ? bannerindex : 0}
         dotColor={colors.border}
         activeDotStyle={{ top: 15 }}
         activeDotColor={colors.blue}
