@@ -31,56 +31,61 @@ import {
   widthPercentage,
 } from '../../services/util';
 
-export default function DialogGrade({route}) {
-  
+export default function DialogRegion({route}) {
   const dispatch = useDispatch();
-  const [rank, setRank] = useState('all');
-  const {gradeDialog} = useSelector(s => s.dialog, shallowEqual);
-  const gradeArr = [
-    {name: '전체', value: 'all'},
-    {name: '유아', value: 'preSchool'},
-    {name: '초등학교 1학년', value: '00004'},
-    {name: '초등학교 2학년', value: '00005'},
-    {name: '초등학교 3학년', value: '00006'},
-    {name: '초등학교 4학년', value: '00007'},
-    {name: '초등학교 5학년', value: '00008'},
-    {name: '초등학교 6학년', value: '00009'},
-    {name: '중학교 1학년', value: '00010'},
-    {name: '중학교 2학년', value: '00011'},
-    {name: '중학교 3학년', value: '00012'},
-    {name: '고등학교 1학년', value: '00013'},
-    {name: '고등학교 2학년', value: '00014'},
-    {name: '고등학교 3학년', value: '00015'},
+  const [region, setRegion] = useState('all');
+  const {regionDialog} = useSelector(s => s.dialog, shallowEqual);
+  const regionArr = [
+    {name: '전체지역', value: 'all'},
+    {name: '강원도', value: '강원도'},
+    {name: '경기도', value: '경기도'},
+    {name: '경상남도', value: '경상남도'},
+    {name: '경상북도', value: '경상북도'},
+    {name: '광주광역시', value: '광주광역시'},
+    {name: '대구광역시', value: '대구광역시'},
+    {name: '대전광역시', value: '대전광역시'},
+    {name: '부산광역시', value: '부산광역시'},
+    {name: '서울특별시', value: '서울특별시'},
+    {name: '세종특별자치시', value: '세종특별자치시'},
+    {name: '울산광역시', value: '울산광역시'},
+    {name: '전라남도', value: '전라남도'},
+    {name: '전라북도', value: '전라북도'},
+    {name: '제주특별자치도', value: '제주특별자치도'},
+    {name: '충청남도', value: '충청남도'},
+    {name: '충청북도', value: '충청북도'},
   ];
   const radio_props = [
-    {label: '전체', value: 'all'},
-    {label: '유아', value: 'preSchool'},
-    {label: '초등학교 1학년', value: '00004'},
-    {label: '초등학교 2학년', value: '00005'},
-    {label: '초등학교 3학년', value: '00006'},
-    {label: '초등학교 4학년', value: '00007'},
-    {label: '초등학교 5학년', value: '00008'},
-    {label: '초등학교 6학년', value: '00009'},
-    {label: '중학교 1학년', value: '00010'},
-    {label: '중학교 2학년', value: '00011'},
-    {label: '중학교 3학년', value: '00012'},
-    {label: '고등학교 1학년', value: '00013'},
-    {label: '고등학교 2학년', value: '00014'},
-    {label: '고등학교 3학년', value: '00015'},
+    {label: '전체지역', value: 'all'},
+    {label: '강원도', value: '강원도'},
+    {label: '경기도', value: '경기도'},
+    {label: '경상남도', value: '경상남도'},
+    {label: '경상북도', value: '경상북도'},
+    {label: '광주광역시', value: '광주광역시'},
+    {label: '대구광역시', value: '대구광역시'},
+    {label: '대전광역시', value: '대전광역시'},
+    {label: '부산광역시', value: '부산광역시'},
+    {label: '서울특별시', value: '서울특별시'},
+    {label: '세종특별자치시', value: '세종특별자치시'},
+    {label: '울산광역시', value: '울산광역시'},
+    {label: '전라남도', value: '전라남도'},
+    {label: '전라북도', value: '전라북도'},
+    {label: '제주특별자치도', value: '제주특별자치도'},
+    {label: '충청남도', value: '충청남도'},
+    {label: '충청북도', value: '충청북도'},
   ];
   const {Troutes} = {
     name: routes.topActivity,
     component: TopActivity,
-    initialParams: {type: 'quiz', rank: '00004'},
+    initialParams: {type: 'gather', rank: '00004'},
     options: {tabBarLabel: 'ACTIVITY'},
   };
   useEffect(() => {
-    if (gradeDialog.open) {
+    if (regionDialog.open) {
       Keyboard.dismiss();
     }
-  }, [gradeDialog.open]);
+  }, [regionDialog.open]);
 
-  if (!gradeDialog.open) {
+  if (!regionDialog.open) {
     return null;
   }
   return (
@@ -105,15 +110,15 @@ export default function DialogGrade({route}) {
               style={{
                 width: screenWidth,
               }}>
-              {gradeArr.map((item, index) => (
+              {regionArr.map((item, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.iconContainer}
                   onPress={() => {
                     dispatch(
                       setTab({
-                        tab: 'quiz',
-                        rank: item.value,
+                        tab: 'gather',
+                        region: item.value,
                       }),
                     );
                     dispatch(dialogClose());
@@ -125,52 +130,6 @@ export default function DialogGrade({route}) {
                   </TextWrap>
                 </TouchableOpacity>
               ))}
-              {/*<RadioForm animation={true}>
-
-                {radio_props.map((obj, i) => (
-                  <RadioButton labelHorizontal={true} key={i}>
-
-                    <RadioButtonLabel
-                      obj={obj}
-                      index={i}
-                      labelHorizontal={true}
-                      onPress={() => {
-                        dispatch(
-                          setTab({
-                            tab: 'quiz',
-                            rank: obj.value,
-                          }),
-                        );
-                        setRank(obj.value);
-                        dispatch(dialogClose());
-                      }}
-                      labelStyle={styles.message}
-                      labelWrapStyle={{}}
-                    />
-                    <RadioButtonInput
-                      obj={obj}
-                      index={i}
-                      isSelected={rank === obj.value}
-                      onPress={() => {
-                        dispatch(
-                          setTab({
-                            tab: 'quiz',
-                            rank: obj.value,
-                          }),
-                        );
-                        setRank(obj.value);
-                        dispatch(dialogClose());
-                      }}
-                      borderWidth={1}
-                      buttonOuterColor={'#fff'}
-                      buttonSize={25}
-                      buttonOuterSize={50}
-                      buttonStyle={{}}
-                      buttonWrapStyle={{left: 500}}
-                    />
-                  </RadioButton>
-                ))}
-                    </RadioForm>*/}
             </ScrollView>
           </View>
         </TouchableWithoutFeedback>

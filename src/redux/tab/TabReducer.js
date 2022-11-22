@@ -7,6 +7,7 @@ const initTab = {
   listTab: {},
   detailTab: {viewType: ''},
   rank: '',
+  region: '',
 };
 
 export default function loading(state = initTab, action) {
@@ -63,6 +64,33 @@ export default function loading(state = initTab, action) {
           selectedBook: action.selectedBook,
         },
       };
+    case tabActionType.gather:
+      return {
+        ...state,
+        tab: action.tab,
+        region: action.region,
+        detailTab: {
+          selectedBook: action.selectedBook,
+        },
+      };
+    case tabActionType.gatherlist:
+      return {
+        ...state,
+        tab: action.tab,
+        listTab: {
+          region: action.region,
+          rank: action.rank,
+        },
+      };
+    case tabActionType.gatherdetail:
+      return {
+        ...state,
+        tab: action.tab,
+        detailTab: {
+          num: action.num,
+        },
+      };
+      
     default:
       return state;
   }

@@ -13,6 +13,12 @@ const initDialog = {
     onPress: null,
     title: '확인',
   },
+  regionDialog: {
+    open: false,
+    message: '',
+    onPress: null,
+    title: '확인',
+  },
   gradeDialogProfile: {
     open: false,
     onPress: null,
@@ -54,6 +60,15 @@ const initDialog = {
     cancelTitle: '',
   },
   drawerDialog: {
+    open: false,
+    title: '',
+    drawerList: [],
+    selectedArr: [],
+    currentDrawerIndex: null,
+    onPress: null,
+    from: '',
+  },
+  gatherDialog: {
     open: false,
     title: '',
     drawerList: [],
@@ -108,6 +123,15 @@ export default function dialog(state = initDialog, action) {
           onPress: action.onPress,
           label: action.label,
           grade: action.grade,
+        },
+      };
+    case dialogActionType.openRegion:
+      return {
+        ...state,
+        regionDialog: {
+          open: true,
+          onPress: action.onPress,
+          region: action.region,
         },
       };
     case dialogActionType.openGradeProfile:
@@ -174,6 +198,21 @@ export default function dialog(state = initDialog, action) {
       return {
         ...state,
         drawerDialog: {
+          open: true,
+          title: action.title,
+          onPress: action.onPress,
+          drawerList: action.drawerList,
+          selectedArr: action.selectedArr,
+          currentDrawerIndex: action.currentDrawerIndex,
+          from: action.from,
+          viewType: action.viewType,
+          bookIdx: action.bookIdx,
+        },
+      };
+    case dialogActionType.openShinchung:
+      return {
+        ...state,
+        gatherDialog: {
           open: true,
           title: action.title,
           onPress: action.onPress,

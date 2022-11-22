@@ -37,7 +37,7 @@ import { requestGet, requestDelete, requestPost } from '../../services/network';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
 import { navigate } from '../../services/navigation';
-import { setShowAudio } from '../../redux/audiobook/AudioAction';
+import { setShowAudio, setShowPlay } from '../../redux/audiobook/AudioAction';
 
 export default function BookDrawerDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -61,6 +61,7 @@ export default function BookDrawerDetail({ route, navigation }) {
   let hour = 0, minute = 0, second = -1;
 
   const showmain = async (titles,track,time) => {
+    dispatch(setShowPlay(true));
     if(time == 0){
       dispatch(setShowAudio(false,track,1,0,1));
       setCurrentTime(0);

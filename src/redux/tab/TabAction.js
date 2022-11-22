@@ -5,6 +5,9 @@ export const tabActionType = {
   detail: 'tab/detail',
   quiz: 'tab/quiz',
   audio: 'tab/audio',
+  gather: 'tab/gather',
+  gatherlist: 'tab/gatherlist',
+  gatherdetail: 'tab/gatherdetail',
 };
 
 export const setTab =
@@ -13,10 +16,13 @@ export const setTab =
     tabType,
     grade,
     selectedBook,
+    selectedGather,
     gradeStyle,
     viewType,
     selectType,
     rank,
+    region,
+    num,
   }) =>
   dispatch => {
     if (tab === 'main') {
@@ -40,6 +46,26 @@ export const setTab =
         type: tabActionType.audio,
         tab,
         selectedBook,
+      });
+    } else if (tab === 'gather') {
+      dispatch({
+        type: tabActionType.gather,
+        tab,
+        selectedBook,
+        region,
+      });
+    } else if (tab === 'gatherlist') {
+      dispatch({
+        type: tabActionType.gatherlist,
+        tab,
+        region,
+        rank,
+      });
+    } else if (tab === 'gatherdetail') {
+      dispatch({
+        type: tabActionType.gatherdetail,
+        tab,
+        num,
       });
     } else {
       dispatch({

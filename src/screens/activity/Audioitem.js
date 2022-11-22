@@ -18,7 +18,7 @@ import {
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import AudioCarouselImage from './AudioCarouselImage';
-import { setShowAudio, setShowWhat } from '../../redux/audiobook/AudioAction';
+import { setShowAudio, setShowPlay, setShowWhat } from '../../redux/audiobook/AudioAction';
 import AudioPlayer from './audioplayer';
 
 export default function AudioItem({item, playtime, index}) {
@@ -138,6 +138,7 @@ export default function AudioItem({item, playtime, index}) {
             setBlind(true);
             dispatch(setShowWhat(index));
             if ( cnt != 1 ) {
+              dispatch(setShowPlay(true));
               dispatch(setShowAudio(index,item.title,0,0,0));
               openModalWithNoData();  //독서전, 독서 완료일 경우 처음부터 듣기로
             }
@@ -152,6 +153,7 @@ export default function AudioItem({item, playtime, index}) {
                 <TouchableOpacity
                   style={styles.playbtn}
                   onPress={() => {
+                    dispatch(setShowPlay(true));
                     dispatch(setShowAudio(index,item.title,0,0,0));
                     openModalWhitData();  //이어서 듣기
                   }}>

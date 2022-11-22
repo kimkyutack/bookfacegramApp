@@ -26,6 +26,9 @@ import {
   fontPercentage,
   cameraItem,
 } from '../../services/util';
+import Gatherlist from '../activity/Gatherlist';
+import GatherAll from '../activity/GatherAll';
+import GatheringDetail from '../activity/GatherDetail';
 
 export default function TopActivity({route}) {
   //alert(JSON.stringify(route));
@@ -45,6 +48,12 @@ export default function TopActivity({route}) {
         <Examwrong route={route} />
       ) : route.params.type === 'audio' ? (
         <AudioBook route={route}  start={0}/>
+      ) : route.params.type === 'gather' ? (
+        <Gatherlist route={route}/>
+      ) : route.params.type === 'gatherlist' ? (
+        <GatherAll route={route}/>
+      ) : route.params.type === 'detail' ? (
+        <GatheringDetail route={route}/>
       ) : (
         <ActivityMain route={route} />
       )}

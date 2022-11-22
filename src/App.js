@@ -8,6 +8,7 @@ import { keyboardActionType } from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogGrade from './redux-components/dialog-grade/DialogGrade';
 import DialogGradeProfile from './redux-components/dialog-grade-profile/DialogGradeProfile';
+import DialogRegion from './redux-components/dialog-region/DialogRegion';
 import DialogAction from './redux-components/dialog-action/DialogAction';
 import DialogActionProfile from './redux-components/dialog-action/DialogActionProfile';
 import DialogMore from './redux-components/dialog-select/DialogMore';
@@ -23,6 +24,7 @@ import { requestUserPermission, NotificationLister } from './components/FCMConta
 import { dialogError } from './redux/dialog/DialogActions';
 import BackgroundControls from './components/audio-player/BackgroundPlayer';
 import { setShowMain } from './redux/audiobook/AudioAction';
+import DialogGather from './redux-components/dialog-gather/DialogGather';
 
 
 function App({ }) {
@@ -68,12 +70,14 @@ function App({ }) {
       <Router />
       <DialogMessage />
       <DialogGrade />
+      <DialogRegion />
       <DialogGradeProfile />
       <DialogAction />
       <DialogSelect />
       <DialogMore />
       <DialogKakaoLogin />
       <DialogDrawer />
+      <DialogGather />
       <DialogDrawerKeyBoard />
       <DialogDrawerKeyBoardPW />
       <DialogDrawerKeyBoardWD />

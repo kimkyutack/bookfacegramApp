@@ -7,6 +7,8 @@ export const dialogActionType = {
   openDrawer: 'dialog/openDrawer',
   openMore: 'dialog/openMore',
   openGrade: 'dialog/openGrade',
+  openRegion: 'dialog/openRegion',
+  openShinchung: 'dialog/openShinchung',
   openGradeProfile: 'dialog/openGradeProfile',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
@@ -62,6 +64,18 @@ export const dialogOpenGrade =
         bookIdx,
         viewType,
         grade,
+      });
+    };
+export const dialogOpenRegion =
+  ({
+    onPress,
+    region,
+  }) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openRegion,
+        onPress,
+        region,
       });
     };
 export const dialogOpenGradeProfile =
@@ -139,6 +153,30 @@ export const dialogOpenDrawerSelect =
     dispatch => {
       dispatch({
         type: dialogActionType.openDrawer,
+        title,
+        drawerList,
+        selectedArr,
+        currentDrawerIndex,
+        onPress,
+        from,
+        bookIdx,
+        viewType,
+      });
+    };
+export const dialogOpenShinchung =
+  ({
+    drawerList,
+    selectedArr,
+    title = '',
+    onPress,
+    currentDrawerIndex,
+    from,
+    bookIdx,
+    viewType,
+  }) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openShinchung,
         title,
         drawerList,
         selectedArr,

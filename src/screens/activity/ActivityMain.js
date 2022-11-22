@@ -209,10 +209,54 @@ export default function ActivityMain({route}) {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={styles.nonebox}>
-          </View>
+          <View style={styles.box2}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(
+                    setTab({
+                      tab: 'gather',
+                    }),
+                  );
+                  navigate(routes.activity, {
+                    type: 'gather',
+                  });
+                }}>
+                <View style={styles.box3}>
+                  <View style={styles.font4}>
+                    <Image style={styles.img2} source={images.gatherIcon} />
+                    <TextWrap style={styles.text_font}>독서모임</TextWrap>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
         </View>
-        ) : null}
+        ) : (
+          <View style={styles.root2}>
+            <View style={styles.box2}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(
+                    setTab({
+                      tab: 'gather',
+                    }),
+                  );
+                  navigate(routes.activity, {
+                    type: 'gather',
+                  });
+                }}>
+                <View style={styles.box3}>
+                  <View style={styles.font4}>
+                    <Image style={styles.img2} source={images.gatherIcon} />
+                    <TextWrap style={styles.text_font}>독서모임</TextWrap>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.nonebox}>
+            </View>
+          </View>
+        )}
+          
       </View>
     </View>
     </ScrollView>

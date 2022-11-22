@@ -209,23 +209,21 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     },
     bookInfo_bookTitle: {
       alignSelf:'center',
-      marginTop: '9%',
+      marginTop: '7%',
       width:'100%',
       textAlign: 'center',
       color: '#f9f9f9',
       fontSize: fontPercentage(17),
-      justifyContent:'center',
-      height:'35%'
+      justifyContent:'center'
     },
     bookInfo_bookWriter: {
       alignSelf:'center',
+      marginTop: '1%',
       padding:0,
       width:'100%',
       textAlign: 'center',
       color: '#1175F7',
       fontSize: fontPercentage(15),
-      justifyContent:'center',
-      height:'35%'
     },
     bookInfo_image: {
       flex:1,
@@ -235,13 +233,13 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
       alignSelf:'center',
       width: '30%',
       height: '20%',
-      resizeMode:'contain'
+      resizeMode:'stretch'
     } ,
     bookInfo_image_close: {
       alignSelf:'center',
       width: '25%',
-      height: '18%',
-      resizeMode:'contain'
+      height: '20%',
+      resizeMode:'stretch'
     },
   })
   const styles = StyleSheet.create({
