@@ -7,6 +7,7 @@ import { Keyboard, StatusBar, Dimensions, LogBox, Alert } from 'react-native';
 import { keyboardActionType } from './redux/keyboard/KeyboardActions';
 import DialogMessage from './redux-components/dialog-message/DialogMessage';
 import DialogGrade from './redux-components/dialog-grade/DialogGrade';
+import DialogCate from './redux-components/dialog-cate/DialogCate';
 import DialogGradeProfile from './redux-components/dialog-grade-profile/DialogGradeProfile';
 import DialogRegion from './redux-components/dialog-region/DialogRegion';
 import DialogAction from './redux-components/dialog-action/DialogAction';
@@ -25,6 +26,8 @@ import { dialogError } from './redux/dialog/DialogActions';
 import BackgroundControls from './components/audio-player/BackgroundPlayer';
 import { setShowMain } from './redux/audiobook/AudioAction';
 import DialogGather from './redux-components/dialog-gather/DialogGather';
+import DialogPayment from './redux-components/dialog-payment/DialogPayment';
+import DialogDate from './redux-components/dialog-date/DialogDate';
 
 
 function App({ }) {
@@ -69,14 +72,17 @@ function App({ }) {
       <StatusBar barStyle='light-content' />
       <Router />
       <DialogMessage />
+      <DialogPayment />
       <DialogGrade />
       <DialogRegion />
       <DialogGradeProfile />
       <DialogAction />
       <DialogSelect />
       <DialogMore />
+      <DialogCate />
       <DialogKakaoLogin />
       <DialogDrawer />
+      <DialogDate />
       <DialogGather />
       <DialogDrawerKeyBoard />
       <DialogDrawerKeyBoardPW />

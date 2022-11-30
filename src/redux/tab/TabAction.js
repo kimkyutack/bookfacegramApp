@@ -6,6 +6,7 @@ export const tabActionType = {
   quiz: 'tab/quiz',
   audio: 'tab/audio',
   gather: 'tab/gather',
+  info: 'tab/info',
   gatherlist: 'tab/gatherlist',
   gatherdetail: 'tab/gatherdetail',
 };
@@ -23,6 +24,7 @@ export const setTab =
     rank,
     region,
     num,
+    cate
   }) =>
   dispatch => {
     if (tab === 'main') {
@@ -53,13 +55,14 @@ export const setTab =
         tab,
         selectedBook,
         region,
+        cate
       });
     } else if (tab === 'gatherlist') {
       dispatch({
         type: tabActionType.gatherlist,
         tab,
         region,
-        rank,
+        cate,
       });
     } else if (tab === 'gatherdetail') {
       dispatch({

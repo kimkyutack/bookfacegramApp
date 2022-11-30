@@ -19,6 +19,8 @@ import { dialogError } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
 import GatherMain from './GatherMain';
+import { setTab } from '../../redux/tab/TabAction';
+import { setShowInfozero } from '../../redux/activity/ActivityAction';
 
 export default function Gatherlist({ route }) {
   const dispatch = useDispatch();
@@ -26,7 +28,8 @@ export default function Gatherlist({ route }) {
   const [loading, setLoading] = useState(true);
   const [endGather, setEndGather] = useState([]);
   const [ingGather, setIngGather] = useState([]);
-  const [Rank, setRank] = useState(detailTab.rank);
+  const [Rank, setRank] = useState(detailTab.detailTab.cate);
+  const [Region, setRegion] = useState(detailTab.region);
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
   const user = useSelector(s => s.user, shallowEqual);
@@ -70,10 +73,71 @@ export default function Gatherlist({ route }) {
 
     setSessionTime(date_state);
   };
+  //마감임박 독서모임 api
+  const fetchRequested = async () => {
+    try {
+      setLoading(true);
+      const { data, status } = await requestGet({
+        url: consts.apiUrl + '/village/member/urgency-list',
+        query: {
+          region: Region == undefined ? 'all' : Region,
+          category: Rank == undefined ? 'all' : Rank,
+          startPaging: 0,
+          endPaging: 3,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setEndGather([...data]);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+  //모집중인 독서모임 api
+  const fetchRequested2 = async () => {
+    try {
+      setLoading(true);
+      const { data, status } = await requestGet({
+        url: consts.apiUrl + '/village/member/list',
+        query: {
+          region: Region == undefined ? 'all' : Region,
+          category: Rank == undefined ? 'all' : Rank,
+          startPaging: 0,
+          endPaging: 12,
+        },
+      });
+      if (status === 'SUCCESS') {
+        setIngGather([...data]);
+      }
+      return status;
+    } catch (error) {
+      dispatch(dialogError(error));
+    }
+  };
+
+  useEffect(() => {
+      fetchRequested().then(response => {
+        fetchRequested2().then(res => {
+          if (res === 'SUCCESS') {
+            setLoading(false);
+          } else {
+            dispatch(dialogError(res || 'fail'));
+          }
+        });
+      });
+
+    return () => {
+      setLoading(true);
+      setEndGather([]);
+      setIngGather([]);
+    };
+  }, [Rank,Region]);
 
   //page 로그 찍는 로직
   useEffect(() => {
     if (isFocused) {
+      dispatch(setShowInfozero());
       var timer = setInterval(() => { timeCount() }, 1000);
     }
 
@@ -90,66 +154,36 @@ export default function Gatherlist({ route }) {
   }, [isFocused]);
 
   useEffect(() => {
-    setRank(detailTab.rank);
-  }, [detailTab.rank]);
-  //마감임박 독서모임 api
-  const fetchRequested = async () => {
-    try {
-      setLoading(true);
-      const { data, status } = await requestGet({
-        url: consts.apiUrl + '/book/quiz/activity',
-        query: {
-          rank: Rank,
-          startPaging: 0,
-          endPaging: 3,
-        },
-      });
-      if (status === 'SUCCESS') {
-        setEndGather([...data.kbsBookQuizs]);
-      }
-      return status;
-    } catch (error) {
-      dispatch(dialogError(error));
+    if(detailTab.detailTab.cate != undefined){
+      setRank(detailTab.detailTab.cate);
+    }else{
+      setRank('all');
     }
-  };
-  //모집중인 독서모임 api
-  const fetchRequested2 = async () => {
-    try {
-      setLoading(true);
-      const { data, status } = await requestGet({
-        url: consts.apiUrl + '/book/quiz/activity',
-        query: {
-          rank: Rank,
-          startPaging: 0,
-          endPaging: 20,
-        },
-      });
-      if (status === 'SUCCESS') {
-        setIngGather([...data.kbsBookQuizs]);
-      }
-      return status;
-    } catch (error) {
-      dispatch(dialogError(error));
-    }
-  };
+  }, [detailTab.detailTab.cate]);
 
   useEffect(() => {
-    fetchRequested().then(response => {
-      fetchRequested2().then(res => {
-      if (res === 'SUCCESS') {
-        setLoading(false);
-      } else {
-        dispatch(dialogError(res || 'fail'));
-      }
-      })
-    });
+    if(detailTab.region != undefined){
+      setRegion(detailTab.region);
+    }else{
+      setRegion('all');
+    }
+  }, [detailTab.region]);
 
+  useEffect(() => {
+    let mount = true;
+    if (mount) {
+      dispatch(
+        setTab({
+          tab: 'gather',
+          cate: 'all',
+          region: 'all'
+        }),
+      );
+    }
     return () => {
-      setLoading(true);
-      setEndGather([]);
-      setIngGather([]);
+      mount = false;
     };
-  }, [Rank]);
+  }, []);
 
   return (
     <View style={styles.root}>
@@ -159,7 +193,6 @@ export default function Gatherlist({ route }) {
         </View>
       ) : !loading ? (
           <GatherMain
-            rank={Rank}
             endGather={endGather}
             ingGather={ingGather}
           />

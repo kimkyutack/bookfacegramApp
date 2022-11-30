@@ -8,7 +8,7 @@ import {
   Pressable,
   Text
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import colors from '../../libs/colors';
 import fonts from '../../libs/fonts';
 import {
@@ -21,11 +21,31 @@ import {
 import TextWrap from '../../components/text-wrap/TextWrap';
 import GatherCarouselImage from './GatherCarouselImage';
 import { dialogOpenShinchung } from '../../redux/dialog/DialogActions';
+import HTMLView from 'react-native-htmlview';
+import routes from '../../libs/routes';
+import { navigate } from '../../services/navigation';
 
 export default function GatheringDetail({route}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [item,setItme] = useState(route.params.data);
+  const [gatheringCount, setGatheringCount] = useState(item.gatheringCount.split('|'));
+  const [gatheringDate, setGatheringDate] = useState(item.gatheringDate.split('|'));
+  const fee = item.fee != 0 ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+'원' : '무료';
+  const showinfo = useSelector(s => s.showinfo);
+  useEffect(() => {
+    let mount = true;
+    if (mount) {
+      if(showinfo.what === 'info'){
+        navigate(routes.topActivity, {
+          type: 'gather',
+        });
+      }
+    }
+    return () => {
+      mount = false;
+    };
+  },[showinfo.what]);
 
   useEffect(() => {
     let mount = true;
@@ -50,48 +70,71 @@ export default function GatheringDetail({route}) {
                 style={styles.title}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {item?.bookNm}
+                {item?.title}
               </TextWrap>
               <TextWrap
                 style={styles.writer}
                 font={fonts.kopubWorldDotumProLight}>
-                [카테고리] {item?.publisherNm}
+                [카테고리] {item?.category}
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [신청기간] {item?.publisherNm} ~ {item?.writer}
+                [신청기간] {item.applyStartDate} ~ {item.applyEndDate}
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [정원] {item?.publisherNm} | {item?.writer}
+                [정원] {item.minimumHeadcount}명 | {item.maximumHeadcount}명
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [모임지역] {item?.publisherNm}
+                [모임지역] {item.region1} {item.region2}
               </TextWrap>
-              <TextWrap
-                style={styles.data}
-                font={fonts.kopubWorldDotumProLight}>
-                [모임일시] {item?.publisherNm} | {item?.writer}
-              </TextWrap>
+              {gatheringCount.length > 1 
+              ? gatheringCount.map((x, index) => {
+                  if (index === 0) {
+                    return (
+                      <TextWrap
+                        key={index}
+                        style={styles.data}
+                        font={fonts.kopubWorldDotumProLight}>
+                        [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                      </TextWrap>
+                    )
+                  } else {
+                    return (
+                      <TextWrap
+                        key={index}
+                        style={styles.data2}
+                        font={fonts.kopubWorldDotumProLight}>
+                        {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
+                      </TextWrap>
+                    );
+                  }
+                }) 
+              : <TextWrap
+                  style={styles.data}
+                  font={fonts.kopubWorldDotumProLight}>
+                  [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                </TextWrap>
+              }
               <TextWrap
                 style={styles.price}
                 font={fonts.kopubWorldDotumProLight}>
-                무료
+                {fee}
               </TextWrap>
-              <TextWrap
+              <HTMLView 
+                value={item.description}
+                font={fonts.kopubWorldDotumProLight}
                 style={styles.discription}
-                font={fonts.kopubWorldDotumProLight}>
-                줄거리.......
-              </TextWrap>
+              />
             </View>
           </View>
 
           <View style={styles.button}>
-              <Pressable style={styles.buttons} onPress={() => dispatch(dialogOpenShinchung(''))}>
+              <Pressable style={styles.buttons} onPress={() => dispatch(dialogOpenShinchung(item.num))}>
                 <Text style={styles.text}>신청하기</Text>
               </Pressable>
           </View>
@@ -135,11 +178,7 @@ const styles = StyleSheet.create({
     top: 10,
   },
   discription: {
-    marginTop:heightPercentage(70),
-    color: colors.black,
-    fontSize: fontPercentage(9),
-    lineHeight: fontPercentage(17),
-    textAlign: 'left',
+    marginTop:heightPercentage(30),
   },
   writer: {
     marginTop:heightPercentage(40),
@@ -163,10 +202,18 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(13),
     textAlign: 'left',
   },
+  data2: {
+    color: colors.black,
+    marginVertical: heightPercentage(1),
+    fontSize: fontPercentage(9),
+    lineHeight: fontPercentage(13),
+    textAlign: 'center',
+    marginLeft:'1.5%'
+  },
   thumbnail: {
     height: screenHeight / 1.5,
     width: screenWidth,
-    resizeMode: 'stretch',
+    resizeMode: 'contain',
     flexDirection: 'column',
     backgroundColor: 'white',
   },

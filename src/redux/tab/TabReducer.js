@@ -11,9 +11,9 @@ const initTab = {
 };
 
 export default function loading(state = initTab, action) {
-  
   //alert(action.selectType);
   switch (action.type) {
+    
     case tabActionType.main:
       return {
         ...state,
@@ -71,6 +71,7 @@ export default function loading(state = initTab, action) {
         region: action.region,
         detailTab: {
           selectedBook: action.selectedBook,
+          cate: action.cate,
         },
       };
     case tabActionType.gatherlist:
@@ -79,7 +80,7 @@ export default function loading(state = initTab, action) {
         tab: action.tab,
         listTab: {
           region: action.region,
-          rank: action.rank,
+          cate: action.cate,
         },
       };
     case tabActionType.gatherdetail:

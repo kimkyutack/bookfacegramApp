@@ -11,7 +11,7 @@ import TextWrap from '../../components/text-wrap/TextWrap';
 import colors from '../../libs/colors';
 import consts from '../../libs/consts';
 import fonts from '../../libs/fonts';
-import {dialogClose, dialogCloseMessage} from '../../redux/dialog/DialogActions';
+import {dialogClose} from '../../redux/dialog/DialogActions';
 import {
   screenHeight,
   fontPercentage,
@@ -20,66 +20,61 @@ import {
   widthPercentage,
 } from '../../services/util';
 
-export default function DialogMessage({}) {
+export default function DialogPayment({}) {
   const dispatch = useDispatch();
-  const {messageDialog} = useSelector(s => s.dialog, shallowEqual);
-  const {gatherDialog} = useSelector(s => s.dialog, shallowEqual);
+  const {paymentDialog} = useSelector(s => s.dialog, shallowEqual);
 
   useEffect(() => {
-    if (messageDialog.open) {
+    if (paymentDialog.open) {
       Keyboard.dismiss();
     }
-  }, [messageDialog.open]);
+  }, [paymentDialog.open]);
 
-  if (!messageDialog.open) {
+  if (!paymentDialog.open) {
     return null;
   }
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.wrap}>
         <View style={styles.dialog}>
-          {Boolean(messageDialog.label) && (
+          {Boolean(paymentDialog.label) && (
             <TextWrap
               font={fonts.kopubWorldDotumProBold}
               style={[
                 styles.label,
                 {
-                  marginTop: messageDialog.label ? 23 : 0,
+                  marginTop: paymentDialog.label ? 23 : 0,
                 },
               ]}>
-              {messageDialog.label}
+              {paymentDialog.label}
             </TextWrap>
           )}
           <TextWrap
             style={[
               styles.message2,
               {
-                marginTop: messageDialog.label ? 8 : 33,
+                marginTop: paymentDialog.label ? 8 : 33,
                 fontWeight: 'bold',
               },
             ]}>
             알림
           </TextWrap>
-          <TextWrap style={[styles.message]}>{messageDialog.message}</TextWrap>
+          <TextWrap style={[styles.message]}>{paymentDialog.message}</TextWrap>
           <View style={styles.row2}>
               <View style={{flex:1}}>
               </View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              if(!gatherDialog.open){
-                dispatch(dialogClose());
-              }else{
-                dispatch(dialogCloseMessage());
-              }
-              if (messageDialog.onPress) {
-                messageDialog.onPress(true);
+              dispatch(dialogClose());
+              if (paymentDialog.onPress) {
+                paymentDialog.onPress(true);
               }
             }}>
             <TextWrap
               font={fonts.kopubWorldDotumProMedium}
               style={styles.title}>
-              {messageDialog.title}
+              {paymentDialog.title}
             </TextWrap>
           </TouchableOpacity>
           </View>
@@ -98,7 +93,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
     bottom: 0,
     zIndex: consts.dialogZindex,
-    elevation: consts.dialogZindex,
   },
   row2: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
   wrap: {flex: 1, justifyContent: 'center'},

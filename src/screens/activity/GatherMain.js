@@ -24,7 +24,7 @@ import {
 } from '../../services/util';
 import fonts from '../../libs/fonts';
 import {requestGet} from '../../services/network';
-import {dialogError, dialogOpenGrade, dialogOpenRegion} from '../../redux/dialog/DialogActions';
+import {dialogError, dialogOpenCate, dialogOpenRegion} from '../../redux/dialog/DialogActions';
 import Gatheritem from './Gatheritem';
 import FastImage from 'react-native-fast-image';
 import { navigate } from '../../services/navigation';
@@ -33,20 +33,17 @@ import GatheringMain from './GatheringMain';
 
 
 export default function GatherMain({
-  rank,
   endGather,
   ingGather
 }) {
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState('kbs');
-  const [start, setStart] = useState(20);
   const [state, setState] = useState({req: endGather, page: 1});
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   const detailTab = useSelector(s => s.tab, shallowEqual);
-  const [Rank, setRank] = useState(detailTab.rank);
+  const [Rank, setRank] = useState(detailTab.detailTab.cate);
   const [grade, setGrade] = useState('전체학년');
   const [region, setregion] = useState('전체지역');
   useEffect(() => {
@@ -54,44 +51,29 @@ export default function GatherMain({
           case 'all':
             setGrade('전체학년');
             break;
-          case 'preSchool':
-            setGrade('유아');
-            break;
-          case '00004':
+          case '초1':
             setGrade('초등학교 1학년');
             break;
-          case '00005':
+          case '초2':
             setGrade('초등학교 2학년');
             break;
-          case '00006':
+          case '초3':
             setGrade('초등학교 3학년');
             break;
-          case '00007':
+          case '초4':
             setGrade('초등학교 4학년');
             break;
-          case '00008':
+          case '초5':
             setGrade('초등학교 5학년');
             break;
-          case '00009':
+          case '초6':
             setGrade('초등학교 6학년');
             break;
-          case '00010':
+          case '중1':
             setGrade('중학교 1학년');
             break;
-          case '00011':
+          case '중2':
             setGrade('중학교 2학년');
-            break;
-          case '00012':
-            setGrade('중학교 3학년');
-            break;
-          case '00013':
-            setGrade('고등학교 1학년');
-            break;
-          case '00014':
-            setGrade('고등학교 2학년');
-            break;
-          case '00015':
-            setGrade('고등학교 3학년');
             break;
           default:
             setGrade('전체학년');
@@ -108,12 +90,17 @@ export default function GatherMain({
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       if(detailTab.region != undefined && detailTab.region.length !== 0 && detailTab.region != ''){
-        
-        setregion(detailTab.region);
+        if(detailTab.region == 'all'){
+          setregion('전체지역');
+        }else{
+          setregion(detailTab.region);
+        }
       }
+      setLoading(false);
     }
     return () => {
       mount = false;
+      setLoading(true);
     };
   }, [detailTab.region]);
 
@@ -176,7 +163,7 @@ export default function GatherMain({
                   elevation: 1,
                 }}
                 onPress={() => {
-                  dispatch(dialogOpenGrade({ message: '준비중.', grade: Rank }));
+                  dispatch(dialogOpenCate({ message: '준비중.', grade: Rank }));
                 }}>
                 <View style={{ width: '100%' }}>
                   <TextWrap style={styles.selectfont}>{grade}</TextWrap>
@@ -197,7 +184,7 @@ export default function GatherMain({
                   dispatch(
                     setTab({
                       tab: 'gatherlist',
-                      rank: grade,
+                      cate: grade,
                       region: region,
                     })
                   );
@@ -205,7 +192,7 @@ export default function GatherMain({
                   navigate(routes.homeList, {
                     screen: routes.topActivity,
                     params: {
-                      rank:rank,
+                      rank:Rank,
                       region:region,
                       type: 'gatherlist',
                       key: Date.now(),
@@ -224,7 +211,8 @@ export default function GatherMain({
   };
 
   const renderFooter = () => {
-    if (ingGather?.length === 0 || !loading || ingGather?.length < 20) {
+    
+    if (ingGather?.length === 0 || !loading) {
       return <GatheringMain rank={Rank} ingGather={ingGather} />;
     }else{
       return <></>;
@@ -252,7 +240,7 @@ export default function GatherMain({
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            return <Gatheritem item={item} type={type} index={index} />;
+            return <Gatheritem item={item} index={index} />;
           }}
           numColumns={1}
           ListHeaderComponent={renderHeader()}

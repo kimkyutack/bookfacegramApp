@@ -24,8 +24,10 @@ import Examtest from './screens/activity/examtest';
 import Home from './screens/home/home-main';
 import MainQuiz from './screens/activity/MainQuiz';
 import HomeList from './screens/home/home-list';
+import Payment from './services/payment';
 import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
+import ShinChung from './screens/shinchung/Shinchung';
 import Faq from './screens/faq/Faq';
 import Setting from './screens/setting/Setting';
 import Profile from './screens/profile/profile';
@@ -63,6 +65,7 @@ import FeedBookEditor from './screens/feed-book/FeedBookEditor';
 import PolicyHome from './screens/terms-of-service/PolicyHome';
 import Teenager from './screens/terms-of-service/Teenager';
 import Provision from './screens/terms-of-service/Provision';
+import paymentResult from './services/paymentResult';
 
 import RNExitApp from 'react-native-exit-app';
 import { widthPercentage } from './services/util';
@@ -87,7 +90,15 @@ const StackNavigator = () => {
         component={Home}
         options={({ route, navigation }) => {
           return {
-
+            swipeEnabled: false,
+          };
+        }}
+      />
+      <Stack.Screen
+        name={routes.paymentResult}
+        component={paymentResult}
+        options={({ route, navigation }) => {
+          return {
             swipeEnabled: false,
           };
         }}
@@ -260,8 +271,8 @@ const StackNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={routes.notice}
-        component={Notice}
+        name={routes.shinchung}
+        component={ShinChung}
         options={({ route, navigation }) => {
           return {
             swipeEnabled: false,
@@ -271,6 +282,15 @@ const StackNavigator = () => {
       <Stack.Screen
         name={routes.faq}
         component={Faq}
+        options={({ route, navigation }) => {
+          return {
+            swipeEnabled: false,
+          };
+        }}
+      />
+      <Stack.Screen
+        name={routes.notice}
+        component={Notice}
         options={({ route, navigation }) => {
           return {
             swipeEnabled: false,
@@ -388,6 +408,15 @@ const StackNavigator = () => {
       <Stack.Screen
         name={routes.provision}
         component={Provision}
+        options={({ route, navigation }) => {
+          return {
+            swipeEnabled: false,
+          };
+        }}
+      />
+      <Stack.Screen
+        name={routes.payment}
+        component={Payment}
         options={({ route, navigation }) => {
           return {
             swipeEnabled: false,

@@ -30,63 +30,55 @@ import {
   screenWidth,
   widthPercentage,
 } from '../../services/util';
+import { setDateOption } from '../../redux/dateaction/DateAction';
 
-export default function DialogRegion({route}) {
+export default function DialogDate({route}) {
   const dispatch = useDispatch();
-  const [region, setRegion] = useState('all');
-  const {regionDialog} = useSelector(s => s.dialog, shallowEqual);
+  const {dateDialog} = useSelector(s => s.dialog, shallowEqual);
   const detailTab = useSelector(s => s.tab, shallowEqual);
-  const regionArr = [
-    {name: '전체지역', value: 'all'},
-    {name: '강원도', value: '강원도'},
-    {name: '경기도', value: '경기도'},
-    {name: '경상남도', value: '경상남도'},
-    {name: '경상북도', value: '경상북도'},
-    {name: '광주광역시', value: '광주광역시'},
-    {name: '대구광역시', value: '대구광역시'},
-    {name: '대전광역시', value: '대전광역시'},
-    {name: '부산광역시', value: '부산광역시'},
-    {name: '서울특별시', value: '서울특별시'},
-    {name: '세종특별자치시', value: '세종특별자치시'},
-    {name: '울산광역시', value: '울산광역시'},
-    {name: '전라남도', value: '전라남도'},
-    {name: '전라북도', value: '전라북도'},
-    {name: '제주특별자치도', value: '제주특별자치도'},
-    {name: '충청남도', value: '충청남도'},
-    {name: '충청북도', value: '충청북도'},
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const date = now.getDate();
+  const today = year + '-' + month + '-' +date;
+
+
+
+  const eyear = new Date(year, now.getMonth() - 1, now.getDate()).getFullYear();
+  const emonth = new Date(year, now.getMonth() - 1, now.getDate()).getMonth() + 1;
+  const edate = new Date(year, now.getMonth() - 1, now.getDate()).getDate();
+  const eDate = eyear + '-' + emonth + '-' + edate;
+
+  const weekyear = new Date(year, now.getMonth(), now.getDate() - 7).getFullYear();
+  const weekmonth = new Date(year, now.getMonth(), now.getDate() - 7).getMonth() + 1 >= 10 ? new Date(year, now.getMonth(), now.getDate() - 7).getMonth() + 1 : '0' + (new Date(year, now.getMonth(), now.getDate() - 7).getMonth() + 1);
+  const weekdate = new Date(year, now.getMonth(), now.getDate() - 7).getDate() >= 10 ? new Date(year, now.getMonth(), now.getDate() - 7).getDate() : '0' + new Date(year, now.getMonth(), now.getDate() - 7).getDate();
+  const weekDate = weekyear + '-' + weekmonth + '-' + weekdate;
+
+  const tyear = new Date(year, now.getMonth() - 3, now.getDate()).getFullYear();
+  const tmonth = new Date(year, now.getMonth() - 3, now.getDate()).getMonth() + 1 >= 10 ? new Date(year, now.getMonth() - 3, now.getDate()).getMonth() + 1 : '0' + (new Date(year, now.getMonth() - 3, now.getDate()).getMonth() + 1);
+  const tdate = new Date(year, now.getMonth() - 3, now.getDate()).getDate() >= 10 ? new Date(year, now.getMonth() - 3, now.getDate()).getDate() : '0' + new Date(year, now.getMonth() - 3, now.getDate()).getDate();
+  const tDate = tyear + '-' + tmonth + '-' + tdate;
+
+  const syear = new Date(year, now.getMonth() - 6, now.getDate()).getFullYear();
+  const smonth = new Date(year, now.getMonth() - 6, now.getDate()).getMonth() + 1 >= 10 ? new Date(year, now.getMonth() - 6, now.getDate()).getMonth() + 1 : '0' + (new Date(year, now.getMonth() - 6, now.getDate()).getMonth() + 1);
+  const sdate = new Date(year, now.getMonth() - 6, now.getDate()).getDate() >= 10 ? new Date(year, now.getMonth() - 6, now.getDate()).getDate() : '0' + new Date(year, now.getMonth() - 6, now.getDate()).getDate();
+  const sDate = syear + '-' + smonth + '-' + sdate;
+
+  const dateArr = [
+    {name: '최근 1주일', value: weekDate},
+    {name: '최근 1개월', value: eDate},
+    {name: '최근 3개월', value: tDate},
+    {name: '최근 6개월', value: sDate},
+    {name: '직접입력', value: eDate},
   ];
-  const radio_props = [
-    {label: '전체지역', value: 'all'},
-    {label: '강원도', value: '강원도'},
-    {label: '경기도', value: '경기도'},
-    {label: '경상남도', value: '경상남도'},
-    {label: '경상북도', value: '경상북도'},
-    {label: '광주광역시', value: '광주광역시'},
-    {label: '대구광역시', value: '대구광역시'},
-    {label: '대전광역시', value: '대전광역시'},
-    {label: '부산광역시', value: '부산광역시'},
-    {label: '서울특별시', value: '서울특별시'},
-    {label: '세종특별자치시', value: '세종특별자치시'},
-    {label: '울산광역시', value: '울산광역시'},
-    {label: '전라남도', value: '전라남도'},
-    {label: '전라북도', value: '전라북도'},
-    {label: '제주특별자치도', value: '제주특별자치도'},
-    {label: '충청남도', value: '충청남도'},
-    {label: '충청북도', value: '충청북도'},
-  ];
-  const {Troutes} = {
-    name: routes.topActivity,
-    component: TopActivity,
-    initialParams: {type: 'gather', rank: '00004'},
-    options: {tabBarLabel: 'ACTIVITY'},
-  };
+
   useEffect(() => {
-    if (regionDialog.open) {
+    if (dateDialog.open) {
       Keyboard.dismiss();
     }
-  }, [regionDialog.open]);
+  }, [dateDialog.open]);
 
-  if (!regionDialog.open) {
+  if (!dateDialog.open) {
     return null;
   }
   return (
@@ -101,7 +93,7 @@ export default function DialogRegion({route}) {
           <View
             style={{
               backgroundColor: '#403737',
-              height: screenHeight / 1.07,
+              height: screenHeight / 3.02,
               marginLeft: widthPercentage(15),
               marginRight: widthPercentage(15),
               alignItems: 'center',
@@ -111,18 +103,12 @@ export default function DialogRegion({route}) {
               style={{
                 width: screenWidth,
               }}>
-              {regionArr.map((item, index) => (
+              {dateArr.map((item, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.iconContainer}
                   onPress={() => {
-                    dispatch(
-                      setTab({
-                        tab: 'gather',
-                        region: item.value,
-                        cate: detailTab.detailTab.cate,
-                      }),
-                    );
+                    dispatch(setDateOption(item.value,today, item.name));
                     dispatch(dialogClose());
                   }}>
                   <TextWrap

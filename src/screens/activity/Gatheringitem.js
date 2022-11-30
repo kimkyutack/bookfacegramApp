@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -22,6 +22,8 @@ import GatherCarouselImage from './GatherCarouselImage';
 
 export default function Gatheringitem({item, index}) {
   const dispatch = useDispatch();
+  const [gatheringCount, setGatheringCount] = useState(item.gatheringCount.split('|'));
+  const [gatheringDate, setGatheringDate] = useState(item.gatheringDate.split('|'));
   //alert(JSON.stringify(item));
   return (
     <>
@@ -49,33 +51,56 @@ export default function Gatheringitem({item, index}) {
                 style={styles.title}
                 numberOfLines={1}
                 ellipsizeMode="tail">
-                {item.bookNm}
+                {item.title}
               </TextWrap>
               <TextWrap
                 style={styles.writer}
                 font={fonts.kopubWorldDotumProLight}>
-                [카테고리] {item.publisherNm}
+                [카테고리] {item.category}
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [신청기간] {item.publisherNm} ~ {item.writer}
+                [신청기간] {item.applyStartDate} ~ {item.applyEndDate}
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [정원] {item.publisherNm} | {item.writer}
+                [정원] {item.minimumHeadcount}명 | {item.maximumHeadcount}명
               </TextWrap>
               <TextWrap
                 style={styles.data}
                 font={fonts.kopubWorldDotumProLight}>
-                [모임지역] {item.publisherNm}
+                [모임지역] {item.region1} {item.region2}
               </TextWrap>
-              <TextWrap
-                style={styles.data}
-                font={fonts.kopubWorldDotumProLight}>
-                [모임일시] {item.publisherNm} | {item.writer}
-              </TextWrap>
+              {gatheringCount.length > 1 
+              ? gatheringCount.map((x, index) => {
+                  if (index === 0) {
+                    return (
+                      <TextWrap
+                        key={index}
+                        style={styles.data}
+                        font={fonts.kopubWorldDotumProLight}>
+                        [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                      </TextWrap>
+                    )
+                  } else {
+                    return (
+                      <TextWrap
+                        key={index}
+                        style={styles.data2}
+                        font={fonts.kopubWorldDotumProLight}>
+                        {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
+                      </TextWrap>
+                    );
+                  }
+                }) 
+              : <TextWrap
+                  style={styles.data}
+                  font={fonts.kopubWorldDotumProLight}>
+                  [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                </TextWrap>
+              }
             </View>
           </View>
         </TouchableOpacity>
@@ -86,7 +111,7 @@ export default function Gatheringitem({item, index}) {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    width:screenWidth / 2,
     flexDirection: 'row',
     top: 0,
     //paddingRight: widthPercentage(10),
@@ -128,6 +153,14 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(13),
     textAlign: 'left',
+  },
+  data2: {
+    color: colors.black,
+    marginVertical: heightPercentage(1),
+    fontSize: fontPercentage(9),
+    lineHeight: fontPercentage(13),
+    textAlign: 'center',
+    marginLeft:'22%'
   },
   divider: {
     marginHorizontal: 16,

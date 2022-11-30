@@ -31,62 +31,31 @@ import {
   widthPercentage,
 } from '../../services/util';
 
-export default function DialogRegion({route}) {
+export default function DialogCate({route}) {
+  
   const dispatch = useDispatch();
-  const [region, setRegion] = useState('all');
-  const {regionDialog} = useSelector(s => s.dialog, shallowEqual);
+  const [rank, setRank] = useState('all');
+  const {cateDialog} = useSelector(s => s.dialog, shallowEqual);
   const detailTab = useSelector(s => s.tab, shallowEqual);
-  const regionArr = [
-    {name: '전체지역', value: 'all'},
-    {name: '강원도', value: '강원도'},
-    {name: '경기도', value: '경기도'},
-    {name: '경상남도', value: '경상남도'},
-    {name: '경상북도', value: '경상북도'},
-    {name: '광주광역시', value: '광주광역시'},
-    {name: '대구광역시', value: '대구광역시'},
-    {name: '대전광역시', value: '대전광역시'},
-    {name: '부산광역시', value: '부산광역시'},
-    {name: '서울특별시', value: '서울특별시'},
-    {name: '세종특별자치시', value: '세종특별자치시'},
-    {name: '울산광역시', value: '울산광역시'},
-    {name: '전라남도', value: '전라남도'},
-    {name: '전라북도', value: '전라북도'},
-    {name: '제주특별자치도', value: '제주특별자치도'},
-    {name: '충청남도', value: '충청남도'},
-    {name: '충청북도', value: '충청북도'},
+  const gradeArr = [
+    {name: '전체', value: 'all'},
+    {name: '초등학교 1학년', value: '초1'},
+    {name: '초등학교 2학년', value: '초2'},
+    {name: '초등학교 3학년', value: '초3'},
+    {name: '초등학교 4학년', value: '초4'},
+    {name: '초등학교 5학년', value: '초5'},
+    {name: '초등학교 6학년', value: '초6'},
+    {name: '중학교 1학년', value: '중1'},
+    {name: '중학교 2학년', value: '중2'},
   ];
-  const radio_props = [
-    {label: '전체지역', value: 'all'},
-    {label: '강원도', value: '강원도'},
-    {label: '경기도', value: '경기도'},
-    {label: '경상남도', value: '경상남도'},
-    {label: '경상북도', value: '경상북도'},
-    {label: '광주광역시', value: '광주광역시'},
-    {label: '대구광역시', value: '대구광역시'},
-    {label: '대전광역시', value: '대전광역시'},
-    {label: '부산광역시', value: '부산광역시'},
-    {label: '서울특별시', value: '서울특별시'},
-    {label: '세종특별자치시', value: '세종특별자치시'},
-    {label: '울산광역시', value: '울산광역시'},
-    {label: '전라남도', value: '전라남도'},
-    {label: '전라북도', value: '전라북도'},
-    {label: '제주특별자치도', value: '제주특별자치도'},
-    {label: '충청남도', value: '충청남도'},
-    {label: '충청북도', value: '충청북도'},
-  ];
-  const {Troutes} = {
-    name: routes.topActivity,
-    component: TopActivity,
-    initialParams: {type: 'gather', rank: '00004'},
-    options: {tabBarLabel: 'ACTIVITY'},
-  };
+
   useEffect(() => {
-    if (regionDialog.open) {
+    if (cateDialog.open) {
       Keyboard.dismiss();
     }
-  }, [regionDialog.open]);
+  }, [cateDialog.open]);
 
-  if (!regionDialog.open) {
+  if (!cateDialog.open) {
     return null;
   }
   return (
@@ -101,7 +70,7 @@ export default function DialogRegion({route}) {
           <View
             style={{
               backgroundColor: '#403737',
-              height: screenHeight / 1.07,
+              height: screenHeight / 1.68,
               marginLeft: widthPercentage(15),
               marginRight: widthPercentage(15),
               alignItems: 'center',
@@ -111,7 +80,7 @@ export default function DialogRegion({route}) {
               style={{
                 width: screenWidth,
               }}>
-              {regionArr.map((item, index) => (
+              {gradeArr.map((item, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.iconContainer}
@@ -119,8 +88,8 @@ export default function DialogRegion({route}) {
                     dispatch(
                       setTab({
                         tab: 'gather',
-                        region: item.value,
-                        cate: detailTab.detailTab.cate,
+                        cate: item.value,
+                        region: detailTab.region,
                       }),
                     );
                     dispatch(dialogClose());

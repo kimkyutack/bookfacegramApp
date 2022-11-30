@@ -93,6 +93,18 @@ export default function DrawerCustom(props) {
               }}
             />
           </View>
+          <View style={styles.itemList}>
+            <DrawerItem
+              style={styles.drawerItem}
+              label="ㆍ독서모임 신청내역"
+              labelStyle={styles.label}
+              onPress={() => {
+                props.navigation.navigate(routes.shinchung, {
+                  timeKey: Date.now(),
+                });
+              }}
+            />
+          </View>
           {/*<View style={styles.itemList}>
             <DrawerItem
               style={styles.drawerItem}

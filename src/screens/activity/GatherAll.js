@@ -19,13 +19,15 @@ import { dialogError } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
 import GatherAllList from './GatherAllList';
+import { setTab } from '../../redux/tab/TabAction';
 
 export default function GatherAll({ route }) {
   const dispatch = useDispatch();
   const detailTab = useSelector(s => s.tab, shallowEqual);
   const [loading, setLoading] = useState(true);
   const [gatherlist, setGatherlist] = useState([]);
-  const [Rank, setRank] = useState(detailTab.rank);
+  const [Rank, setRank] = useState(detailTab.detailTab.cate);
+  const [Region, setRegion] = useState(detailTab.region);
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
   const user = useSelector(s => s.user, shallowEqual);
@@ -90,36 +92,51 @@ export default function GatherAll({ route }) {
   }, [isFocused]);
 
   useEffect(() => {
-    setRank(detailTab.rank);
-  }, [detailTab.rank]);
+    if(detailTab.detailTab.cate != undefined){
+      setRank(detailTab.detailTab.cate);
+    }else{
+      setRank('all');
+    }
+  }, [detailTab.detailTab.cate]);
+
+  useEffect(() => {
+    if(detailTab.region != undefined){
+      setRegion(detailTab.region);
+    }else{
+      setRegion('all');
+    }
+  }, [detailTab.region]);
 
   const fetchRequested = async () => {
     try {
+      
       setLoading(true);
       if(end == 0){
         const { data, status } = await requestGet({
-          url: consts.apiUrl + '/book/quiz/activity',
+          url: consts.apiUrl + '/village/member/urgency-list',
           query: {
-            rank: Rank,
+            region: Region,
+            category: Rank,
             startPaging: 0,
             endPaging: 20,
           },
         });
         if (status === 'SUCCESS') {
-          setGatherlist([...data.kbsBookQuizs]);
+          setGatherlist([...data]);
         }
         return status;
       }else{
         const { data, status } = await requestGet({
-          url: consts.apiUrl + '/book/quiz/activity',
+          url: consts.apiUrl + '/village/member/list',
           query: {
-            rank: Rank,
+            region: Region,
+            category: Rank,
             startPaging: 0,
             endPaging: 20,
           },
         });
         if (status === 'SUCCESS') {
-          setGatherlist([...data.kbsBookQuizs]);
+          setGatherlist([...data]);
         }
         return status;
       }
@@ -142,7 +159,7 @@ export default function GatherAll({ route }) {
       setLoading(true);
       setGatherlist([]);
     };
-  }, [Rank]);
+  }, [Rank,Region]);
 
   
 

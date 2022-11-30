@@ -21,7 +21,7 @@ import {
 } from '../../services/util';
 import fonts from '../../libs/fonts';
 import {requestGet} from '../../services/network';
-import {dialogError, dialogOpenGrade, dialogOpenRegion} from '../../redux/dialog/DialogActions';
+import {dialogError, dialogOpenCate, dialogOpenRegion} from '../../redux/dialog/DialogActions';
 import GatherAllitem from './GatherAllitem';
 
 export default function GatherAllList({
@@ -33,22 +33,51 @@ export default function GatherAllList({
   const scrollRef = useRef();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState('kbs');
   const [start, setStart] = useState(20);
   const detailTab = useSelector(s => s.tab, shallowEqual);
-  const [Rank, setRank] = useState(detailTab.rank);
+  const [Rank, setRank] = useState(detailTab.detailTab.cate);
+  const [Regions, setRegions] = useState(detailTab.region);
   const [grade, setGrade] = useState('전체학년');
   const [state, setState] = useState({req: gatherlist, page: 1});
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
-  
-
   const [Region, setRegion] = useState('전체지역');
-
-  useEffect(() => {
-    setRank(detailTab.rank);
-  }, [detailTab.rank]);
-
+  const url = end === 0 ? consts.apiUrl + '/village/member/urgency-list' : consts.apiUrl + '/village/member/list';
+  
+  const fetchRequested = async startpage => {
+    try {
+      setLoading(true);
+      const {data, status} = await requestGet({
+        url: url,
+        query: {
+          region: Regions == undefined ? 'all' : Regions,
+          category: Rank == undefined ? 'all' : Rank,
+          startPaging: startpage,
+          endPaging: 20, 
+        },
+      });
+      setLoading(false);
+      if (status === 'SUCCESS') {
+        if(startpage !== 0){
+          setStart(start + 20);
+          setState({
+            req: state.req.concat([...data]), // 기존 data에 추가.
+            page: state.page + 1,
+          });
+        }else{
+          setStart(20);
+          setState({
+            req: [...data], // 기존 data 변경
+            page: 1,
+          });
+        }
+      }
+      return status;
+    } catch (error) {
+      setLoading(false);
+      dispatch(dialogError(error));
+    }
+  };
   useEffect(() => {
     let mount = true;
     if (mount) {
@@ -56,44 +85,29 @@ export default function GatherAllList({
           case 'all':
             setGrade('전체학년');
             break;
-          case 'preSchool':
-            setGrade('유아');
-            break;
-          case '00004':
+          case '초1':
             setGrade('초등학교 1학년');
             break;
-          case '00005':
+          case '초2':
             setGrade('초등학교 2학년');
             break;
-          case '00006':
+          case '초3':
             setGrade('초등학교 3학년');
             break;
-          case '00007':
+          case '초4':
             setGrade('초등학교 4학년');
             break;
-          case '00008':
+          case '초5':
             setGrade('초등학교 5학년');
             break;
-          case '00009':
+          case '초6':
             setGrade('초등학교 6학년');
             break;
-          case '00010':
+          case '중1':
             setGrade('중학교 1학년');
             break;
-          case '00011':
+          case '중2':
             setGrade('중학교 2학년');
-            break;
-          case '00012':
-            setGrade('중학교 3학년');
-            break;
-          case '00013':
-            setGrade('고등학교 1학년');
-            break;
-          case '00014':
-            setGrade('고등학교 2학년');
-            break;
-          case '00015':
-            setGrade('고등학교 3학년');
             break;
           default:
             setGrade('전체학년');
@@ -107,40 +121,27 @@ export default function GatherAllList({
     };
   }, [Rank]);
 
-  const fetchRequested = async startpage => {
-    try {
-      setLoading(true);
-      const {data, status} = await requestGet({
-        url: consts.apiUrl + '/book/quiz/activity',
-        query: {
-          rank: rank,
-          startPaging: startpage,
-          endPaging: 20,
-        },
-      });
-      setLoading(false);
-      if (status === 'SUCCESS') {
-        setStart(start + 20);
-        setState({
-          req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
-          page: state.page + 1,
-        });
-      }
-      return status;
-    } catch (error) {
-      setLoading(false);
-      dispatch(dialogError(error));
+  useEffect(() => {
+    if(detailTab.detailTab.cate != undefined){
+      setRank(detailTab.detailTab.cate);
+    }else{
+      setRank('all')
     }
-  };
+  }, [detailTab.detailTab.cate]);
+
+  
+
 
   useEffect(() => {
     let mount = true;
     if (mount) {
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
       
-      if(detailTab.region == undefined){
+      if(detailTab.region == undefined || detailTab.region == 'all'){
+        setRegions('all');
         setRegion('전체지역');
       }else{
+        setRegions(detailTab.region);
         setRegion(detailTab.region);
       }
     }
@@ -150,14 +151,29 @@ export default function GatherAllList({
   }, [detailTab.region]);
 
   useEffect(() => {
+      if(Rank != undefined && Region != undefined){
+        setLoading(true);
+        fetchRequested(0);
+      }
+    return () => {
+      setLoading(true);
+    }
+  }, [Rank,Region]);
+
+  useEffect(() => {
     let mount = true;
     if (mount) {
+      setState({
+          req: gatherlist, // 기존 data에 추가.
+          page: 1,
+        });
       scrollRef.current?.scrollToOffset({y: 0.1, animated: false});
     }
     return () => {
       mount = false;
     };
   }, []);
+
    const renderHeader = () => {
     if (gatherlist?.length === 0 || !loading || gatherlist?.length < 20) {
     return <View style={styles.root2}>
@@ -201,7 +217,7 @@ export default function GatherAllList({
                         elevation: 1,
                       }}
                       onPress={() => {
-                        dispatch(dialogOpenGrade({ message: '준비중.', grade: Rank }));
+                        dispatch(dialogOpenCate({ message: '준비중.', grade: Rank }));
                       }}>
                       <View style={{ width: '100%' }}>
                         <TextWrap style={styles.selectfont}>{grade}</TextWrap>
@@ -259,7 +275,7 @@ export default function GatherAllList({
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            return <GatherAllitem item={item} type={type} index={index} />;
+            return <GatherAllitem item={item} index={index} />;
           }}
           onEndReached={loadMore}
           onEndReachedThreshold={0.8}

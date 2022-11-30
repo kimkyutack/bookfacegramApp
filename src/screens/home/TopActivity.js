@@ -1,17 +1,8 @@
 import React from 'react';
 import {
-  FlatList,
-  Image,
   StyleSheet,
-  TouchableOpacity,
   View,
-  SafeAreaView,
-  Alert,
 } from 'react-native';
-import images from '../../libs/images';
-import TextWrap from '../../components/text-wrap/TextWrap';
-import routes from '../../libs/routes';
-import {navigate} from '../../services/navigation';
 import MainQuiz from '../activity/MainQuiz';
 import Kbstest from '../activity/kbstest';
 import Examtest from '../activity/examtest';
@@ -24,14 +15,14 @@ import {
   widthPercentage,
   heightPercentage,
   fontPercentage,
-  cameraItem,
 } from '../../services/util';
 import Gatherlist from '../activity/Gatherlist';
 import GatherAll from '../activity/GatherAll';
 import GatheringDetail from '../activity/GatherDetail';
+import ApplyInfo from '../activity/ApplyInfo';
 
 export default function TopActivity({route}) {
-  //alert(JSON.stringify(route));
+
   return (
     <View style={styles.root}>
       {route.params.type === 'quiz' ? (
@@ -52,6 +43,8 @@ export default function TopActivity({route}) {
         <Gatherlist route={route}/>
       ) : route.params.type === 'gatherlist' ? (
         <GatherAll route={route}/>
+      ) : route.params.type === 'info' ? (
+        <ApplyInfo route={route}/>
       ) : route.params.type === 'detail' ? (
         <GatheringDetail route={route}/>
       ) : (

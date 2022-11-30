@@ -19,6 +19,7 @@ import {
   fontPercentage,
   screenWidth,
 } from '../services/util';
+import { dialogClose } from '../redux/dialog/DialogActions';
 
 export function Footer(page) {
   const dispatch = useDispatch();
@@ -26,7 +27,8 @@ export function Footer(page) {
   return (
     <View style={styles.mainfooter}>
       <TouchableWithoutFeedback
-        onPress={() =>
+        onPress={() => {
+          dispatch(dialogClose());
           navigate(routes.home, {
             screen: routes.topNewBooks,
             params: {
@@ -34,6 +36,7 @@ export function Footer(page) {
               key: Date.now(),
             },
           })
+        }
         }>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
@@ -55,7 +58,8 @@ export function Footer(page) {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
+        onPress={() => {
+          dispatch(dialogClose());
           navigate(routes.feedBook, {
             screen: routes.feedBookFeed,
             params: {
@@ -63,6 +67,7 @@ export function Footer(page) {
               key: Date.now(),
             },
           })
+        }
         }>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
@@ -84,7 +89,8 @@ export function Footer(page) {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
+        onPress={() => {
+          dispatch(dialogClose());
           navigate(routes.bookDrawer, {
             screen: routes.bookDrawer,
             params: {
@@ -92,6 +98,7 @@ export function Footer(page) {
               key: Date.now(),
             },
           })
+        }
         }>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image
@@ -122,6 +129,8 @@ export function Footer(page) {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
+          
+          dispatch(dialogClose());
           dispatch(
             setTab({
               tab: 'quiz',
@@ -153,7 +162,8 @@ export function Footer(page) {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
+        onPress={() => {
+          dispatch(dialogClose());
           navigate(routes.event, {
             screen: routes.event,
             params: {
@@ -161,6 +171,7 @@ export function Footer(page) {
               key: Date.now(),
             },
           })
+        }
         }>
         <View accessibilityRole="button" style={[styles.footer]}>
           <Image

@@ -13,6 +13,18 @@ const initDialog = {
     onPress: null,
     title: '확인',
   },
+  cateDialog: {
+    open: false,
+    message: '',
+    onPress: null,
+    title: '확인',
+  },
+  dateDialog: {
+    open: false,
+    message: '',
+    onPress: null,
+    title: '확인',
+  },
   regionDialog: {
     open: false,
     message: '',
@@ -52,6 +64,12 @@ const initDialog = {
     title: '',
     cancelTitle: '',
   },
+  paymentDialog: {
+    open: false,
+    message: '',
+    onPress: null,
+    title: '확인',
+  },
   selectKakaoLoginDialog: {
     open: false,
     onPress: null,
@@ -70,12 +88,8 @@ const initDialog = {
   },
   gatherDialog: {
     open: false,
-    title: '',
-    drawerList: [],
-    selectedArr: [],
-    currentDrawerIndex: null,
-    onPress: null,
-    from: '',
+    num: 0,
+    pay:false
   },
   drawerKeyBoardDialog: {
     open: false,
@@ -113,6 +127,24 @@ export default function dialog(state = initDialog, action) {
           label: action.label,
         },
       };
+    case dialogActionType.closeMessage:
+      return {
+        ...state,
+        messageDialog: {
+          open: false,
+        },
+      };
+    case dialogActionType.openPayment:
+      return {
+        ...state,
+        paymentDialog: {
+          title: action.title,
+          open: true,
+          message: action.message,
+          onPress: action.onPress,
+          label: action.label,
+        },
+      };
     case dialogActionType.openGrade:
       return {
         ...state,
@@ -123,6 +155,27 @@ export default function dialog(state = initDialog, action) {
           onPress: action.onPress,
           label: action.label,
           grade: action.grade,
+        },
+      };
+    case dialogActionType.openCate:
+      return {
+        ...state,
+        cateDialog: {
+          title: action.title,
+          open: true,
+          message: action.message,
+          onPress: action.onPress,
+          label: action.label,
+          grade: action.grade,
+        },
+      };
+    case dialogActionType.openDate:
+      return {
+        ...state,
+        dateDialog: {
+          open: true,
+          onPress: action.onPress,
+          date: action.date,
         },
       };
     case dialogActionType.openRegion:
@@ -214,14 +267,17 @@ export default function dialog(state = initDialog, action) {
         ...state,
         gatherDialog: {
           open: true,
-          title: action.title,
-          onPress: action.onPress,
-          drawerList: action.drawerList,
-          selectedArr: action.selectedArr,
-          currentDrawerIndex: action.currentDrawerIndex,
-          from: action.from,
-          viewType: action.viewType,
-          bookIdx: action.bookIdx,
+          num: action.num,
+          pay: false,
+        },
+      };
+    case dialogActionType.openResult:
+      return {
+        ...state,
+        gatherDialog: {
+          open: true,
+          num: action.num,
+          pay: true,
         },
       };
     case dialogActionType.openDrawerKeyBoard:

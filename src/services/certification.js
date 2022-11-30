@@ -4,6 +4,7 @@ import IMP from 'iamport-react-native';
 
 /* 로딩 컴포넌트를 불러옵니다. */
 import Loading from './Loading';
+import { View, StyleSheet } from 'react-native';
 
 export function Certification({ navigation }) {
   /* [필수입력] 본인인증 종료 후, 라우터를 변경하고 결과를 전달합니다. */
@@ -22,14 +23,22 @@ export function Certification({ navigation }) {
   };
 
   return (
-    <IMP.Certification
-      userCode={'iamport'}  // 가맹점 식별코드
-      tierCode={'AAA'}      // 티어 코드: agency 기능 사용자에 한함
-      loading={<Loading />} // 로딩 컴포넌트
-      data={data}           // 본인인증 데이터
-      callback={callback}   // 본인인증 종료 후 콜백
-    />
+    <View style={styles.container}>
+      <IMP.Certification
+        userCode={'iamport'}  // 가맹점 식별코드
+        tierCode={'AAA'}      // 티어 코드: agency 기능 사용자에 한함
+        loading={<Loading />} // 로딩 컴포넌트
+        data={data}           // 본인인증 데이터
+        callback={callback}   // 본인인증 종료 후 콜백
+      />
+    </View>
+    
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default Certification;

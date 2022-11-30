@@ -2,13 +2,18 @@ export const dialogActionType = {
   openAction: 'dialog/openAction',
   openAction2: 'dialog/openAction2',
   openMessage: 'dialog/openMessage',
+  closeMessage: 'dialog/closeMessage',
   openSelect: 'dialog/openSelect',
   openKakaoLogin: 'dialog/openKakaoLogin',
   openDrawer: 'dialog/openDrawer',
   openMore: 'dialog/openMore',
   openGrade: 'dialog/openGrade',
+  openPayment: 'dialog/openPayment',
+  openCate: 'dialog/openCate',
+  openDate: 'dialog/openDate',
   openRegion: 'dialog/openRegion',
   openShinchung: 'dialog/openShinchung',
+  openResult: 'dialog/openResult',
   openGradeProfile: 'dialog/openGradeProfile',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
@@ -19,6 +24,19 @@ export const dialogActionType = {
 export const dialogError = (error, onPress) => dispatch => {
   dispatch({
     type: dialogActionType.openMessage,
+    message:
+      error?.data?.msg ||
+      error?.message ||
+      (typeof error === 'object' ? JSON.stringify(error) : error),
+    close: true,
+    title: '확인',
+    onPress,
+  });
+};
+
+export const dialogPayment = (error, onPress) => dispatch => {
+  dispatch({
+    type: dialogActionType.openPayment,
     message:
       error?.data?.msg ||
       error?.message ||
@@ -40,6 +58,11 @@ export const dialogOpenMessage =
         label,
       });
     };
+export const dialogCloseMessage = () => dispatch => {
+  dispatch({
+    type: dialogActionType.closeMessage,
+  });
+};
 export const dialogOpenGrade =
   ({
     drawerList,
@@ -64,6 +87,44 @@ export const dialogOpenGrade =
         bookIdx,
         viewType,
         grade,
+      });
+    };
+export const dialogOpenCate =
+  ({
+    drawerList,
+    selectedArr,
+    title = '',
+    onPress,
+    currentDrawerIndex,
+    from,
+    bookIdx,
+    viewType,
+    grade,
+  }) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openCate,
+        title,
+        drawerList,
+        selectedArr,
+        currentDrawerIndex,
+        onPress,
+        from,
+        bookIdx,
+        viewType,
+        grade,
+      });
+    };
+export const dialogOpenDate =
+  ({
+    onPress,
+    date,
+  }) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openDate,
+        onPress,
+        date,
       });
     };
 export const dialogOpenRegion =
@@ -164,27 +225,19 @@ export const dialogOpenDrawerSelect =
       });
     };
 export const dialogOpenShinchung =
-  ({
-    drawerList,
-    selectedArr,
-    title = '',
-    onPress,
-    currentDrawerIndex,
-    from,
-    bookIdx,
-    viewType,
-  }) =>
+  (num) =>
     dispatch => {
       dispatch({
         type: dialogActionType.openShinchung,
-        title,
-        drawerList,
-        selectedArr,
-        currentDrawerIndex,
-        onPress,
-        from,
-        bookIdx,
-        viewType,
+        num,
+      });
+    };
+export const dialogOpenResult =
+  (num) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openResult,
+        num,
       });
     };
 

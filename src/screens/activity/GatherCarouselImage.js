@@ -6,23 +6,22 @@ import {heightPercentage} from '../../services/util';
 import FastImage from 'react-native-fast-image';
 
 export default function GatherCarouselImage({item, index, style}) {
-  const [bookThumbnail, setBookThumbnail] = useState(item?.isbn
+  const [bookThumbnail, setBookThumbnail] = useState(item?.thumbnail
   );
   useEffect(() => {
     // crawl , toaping
-    setBookThumbnail(item?.isbn);
-  }, [item?.isbn]);
-
+    setBookThumbnail(item?.thumbnail);
+  }, [item?.thumbnail]);
   return (
     <FastImage
       source={{
         uri:
           bookThumbnail !== '' && bookThumbnail !== 'bookDefault'
-            ? consts.toapingUrl + '/book/book_img/' + bookThumbnail + '.gif'
+            ? 'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/village/' + bookThumbnail
             : consts.imgUrl + '/thumbnail/bookDefault.gif',
         priority: FastImage.priority.high,
       }}
-      resizeMode={FastImage.resizeMode.cover}
+      resizeMode={style?.resizeMode == 'contain' ? FastImage.resizeMode.contain : FastImage.resizeMode.cover}
       style={[styles.image, style && style]}
       onError={e => {
         setBookThumbnail('bookDefault');

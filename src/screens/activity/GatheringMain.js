@@ -23,6 +23,7 @@ import { setTab } from '../../redux/tab/TabAction';
 import GatherAllitem from './GatherAllitem';
 import consts from '../../libs/consts';
 import { dialogError } from '../../redux/dialog/DialogActions';
+import Gatheringitem from './Gatheringitem';
 
 
 export default function GatheringMain({
@@ -32,37 +33,9 @@ export default function GatheringMain({
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState('kbs');
-  const [start, setStart] = useState(20);
-  const [state, setState] = useState({req: ingGather, page: 1});
   const detailTab = useSelector(s => s.tab, shallowEqual);
-  const [Rank, setRank] = useState(detailTab.rank);
+  const [Rank, setRank] = useState(detailTab.detailTab.cate);
   const [Region, setRegion] = useState(detailTab.region);
-
-  //모집중인 독서모임 api
-  const fetchRequested = async (startpage) => {
-    try {
-      setLoading(true);
-      const { data, status } = await requestGet({
-        url: consts.apiUrl + '/book/quiz/activity',
-        query: {
-          rank: Rank,
-          startPaging: startpage,
-          endPaging: 20,
-        },
-      });
-      if (status === 'SUCCESS') {
-        setStart(start + 20);
-        setState({
-          req: state.req.concat([...data.kbsBookQuizs]), // 기존 data에 추가.
-          page: state.page + 1,
-        });
-      }
-      return status;
-    } catch (error) {
-      dispatch(dialogError(error));
-    }
-  };
-
 
   const renderFooter = () => {
     if (ingGather?.length === 0 || !loading || ingGather?.length < 20) {
@@ -81,12 +54,6 @@ export default function GatheringMain({
     }
   };
 
-  const loadMore = () => {
-    if(ingGather.length >= 20){
-      fetchRequested(start);
-    }
-    return () => {};
-  };
 
   return (
     <View
@@ -114,7 +81,7 @@ export default function GatheringMain({
                   dispatch(
                     setTab({
                       tab: 'gatherlist',
-                      rank: Rank,
+                      cate: Rank,
                       region: Region,
                     })
                   );
@@ -136,16 +103,14 @@ export default function GatheringMain({
               </View>
           </View>
         <FlatList
-          data={state.req} 
-          extraData={state.req} 
+          data={ingGather} 
+          extraData={ingGather} 
           keyExtractor={(item, index) => {
             return index.toString();
           }}
           renderItem={({item, index}) => {
-            return <GatherAllitem item={item} type={type} index={index} />;
+            return <Gatheringitem item={item} type={type} index={index} />;
           }}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.8}
           numColumns={2}
           ListFooterComponent={renderFooter}
         />
@@ -168,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     ...Platform.select({
       android: {
-        bottom:heightPercentage(50),
+        bottom:heightPercentage(70),
       },
   }),
   },
