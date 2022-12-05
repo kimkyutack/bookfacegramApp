@@ -134,7 +134,7 @@ export default function Intro2({route, navigation}) {
               pressButtonIdx={pressButtonIdx}
               style={styles.buttonBox2}
               onPress={() => goBack()}
-              disabled={route.name === 'intro1' ? true : false}
+              disabled={route.params?.category == 'partner' ? true : route.name === 'intro1' ? true : false}
               // disabledStyle={
               //   route.name === 'intro1'
               //     ? styles.disabledStyle2

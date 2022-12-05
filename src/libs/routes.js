@@ -46,6 +46,8 @@ export default {
   hashTagFeed: 'hashTagFeed',
   notice: 'notice',
   shinchung: 'shinchung',
+  shinchungdetail: 'shinchungdetail',
+  canceldetail: 'canceldetail',
   event: 'event',
   faq: 'faq',
   setting: 'setting',

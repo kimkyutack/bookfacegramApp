@@ -336,7 +336,7 @@ export default function Intro1({route, navigation}) {
                   ? styles.disabledStyle
                   : styles.disabledStyle2
               }
-              onPress={() => navigate('intro2', {grade: pressButtonIdx})}
+              onPress={() => navigate('intro2', {grade: pressButtonIdx, category: 'member'})}
               fontStyle={styles.buttonBox3}>
               다음
             </ButtonBox>

@@ -15,6 +15,7 @@ import {
   heightPercentage,
   screenWidth,
   widthPercentage,
+  screenHeight
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import {setTab} from '../../redux/tab/TabAction';
@@ -39,7 +40,7 @@ export default function Gatheritem({item, index}) {
               }),
             );
             navigate(routes.topActivity, {
-              type: 'detail',
+              type: 'gatherdetail',
               data: item,
               key: Date.now(),
             });
@@ -78,21 +79,31 @@ export default function Gatheritem({item, index}) {
               ? gatheringCount.map((x, index) => {
                   if (index === 0) {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data}
-                        font={fonts.kopubWorldDotumProLight}>
-                        [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <TextWrap
+                          style={[styles.data,{width:widthPercentage(35)}]}
+                          font={fonts.kopubWorldDotumProLight}>
+                          [모임일시]
+                        </TextWrap>
+                        <TextWrap
+                          
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                        </TextWrap>
+                      </View>
                     )
                   } else {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data2}
-                        font={fonts.kopubWorldDotumProLight}>
-                        {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <View style={[styles.data,{width:widthPercentage(35)}]}/>
+                        <TextWrap
+                          key={index}
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
+                        </TextWrap>
+                      </View>
                     );
                   }
                 }) 
@@ -140,10 +151,10 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(20),
     fontWeight:'bold',
     textAlign: 'left',
-    top: 10,
+    marginTop:heightPercentage(32)
   },
   writer: {
-    marginTop:heightPercentage(40),
+    marginTop:heightPercentage(15),
     color: colors.black,
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(17),
@@ -156,13 +167,21 @@ const styles = StyleSheet.create({
     lineHeight: fontPercentage(13),
     textAlign: 'left',
   },
+  data: {
+    
+    color: colors.black,
+    marginVertical: heightPercentage(1),
+    fontSize: fontPercentage(9),
+    lineHeight: fontPercentage(13),
+    textAlign: 'left',
+  },
   data2: {
     color: colors.black,
     marginVertical: heightPercentage(1),
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(13),
     textAlign: 'center',
-    marginLeft:'9%'
+    marginLeft:'1%'
   },
   divider: {
     marginHorizontal: 16,
@@ -171,7 +190,7 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -187,7 +206,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignSelf: 'flex-start',
-    marginLeft: widthPercentage(10)
+    alignItems:'flex-start',
+    justifyContent:'center',
+    marginLeft: widthPercentage(12)
   },
   buttonContainer: {
     width: '100%',

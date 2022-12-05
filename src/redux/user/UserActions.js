@@ -232,6 +232,7 @@ export const userCheckToken = async dispatch => {
     const token = await getItem('accessToken');
     const refreshToken = await getItem('refreshToken');
     const platformType = await getItem('platformType');
+    const category = await getItem('category');
 
     if (!token) {
       throw 'accessToken is null';
@@ -249,10 +250,16 @@ export const userCheckToken = async dispatch => {
         type : platformType,
       },
     });
+    
 
     if (status === 'FAIL') {
       throw 'member is null';
     } else if (status === 'SUCCESS') {
+      if(category){
+        data.category = category;
+      }else{
+        data.category = 'member';
+      }
       dispatch({ type: userActionType.token, user: data });
     }
   } catch (error) {

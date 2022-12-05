@@ -65,7 +65,7 @@ export const getImageFromCamera = async () => {
       },
     ];
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     if (error.code !== 'E_PICKER_CANCELLED') {
       throw 'getImageFromCamera';
       // throw error;

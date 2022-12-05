@@ -19,7 +19,6 @@ import {
   dialogClose,
   dialogCloseMessage,
   dialogError,
-  dialogPayment,
 } from '../../redux/dialog/DialogActions';
 import images from '../../libs/images';
 import {
@@ -37,9 +36,8 @@ import CheckBox2 from '../../components/check-box2/CheckBox2';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { navigate } from '../../services/navigation';
 import routes from '../../libs/routes';
-import { setTab } from '../../redux/tab/TabAction';
-import { getItem } from '../../services/preference';
 import { setShowInfo } from '../../redux/activity/ActivityAction';
+import { useRef } from 'react';
 
 export default function DialogGather({}) {
   const dispatch = useDispatch();
@@ -53,15 +51,20 @@ export default function DialogGather({}) {
   const [selectOption, setSelectOption] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const user = useSelector(s => s.user, shallowEqual);
-  const [min1, setMin1] = useState(user.handphone != null ? user.handphone.substring(0,3) : '');
-  const [min2, setMin2] = useState(user.handphone != null ? user.handphone.substring(3,7) : '');
-  const [min3, setMin3] = useState(user.handphone != null ? user.handphone.substring(7,11) : '');
-  const [email1, setEmail1] = useState(user.email != null ? user.email.split('@')[0] : '');
-  const [email2, setEmail2] = useState(user.email != null ? user.email.split('@')[1] : '');
+  
+  const [min1, setMin1] = useState(user?.handphone ? user.handphone.substring(0,3) : '');
+  const [min2, setMin2] = useState(user?.handphone ? user.handphone.substring(3,7) : '');
+  const [min3, setMin3] = useState(user?.handphone ? user.handphone.substring(7,11) : '');
+  const [email1, setEmail1] = useState(user?.email ? user.email.split('@')[0] : '');
+  const [email2, setEmail2] = useState(user?.email ? user.email.split('@')[1] : '');
   const [agree, setAgree] = useState(false);
   const [totalcode, setTotalcode] = useState([]);
   const [applySuccess, setApplySuccess] = useState(false);
   const [ordernum, setOrdernum] = useState(0);
+  const [erroropen, setErroropen] = useState(false);
+  const [errorselect, setErrorselect] = useState(false);
+  const [sucpay, setSucpay] = useState(false);
+  const scrollRef = useRef();
   const radio_props = [
     {label: '신용카드', value: 'card'},
   ];
@@ -98,12 +101,12 @@ export default function DialogGather({}) {
       formData.append('gatheringCode',totalcode.join('|'));
       formData.append('mail', email1 + '@' + email2);
       formData.append('paymentMethod','카드');
-      formData.append('paymentName', '신한카드');
-      formData.append('paymentNumber','1101-1813-1115-1234');
+      formData.append('paymentName', '무료');
+      formData.append('paymentNumber','0000-0000-0000-0000');
       formData.append('price', totalPrice);
       formData.append('tel',min1 + '-' +  min2 + '-' + min3);
-      formData.append('userId', user.member_id);
-      formData.append('userName',user.kor_nm);
+      formData.append('userId', user?.member_id ? user?.member_id : user?.memberId);
+      formData.append('userName',user?.kor_nm ? user?.kor_nm : user?.korNm);
       
     try {
       const { data, status } = await requestPost({
@@ -113,33 +116,44 @@ export default function DialogGather({}) {
       if (status === 'SUCCESS') {
         setOrdernum(data);
         setApplySuccess(true);
-        //dispatch(setShowInfo(data,selectOption,totalPrice));
-        //dispatch(dialogError('신청이 완료되었습니다.'));
-        
+        setSucpay(true);
       }
     } catch (error) {
       dispatch(dialogClose());
-      dispatch(dialogPayment(error, dispatch(dialogClose())))
+      dispatch(dialogError(error), dialogCloseMessage());
     }
   };
 
   useEffect(() => {
     if (gatherDialog.open) {
+      setMin1(user?.handphone ? user.handphone.substring(0,3) : '');
+      setMin2(user?.handphone ? user.handphone.substring(3,7) : '');
+      setMin3(user?.handphone ? user.handphone.substring(7,11) : '');
+      setEmail1(user?.email ? user.email.split('@')[0] : '');
+      setEmail2(user?.email ? user.email.split('@')[1] : '');
       fetchRequested();
       setShinchung(false);
       setOpen(true);
       setOrdernum(0);
       setPay(false);
+      setErrorselect(false);
       setSubOpen(false);
       setApplySuccess(false);
+      setSucpay(false);
       setGatheringcode('');
       setSelectOption([]);
       setTotalPrice(0);
       setAgree(false);
       setTotalcode([]);
+      setErroropen(false);
       Keyboard.dismiss();
     }
     return () => {
+      setMin1(user?.handphone ? user.handphone.substring(0,3) : '');
+      setMin2(user?.handphone ? user.handphone.substring(3,7) : '');
+      setMin3(user?.handphone ? user.handphone.substring(7,11) : '');
+      setEmail1(user?.email ? user.email.split('@')[0] : '');
+      setEmail2(user?.email ? user.email.split('@')[1] : '');
       setOption([]);
       setShinchung(false);
       setOpen(true);
@@ -148,13 +162,24 @@ export default function DialogGather({}) {
       setOrdernum(0);
       setApplySuccess(false);
       setSelectOption([]);
+      setSucpay(false);
+      setErrorselect(false);
       setTotalPrice(0);
       setTotalcode([]);
+      setErroropen(false);
       setGatheringcode('');
       setAgree(false);
     };
   }, [gatherDialog.open]);
 
+
+  useEffect(() => {
+    setMin1(user?.handphone ? user.handphone.substring(0,3) : '');
+    setMin2(user?.handphone ? user.handphone.substring(3,7) : '');
+    setMin3(user?.handphone ? user.handphone.substring(7,11) : '');
+    setEmail1(user?.email ? user.email.split('@')[0] : '');
+    setEmail2(user?.email ? user.email.split('@')[1] : '');
+  },[user?.handphone]);
 
   if (!gatherDialog.open) {
     return null;
@@ -162,6 +187,108 @@ export default function DialogGather({}) {
 
   return (
     <SafeAreaView style={shinchung ? styles.shinroot : styles.root}>
+       {erroropen ? (
+                <View style={styles.rooterr}>
+                  <View style={styles.wraperr}>
+                    <View style={styles.dialogerr}>
+                      <TextWrap
+                        style={[
+                          styles.message2err,
+                          {
+                            marginTop: 33,
+                            fontWeight: 'bold',
+                          },
+                        ]}>
+                        알림
+                      </TextWrap>
+                      <TextWrap style={[styles.messageerr]}>이미 선택한 옵션입니다.</TextWrap>
+                      <View style={styles.row2err}>
+                          <View style={{flex:1}}>
+                          </View>
+                      <TouchableOpacity
+                        style={styles.buttonerr}
+                        onPress={() => {
+                            setErroropen(false);
+                        }}>
+                        <TextWrap
+                          font={fonts.kopubWorldDotumProMedium}
+                          style={styles.titleerr}>
+                          닫기
+                        </TextWrap>
+                      </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  </View>
+                  ) : null}
+      {errorselect ? (
+                <View style={styles.rooterr}>
+                  <View style={styles.wraperr}>
+                    <View style={styles.dialogerr}>
+                      <TextWrap
+                        style={[
+                          styles.message2err,
+                          {
+                            marginTop: 33,
+                            fontWeight: 'bold',
+                          },
+                        ]}>
+                        알림
+                      </TextWrap>
+                      <TextWrap style={[styles.messageerr]}>필수옵션을 선택해주세요.</TextWrap>
+                      <View style={styles.row2err}>
+                          <View style={{flex:1}}>
+                          </View>
+                      <TouchableOpacity
+                        style={styles.buttonerr}
+                        onPress={() => {
+                            setErrorselect(false);
+                        }}>
+                        <TextWrap
+                          font={fonts.kopubWorldDotumProMedium}
+                          style={styles.titleerr}>
+                          닫기
+                        </TextWrap>
+                      </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  </View>
+                  ) : null}
+        {sucpay ? (
+                <View style={styles.rooterr}>
+                  <View style={styles.wraperr}>
+                    <View style={styles.dialogerr}>
+                      <TextWrap
+                        style={[
+                          styles.message2err,
+                          {
+                            marginTop: 33,
+                            fontWeight: 'bold',
+                          },
+                        ]}>
+                        알림
+                      </TextWrap>
+                      <TextWrap style={[styles.messageerr]}>신청이 완료되었습니다.</TextWrap>
+                      <View style={styles.row2err}>
+                          <View style={{flex:1}}>
+                          </View>
+                      <TouchableOpacity
+                        style={styles.buttonerr}
+                        onPress={() => {
+                            setSucpay(false);
+                        }}>
+                        <TextWrap
+                          font={fonts.kopubWorldDotumProMedium}
+                          style={styles.titleerr}>
+                          닫기
+                        </TextWrap>
+                      </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                  </View>
+                  ) : null}
       <TouchableOpacity
         style={styles.wrap}
         onPress={() => dispatch(dialogClose())}>
@@ -216,11 +343,15 @@ export default function DialogGather({}) {
                     return (
                       <TouchableOpacity
                         key={index}
-                        style={styles.dataContainer}
+                        style={x.overFlag == 0 ? styles.dataContainer : [styles.dataContainer,{backgroundColor:'#D2D2D2'}]}
                         onPress={() => {
+                          if(x.overFlag == 0){
                           setSelectOption([x]);
                           setGatheringcode(x.code); //모임코드 입력
                           setTotalPrice(totalPrice + parseInt(x.fee));
+                          }else{
+                            console.log('정원초과');
+                          }
                         }}>
                         <TextWrap
                           font={fonts.kopubWorldDotumProMedium}
@@ -239,7 +370,7 @@ export default function DialogGather({}) {
                     if(gatheringcode != ''){
                       setShinchung(true)
                     }else{
-                        dispatch(dialogError('필수옵션을 선택해주세요.'))
+                        setErrorselect(true);
                     }
                   }
                 }>
@@ -290,14 +421,18 @@ export default function DialogGather({}) {
                     return (
                         <TouchableOpacity
                           key={index}
-                          style={styles.subdataContainer}
+                          style={x.overFlag == 0 ? styles.subdataContainer : [styles.subdataContainer,{backgroundColor:'#D2D2D2'}]}
                           onPress={() => {
-                            if(!gatheringcode.includes(x.code)){
-                              setSelectOption(selectOption.concat([x]));
-                              setGatheringcode(x.code); //모임코드 입력
-                              setTotalPrice(totalPrice + parseInt(x.fee));
+                            if(x.overFlag == 0){
+                              if(!gatheringcode.includes(x.code)){
+                                setSelectOption(selectOption.concat([x]));
+                                setGatheringcode(x.code); //모임코드 입력
+                                setTotalPrice(totalPrice + parseInt(x.fee));
+                              }else{
+                                setErroropen(true);
+                              }
                             }else{
-                              dispatch(dialogError('이미 선택한 옵션입니다.'))
+                              console.log('정원초과');
                             }
                           }}>
                           <TextWrap
@@ -332,7 +467,11 @@ export default function DialogGather({}) {
                           style={styles.closebtn}
                           onPress={() => {
                               selectOption.splice(index,1);
-                              setSelectOption(selectOption);
+                              if(selectOption.length == 0){
+                                setSelectOption([]);
+                              }else{
+                                setSelectOption(selectOption);
+                              }
                               setTotalPrice(totalPrice - parseInt(x.fee));
                           }}>
                           <Image source={images.del} style={styles.closebtn}/>
@@ -377,10 +516,13 @@ export default function DialogGather({}) {
                 alignItems: 'center',
               }}>
             <ScrollView
+              ref={scrollRef}
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
               }}>
+          <TouchableWithoutFeedback>
+           <View>
             <View style={styles.shinbox}>
             <TextWrap
               style={styles.shinTitles}
@@ -550,20 +692,26 @@ export default function DialogGather({}) {
                   <Text style={styles.textother}>다른 독서모임 둘러보기</Text>
                 </Pressable>
             </View>
+            </View>
+            </TouchableWithoutFeedback>
           </ScrollView>
           </View>
           ) : (
             <View
             style={{
               backgroundColor: colors.white,
-              height: screenHeight * 0.76,
+              marginTop:heightPercentage(60),
               alignItems: 'center',
             }}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
+                zIndex: 6,
+                elevation: 6,
               }}>
+            <TouchableWithoutFeedback>
+           <View>
             <View style={styles.shinbox}>
             <TextWrap
               style={styles.shinTitle}
@@ -811,12 +959,13 @@ export default function DialogGather({}) {
                           screen: routes.topActivity,
                           params: {
                             name: selectOption[0].title,
-                            buyer_name: user.kor_nm,
+                            buyer_name: user?.kor_nm ? user?.kor_nm : user?.korNm,
                             buyer_email: email1 + '@' + email2,
                             buyer_tel: min1 + min2 + min3,
                             amount: totalPrice,
-                            user_id: user.member_id,
-                            gatheringcode: totalcode
+                            user_id: user?.member_id ? user?.member_id : user?.memberId,
+                            gatheringcode: totalcode.join('|'),
+                            selectOption: selectOption
                           },
                         });
                         dispatch(dialogClose());
@@ -825,13 +974,15 @@ export default function DialogGather({}) {
                         freeRequested();
                       }
                     }else{
-                        dispatch(dialogPayment('필수옵션을 선택해주세요.'))
+                        setErrorselect(true);
                     }
                   }
                 }>
                   <Text style={styles.text}>신청하기</Text>
                 </Pressable>
             </View>
+            </View>
+            </TouchableWithoutFeedback>
           </ScrollView>
           </View>
           )}
@@ -896,9 +1047,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     backgroundColor: 'rgba(0,0,0,0.8)',
-    bottom: 30,
-    zIndex: 3,
-    elevation: 3,
+    bottom: heightPercentage(60),
   },
   shinTitles: {
     width:'100%',
@@ -936,9 +1085,19 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    bottom: 30,
-    zIndex: 3,
-    elevation: 3,
+    bottom: heightPercentage(60),
+    zIndex: 5,
+    elevation: 5,
+  },
+  errorroot:{
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    bottom: 0,
+    zIndex: consts.dialogZindex,
+    elevation: consts.dialogZindex,
   },
   wrap: {flex: 1, justifyContent: 'flex-end'},
   shinTitle: {
@@ -997,6 +1156,67 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     textAlign:'left',
     fontWeight:'bold'
+  },
+  rooterr: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    bottom: 0,
+    zIndex: consts.dialogZindex,
+    elevation: consts.dialogZindex,
+  },
+  row2err: {flexDirection: 'row', alignSelf: 'flex-end', justifyContent : 'flex-end' ,width : '50%'},
+  wraperr: {flex: 1, justifyContent: 'center'},
+  dialogerr: {
+    backgroundColor: colors.white,
+    marginHorizontal: 30,
+    borderRadius: 8,
+  },
+  message2err: {
+    ...Platform.select({
+      android:{
+        lineHeight: 21,
+      },
+    }),
+    fontSize: fontPercentage(16),
+    color: '#222222',
+    textAlign: 'left',
+    paddingHorizontal: 30,
+  },
+  messageerr: {
+    ...Platform.select({
+      android:{
+        lineHeight: 21,
+      },
+    }),
+    fontSize: fontPercentage(14),
+    color: '#222222',
+    textAlign: 'left',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  labelerr: {
+    paddingHorizontal: 30,
+    color: '#222222',
+    lineHeight: 20,
+    fontSize: fontPercentage(15),
+    textAlign: 'left',
+  },
+  buttonerr: {
+    // borderTopWidth: 1,
+    flex:1,
+    paddingVertical: 18,
+    // borderTopColor: colors.prussianBlue,
+    alignItems: 'center',
+    // colors: colors.prussianBlue,
+    justifyContent: 'center',
+  },
+  titleerr: {
+    fontSize: fontPercentage(15),
+    lineHeight: 21,
+    color: colors.blue,
   },
   shinfont3: {
     fontSize: fontPercentage(13),
@@ -1133,18 +1353,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     color: colors.text,
     width: widthPercentage(45),
-    height: heightPercentage(35),
+    height: heightPercentage(28),
     fontFamily: fonts.kopubWorldDotumProMedium,
-    marginBottom:heightPercentage(13),
+    marginBottom:heightPercentage(12),
   },
   input2: {
     borderColor: '#ddd',
     borderWidth: 0.5,
     color: colors.text,
     width: widthPercentage(100),
-    height: heightPercentage(35),
+    height: heightPercentage(28),
     fontFamily: fonts.kopubWorldDotumProMedium,
-    marginBottom:heightPercentage(13),
+    marginBottom:heightPercentage(12),
   },
   inputValue: {
     color: '#848484',
@@ -1288,7 +1508,7 @@ const styles = StyleSheet.create({
   },
   totalbutton: {
     width: '90%',
-    bottom: 0,
+    bottom: heightPercentage(10),
     position:'absolute',
     ...Platform.select({
       ios: {
@@ -1309,7 +1529,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '90%',
-    bottom: 0,
+    bottom: heightPercentage(10),
     position:'absolute',
     ...Platform.select({
       ios: {

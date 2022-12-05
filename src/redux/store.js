@@ -10,6 +10,7 @@ import session from './session/SessionReducer';
 import showAudio from './audiobook/AudioAction';
 import showInfo from './activity/ActivityAction';
 import setoption from './dateaction/DateAction';
+import PayAction from './payment/PayAction';
 
 const appReducer = combineReducers({
   user: user,
@@ -21,7 +22,8 @@ const appReducer = combineReducers({
   session: session,
   showaudio: showAudio,
   showinfo: showInfo,
-  dateoption: setoption
+  dateoption: setoption,
+  PayAction: PayAction
 });
 
 const rootReducer = (state, action) => {

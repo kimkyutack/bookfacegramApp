@@ -30,7 +30,6 @@ export default function RegisterForm({route,navigation}) {
 
   const buttonDisabled = !agree;
   const curRouteName = navigationRef.current.getCurrentRoute().name;
-
   const handleGoRegister = () => {
     if (route.params?.platformType === 'toaping') {
       navigate(routes.registerFormToapingInfo, {
@@ -42,6 +41,7 @@ export default function RegisterForm({route,navigation}) {
         data: route.params?.data,
         userId: route.params?.userId,
         password: route.params?.password,
+        category: route.params?.category,
       });
     } else {
       navigate(routes.registerFormInfo, {

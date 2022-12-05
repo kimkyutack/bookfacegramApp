@@ -8,11 +8,14 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  Pressable,
+  Text,
+  StatusBar
 } from 'react-native';
 import colors from '../libs/colors';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import { screenHeight, screenWidth, widthPercentage, heightPercentage, fontPercentage } from './util';
-import { dialogClose, dialogPayment } from '../redux/dialog/DialogActions';
+import { screenHeight, screenWidth, widthPercentage, heightPercentage, fontPercentage, cameraItem } from './util';
+import { dialogClose, dialogPayment, dialogOpenSelect, dialogCloseMessage } from '../redux/dialog/DialogActions';
 import routes from '../libs/routes';
 import { setTab } from '../redux/tab/TabAction';
 import { navigate } from './navigation';
@@ -20,28 +23,71 @@ import { requestPost } from './network';
 import fonts from '../libs/fonts';
 import consts from '../libs/consts';
 import { setShowInfo } from '../redux/activity/ActivityAction';
+import TextWrap from '../components/text-wrap/TextWrap';
+import Topbar from '../components/topbar/Topbar';
+import images from '../libs/images';
+import axios from 'axios';
+import Footer from '../libs/footer';
 
-
-export default function paymentResult({ route }) {
+export default function paymentResult({ route, navigation }) {
+  //console.log('route::::::::',route);
   const dispatch = useDispatch();
-  const [item,setItem] = useState([route.params[0].params?.params]);
+  
+  const [item,setItem] = useState([route.params[0].params?.params?.selectOption]);
   const [ordernum, setOrdernum] = useState(0);
-  const [totalPrice , setTotalPrice] = useState(item[0].amount);
+  const [totalPrice , setTotalPrice] = useState(route.params[0].params?.params.amount);
+  const gatheringDateArray = route.params[0].params?.params?.selectOption[0].gatheringDate.split('|');
+  const [cardname, setCardName] = useState('');
+  const [cardnumber, setCardNumber] = useState('');
+  const dayOfWeek = (wantdate) => {
+    let week = ['일', '월', '화', '수', '목', '금', '토'];
+    let day = week[new Date(wantdate).getDay()];
+    return day;
+  }	
+  const responsedata = async () => {
+    try {
+      const getToken = await axios({
+        url: "https://api.iamport.kr/users/getToken",
+        method: "post", // POST method
+        headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
+        data: {
+          imp_key: "0857543567523211", // REST API 키
+          imp_secret: "9klvboXthryMSA7QaZBBjlKZj0wnkqZF3zCAoq3wSzVdhSaFbhfbTQ6tlxHng61rYFZAvHE0jHxs9Tim" // REST API Secret
+        }
+      });
+
+      const { access_token } = getToken.data.response; 
+
+      const getPaymentData = await axios({
+        url: 'https://api.iamport.kr/payments/' + route.params[1].imp_uid,
+        method: "get",
+        headers: { "Authorization": access_token } 
+      });
+      
+      const paymentData = getPaymentData.data.response;
+      setCardName(paymentData.card_name);
+      setCardNumber(paymentData.card_number);
+      fetchRequested(paymentData.card_name,paymentData.card_number);
+      
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
    //결제 성공 시 독서모임 신청
-  const fetchRequested = async () => {
+  const fetchRequested = async (card, cardnum) => {
       const formData = new FormData();
-      //formData.append('TId', route.params[1].merchant_uid);
-      formData.append('TId', route.params[1].merchant_uid);
-      formData.append('gatheringCode',item[0].gatheringcode);
-      formData.append('mail', item[0].buyer_email);
+      //console.log(route.params[0].params?.params)
+      formData.append('TId', route.params[1].imp_uid);
+      formData.append('gatheringCode',route.params[0].params?.params.gatheringcode);
+      formData.append('mail', route.params[0].params?.params.buyer_email);
       formData.append('paymentMethod','카드');
-      formData.append('paymentName', '신한카드');
-      formData.append('paymentNumber','1101-1813-1115-1234');
-      formData.append('price', item[0].amount);
-      formData.append('tel',item[0].buyer_tel);
-      formData.append('userId', item[0].user_id);
-      formData.append('userName',item[0].buyer_name);
+      formData.append('paymentName', card);
+      formData.append('paymentNumber',cardnum);
+      formData.append('price', route.params[0].params?.params.amount);
+      formData.append('tel',route.params[0].params?.params.buyer_tel.substring(0,3) + '-' + route.params[0].params?.params.buyer_tel.substring(3,7) + '-' + route.params[0].params?.params.buyer_tel.substring(7,11));
+      formData.append('userId', route.params[0].params?.params.user_id);
+      formData.append('userName',route.params[0].params?.params.buyer_name);
       
     try {
       const { data, status } = await requestPost({
@@ -50,10 +96,8 @@ export default function paymentResult({ route }) {
       });
       
       if (status === 'SUCCESS') {
-        dispatch(setShowInfo(data, item, item[0].amount));
         setOrdernum(data);
-        dispatch(dialogClose());
-        dispatch(dialogPayment('결제가 완료되었습니다.', dispatch(dialogClose())));
+        dispatch(dialogPayment('결제가 완료되었습니다.', dispatch(dialogCloseMessage())));
       }
     } catch (error) {
       dispatch(dialogPayment(route.params[1].error_msg, dispatch(dialogClose())));
@@ -63,9 +107,17 @@ export default function paymentResult({ route }) {
   useEffect(() => {
     let mount = true;
     if (mount) {
-        if(route.params[1].imp_success == true){
-          fetchRequested();
+        if(route.params[1].imp_success == 'true'){
+          responsedata();
         }else{
+          dispatch(
+            setTab({
+                tab: 'gather',
+              }),
+            );
+            navigate(routes.activity, {
+              type: 'gather',
+            });
           dispatch(dialogPayment(route.params[1].error_msg, dispatch(dialogClose())))
         }
     }
@@ -76,17 +128,34 @@ export default function paymentResult({ route }) {
 
   return (
     <SafeAreaView style={styles.shinroot}>
+      <Topbar
+        title="TOAPING"
+        navigation={navigation}
+        options={{
+          component: <Image style={styles.cameraIcon} source={images.camera} />,
+          name: 'camera',
+          onPress: () =>
+            dispatch(
+              dialogOpenSelect({
+                item: cameraItem(),
+              }),
+            ),
+        }}
+      />
+      {<StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />}
+      {route.params[1].imp_success ? (
             <View
               style={{
                 backgroundColor: colors.white,
-                height: screenHeight*0.76,
                 alignItems: 'center',
+                marginBottom:heightPercentage(70)
+                
               }}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={{
                 width: screenWidth,
-                height:screenHeight
+                marginBottom:heightPercentage(50)
               }}>
             <View style={styles.shinbox}>
             <TextWrap
@@ -109,22 +178,22 @@ export default function paymentResult({ route }) {
             <View style={styles.shininfo}>
                 <View style={styles.shinContainer}>
                   <Image source={{
-                    uri:'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/village/' + item[0].thumbnail
+                    uri:'https://api-storage.cloud.toast.com/v1/AUTH_2900a4ee8d4d4be3a5146f0158948bd1/village/' + item[0][0].thumbnail
                   }} style={styles.thumbnail}/>
                   <View style={{flexDirection:'column'}}>
                   <TextWrap
                     font={fonts.kopubWorldDotumProMedium}
                     style={styles.shinfont3}>
-                    {item[0].title}
+                    {item[0][0].title}
                   </TextWrap>
-                  {item.map((x, index) => {
+                  {gatheringDateArray.map((x, index) => {
                     if(index === 0){
                       return (
                         <TextWrap
                           key={'gather'+index}
                           font={fonts.kopubWorldDotumProMedium}
                           style={styles.datefont}>
-                          [선택] {x.gatheringDate.substring(0,10)}({dayOfWeek(x.gatheringDate.substring(0,10))}) | {x.gatheringDate.substring(11,16)} {x.gatheringDate.substring(11,13) < 13 ? 'AM' : 'PM'} | {x.title}
+                          [선택] {x.substring(0,10)}({dayOfWeek(x.substring(0,10))}) | {x.substring(11,16)} {x.substring(11,13) < 13 ? 'AM' : 'PM'} | {item[0][0].title}
                         </TextWrap>
                         )
                     }else{
@@ -133,7 +202,7 @@ export default function paymentResult({ route }) {
                           key={'gather'+index}
                           font={fonts.kopubWorldDotumProMedium}
                           style={styles.datefont2}>
-                          {x.gatheringDate.substring(0,10)}({dayOfWeek(x.gatheringDate.substring(0,10))}) | {x.gatheringDate.substring(11,16)} {x.gatheringDate.substring(11,13) < 13 ? 'AM' : 'PM'} | {x.title}
+                          {x.substring(0,10)}({dayOfWeek(x.substring(0,10))}) | {x.substring(11,16)} {x.substring(11,13) < 13 ? 'AM' : 'PM'} | {item[0][0].title}
                         </TextWrap>
                         )
                     }
@@ -141,7 +210,7 @@ export default function paymentResult({ route }) {
                   <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.datefont}>
-                      [신청수량] {item.length}개
+                      [신청수량] {gatheringDateArray.length}개
                     </TextWrap>
                   <TextWrap
                     font={fonts.kopubWorldDotumProMedium}
@@ -232,7 +301,7 @@ export default function paymentResult({ route }) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext5}>
-                      국민(000000000****)
+                      {cardname.replace('카드','')}({cardnumber})
                     </TextWrap>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -247,27 +316,39 @@ export default function paymentResult({ route }) {
             </View>
             <View style={styles.totalsbutton}>
                 <Pressable style={styles.buttons} onPress={() => {
-                  console.log('1')
-                    dispatch(
-                      setTab({
-                          tab: 'gather',
-                        }),
-                      );
-                      navigate(routes.activity, {
-                        type: 'gather',
-                      });
-                  }
-                }>
+                  dispatch(setShowInfo(ordernum,item,totalPrice));
+                  dispatch(dialogClose());
+                }}>
                   <Text style={styles.text}>다른 독서모임 둘러보기</Text>
                 </Pressable>
             </View>
           </ScrollView>
+          <View style={styles.footerstyle}>
+            <Footer page="orderlist" />
           </View>
+          </View>
+           ) : (
+          <View style={{height: screenHeight*0.85, alignItems:'center', justifyContent:'center'}}>
+            <ActivityIndicator
+              size="large"
+              style={{ alignSelf: 'center'}}
+              color={colors.blue}
+            />
+          </View>
+        )
+
+        }
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  footerstyle:{
+    position:'absolute',
+    bottom:0,
+    alignItems:'center',
+    justifyContent:'center'
+  },
   shinbox: {
     width:screenWidth * 0.95,
     flex:1,
@@ -275,6 +356,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomWidth: 3,
     borderBottomColor:'#F0F0F0'
+  },
+  cameraIcon: {
+    width: widthPercentage(24),
+    height: heightPercentage(24),
+    resizeMode: 'cover',
   },
   shininfo: {
     height:'100%',
@@ -284,11 +370,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   shinroot: {
-    position: 'absolute',
+    backgroundColor:colors.white,
     left: 0,
     right: 0,
     top: 0,
-    bottom: 30,
     zIndex: 3,
     elevation: 3,
   },
@@ -437,7 +522,6 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     textAlign:'right',
     fontWeight:'bold',
-    left:widthPercentage(3)
   },
   message: {
     fontSize: fontPercentage(14),
@@ -505,10 +589,12 @@ const styles = StyleSheet.create({
     
   },
   totalsbutton: {
+    flex:1,
     width: '90%',
     alignSelf:'center',
     justifyContent:'center',
     marginTop:'2%',
+    height:heightPercentage(100),
     bottom: 0,
     ...Platform.select({
       ios: {

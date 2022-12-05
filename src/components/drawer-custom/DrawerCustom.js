@@ -18,7 +18,6 @@ import {dialogError} from '../../redux/dialog/DialogActions';
 export default function DrawerCustom(props) {
   const dispatch = useDispatch();
   const user = useSelector(s => s.user, shallowEqual);
-
   return (
     <View style={styles.root}>
       <View style={styles.userInfoContainer}>
@@ -37,7 +36,7 @@ export default function DrawerCustom(props) {
           <TextWrap
             style={styles.avatorText}
             font={fonts.kopubWorldDotumProBold}>
-            {user?.kor_nm ? user?.kor_nm : 'Undefined'}{' '}
+            {user?.kor_nm ? user?.kor_nm : user?.korNm ? user?.korNm : 'Undefined'}{' '}
             <Text style={styles.avatorText2}>님</Text>
           </TextWrap>
         </View>
@@ -99,7 +98,7 @@ export default function DrawerCustom(props) {
               label="ㆍ독서모임 신청내역"
               labelStyle={styles.label}
               onPress={() => {
-                props.navigation.navigate(routes.shinchung, {
+                  props.navigation.navigate(routes.shinchung, {
                   timeKey: Date.now(),
                 });
               }}

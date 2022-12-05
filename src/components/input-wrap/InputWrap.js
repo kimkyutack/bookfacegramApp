@@ -64,8 +64,6 @@ export default function InputWrap({
         style={[
           styles.inputWrap,
           inputFlex,
-          borderColor && {borderColor, borderWidth: 1.5},
-          borderBottomColor && borderBottomColor,
           disabled && {
             backgroundColor: '#f2f2f2',
             borderColor: '#e5e5e5',

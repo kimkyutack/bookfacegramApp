@@ -22,7 +22,6 @@ import GatheringDetail from '../activity/GatherDetail';
 import ApplyInfo from '../activity/ApplyInfo';
 
 export default function TopActivity({route}) {
-
   return (
     <View style={styles.root}>
       {route.params.type === 'quiz' ? (
@@ -45,7 +44,7 @@ export default function TopActivity({route}) {
         <GatherAll route={route}/>
       ) : route.params.type === 'info' ? (
         <ApplyInfo route={route}/>
-      ) : route.params.type === 'detail' ? (
+      ) : route.params.type === 'gatherdetail' ? (
         <GatheringDetail route={route}/>
       ) : (
         <ActivityMain route={route} />

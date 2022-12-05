@@ -38,15 +38,15 @@ export default function DialogDate({route}) {
   const detailTab = useSelector(s => s.tab, shallowEqual);
   const now = new Date();
   const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const date = now.getDate();
+  const month = now.getMonth() + 1 >= 10 ? now.getMonth() + 1 : '0' + (now.getMonth() + 1);
+  const date = now.getDate() >= 10 ? now.getDate() : '0' + now.getDate();
   const today = year + '-' + month + '-' +date;
 
 
 
   const eyear = new Date(year, now.getMonth() - 1, now.getDate()).getFullYear();
-  const emonth = new Date(year, now.getMonth() - 1, now.getDate()).getMonth() + 1;
-  const edate = new Date(year, now.getMonth() - 1, now.getDate()).getDate();
+  const emonth = new Date(year, now.getMonth() - 1, now.getDate()).getMonth() + 1 >= 10 ? new Date(year, now.getMonth() - 1, now.getDate()).getMonth() + 1 : '0' + (new Date(year, now.getMonth() - 1, now.getDate()).getMonth() + 1);
+  const edate = new Date(year, now.getMonth() - 1, now.getDate()).getDate() >= 10 ? new Date(year, now.getMonth() - 1, now.getDate()).getDate() : '0' + (new Date(year, now.getMonth() - 1, now.getDate()).getDate());
   const eDate = eyear + '-' + emonth + '-' + edate;
 
   const weekyear = new Date(year, now.getMonth(), now.getDate() - 7).getFullYear();

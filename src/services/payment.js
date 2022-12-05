@@ -11,7 +11,7 @@ export function Payment({ route, navigation }) {
   const [screenWidth, setScreenWidth] = useState(0);
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
   function callback(response) {
-    console.log(param.concat(response))
+    //console.log(response)
     navigation.replace('paymentResult', param.concat(response));
   }
 
@@ -25,8 +25,8 @@ export function Payment({ route, navigation }) {
     buyer_name: route.params.params.buyer_name,
     buyer_tel: route.params.params.buyer_tel,
     buyer_email: route.params.params.buyer_email,
-    buyer_addr: '서울시 강남구 신사동 661-16',
-    buyer_postcode: '06018',
+    buyer_addr: '경기도 성남시 수정구 달래내로 46',
+    buyer_postcode: '13449',
     app_scheme: 'bookfacegram',
     // [Deprecated v1.0.3]: m_redirect_url
   };
@@ -35,7 +35,7 @@ export function Payment({ route, navigation }) {
     
       <View style={styles.container}>
           <IMP.Payment
-            userCode={'iamport'}  // 가맹점 식별코드
+            userCode={'imp84332736'}  // 가맹점 식별코드
             loading={<Loading />} // 로딩 컴포넌트
             data={data}           // 결제 데이터
             callback={callback}   // 결제 종료 후 콜백

@@ -28,7 +28,9 @@ import Payment from './services/payment';
 import HomeDetail from './screens/home/home-detail';
 import Notice from './screens/notice/Notice';
 import ShinChung from './screens/shinchung/Shinchung';
+import ShinChungDetail from './screens/shinchung/ShinchungDetail';
 import Faq from './screens/faq/Faq';
+import CancelDetail from './screens/shinchung/CancelDetail';
 import Setting from './screens/setting/Setting';
 import Profile from './screens/profile/profile';
 import Event from './screens/event/Event';
@@ -280,6 +282,24 @@ const StackNavigator = () => {
         }}
       />
       <Stack.Screen
+        name={routes.shinchungdetail}
+        component={ShinChungDetail}
+        options={({ route, navigation }) => {
+          return {
+            swipeEnabled: false,
+          };
+        }}
+      />
+      <Stack.Screen
+        name={routes.canceldetail}
+        component={CancelDetail}
+        options={({ route, navigation }) => {
+          return {
+            swipeEnabled: false,
+          };
+        }}
+      />
+      <Stack.Screen
         name={routes.faq}
         component={Faq}
         options={({ route, navigation }) => {
@@ -438,7 +458,11 @@ export default function Router() {
       reset(routes.login);
     } else if (user.inited && user.signed) {
       if (!user.intro_setting) {
-        navigate(routes.intro1, { age: user.age, initGrade: user.grade });
+        if(user.category != 'partner'){
+          navigate(routes.intro1, { age: user.age, initGrade: user.grade });
+        }else{
+          navigate(routes.intro2, { grade : 10 , category: user.category});
+        }
       }
     }
   }, [user.signed, user.inited]);

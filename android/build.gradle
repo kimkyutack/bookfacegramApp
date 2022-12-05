@@ -4,12 +4,14 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 21
-        compileSdkVersion = 31  //30 -> 31 Verserion Upgrade For react-native-track-player
+        compileSdkVersion = 33  //30 -> 31 Verserion Upgrade For react-native-track-player
         targetSdkVersion = 31   //30 -> 31 Verserion Upgrade For react-native-track-player
         ndkVersion = "20.1.5948944"
         kotlinVersion = '1.6.21'    //1.4.30 -> 1.5.31 Verserion Upgrade For react-native-track-player
         googlePlayServicesAuthVersion = '17.0.0'
     }
+
+
     repositories {
         google()
         mavenCentral() 
@@ -41,6 +43,12 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.facebook.react:react-native:0.65.2'
+        }
+    }
+
 }
 subprojects {
     repositories {

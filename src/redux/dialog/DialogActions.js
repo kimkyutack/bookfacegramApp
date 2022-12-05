@@ -14,6 +14,7 @@ export const dialogActionType = {
   openRegion: 'dialog/openRegion',
   openShinchung: 'dialog/openShinchung',
   openResult: 'dialog/openResult',
+  openCancel: 'dialog/openCancel',
   openGradeProfile: 'dialog/openGradeProfile',
   openDrawerKeyBoard: 'dialog/openDrawer/keyBoard',
   openDrawerKeyBoardPW: 'dialog/openDrawer/keyBoardPW',
@@ -58,11 +59,21 @@ export const dialogOpenMessage =
         label,
       });
     };
+export const dialogOpenCancel =
+  ({ orderCode, message = '' }) =>
+    dispatch => {
+      dispatch({
+        type: dialogActionType.openCancel,
+        message,
+        orderCode,
+      });
+    };
 export const dialogCloseMessage = () => dispatch => {
   dispatch({
     type: dialogActionType.closeMessage,
   });
 };
+
 export const dialogOpenGrade =
   ({
     drawerList,

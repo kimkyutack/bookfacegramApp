@@ -123,7 +123,6 @@ export default function GatheringMain({
 const styles = StyleSheet.create({
   root2: {
     //flex: 1,
-    marginTop:heightPercentage(60),
     width: screenWidth,
     alignItems: 'center',
     backgroundColor: colors.white,
@@ -131,11 +130,6 @@ const styles = StyleSheet.create({
   root: {
     width: screenWidth,
     flexDirection: 'column',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(70),
-      },
-  }),
   },
   cardHeaderTitleSt1: {
     lineHeight: fontPercentage(24),
@@ -153,35 +147,10 @@ const styles = StyleSheet.create({
     width: screenWidth*0.9,
     height: heightPercentage(270),
   },
-  row: {
-    height: screenHeight / 25,
-    flexDirection: 'row',
-  },
-  row2: {
-    marginTop: heightPercentage(60),
-    width: screenWidth * 0.9,
-    height: screenHeight / 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   cameraIcon: {
     width: widthPercentage(24),
     height: heightPercentage(24),
     resizeMode: 'cover',
-  },
-  select: {
-    position: 'absolute',
-    width: '100%',
-    height: heightPercentage(28),
-    resizeMode: 'stretch',
-  },
-  selectfont: {
-    fontSize: fontPercentage(9),
-    marginLeft: widthPercentage(5),
-    top: heightPercentage(8),
-    zIndex: 10, // works on ios
-    elevation: 10,
   },
   cardHeaderTitle: {
     alignContent:'space-between',
@@ -195,37 +164,5 @@ const styles = StyleSheet.create({
     width:'87%',
     fontWeight: 'bold',
     color: colors.black
-  },
-  scrolltotop: {
-    width: widthPercentage(35),
-    height: heightPercentage(35),
-    resizeMode: 'contain',
-  },
-  topButton: {
-    alignItems: 'center',
-    width: widthPercentage(35),
-    height: heightPercentage(35),
-    position: 'absolute',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(20),
-      },
-      ios: {
-        bottom: heightPercentage(50),
-      },
-  }),
-    left: screenWidth / 2.2,
-    display: 'flex',
-  },
-  none_button: {
-    display: 'none',
-  },
-  column: {
-    marginTop:heightPercentage(20),
-    width: screenWidth,
-    height: screenHeight * 0.25,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

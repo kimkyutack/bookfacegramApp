@@ -53,6 +53,23 @@ export default function ToapingLogin({navigation}) {
             userId: username,
             password: password,
             platformType: 'toaping',
+            category: data?.category
+          });
+          dispatch(
+          dialogOpenMessage({
+            message: '입력하신 계정의 회원정보가 확인되었습니다.',
+            onPress: () => {
+              dispatch(userCheckToken);
+            },
+          }),
+        );
+        } else if (data?.partner) {
+          navigate(routes.registerForm, {
+            data: data?.partner,
+            userId: username,
+            password: password,
+            platformType: 'toaping',
+            category: data?.category
           });
           dispatch(
           dialogOpenMessage({

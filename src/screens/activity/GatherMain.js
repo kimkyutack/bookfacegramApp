@@ -7,7 +7,8 @@ import {
   View,
   ActivityIndicator,
   Text,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ScrollView
 } from 'react-native';
 import {useDispatch , useSelector, shallowEqual} from 'react-redux';
 import TextWrap from '../../components/text-wrap/TextWrap';
@@ -30,6 +31,7 @@ import FastImage from 'react-native-fast-image';
 import { navigate } from '../../services/navigation';
 import { setTab } from '../../redux/tab/TabAction';
 import GatheringMain from './GatheringMain';
+import NoFound from '../../components/no-found/NoFound';
 
 
 export default function GatherMain({
@@ -212,7 +214,7 @@ export default function GatherMain({
 
   const renderFooter = () => {
     
-    if (ingGather?.length === 0 || !loading) {
+    if (ingGather?.length !== 0 && !loading) {
       return <GatheringMain rank={Rank} ingGather={ingGather} />;
     }else{
       return <></>;
@@ -222,14 +224,150 @@ export default function GatherMain({
 
   return (
     <View
-      style={[
-        styles.root,
-        endGather.length === 0 && {flex: 1, justifyContent: 'center'},
-      ]}>
-      {endGather.length === 0 ? (
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <TextWrap>마감 임박한 독서모임이 없습니다.</TextWrap>
-        </View>
+      style={
+        styles.root
+      }>
+      {state.req.length === 0 ? (
+        <ScrollView>
+          <View style={[styles.root2,{flex:1}]}>
+            <View style={styles.column}>
+              <TouchableWithoutFeedback>
+                <View style={styles.bannerContainer}>
+                  <FastImage
+                    source={images.gatherBanner}
+                    resizeMode={FastImage.resizeMode.stretch}
+                    style={styles.banner}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+            <View style={styles.row2}>
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  height: heightPercentage(25),
+                  top: heightPercentage(5),
+                  borderWidth: 0.3,
+                  borderStyle: 'solid',
+                  borderColor: '#c9c9c9',
+                  position: 'relative',
+                  zIndex: 1, // works on ios
+                  elevation: 1,
+                }}
+                onPress={() => {
+                  dispatch(dialogOpenRegion({ message: '준비중.', region: region }));
+                }}>
+                <View style={{ width: '100%' }}>
+                  <TextWrap style={styles.selectfont}>{region}</TextWrap>
+                  <Image source={images.selectbox} style={styles.select} />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  height: heightPercentage(25),
+                  top: heightPercentage(5),
+                  borderWidth: 0.3,
+                  borderStyle: 'solid',
+                  borderColor: '#c9c9c9',
+                  position: 'relative',
+                  zIndex: 1, // works on ios
+                  elevation: 1,
+                }}
+                onPress={() => {
+                  dispatch(dialogOpenCate({ message: '준비중.', grade: Rank }));
+                }}>
+                <View style={{ width: '100%' }}>
+                  <TextWrap style={styles.selectfont}>{grade}</TextWrap>
+                  <Image source={images.selectbox} style={styles.select} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.cardHeaderTitle}>
+            <TextWrap
+              style={styles.cardHeaderTitle2}
+              font={fonts.kopubWorldDotumProBold}>
+              곧 마감하는 독서모임!
+            </TextWrap>
+            <TextWrap
+                style={styles.cardHeaderSpreadSt1}
+                font={fonts.kopubWorldDotumProMedium}
+                onPress={() => {
+                  dispatch(
+                    setTab({
+                      tab: 'gatherlist',
+                      cate: grade,
+                      region: region,
+                    })
+                  );
+
+                  navigate(routes.homeList, {
+                    screen: routes.topActivity,
+                    params: {
+                      rank:Rank,
+                      region:region,
+                      type: 'gatherlist',
+                      key: Date.now(),
+                      end: 0,
+                    },
+                  });
+
+                }}>
+                &gt; 전체보기
+              </TextWrap>
+              </View>
+              <View style={{flex:1}}>
+              <NoFound message="검색조건에 해당하는 독서모임이 없습니다." />
+              </View>
+              {ingGather?.length !== 0 && !loading ? (
+                <GatheringMain rank={Rank} ingGather={ingGather} />
+              ) : (
+               <View style={[styles.root2,{marginTop:0}]}>
+                <View>
+                <View style={styles.cardHeaderTitle}>
+                <TextWrap
+                  style={styles.cardHeaderTitle2}
+                  font={fonts.kopubWorldDotumProBold}>
+                  모집중인 독서모임
+                </TextWrap>
+                <TextWrap
+                    style={styles.cardHeaderSpreadSt1}
+                    font={fonts.kopubWorldDotumProMedium}
+                    onPress={() => {
+                      dispatch(
+                        setTab({
+                          tab: 'gatherlist',
+                          cate: Rank,
+                          region: region,
+                        })
+                      );
+
+                      navigate(routes.homeList, {
+                        screen: routes.topActivity,
+                        params: {
+                          rank:Rank,
+                          region:region,
+                          type: 'gatherlist',
+                          key: Date.now(),
+                          end: 1,
+                        },
+                      });
+
+                    }}>
+                    &gt; 전체보기
+                  </TextWrap>
+                  </View>
+              </View>
+                <View>
+                <NoFound message="검색조건에 해당하는 독서모임이 없습니다." />
+                </View>
+                </View>
+              )
+              }
+          </View>
+          
+       </ScrollView> 
       ) : (
         <View>
         <FlatList
@@ -273,14 +411,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.white,
   },
+  noroot: {
+
+  },
   root: {
     width: screenWidth,
     flexDirection: 'column',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(10),
-      },
-  }),
+    
   },
   cardHeaderTitleSt1: {
     lineHeight: fontPercentage(24),
@@ -351,16 +488,10 @@ const styles = StyleSheet.create({
     width: widthPercentage(35),
     height: heightPercentage(35),
     position: 'absolute',
-    ...Platform.select({
-      android: {
-        bottom:heightPercentage(20),
-      },
-      ios: {
-        bottom: heightPercentage(50),
-      },
-  }),
+    bottom:heightPercentage(5),
     left: screenWidth / 2.2,
     display: 'flex',
+
   },
   none_button: {
     display: 'none',

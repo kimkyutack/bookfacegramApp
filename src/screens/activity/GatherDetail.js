@@ -20,19 +20,29 @@ import {
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
 import GatherCarouselImage from './GatherCarouselImage';
-import { dialogOpenShinchung } from '../../redux/dialog/DialogActions';
+import { dialogClose, dialogOpenShinchung } from '../../redux/dialog/DialogActions';
 import HTMLView from 'react-native-htmlview';
 import routes from '../../libs/routes';
 import { navigate } from '../../services/navigation';
+import { BackHandler } from 'react-native';
 
 export default function GatheringDetail({route}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [item,setItme] = useState(route.params.data);
+  const {gatherDialog} = useSelector(s => s.dialog);
   const [gatheringCount, setGatheringCount] = useState(item.gatheringCount.split('|'));
   const [gatheringDate, setGatheringDate] = useState(item.gatheringDate.split('|'));
   const fee = item.fee != 0 ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')+'원' : '무료';
   const showinfo = useSelector(s => s.showinfo);
+
+  const handlePressBack = () => {
+    if(gatherDialog.open) {
+      dispatch(dialogClose());
+      return true;
+   }
+   return false;
+  }
   useEffect(() => {
     let mount = true;
     if (mount) {
@@ -57,6 +67,15 @@ export default function GatheringDetail({route}) {
       mount = false;
     };
   },[]);
+
+  useEffect(() => {
+    if (gatherDialog.open) {
+      BackHandler.addEventListener('hardwareBackPress',handlePressBack);
+    }
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    }
+  },[gatherDialog.open]);
 
   return (
     <>
@@ -96,21 +115,31 @@ export default function GatheringDetail({route}) {
               ? gatheringCount.map((x, index) => {
                   if (index === 0) {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data}
-                        font={fonts.kopubWorldDotumProLight}>
-                        [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <TextWrap
+                          style={[styles.data,{width:widthPercentage(35)}]}
+                          font={fonts.kopubWorldDotumProLight}>
+                          [모임일시]
+                        </TextWrap>
+                        <TextWrap
+                          
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                        </TextWrap>
+                      </View>
                     )
                   } else {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data2}
-                        font={fonts.kopubWorldDotumProLight}>
-                        {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <View style={[styles.data,{width:widthPercentage(35)}]}/>
+                        <TextWrap
+                          key={index}
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
+                        </TextWrap>
+                      </View>
                     );
                   }
                 }) 
@@ -208,7 +237,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(13),
     textAlign: 'center',
-    marginLeft:'1.5%'
+    marginLeft:'1%'
   },
   thumbnail: {
     height: screenHeight / 1.5,

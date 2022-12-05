@@ -7,6 +7,11 @@ const initDialog = {
     onPress: null,
     title: '확인',
   },
+  cancelDialog: {
+    open: false,
+    message: '',
+    orderCode: '',
+  },
   gradeDialog: {
     open: false,
     message: '',
@@ -127,10 +132,22 @@ export default function dialog(state = initDialog, action) {
           label: action.label,
         },
       };
+    case dialogActionType.openCancel:
+      return {
+        ...state,
+        cancelDialog: {
+          open: true,
+          message: action.message,
+          orderCode: action.orderCode,
+        },
+      };
     case dialogActionType.closeMessage:
       return {
         ...state,
         messageDialog: {
+          open: false,
+        },
+        paymentDialog: {
           open: false,
         },
       };

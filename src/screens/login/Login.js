@@ -121,7 +121,6 @@ export default function Login({ route }) {
           platformType: type,
         },
       });
-
       if (status === 'SUCCESS') {
         if (data?.lnupMember) {
           navigate(routes.registerForm, {
@@ -129,6 +128,15 @@ export default function Login({ route }) {
             userId: 'userId',
             password: userPw,
             platformType: type,
+            category: 'member'
+          });
+        } else if (data?.partner) {
+          navigate(routes.registerForm, {
+            data: data?.partner,
+            userId: 'userId',
+            password: userPw,
+            platformType: type,
+            category: 'partner'
           });
         } else {
           await setItem('accessToken', data.accessToken);

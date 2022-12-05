@@ -129,7 +129,6 @@ export function Footer(page) {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
         onPress={() => {
-          
           dispatch(dialogClose());
           dispatch(
             setTab({
@@ -137,9 +136,12 @@ export function Footer(page) {
               rank: 'all',
             }),
           );
-          navigate(routes.activity, {
-            type: 'quiz',
-            rank: 'all',
+          navigate(routes.home, {
+            screen: routes.topActivity,
+            params: {
+              type: 'quiz',
+              rank: 'all',
+            },
           });
         }}>
         <View accessibilityRole="button" style={[styles.footer]}>

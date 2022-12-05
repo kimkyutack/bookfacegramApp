@@ -23,6 +23,7 @@ import fonts from '../../libs/fonts';
 import {requestGet} from '../../services/network';
 import {dialogError, dialogOpenCate, dialogOpenRegion} from '../../redux/dialog/DialogActions';
 import GatherAllitem from './GatherAllitem';
+import NoFound from '../../components/no-found/NoFound';
 
 export default function GatherAllList({
   route,
@@ -257,14 +258,63 @@ export default function GatherAllList({
 
   return (
     <View
-      style={[
-        styles.root,
-        gatherlist.length === 0 && {flex: 1, justifyContent: 'center'},
-      ]}>
+      style={styles.root}>
       {gatherlist.length === 0 ? (
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <TextWrap>해당하는 독서모임이 없습니다.</TextWrap>
-        </View>
+        <View>
+        <View style={styles.root2}>
+            <TextWrap
+              style={styles.cardHeaderTitle2}
+              font={fonts.kopubWorldDotumProBold}>
+              {end === 0 ? '곧 마감하는 독서모임!' : '모집중인 독서모임'}
+            </TextWrap>
+            <View style={styles.row2}>
+              <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        height: heightPercentage(25),
+                        top: heightPercentage(5),
+                        borderWidth: 0.3,
+                        borderStyle: 'solid',
+                        borderColor: '#c9c9c9',
+                        position: 'relative',
+                        zIndex: 1, // works on ios
+                        elevation: 1,
+                      }}
+                      onPress={() => {
+                        dispatch(dialogOpenRegion({ message: '준비중.', region: Region }));
+                      }}>
+                      <View style={{ width: '100%' }}>
+                        <TextWrap style={styles.selectfont}>{Region}</TextWrap>
+                        <Image source={images.selectbox} style={styles.select} />
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        height: heightPercentage(25),
+                        top: heightPercentage(5),
+                        borderWidth: 0.3,
+                        borderStyle: 'solid',
+                        borderColor: '#c9c9c9',
+                        position: 'relative',
+                        zIndex: 1, // works on ios
+                        elevation: 1,
+                      }}
+                      onPress={() => {
+                        dispatch(dialogOpenCate({ message: '준비중.', grade: Rank }));
+                      }}>
+                      <View style={{ width: '100%' }}>
+                        <TextWrap style={styles.selectfont}>{grade}</TextWrap>
+                        <Image source={images.selectbox} style={styles.select} />
+                      </View>
+                    </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{height:screenHeight / 2}}>
+            <NoFound message="검색조건에 해당하는 독서모임이 없습니다." />
+          </View>
+          </View>
       ) : (
         <View>
         <FlatList

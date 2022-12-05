@@ -11,7 +11,6 @@ const initTab = {
 };
 
 export default function loading(state = initTab, action) {
-  //alert(action.selectType);
   switch (action.type) {
     
     case tabActionType.main:

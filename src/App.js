@@ -28,6 +28,7 @@ import { setShowMain } from './redux/audiobook/AudioAction';
 import DialogGather from './redux-components/dialog-gather/DialogGather';
 import DialogPayment from './redux-components/dialog-payment/DialogPayment';
 import DialogDate from './redux-components/dialog-date/DialogDate';
+import DialogCancel from './redux-components/dialog-cancel/DialogCancel';
 
 
 function App({ }) {
@@ -82,6 +83,7 @@ function App({ }) {
       <DialogCate />
       <DialogKakaoLogin />
       <DialogDrawer />
+      <DialogCancel />
       <DialogDate />
       <DialogGather />
       <DialogDrawerKeyBoard />

@@ -42,7 +42,6 @@ export default function CheckBox2({
     </TouchableOpacity>
   );
 }
-
 const styles = StyleSheet.create({
   root: {
     alignSelf: 'stretch',

@@ -38,7 +38,7 @@ export default function Gatheringitem({item, index}) {
               }),
             );
             navigate(routes.topActivity, {
-              type: 'detail',
+              type: 'gatherdetail',
               data: item,
               key: Date.now(),
             });
@@ -77,21 +77,31 @@ export default function Gatheringitem({item, index}) {
               ? gatheringCount.map((x, index) => {
                   if (index === 0) {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data}
-                        font={fonts.kopubWorldDotumProLight}>
-                        [모임일시] {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <TextWrap
+                          style={[styles.data,{width:widthPercentage(35)}]}
+                          font={fonts.kopubWorldDotumProLight}>
+                          [모임일시]
+                        </TextWrap>
+                        <TextWrap
+                          
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {item.gatheringDate.substring(0,11)} | {item.gatheringDate.substring(11,16)} {parseInt(item.gatheringDate.substring(11,13)) < 13 ? 'AM' : 'PM'}(1회)
+                        </TextWrap>
+                      </View>
                     )
                   } else {
                     return (
-                      <TextWrap
-                        key={index}
-                        style={styles.data2}
-                        font={fonts.kopubWorldDotumProLight}>
-                        {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
-                      </TextWrap>
+                      <View key={index} style={{flexDirection:'row'}}>
+                        <View style={[styles.data,{width:widthPercentage(35)}]}/>
+                        <TextWrap
+                          key={index}
+                          style={styles.data2}
+                          font={fonts.kopubWorldDotumProLight}>
+                          {gatheringDate[index].substring(0,11)} | {gatheringDate[index].substring(11,16)} {parseInt(gatheringDate[index].substring(11,13)) < 13 ? 'AM' : 'PM'}({x}회)
+                        </TextWrap>
+                      </View>
                     );
                   }
                 }) 
@@ -141,7 +151,7 @@ const styles = StyleSheet.create({
     top: 10,
   },
   writer: {
-    marginTop:heightPercentage(40),
+    marginTop:heightPercentage(30),
     color: colors.black,
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(17),
@@ -160,7 +170,7 @@ const styles = StyleSheet.create({
     fontSize: fontPercentage(9),
     lineHeight: fontPercentage(13),
     textAlign: 'center',
-    marginLeft:'22%'
+    marginLeft:'1%'
   },
   divider: {
     marginHorizontal: 16,

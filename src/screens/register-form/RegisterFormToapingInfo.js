@@ -46,6 +46,9 @@ export default function RegisterFormToapingInfo({}) {
   const [passwordConfirm, setPasswordConfirm] = useState(
     params?.password ? params?.password : '',
   );
+  const [category, setCategory] = useState(
+    params?.category ? params?.category : '',
+  );
   const [phone, setPhone] = useState(
     params?.data?.handphone ? params?.data?.handphone : '',
   );
@@ -62,7 +65,11 @@ export default function RegisterFormToapingInfo({}) {
       if (user.intro_setting) {
         reset(routes.home);
       } else {
-        navigate(routes.intro1, {age: user.age, initGrade: level !== 0 ? level : user.grade});
+        if(category !== 'partner'){
+          navigate(routes.intro1, {age: user.age, initGrade: level !== 0 ? level : user.grade});
+        }else{
+          navigate(routes.intro2, {grade: 10, category: category});
+        }
       }
     }
   }, [user.signed]);
@@ -113,9 +120,14 @@ export default function RegisterFormToapingInfo({}) {
         await setItem('accessToken', data.accessToken);
         await setItem('refreshToken', data.refreshToken);
         await setItem('platformType', 'toaping');
-        await setItem('level', '' + level);
+        if(category !== 'partner'){
+          await setItem('level', '' + level);
+        }else{
+          await setItem('level', '10');
+        }
         await setItem('toapingId', memberId);
         await setItem('toapingPw', password);
+        await setItem('category', category);
 
         dispatch(
           dialogOpenMessage({message: '회원가입이 정상적으로 완료되었습니다.'}),

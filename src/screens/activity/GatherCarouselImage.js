@@ -21,7 +21,7 @@ export default function GatherCarouselImage({item, index, style}) {
             : consts.imgUrl + '/thumbnail/bookDefault.gif',
         priority: FastImage.priority.high,
       }}
-      resizeMode={style?.resizeMode == 'contain' ? FastImage.resizeMode.contain : FastImage.resizeMode.cover}
+      resizeMode={FastImage.resizeMode.contain}
       style={[styles.image, style && style]}
       onError={e => {
         setBookThumbnail('bookDefault');
@@ -32,6 +32,6 @@ export default function GatherCarouselImage({item, index, style}) {
 
 const styles = StyleSheet.create({
   image: {
-    height: heightPercentage(200),
+    height: heightPercentage(170),
   },
 });

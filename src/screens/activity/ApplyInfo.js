@@ -41,7 +41,6 @@ export default function ApplyInfo({route}) {
     let day = week[new Date(wantdate).getDay()];
     return day;
 }	
-console.log(item)
 
   useEffect(() => {
     let mount = true;
@@ -231,7 +230,6 @@ console.log(item)
             </View>
             <View style={styles.totalsbutton}>
                 <Pressable style={styles.buttons} onPress={() => {
-                  console.log('1')
                     dispatch(
                       setTab({
                           tab: 'gather',

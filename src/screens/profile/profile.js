@@ -407,7 +407,7 @@ export default function Profile({ route, navigation }) {
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.inputStyle}>
-            {user.member_id}
+            {user?.member_id ? user?.member_id : user?.memberId}
           </TextWrap>
         </View>
         <View style={styles.divider} />
@@ -420,7 +420,7 @@ export default function Profile({ route, navigation }) {
           <TextWrap
             font={fonts.kopubWorldDotumProMedium}
             style={styles.inputStyle}>
-            {user.kor_nm}
+            {user?.kor_nm ? user?.kor_nm : user?.korNm}
           </TextWrap>
         </View>
         <View style={styles.divider} />
