@@ -25,13 +25,14 @@ import {
 } from '../../services/util';
 import fonts from '../../libs/fonts';
 import {requestGet} from '../../services/network';
-import {dialogError, dialogOpenCate, dialogOpenRegion} from '../../redux/dialog/DialogActions';
+import {dialogError, dialogOpenCate, dialogOpenRegion, dialogClose} from '../../redux/dialog/DialogActions';
 import Gatheritem from './Gatheritem';
 import FastImage from 'react-native-fast-image';
 import { navigate } from '../../services/navigation';
 import { setTab } from '../../redux/tab/TabAction';
 import GatheringMain from './GatheringMain';
 import NoFound from '../../components/no-found/NoFound';
+import { BackHandler } from 'react-native';
 
 
 export default function GatherMain({
@@ -45,9 +46,29 @@ export default function GatherMain({
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   const detailTab = useSelector(s => s.tab, shallowEqual);
+  const {cateDialog} = useSelector(s => s.dialog, shallowEqual);
+  const {regionDialog} = useSelector(s => s.dialog, shallowEqual);
   const [Rank, setRank] = useState(detailTab.detailTab.cate);
   const [grade, setGrade] = useState('전체학년');
   const [region, setregion] = useState('전체지역');
+
+  const handlePressBack = () => {
+    if(cateDialog.open || regionDialog.open) {
+      dispatch(dialogClose());
+      return true;
+   }
+   return false;
+  }
+
+  useEffect(() => {
+    if (cateDialog.open || regionDialog.open) {
+      BackHandler.addEventListener('hardwareBackPress',handlePressBack);
+    }
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    }
+  },[cateDialog.open, regionDialog.open]);
+
   useEffect(() => {
         switch (Rank) {
           case 'all':

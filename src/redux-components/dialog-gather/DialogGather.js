@@ -416,7 +416,7 @@ export default function DialogGather({}) {
                   </TextWrap>
                   <Image source={subopen ? images.angleUp : images.angleDown} style={styles.arrowimg}/>
                 </TouchableOpacity>
-                <ScrollView styles={{height:heightPercentage(70)}}>
+                <ScrollView styles={{height:heightPercentage(120)}}>
                 {subopen ? optionData.map((x, index) => {
                     return (
                         <TouchableOpacity
@@ -512,12 +512,12 @@ export default function DialogGather({}) {
             <View
               style={{
                 backgroundColor: colors.white,
-                height: screenHeight * 0.76,
                 alignItems: 'center',
               }}>
             <ScrollView
               ref={scrollRef}
               showsVerticalScrollIndicator={false}
+              contentOffset={{x:0, y:0}}
               style={{
                 width: screenWidth,
               }}>
@@ -654,7 +654,7 @@ export default function DialogGather({}) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext4}>
-                      신용카드
+                      -
                     </TextWrap>
                   </View>
                   <View style={{flexDirection:'row',marginLeft:widthPercentage(5)}}>
@@ -667,7 +667,7 @@ export default function DialogGather({}) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext5}>
-                      국민(000000000****)
+                      무료
                     </TextWrap>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -700,7 +700,6 @@ export default function DialogGather({}) {
             <View
             style={{
               backgroundColor: colors.white,
-              marginTop:heightPercentage(60),
               alignItems: 'center',
             }}>
             <ScrollView

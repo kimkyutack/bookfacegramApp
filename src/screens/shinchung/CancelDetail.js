@@ -214,7 +214,7 @@ export default function CancelDetail({ route, navigation }) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext4}>
-                      신용카드
+                      {selectOption.paymentName === '무료' ? '-' : '신용카드'}
                     </TextWrap>
                   </View>
                   <View style={{flexDirection:'row',marginLeft:widthPercentage(5)}}>
@@ -227,7 +227,7 @@ export default function CancelDetail({ route, navigation }) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext5}>
-                      {selectOption.paymentName.replace('카드','')}({selectOption.paymentNumber.substring(0,selectOption.paymentNumber.length - 4)}****)
+                      {selectOption.paymentName.replace('카드','')}{selectOption.paymentName === '무료' ? null : '('+selectOption.paymentNumber.substring(0,selectOption.paymentNumber.length - 4)+'****)'}
                     </TextWrap>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -239,6 +239,23 @@ export default function CancelDetail({ route, navigation }) {
                   </View>
                 </View>
             </View>
+            </View>
+            <View style={styles.totalsbutton}>
+                <Pressable style={[styles.buttons, {
+                  backgroundColor: 'white',
+                  borderWidth:0.5,
+                  borderColor:'#3F3F3F'}]} 
+                  onPress={() => {
+                  navigate(routes.shinchung, {
+                    timeKey: Date.now(), 
+                    params:{
+                      type:'cancel'
+                    },
+                  });
+                }}
+                >
+                  <Text style={styles.textother}>독서모임 취소/환불내역 보기</Text>
+                </Pressable>
             </View>
           </ScrollView>
           </View>

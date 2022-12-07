@@ -32,6 +32,7 @@ import { Pressable } from 'react-native';
 import { setDateOption } from '../../redux/dateaction/DateAction';
 import OrderListitem from './orderListitem';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { BackHandler } from 'react-native';
 
 
 export default function ShinChung({ route, navigation }) {
@@ -46,7 +47,7 @@ export default function ShinChung({ route, navigation }) {
   const CONTENT_OFFSET_THRESHOLD = 50;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  
+  const {dateDialog} = useSelector(s => s.dialog, shallowEqual);
   const dateoption = useSelector(s => s.dateoption, shallowEqual);
 
   const [startDate,setStartDate] = useState(dateoption.startdate);
@@ -58,7 +59,6 @@ export default function ShinChung({ route, navigation }) {
   const user = useSelector(s => s.user, shallowEqual);
   const cancelcode = useSelector(s => s.PayAction.ordercode);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
   const changeStyle = type => {
     if (type === '취소') {
       setColor1('#FED500');
@@ -158,9 +158,11 @@ export default function ShinChung({ route, navigation }) {
         endPaging:20
       },
       });
+      
       if (status === 'SUCCESS') {
           if(start === 0){
             setData([...data]);
+            
           }else{
             setData(datas.concat([...data]));
           }
@@ -177,6 +179,13 @@ export default function ShinChung({ route, navigation }) {
     }else{
       console.log('끝')
     }
+  }
+  const handlePressBack = () => {
+    if(dateDialog.open) {
+      dispatch(dialogClose());
+      return true;
+   }
+   return false;
   }
   //page 로그 찍는 로직
   useEffect(() => {
@@ -201,6 +210,14 @@ export default function ShinChung({ route, navigation }) {
     setStartpage(0);
     fetchRequested(0);
   }, [category_,startDate,endDate,cancelcode]);
+
+  useEffect(() => {
+    if(route.params?.params?.type === 'cancel'){
+      changeStyle('취소');
+    }else{
+      changeStyle('신청');
+    }
+  }, [route.params?.params?.type]);
 
   useEffect(() => {
     let mount = true;
@@ -231,6 +248,15 @@ export default function ShinChung({ route, navigation }) {
 
     return unsubscribe;
   }, [navigate]);
+
+  useEffect(() => {
+    if (dateDialog.open) {
+      BackHandler.addEventListener('hardwareBackPress',handlePressBack);
+    }
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    }
+  },[dateDialog.open]);
 
   return (
     <RootLayout

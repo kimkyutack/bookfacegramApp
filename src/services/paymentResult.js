@@ -128,28 +128,11 @@ export default function paymentResult({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.shinroot}>
-      <Topbar
-        title="TOAPING"
-        navigation={navigation}
-        options={{
-          component: <Image style={styles.cameraIcon} source={images.camera} />,
-          name: 'camera',
-          onPress: () =>
-            dispatch(
-              dialogOpenSelect({
-                item: cameraItem(),
-              }),
-            ),
-        }}
-      />
-      {<StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />}
       {route.params[1].imp_success ? (
             <View
               style={{
                 backgroundColor: colors.white,
                 alignItems: 'center',
-                marginBottom:heightPercentage(70)
-                
               }}>
             <ScrollView
               showsVerticalScrollIndicator={false}

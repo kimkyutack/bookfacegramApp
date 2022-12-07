@@ -16,6 +16,7 @@ export default {
   quiz_btn: require('../assets/images/quiz_btn.png'),
   submit_btn: require('../assets/images/submit_btn.png'),
   check: require('../assets/images/check.png'),
+  loadingclock: require('../assets/images/loadingclock.gif'),
   retry: require('../assets/images/retry.png'),
   noticeFile: require('../assets/images/noticeFile.png'),
   next_btn: require('../assets/images/next_btn.png'),

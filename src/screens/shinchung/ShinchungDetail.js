@@ -218,7 +218,7 @@ export default function ShinChungDetail({ route, navigation }) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext4}>
-                      신용카드
+                      {selectOption.paymentName === '무료' ? '-' : '신용카드'}
                     </TextWrap>
                   </View>
                   <View style={{flexDirection:'row',marginLeft:widthPercentage(5)}}>
@@ -231,7 +231,7 @@ export default function ShinChungDetail({ route, navigation }) {
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
                       style={styles.pricetext5}>
-                      {selectOption.paymentName.replace('카드','')}({selectOption.paymentNumber.substring(0,selectOption.paymentNumber.length - 4)}****)
+                      {selectOption.paymentName.replace('카드','')}{selectOption.paymentName === '무료' ? null : '('+selectOption.paymentNumber.substring(0,selectOption.paymentNumber.length - 4)+'****)'}
                     </TextWrap>
                     <TextWrap
                       font={fonts.kopubWorldDotumProMedium}
@@ -252,6 +252,9 @@ export default function ShinChungDetail({ route, navigation }) {
                   onPress={() => {
                   navigate(routes.shinchung, {
                     timeKey: Date.now(), 
+                    params:{
+                      type:'shinchung'
+                    },
                   });
                 }}
                 >
@@ -263,7 +266,7 @@ export default function ShinChungDetail({ route, navigation }) {
           
           </View>
         <View style={styles.footerstyle}>
-      <Footer page="order" />
+      <Footer page="orderlist" />
       </View>
     </RootLayout>
   );

@@ -20,10 +20,10 @@ import {
   heightPercentage,
   fontPercentage,
 } from '../../services/util';
-import { dialogError } from '../../redux/dialog/DialogActions';
-import { dialogOpenGrade } from '../../redux/dialog/DialogActions';
+import { dialogError, dialogClose, dialogOpenGrade } from '../../redux/dialog/DialogActions';
 import { useIsFocused } from '@react-navigation/native';
 import { browsingTime } from '../../redux/session/SessionAction';
+import { BackHandler } from 'react-native';
 
 export default function MainQuiz({ route }, start) {
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ export default function MainQuiz({ route }, start) {
   const [notKbsQuiz, setnotKbsQuiz] = useState([]);
   const [KbsQuiz, setKbsQuiz] = useState([]);
   const [Rank, setRank] = useState(detailTab.rank);
+  const {gradeDialog} = useSelector(s => s.dialog);
   const [grade, setGrade] = useState('전체');
   const [sessionTime, setSessionTime] = useState('000000');
   const isFocused = useIsFocused();
@@ -76,6 +77,14 @@ export default function MainQuiz({ route }, start) {
 
     setSessionTime(date_state);
   };
+
+  const handlePressBack = () => {
+    if(gradeDialog.open) {
+      dispatch(dialogClose());
+      return true;
+   }
+   return false;
+  }
 
   //page 로그 찍는 로직
   useEffect(() => {
@@ -185,6 +194,15 @@ export default function MainQuiz({ route }, start) {
       setnotKbsQuiz([]);
     };
   }, [Rank]);
+
+  useEffect(() => {
+    if (gradeDialog.open) {
+      BackHandler.addEventListener('hardwareBackPress',handlePressBack);
+    }
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    }
+  },[gradeDialog.open]);
 
   return (
     <View style={styles.root}>
