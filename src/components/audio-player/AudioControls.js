@@ -34,6 +34,8 @@ export const onRegisterPlayback = async() => {
     track,
     backRate,
   }) => {
+    
+      
     //오디오 현재 진행 상태 (슬라이더 관련)
     const pos = useGettingPos();
     const showaudio = useSelector(state => state.showaudio);
@@ -41,14 +43,13 @@ export const onRegisterPlayback = async() => {
     const state = usePlaybackState(); 
     const isPlaying = state === State.Playing;  
     const dispatch = useDispatch();
-
+    const sliderValue = parseInt(pos);
     //Play, Pause 토글 이벤트
-    const onTogglePlayback = useOnTogglePlayback();
+    const onTogglePlayback = useOnTogglePlayback(sliderValue,track.duration);
 
     //배속 세팅
     const [curRate, setCurRate] = useState(1.0);
-    const [slider, setSlider] = useState(false);
-
+    //const [slider, setSlider] = useState(true);
     const onHandleRate = async () => {
       try{
         await TrackPlayer.setRate(curRate + 0.5); //일단 배속 +0.5
@@ -103,23 +104,21 @@ export const onRegisterPlayback = async() => {
           }else{
             TrackPlayer.play(); 
           }
-          setSlider(true);
+          //setSlider(true);
         }catch(error){
           //console.log(error);
         }
       })();
     }, []);
 
-    useEffect(() => {
-      dispatch(setShowPlay(isPlaying));
-    },[isPlaying]);
 
     return (
       <View style={styles.root}>
         {/* 오디오 컨트롤 */}
         <View style={styles.audioContainer}>
           {/* 슬라이더 */}
-          {slider && <SeekBar />}
+          {/*slider && <SeekBar />*/}
+          <SeekBar />
           {/* 오디오 컨트롤 패널 */}
           <View style={styles.container}>
             {/* 배속 기능 */}
@@ -141,7 +140,7 @@ export const onRegisterPlayback = async() => {
             </View>
             <View style={{flex:2, alignItems:'center', justifyContent:'center'}}>
             {/* PLAY 버튼 */}
-            {!isPlaying ?
+            {!showaudio.playnow ?
             <TouchableOpacity style={styles.touchcontainer} onPress={onTogglePlayback}>
               <View style={styles.playButton}>
                 <Image source={images.play_btn} style={styles.playButton_image}/>

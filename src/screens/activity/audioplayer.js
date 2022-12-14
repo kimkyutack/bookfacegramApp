@@ -16,7 +16,7 @@ import {
   widthPercentage,
 } from '../../services/util';
 import TextWrap from '../../components/text-wrap/TextWrap';
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import { requestGet, requestPost } from '../../services/network';
 import consts from '../../libs/consts';
 import { AudioControls } from '../../components/audio-player';
@@ -35,8 +35,9 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
   }) => {
     // Modal 표시
     const dispatch = useDispatch();
-    const [visibleModal, setVisibleModal] = useState(true);
     const pos = useGettingPos();
+    const showaudio = useSelector(state => state.showaudio);
+    const [visibleModal, setVisibleModal] = useState(true);
     const handleClose = () => {
       TrackPlayer.seekTo(0);
       TrackPlayer.pause();
@@ -228,18 +229,20 @@ import { setShowAudio } from '../../redux/audiobook/AudioAction';
     bookInfo_image: {
       flex:1,
       marginLeft: 0,
+      justifyContent:'center',
+      alignItems:'center'
     },
     bookInfo_image_arrow: {
       alignSelf:'center',
       width: '30%',
       height: '20%',
-      resizeMode:'stretch'
+      resizeMode:'contain'
     } ,
     bookInfo_image_close: {
       alignSelf:'center',
       width: '25%',
       height: '20%',
-      resizeMode:'stretch'
+      resizeMode:'contain'
     },
   })
   const styles = StyleSheet.create({

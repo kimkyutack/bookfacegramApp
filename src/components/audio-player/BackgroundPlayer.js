@@ -49,12 +49,13 @@ export const onRegisterPlayback = async() => {
     const showaudio = useSelector(state => state.showaudio);
     const dispatch = useDispatch();
     //Play, Pause 토글 이벤트
-    const onTogglePlayback = useOnTogglePlayback();
+    
     //배속 세팅
-    const [curRate, setCurRate] = useState(1.0);
-    const [slider, setSlider] = useState(false);
-    const [nextTime, setNextTime] = useState(currentTime);
-
+    //const [curRate, setCurRate] = useState(1.0);
+    //const [slider, setSlider] = useState(false);
+    //const [nextTime, setNextTime] = useState(currentTime);
+    const sliderValue = parseInt(pos);
+    const onTogglePlayback = useOnTogglePlayback(sliderValue,track.duration);
     /*const recordPlayTimeEverySecond = () => {
       let curTime = Math.floor(+ new Date()/1000);
       const sliderValue = parseInt(pos);
@@ -152,7 +153,7 @@ export const onRegisterPlayback = async() => {
           }else{
             TrackPlayer.play(); 
           }
-          setSlider(true);
+          //setSlider(true);
         }catch(error){
           //console.log(error);
         }
@@ -168,7 +169,7 @@ export const onRegisterPlayback = async() => {
         {/* 오디오 컨트롤 */}
         <View style={styles.audioContainer}>
           {/* 슬라이더 */}
-          {slider && <BackSeekBar />}
+          <BackSeekBar />
           {/* 오디오 컨트롤 패널 */}
           <TouchableOpacity style={styles.container} onPress={() => showmain()}>
             {/* White Space */}
